@@ -11,16 +11,16 @@
  */
 class Solution {
 public:
-    TreeNode* makeTree(int &index, int n, vector<int>& pre, int mini, int maxi)
+    TreeNode* makeTree(int &index, int n, vector<int>& pre, int maxi)
     {
-        if (index >= n || (pre[index] <= mini || pre[index] >= maxi)) {
+        if (index >= n || pre[index] >= maxi) {
             return nullptr;
         }
 
         TreeNode* root = new TreeNode(pre[index++]);
 
-        root->left = makeTree(index, n, pre, mini, root->val);
-        root->right = makeTree(index, n, pre, root->val, maxi);
+        root->left = makeTree(index, n, pre, root->val);
+        root->right = makeTree(index, n, pre, maxi);
 
         return root;
     }
@@ -29,7 +29,7 @@ public:
         int index = 0;
         int n = preorder.size();
 
-        TreeNode* root = makeTree(index, n, preorder, INT_MIN, INT_MAX);
+        TreeNode* root = makeTree(index, n, preorder, INT_MAX);
 
         return root;
     }
