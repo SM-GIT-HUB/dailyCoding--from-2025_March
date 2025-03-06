@@ -1,18 +1,17 @@
 class Solution {
 public:
-    void dfs(int x, int y, int &m, int &n, vector<vector<bool> >& visited, vector<vector<char> >& b, vector<vector<int> >& dirs)
+    void dfs(int x, int y, int &m, int &n, vector<vector<char> >& b, vector<vector<int> >& dirs)
     {
-        visited[x][y] = true;
         b[x][y] = '#';
 
         auto check = [&](int x, int y) {
-            return (x >= 0 && x < m && y >= 0 && y < n && b[x][y] == 'O' && !visited[x][y]);
+            return (x >= 0 && x < m && y >= 0 && y < n && b[x][y] == 'O');
         };
 
         for (auto &d : dirs)
         {
             if (check(x + d[0], y + d[1])) {
-                dfs(x + d[0], y + d[1], m, n, visited, b, dirs);
+                dfs(x + d[0], y + d[1], m, n, b, dirs);
             }
         }
     }
@@ -21,28 +20,26 @@ public:
         int m = b.size();
         int n = b[0].size();
 
-        vector<vector<bool> > visited(m, vector<bool>(n, false));
-
         vector<vector<int> > dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
         for (int i = 0; i < m; i++)
         {
             if (b[i][0] == 'O') {
-                dfs(i, 0, m, n, visited, b, dirs);
+                dfs(i, 0, m, n, b, dirs);
             }
 
             if (b[i][n - 1] == 'O') {
-                dfs(i, n - 1, m, n, visited, b, dirs);
+                dfs(i, n - 1, m, n, b, dirs);
             }
         }
 
         for (int j = 0; j < n; j++)
         {
             if (b[0][j] == 'O') {
-                dfs(0, j, m, n, visited, b, dirs);
+                dfs(0, j, m, n, b, dirs);
             }
             if (b[m - 1][j] == 'O') {
-                dfs(m - 1, j, m, n, visited, b, dirs);
+                dfs(m - 1, j, m, n, b, dirs);
             }
         }
 
