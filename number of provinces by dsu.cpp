@@ -3,6 +3,7 @@
 class DSUrank {
 public:
 	vector<int> rank, parent;
+	int comp;
 	
 	DSUrank(int n)
 	{
@@ -13,6 +14,8 @@ public:
 		{
 			parent[i] = i;
 		}
+		
+		comp = n;
 	}
 	
 	int findUltParent(int node)
@@ -43,6 +46,8 @@ public:
 			parent[vParent] = uParent;
 			rank[uParent]++;
 		}
+		
+		comp--;
 	}
 	
 	bool sameComp(int u, int v)
@@ -71,15 +76,7 @@ class Solution {
             }
         }
         
-        int comp = 0;
-        
-        for (int node = 0; node < V; node++)
-        {
-            if (ds.findUltParent(node) == node) {
-                comp++;
-            }
-        }
-        
+        int comp = ds.comp;
         return comp;
     }
 };
