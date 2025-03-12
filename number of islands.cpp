@@ -3,55 +3,50 @@
 
 class DSUrank {
 public:
-	vector<vector<int> > rank;
-	vector<vector<pair<int, int> > > parent;
+	vector<int> rank, parent;
 	
-	DSUrank(int m, int n)
+	DSUrank(int n)
 	{
-		rank.resize(m);
-		parent.resize(m);
+		rank.resize(n + 1, 0);
+		parent.resize(n + 1);
 		
-		for (int i = 0; i < m; i++)
+		for (int i = 0; i <= n; i++)
 		{
-		    for (int j = 0; j < n; j++)
-		    {
-		        rank[i].push_back(0);
-		        parent[i].push_back({i, j});
-		    }
+			parent[i] = i;
 		}
 	}
 	
-	pair<int, int> findUltParent(pair<int, int> node)
+	int findUltParent(int node)
 	{
-		if (parent[node.first][node.second] == node) {
+		if (parent[node] == node) {
 			return node;
 		}
 		
-		return parent[node.first][node.second] = findUltParent(parent[node.first][node.second]);
+		return parent[node] = findUltParent(parent[node]);
 	}
 	
-	void unionByRank(pair<int, int> u, pair<int, int> v)
+	void unionByRank(int u, int v)
 	{
-		pair<int, int> uParent = findUltParent(u);
-		pair<int, int> vParent = findUltParent(v);
+		int uParent = findUltParent(u);
+		int vParent = findUltParent(v);
 		
 		if (uParent == vParent) {
 			return;
 		}
-		else if (rank[uParent.first][uParent.second] > rank[vParent.first][vParent.second]) {
-			parent[vParent.first][vParent.second] = uParent;
+		else if (rank[uParent] > rank[vParent]) {
+			parent[vParent] = uParent;
 		}
-		else if (rank[uParent.first][uParent.second] < rank[vParent.first][vParent.second]) {
-			parent[uParent.first][uParent.second] = vParent;
+		else if (rank[uParent] < rank[vParent]) {
+			parent[uParent] = vParent;
 		}
 		else
 		{
-			parent[vParent.first][vParent.second] = uParent;
-			rank[uParent.first][uParent.second]++;
+			parent[vParent] = uParent;
+			rank[uParent]++;
 		}
 	}
 	
-	bool sameComp(pair<int, int> u, pair<int, int> v)
+	bool sameComp(int u, int v)
 	{
 		if (findUltParent(u) == findUltParent(v)) {
 			return true;
@@ -65,41 +60,40 @@ class Solution {
   public:
     vector<int> numOfIslands(int m, int n, vector<vector<int>> &operators) {
         // code here
-        DSUrank ds(m, n);
-        
-        vector<vector<int> > mat(m, vector<int>(n, 0));
-        
         vector<int> ans;
-        int comp = 0;
+        DSUrank ds(m * n);
+        vector<vector<bool> > mat(m, vector<bool>(n, false));
         
+        int comp = 0;
         int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
         
-        for (auto &op : operators)
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n && mat[x][y] == true);
+        };
+        
+        for (auto &ops : operators)
         {
-            int x = op[0];
-            int y = op[1];
+            int x = ops[0];
+            int y = ops[1];
+            int currNode = n * x + y;
             
-            if (mat[x][y] == 1)
+            if (mat[x][y])
             {
                 ans.push_back(comp);
                 continue;
             }
             
+            mat[x][y] = true;
             comp++;
-            
-            mat[x][y] = 1;
             
             for (auto &d : dirs)
             {
-                int newX = x + d[0], newY = y + d[1];
+                int adjNode = n * (x + d[0]) + (y + d[1]);
                 
-                if (newX >= 0 && newX < m && newY >= 0 && newY < n && mat[newX][newY] == 1)
+                if (check(x + d[0], y + d[1]) && !ds.sameComp(currNode, adjNode))
                 {
-                    if (!ds.sameComp({x, y}, {newX, newY}))
-                    {
-                        ds.unionByRank({x, y}, {newX, newY});
-                        comp--;
-                    }
+                    comp--;
+                    ds.unionByRank(currNode, adjNode);
                 }
             }
             
