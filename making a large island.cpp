@@ -7,7 +7,7 @@ public:
 		for (int i = 0; i <= n; i++)
 		{
 			size.push_back(1);
-            parent.push_back(i);
+            		parent.push_back(i);
 		}
 	}
 	
@@ -56,8 +56,6 @@ public:
         int n = grid.size();
         DSUsize ds(n * n);
 
-        int ans = 0;
-
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
@@ -79,10 +77,10 @@ public:
                     int adjNode = n * (i + 1) + j;
                     ds.unionBySize(node, adjNode);
                 }
-
-                ans = max(ans, ds.size[ds.findUltParent(node)]);
             }
         }
+
+        int ans = ds.size[ds.findUltParent(0)];
 
         auto check = [&](int x, int y) {
             return (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == 1);
@@ -100,7 +98,7 @@ public:
 
                 int node = n * i + j;
                 int size = 1;
-                unordered_set<int> sett;
+                set<int> sett;
 
                 for (auto &d : dirs)
                 {
