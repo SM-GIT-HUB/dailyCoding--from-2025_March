@@ -1,0 +1,73 @@
+int recur(int n, int k, vector<int>& hs)
+{
+    if (n <= 1) {
+        return abs(hs[n] - hs[0]);
+    }
+
+    int ans = INT_MAX;
+
+    for (int i = 1; i <= k && (n - i) >= 0; i++)
+    {
+        ans = min(ans, recur(n - i, k, hs) + abs(hs[n] - hs[n - i]));
+    }
+
+    return ans;
+}
+
+int memoization(int n, int k, vector<int>& hs, vector<int>& dp)
+{
+    if (n <= 1) {
+        return abs(hs[n] - hs[0]);
+    }
+
+    if (dp[n] != -1) {
+        return dp[n];
+    }
+
+    int ans = INT_MAX;
+
+    for (int i = 1; i <= k && (n - i) >= 0; i++)
+    {
+        ans = min(ans, memoization(n - i, k, hs, dp) + abs(hs[n] - hs[n - i]));
+    }
+
+    return dp[n] = ans;
+}
+
+int tabulation(int n, int k, vector<int>& hs)
+{
+    vector<int> dp(n + 1);
+    dp[0] = 0;
+    dp[1] = abs(hs[1] - hs[0]);
+
+    for (int i = 2; i <= n; i++)
+    {
+        int ans = INT_MAX;
+
+        for (int d = 1; d <= k && (i - d) >= 0; d++)
+        {
+            ans = min(ans, dp[i - d] + abs(hs[i] - hs[i - d]));
+        }
+
+        dp[i] = ans;
+    }
+
+    return dp[n];
+}
+
+int minimizeCost(int n, int k, vector<int> &height){
+    // Write your code here.
+    // int ans = recur(n - 1, k, height);
+
+    // vector<int> dp(n, -1);
+
+    // int ans = memoization(n - 1, k, height, dp);
+
+    if (n == 1) {
+        return 0;
+    }
+
+    int ans = tabulation(n - 1, k, height);
+
+    return ans;
+}
