@@ -1,0 +1,86 @@
+class Solution {
+public:
+    int recur(int index, int n, vector<int>& arr)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        int include = arr[index] + recur(index + 2, n, arr);
+        int exclude = recur(index + 1, n, arr);
+
+        return max(include, exclude);
+    }
+
+    int memoization(int index, int n, vector<int>& arr, vector<int>& dp)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        if (dp[index] != -1) {
+            return dp[index];
+        }
+
+        int include = arr[index] + memoization(index + 2, n, arr, dp);
+        int exclude = memoization(index + 1, n, arr, dp);
+
+        return dp[index] = max(include, exclude);
+    }
+
+    int tabulation(int n, vector<int>& arr)
+    {
+        vector<int> dp(n + 1, 0);
+        dp[n - 1] = arr[n - 1];
+
+        for (int index = n - 2; index >= 0; index--)
+        {
+            int include = arr[index] + dp[index + 2];
+            int exclude = dp[index + 1];
+
+            dp[index] = max(include, exclude);
+        }
+
+        return dp[0];
+    }
+
+    int spaceOpt(int n, vector<int>& arr)
+    {
+        if (n == 1) {
+            return arr[0];
+        }
+
+        int next2 = arr[n - 1];
+        int next1 = max(arr[n - 2], next2);
+        int curr = max(next1, next2);
+
+        for (int index = n - 3; index >= 0; index--)
+        {
+            int include = arr[index] + next2;
+            int exclude = next1;
+
+            curr = max(include, exclude);
+
+            next2 = next1;
+            next1 = curr;
+        }
+
+        return curr;
+    }
+
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+
+        // int ans = recur(0, n, nums);
+
+        // vector<int> dp(n, -1);
+
+        // int ans = memoization(0, n, nums, dp);
+
+        // int ans = tabulation(n, nums);
+
+        int ans = spaceOpt(n, nums);
+
+        return ans;
+    }
+};
