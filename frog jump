@@ -51,6 +51,26 @@ class Solution {
         
         return dp[n];
     }
+    
+    int spaceOpt(int n, vector<int>& height)
+    {
+        int a = 0;
+        int b = abs(height[1] - height[0]);
+        int c = b;
+        
+        for (int i = 2; i <= n; i++)
+        {
+            int cost1 = b + abs(height[i] - height[i - 1]);
+            int cost2 = a + abs(height[i] - height[i - 2]);
+            
+            c = min(cost1, cost2);
+            
+            a = b;
+            b = c;
+        }
+        
+        return c;
+    }
   
     int minCost(vector<int>& height) {
         // Code here
@@ -65,7 +85,9 @@ class Solution {
             return 0;
         }
         
-        int ans = tabulation(n - 1, height);
+        // int ans = tabulation(n - 1, height);
+        
+        int ans = spaceOpt(n - 1, height);
         
         return ans;
     }
