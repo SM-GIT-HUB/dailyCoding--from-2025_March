@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+ 
+int recur(int x, int row, int &m, vector<vector<int> >& triangle)
+{
+	if (row >= m) {
+		return 0;
+	}
+	
+	int ans = recur(x, row + 1, m, triangle);
+	ans = min(ans, recur(x + 1, row + 1, m, triangle));
+
+	return triangle[row][x] + ans;
+}
+
+int memoization(int x, int row, int &m, vector<vector<int> >& triangle, vector<vector<int> >& dp)
+{
+	if (row >= m) {
+		return 0;
+	}
+
+	if (dp[row][x] != -1) {
+		return dp[row][x];
+	}
+	
+	int ans = memoization(x, row + 1, m, triangle, dp);
+	ans = min(ans, memoization(x + 1, row + 1, m, triangle, dp));
+
+	return dp[row][x] = triangle[row][x] + ans;
+}
+
+int tabulation(int m, vector<vector<int> >& triangle)
+{
+	vector<vector<int> > dp(m + 1, vector<int>(m + 1, 0));
+
+	for (int row = m - 1; row >= 0; row--)
+	{
+		int n = triangle[row].size();
+
+		for (int x = 0; x < n; x++)
+		{
+			int ans = dp[row + 1][x];
+			ans = min(ans, dp[row + 1][x + 1]);
+
+			dp[row][x] = triangle[row][x] + ans;
+		}
+	}
+
+	return dp[0][0];
+}
+
+int spaceOpt1(int m, vector<vector<int> >& triangle)
+{
+	vector<int> next(m + 1, 0);
+	vector<int> curr(m + 1, 0);
+
+	for (int row = m - 1; row >= 0; row--)
+	{
+		int n = triangle[row].size();
+
+		for (int x = 0; x < n; x++)
+		{
+			int ans = next[x];
+			ans = min(ans, next[x + 1]);
+
+			curr[x] = triangle[row][x] + ans;
+		}
+
+		next = curr;
+	}
+
+	return curr[0];
+}
+
+
+int spaceOpt2(int m, vector<vector<int> >& triangle)
+{
+	vector<int> curr(m + 1, 0);
+
+	for (int row = m - 1; row >= 0; row--)
+	{
+		int n = triangle[row].size();
+
+		for (int x = 0; x < n; x++)
+		{
+			int ans = curr[x];
+			ans = min(ans, curr[x + 1]);
+
+			curr[x] = triangle[row][x] + ans;
+		}
+	}
+
+	return curr[0];
+}
+
+int minimumPathSum(vector<vector<int>>& triangle, int m){
+	// Write your code here.
+	// int ans = recur(0, 0, m, triangle);
+
+	// vector<vector<int> > dp(m, vector<int>(m, -1));
+
+	// int ans = memoization(0, 0, m, triangle, dp);
+
+	// int ans = tabulation(m, triangle);
+
+	// int ans = spaceOpt1(m, triangle);
+
+	int ans = spaceOpt2(m, triangle);
+
+	return ans;
+}
