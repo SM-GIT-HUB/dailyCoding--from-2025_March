@@ -1,0 +1,135 @@
+#include <bits/stdc++.h> 
+
+int recur(int x, int y, int &m, int &n, vector<vector<int> >& mat)
+{
+    if (x == m) {
+        return 0;
+    }
+
+    int ans = recur(x + 1, y, m, n, mat);
+
+    if (y - 1 >= 0) {
+        ans = max(recur(x + 1, y - 1, m, n, mat), ans);
+    }
+
+    if (y + 1 < n) {
+        ans = max(recur(x + 1, y + 1, m, n, mat), ans);
+    }
+
+    return mat[x][y] + ans;
+}
+
+int memoization(int x, int y, int &m, int &n, vector<vector<int> >& mat, vector<vector<int> >& dp)
+{
+    if (x == m) {
+        return 0;
+    }
+
+    if (dp[x][y] != -1) {
+        return dp[x][y];
+    }
+
+    int ans = memoization(x + 1, y, m, n, mat, dp);
+
+    if (y - 1 >= 0) {
+        ans = max(memoization(x + 1, y - 1, m, n, mat, dp), ans);
+    }
+
+    if (y + 1 < n) {
+        ans = max(memoization(x + 1, y + 1, m, n, mat, dp), ans);
+    }
+
+    return dp[x][y] = mat[x][y] + ans;
+}
+
+int tabulation(int m, int n, vector<vector<int> >& mat)
+{
+    vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+
+    int ans = INT_MIN;
+
+    for (int x = m - 1; x >= 0; x--)
+    {
+        for (int y = 0; y < n; y++)
+        {
+            int currAns = dp[x + 1][y];
+
+            if (y - 1 >= 0) {
+                currAns = max(dp[x + 1][y - 1], currAns);
+            }
+
+            if (y + 1 < n) {
+                currAns = max(dp[x + 1][y + 1], currAns);
+            }
+
+            dp[x][y] = mat[x][y] + currAns;
+
+            if (x == 0) {
+                ans = max(dp[x][y], ans);
+            }
+        }
+    }
+
+    return ans;
+}
+
+int spaceOpt(int m, int n, vector<vector<int> >& mat)
+{
+    vector<int> next(n + 1, 0);
+    vector<int> curr(n + 1, 0);
+
+    int ans = INT_MIN;
+
+    for (int x = m - 1; x >= 0; x--)
+    {
+        for (int y = 0; y < n; y++)
+        {
+            int currAns = next[y];
+
+            if (y - 1 >= 0) {
+                currAns = max(next[y - 1], currAns);
+            }
+
+            if (y + 1 < n) {
+                currAns = max(next[y + 1], currAns);
+            }
+
+            curr[y] = mat[x][y] + currAns;
+
+            if (x == 0) {
+                ans = max(curr[y], ans);
+            }
+        }
+
+        next = curr;
+    }
+
+    return ans;
+}
+
+int getMaxPathSum(vector<vector<int>> &mat)
+{
+    int m = mat.size(), n = mat[0].size();
+
+    // int ans = recur(0, 0, m, n, mat);
+
+    // for (int y = 1; y < n; y++)
+    // {
+    //     ans = max(recur(0, y, m, n, mat), ans);
+    // }
+
+    // vector<vector<int> > dp(m, vector<int>(n, -1));
+
+    // int ans = memoization(0, 0, m, n, mat, dp);
+
+    // for (int y = 1; y < n; y++)
+    // {
+    //     ans = max(memoization(0, y, m, n, mat, dp), ans);
+    // }
+
+    // int ans = tabulation(m, n, mat);
+
+    int ans = spaceOpt(m, n, mat);
+
+    return ans;
+}
