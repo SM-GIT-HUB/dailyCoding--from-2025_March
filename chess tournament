@@ -1,0 +1,41 @@
+#include <bits/stdc++.h> 
+
+bool check(int &dist, int &n, int &c, vector<int>& pos)
+{
+	int total = 1;
+	int last = pos[0];
+
+	for (int i = 1; total < c && i < n; i++)
+	{
+		if (pos[i] - last >= dist)
+		{
+			last = pos[i];
+			total++;
+		}
+	}
+
+	return (total >= c);
+}
+
+int chessTournament(vector<int> pos , int n ,  int c){
+	// Write your code here
+	sort(pos.begin(), pos.end());
+
+	int ans = -1;
+	int start = 0, end = pos[n - 1];
+
+	while (start <= end)
+	{
+		int mid = start + (end - start) / 2;
+
+		if (check(mid, n, c, pos))
+		{
+			ans = mid;
+			start = mid + 1;
+		}
+		else
+			end = mid - 1;
+	}
+
+	return ans;
+}
