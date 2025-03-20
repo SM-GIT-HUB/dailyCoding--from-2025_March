@@ -1,0 +1,65 @@
+int tabulation(int n, vector<int>& arr, int target, int total)
+{
+    vector<vector<bool>> dp(n + 1, vector<bool>(target + 1, false));
+
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = true;
+    }
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int sum = 0; sum <= target; sum++)
+        {
+            bool exclude = dp[index + 1][sum];
+            bool include = (sum >= arr[index]) ? dp[index + 1][sum - arr[index]] : false;
+            
+            dp[index][sum] = include || exclude;
+        }
+    }
+
+    for (int i = target; i >= 0; i--)
+    {
+        if (dp[0][i]) {
+            return abs(i - (total - i));
+        }
+    }
+
+    return 0;
+}
+
+int spaceOpt(int n, vector<int>& arr, int target, int total)
+{
+    vector<bool> next(target + 1, false);
+    vector<bool> curr(target + 1, false);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        next[0] = true;
+        for (int sum = 0; sum <= target; sum++)
+        {
+            bool exclude = next[sum];
+            bool include = (sum >= arr[index]) ? next[sum - arr[index]] : false;
+            
+            curr[sum] = include || exclude;
+        }
+
+        next = curr;
+    }
+
+    for (int i = target; i >= 0; i--)
+    {
+        if (next[i]) {
+            return abs(i - (total - i));
+        }
+    }
+
+    return 0;
+}
+
+int minSubsetSumDifference(vector<int>& arr, int n)
+{
+    int sum = accumulate(arr.begin(), arr.end(), 0);
+    // return tabulation(n, arr, sum / 2, sum);
+
+    return spaceOpt(n, arr, sum / 2, sum);
+}
