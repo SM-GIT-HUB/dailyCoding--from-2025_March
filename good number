@@ -1,10 +1,10 @@
 bool isGoodNumber(int n) {
     // Write your code here.
-    unordered_map<int, bool> mapp;
+    unordered_set<int> sett;
 
-    while (!mapp[n] && n != 1)
+    while (!sett.count(n) && n != 1)
     {
-        mapp[n] = true;
+        sett.insert(n);
         int newNum = 0;
 
         while (n != 0)
