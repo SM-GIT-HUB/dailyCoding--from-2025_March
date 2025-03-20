@@ -1,0 +1,67 @@
+void getAns(int n, vector<int>& output, vector<vector<int> >& ans)
+{
+    vector<int> temp;
+
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            if (output[row] == col) {
+                temp.push_back(1);
+            }
+            else
+                temp.push_back(0);
+        }
+    }
+
+    ans.push_back(temp);
+}
+
+void track(int row, int n, int &downMask, int &upperMask, int &colMask, vector<int>& output, vector<vector<int> >& ans)
+{
+    if (row >= n)
+    {
+        getAns(n, output, ans);
+        return;
+    }
+
+    auto check = [&](int col) {
+        int colAns = (colMask & (1 << col));
+        int downAns = (downMask & (1 << (row - col + n)));
+        int upperAns = (upperMask & (1 << (row + col)));
+
+        return !(colAns || downAns || upperAns);
+    };
+
+    for (int col = 0; col < n; col++)
+    {
+        if (check(col))
+        {
+            colMask = colMask | (1 << col);
+            downMask = downMask | (1 << (row - col + n));
+            upperMask = upperMask | (1 << (row + col));
+
+            output.push_back(col);
+            track(row + 1, n, downMask, upperMask, colMask, output, ans);
+            output.pop_back();
+
+            colMask = colMask & (~(1 << col));
+            downMask = downMask & (~(1 << (row - col + n)));
+            upperMask = upperMask & (~(1 << (row + col)));
+        }
+    }
+}
+
+vector<vector<int>> solveNQueens(int n) {
+    // Write your code here.
+    vector<vector<int> > ans;
+    vector<int> output;
+
+    int downMask = 0;
+    int upperMask = 0;
+    int colMask = 0;
+
+    track(0, n, downMask, upperMask, colMask, output, ans);
+
+    return ans;
+}
