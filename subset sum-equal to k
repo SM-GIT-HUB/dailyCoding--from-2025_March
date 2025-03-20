@@ -1,0 +1,113 @@
+#include <bits/stdc++.h> 
+
+bool recur(int index, int n, int sum, int k, vector<int>& arr)
+{
+    if (sum == k) {
+        return true;
+    }
+
+    if (index >= n || sum > k) {
+        return false;
+    }
+
+    bool include = recur(index + 1, n, sum + arr[index], k, arr);
+
+    if (include) {
+        return true;
+    }
+    else
+        return recur(index + 1, n, sum, k, arr);
+}
+
+bool memoization(int index, int n, int sum, int k, vector<int>& arr, vector<vector<int> >& dp)
+{
+    if (sum == k) {
+        return true;
+    }
+
+    if (index >= n || sum > k) {
+        return false;
+    }
+
+    if (dp[index][sum] != -1) {
+        return dp[index][sum];
+    }
+
+    bool include = memoization(index + 1, n, sum + arr[index], k, arr, dp);
+
+    if (include) {
+        return dp[index][sum] = 1;
+    }
+    else
+        return dp[index][sum] = (int)memoization(index + 1, n, sum, k, arr, dp);
+}
+
+bool tabulation(int n, int target, vector<int>& arr)
+{
+    vector<vector<int> > dp(n + 1, vector<int>(target + 1, 0));
+    dp[n][target] = 1;
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        dp[index][target] = 1;
+
+        for (int sum = target; sum >= 0; sum--)
+        {
+            bool include = 0;
+
+            if (sum + arr[index] <= target) {
+                include = dp[index + 1][sum + arr[index]];
+            }
+
+            bool exclude = dp[index + 1][sum];
+
+            dp[index][sum] = (include || exclude);
+        }
+    }
+
+    return dp[0][0];
+}
+
+bool spaceOpt(int n, int target, vector<int>& arr)
+{
+    vector<int> next(target + 1, 0);
+    vector<int> curr(target + 1, 0);
+    next[target] = 1;
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        curr[target] = 1;
+
+        for (int sum = target; sum >= 0; sum--)
+        {
+            bool include = 0;
+
+            if (sum + arr[index] <= target) {
+                include = next[sum + arr[index]];
+            }
+
+            bool exclude = next[sum];
+
+            curr[sum] = (include || exclude);
+        }
+
+        next = curr;
+    }
+
+    return next[0];
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    // Write your code here.
+    // bool ans = recur(0, n, 0, k, arr);
+
+    // vector<vector<int> > dp(n, vector<int>(k, -1));
+
+    // bool ans = memoization(0, n, 0, k, arr, dp);
+
+    // bool ans = tabulation(n, k, arr);
+    
+    bool ans = spaceOpt(n, k, arr);
+
+    return ans;
+}
