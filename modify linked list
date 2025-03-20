@@ -1,0 +1,54 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+    class Node
+    {
+    public:
+        int data;
+        Node *next;
+        Node(int data)
+        {
+	        this->data = data;
+	        this->next = NULL;
+        }
+    };
+
+*****************************************************************/
+
+Node* modifyLL(Node* head) 
+{
+	// Write your code here.
+    vector<Node*> store;
+    Node* temp = head;
+
+    while (temp != nullptr)
+    {
+        store.push_back(temp);
+        temp = temp->next;
+    }
+
+    Node* newHead = new Node(-1);
+    temp = newHead;
+    
+    int start = 0, end = store.size() - 1;
+
+    while (start < end)
+    {
+        temp->next = store[start++];
+        temp = temp->next;
+        temp->next = store[end--];
+        temp = temp->next;
+    }
+
+    if (start == end)
+    {
+        temp->next = store[start];
+        temp->next->next = nullptr;
+    }
+    else
+        temp->next = nullptr;
+
+    return newHead->next;
+}
