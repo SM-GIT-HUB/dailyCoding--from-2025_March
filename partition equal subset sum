@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool spaceOpt(int n, int target, vector<int>& arr)
+    {
+        vector<int> next(target + 1, 0);
+        vector<int> curr(target + 1, 0);
+        next[target] = 1;
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            curr[target] = 1;
+
+            for (int sum = target; sum >= 0; sum--)
+            {
+                bool include = 0;
+
+                if (sum + arr[index] <= target) {
+                    include = next[sum + arr[index]];
+                }
+
+                bool exclude = next[sum];
+
+                curr[sum] = (include || exclude);
+            }
+
+            next = curr;
+        }
+
+        return next[0];
+    }
+
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+
+        for (int x : nums)
+        {
+            sum += x;
+        }
+
+        if (sum & 1) {
+            return false;
+        }
+
+        bool ans = spaceOpt(nums.size(), sum / 2, nums);
+        return ans;
+    }
+};
