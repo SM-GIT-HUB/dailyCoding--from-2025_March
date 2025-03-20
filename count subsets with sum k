@@ -1,0 +1,114 @@
+const int mod = 1e9 + 7;
+
+int recur(int index, int &n, vector<int>& arr, int sum, int &target)
+{
+	if (sum > target) {
+		return 0;
+	}
+
+	if (index >= n && sum == target) {
+		return 1;
+	}
+	else if (index >= n) {
+		return 0;
+	}
+
+	int include = recur(index + 1, n, arr, sum + arr[index], target) % mod;
+	int exclude = recur(index + 1, n, arr, sum, target) % mod;
+
+	return (include + exclude) % mod;
+}
+
+int memoization(int index, int &n, vector<int>& arr, int sum, int &target, vector<vector<int> >& dp)
+{
+	if (sum > target) {
+		return 0;
+	}
+
+	if (index >= n && sum == target) {
+		return 1;
+	}
+	else if (index >= n) {
+		return 0;
+	}
+
+	if (dp[index][sum] != -1) {
+		return dp[index][sum];
+	}
+
+	int include = memoization(index + 1, n, arr, sum + arr[index], target, dp) % mod;
+	int exclude = memoization(index + 1, n, arr, sum, target, dp) % mod;
+
+	return dp[index][sum] = (include + exclude) % mod;
+}
+
+int tabulation(int n, vector<int>& arr, int target)
+{
+	vector<vector<int> > dp(n + 1, vector<int>(target + 1, 0));
+
+	dp[n][target] = 1;
+
+	for (int index = n - 1; index >= 0; index--)
+	{
+		for (int sum = target; sum >= 0; sum--)
+		{
+			int include = 0;
+
+			if (sum + arr[index] <= target) {
+				include = dp[index + 1][sum + arr[index]];
+			}
+
+			int exclude = dp[index + 1][sum];
+
+			dp[index][sum] = (include + exclude) % mod;
+		}
+	}
+
+	return dp[0][0];
+}
+
+int spaceOpt(int n, vector<int>& arr, int target)
+{
+	vector<int> next(target + 1, 0);
+	vector<int> curr(target + 1, 0);
+
+	next[target] = 1;
+
+	for (int index = n - 1; index >= 0; index--)
+	{
+		for (int sum = target; sum >= 0; sum--)
+		{
+			int include = 0;
+
+			if (sum + arr[index] <= target) {
+				include = next[sum + arr[index]];
+			}
+
+			int exclude = next[sum];
+
+			curr[sum] = (include + exclude) % mod;
+		}
+
+		next = curr;
+	}
+
+	return next[0];
+}
+
+int findWays(vector<int>& arr, int k)
+{
+	// Write your code here.
+	int n = arr.size();
+
+	// int ans = recur(0, n, arr, 0, k);
+
+	// vector<vector<int> > dp(n, vector<int>(k + 1, -1));
+
+	// int ans = memoization(0, n, arr, 0, k, dp);
+
+	// int ans = tabulation(n, arr, k);
+
+	int ans = spaceOpt(n, arr, k);
+
+	return ans;
+}
