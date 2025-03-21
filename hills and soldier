@@ -1,0 +1,71 @@
+#include <bits/stdc++.h> 
+void getBigger(int n, vector<int>& next, vector<int>& prev, vector<int>& hills)
+{
+    vector<int> nextBig;
+    vector<int> prevBig;
+
+    nextBig.push_back(n);
+    prevBig.push_back(-1);
+
+    int one = 0, two = n - 1;
+
+    while (two >= 0)
+    {
+        while (nextBig.back() != n && hills[nextBig.back()] < hills[two])
+        {
+            nextBig.pop_back();
+        }
+
+        while (prevBig.back() != -1 && hills[prevBig.back()] <= hills[one])
+        {
+            prevBig.pop_back();
+        }
+
+        next[two] = nextBig.back();
+        prev[one] = prevBig.back();
+
+        nextBig.push_back(two--);
+        prevBig.push_back(one++);
+    }
+}
+
+int countPairs(int n, vector<int>& hills) {
+    // Write your code here.
+    vector<int> next(n, n);
+    vector<int> prev(n, -1);
+
+    getBigger(n, next, prev, hills);
+    int ans = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (prev[i] != -1 && hills[prev[i]] != hills[i]) {
+            ans++;
+        }
+
+        if (next[i] != n)
+        {
+            ans++;
+
+            int nextIn = next[next[i]];
+            
+            if (hills[i] == hills[next[i]])
+            {
+                int nextIn = next[next[i]];
+
+                while (nextIn != n)
+                {
+                    ans++;
+                    
+                    if (hills[nextIn] > hills[i]) {
+                        break;
+                    }
+
+                    nextIn = next[nextIn];
+                }
+            }
+        }
+    }
+
+    return ans;
+}
