@@ -1,0 +1,59 @@
+class Solution {
+public:
+    void dfs(int node, vector<string>& recipes, vector<int>& visited, unordered_map<string, int>& mapp, unordered_set<string>& avl, vector<vector<string>>& ing, vector<string>& ans)
+    {
+        visited[node] = 1;
+
+        for (auto &in : ing[node])
+        {
+            if (avl.count(in)) {
+                continue;
+            }
+            else if (mapp.count(in))
+            {
+                if (visited[mapp[in]]) {
+                    return;
+                }
+
+                dfs(mapp[in], recipes, visited, mapp, avl, ing, ans);
+
+                if (!avl.count(in)) {
+                    return;
+                }
+            }
+            else
+                return;
+        }
+
+        avl.insert(recipes[node]);
+        ans.push_back(recipes[node]);
+    }
+
+    vector<string> findAllRecipes(vector<string>& recipes, vector<vector<string>>& ingredients, vector<string>& supplies) {
+        int n = recipes.size();
+        unordered_set<string> avl;
+        unordered_map<string, int> mapp;
+
+        for (string &s : supplies)
+        {
+            avl.insert(s);
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            mapp[recipes[i]] = i;
+        }
+
+        vector<int> visited(n, 0);
+        vector<string> ans;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (!visited[i]) {
+                dfs(i, recipes, visited, mapp, avl, ingredients, ans);
+            }
+        }
+
+        return ans;
+    }
+};
