@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+
+vector<int> theOrder(int n, int k)
+{
+	// Write your code here.
+	vector<int> ans;
+	vector<int> store(n);
+	iota(store.begin(), store.end(), 1);
+
+	int index = 0;
+
+	while (!store.empty())
+	{
+		index = (index + k) % store.size();
+		ans.push_back(store[index]);
+		store.erase(store.begin() + index);
+	}
+
+	return ans;
+}
