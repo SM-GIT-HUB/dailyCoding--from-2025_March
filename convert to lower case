@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+bool isLowerCase(char x)
+{
+    return (x >= 'a' && x <= 'z');
+}
+
+string toLowerCase(string &str){
+    // Write your code here.
+    string ans = "";
+    
+    for (char x : str)
+    {
+        if (!isLowerCase(x)) {
+            ans.push_back(x - 'A' + 'a');
+        }
+        else
+            ans.push_back(x);
+    }
+
+    return ans;
+}
