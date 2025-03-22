@@ -1,0 +1,86 @@
+#include<bits/stdc++.h>
+
+void dfs(int city, int daysLeft, int &days, int currMismatch, int &bestMismatch, vector<int>& path, vector<int>& ans, vector<string>& arr, string &s, vector<vector<int> >& dp, vector<vector<int> >& adj)
+{
+    if (daysLeft == 0)
+    {
+        if (currMismatch < bestMismatch)
+        {
+            bestMismatch = currMismatch;
+            ans = path;
+        }
+
+        return;
+    }
+
+    if (dp[city][daysLeft] != -1 && dp[city][daysLeft] <= currMismatch) {
+        return;
+    }
+
+    dp[city][daysLeft] = currMismatch;
+
+    for (int nextCity : adj[city])
+    {
+        if (path.back() == nextCity) {
+            continue;
+        }
+
+        int moreMismatch = 0;
+        string cityCode = arr[nextCity];
+        string target = s.substr(3 * (days - daysLeft), 3);
+        
+        for (int i = 0; i < 3; i++)
+        {
+            if (cityCode[i] != target[i]) {
+                moreMismatch++;
+            }
+        }
+
+        if (currMismatch + moreMismatch >= bestMismatch) {
+            continue;
+        }
+
+        path.push_back(nextCity);
+        dfs(nextCity, daysLeft - 1, days, currMismatch + moreMismatch, bestMismatch, path, ans, arr, s, dp, adj);
+        path.pop_back();
+    }
+}
+
+vector<int> findOptimalOrder(vector<string> &arr, vector<vector<int>> &roads, string &s)
+{
+    // Write your code here
+    int n = arr.size();
+    vector<vector<int> > adj(n);
+
+    for (auto &r : roads)
+    {
+        adj[r[0]].push_back(r[1]);
+        adj[r[1]].push_back(r[0]);
+    }
+
+    int days = s.size() / 3;
+    vector<int> ans;
+    vector<int> path;
+
+    vector<vector<int> > dp(n, vector<int>(days + 1, -1));
+
+    int bestMismatch = INT_MAX;
+
+    for (int city = 0; city < n; city++)
+    {
+        path.push_back(city);
+        int currMismatch = 0;
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (arr[city][i] != s[i]) {
+                currMismatch++;
+            }
+        }
+
+        dfs(city, days - 1, days, currMismatch, bestMismatch, path, ans, arr, s, dp, adj);
+        path.pop_back();
+    }
+
+    return ans;
+}
