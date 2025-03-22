@@ -1,0 +1,65 @@
+void merge(int start, int mid, int end, vector<pair<int, int> >& arr, vector<int>& ans)
+{
+    vector<pair<int, int> > merged;
+    int one = start, two = mid + 1;
+    int count = 0;
+
+    while (one <= mid && two <= end)
+    {
+        if (arr[one].first <= arr[two].first)
+        {
+            ans[arr[one].second] += count;
+            merged.push_back(arr[one++]);
+        }
+        else
+        {
+            count++;
+            merged.push_back(arr[two++]);
+        }
+    }
+
+    while (one <= mid)
+    {
+        ans[arr[one].second] += count;
+        merged.push_back(arr[one++]);
+    }
+
+    while (two <= end)
+    {
+        merged.push_back(arr[two++]);
+    }
+
+    for (auto &x : merged)
+    {
+        arr[start++] = x;
+    }
+}
+
+void mergeSort(int start, int end, vector<pair<int, int> >& arr, vector<int>& ans)
+{
+    if (start >= end) {
+        return;
+    }
+
+    int mid = start + (end - start) / 2;
+
+    mergeSort(start, mid, arr, ans);
+    mergeSort(mid + 1, end, arr, ans);
+    merge(start, mid, end, arr, ans);
+}
+
+vector<int>countNumber(int n, vector<int> &arr)
+{
+    // Write your code here.
+    vector<int> ans(n, 0);
+    vector<pair<int, int> > myArr;
+
+    for (int i = 0; i < n; i++)
+    {
+        myArr.push_back({arr[i], i});
+    }
+
+    mergeSort(0, n - 1, myArr, ans);
+
+    return ans;
+}
