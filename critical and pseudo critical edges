@@ -1,0 +1,187 @@
+#include<bits/stdc++.h>
+
+class DSU {
+public:
+	vector<int> rank, parent;
+	int comp;
+
+	DSU(int n)
+	{
+		rank.resize(n + 1, 0);
+		comp = n;
+		
+		for (int i = 0; i <= n; i++)
+		{
+			parent.push_back(i);
+		}
+	}
+
+	int findParent(int node)
+	{
+		if (parent[node] == node) {
+			return node;
+		}
+
+		return parent[node] = findParent(parent[node]);
+	}
+
+	void unionByRank(int u, int v)
+	{
+		int uPar = findParent(u);
+		int vPar = findParent(v);
+
+		if (uPar == vPar) {
+			return;
+		}
+		else if (rank[uPar] > rank[vPar]) {
+			parent[vPar] = uPar;
+		}
+		else if (rank[uPar] < rank[vPar]) {
+			parent[uPar] = vPar;
+		}
+		else
+		{
+			parent[vPar] = uPar;
+			rank[uPar]++;
+		}
+
+		comp--;
+	}
+
+	bool sameComp(int u, int v)
+	{
+		return (findParent(u) == findParent(v));
+	}
+};
+
+int createMst(DSU &ds, vector<vector<int> >& oe, int m, vector<int>& mst)
+{
+	int wt = 0;
+
+	for (auto &vec : oe)
+	{
+		int w = vec[0];
+		int u = vec[1];
+		int v = vec[2];
+		int i = vec[3];
+		
+		if (!ds.sameComp(u, v))
+		{
+			ds.unionByRank(u, v);
+			mst[i] = 1;
+			wt += w;
+		}
+	}
+
+	return wt;
+}
+
+int checkMst(vector<vector<int> >& oe, int m, int n, vector<int> forceEdge, int edgeFlag, int orgWt)
+{
+	DSU ds(n);
+	int wt = 0;
+
+	if (forceEdge[0] != -1)
+	{
+		ds.unionByRank(forceEdge[0], forceEdge[1]);
+		wt += forceEdge[2];
+	}
+
+	for (auto &vec : oe)
+	{
+		int w = vec[0];
+		int u = vec[1];
+		int v = vec[2];
+		int i = vec[3];
+
+		if (edgeFlag == i) {
+			continue;
+		}
+		
+		if (!ds.sameComp(u, v))
+		{
+			ds.unionByRank(u, v);
+			wt += w;
+
+			if (wt > orgWt) {
+				break;
+			}
+		}
+	}
+
+	return (wt == orgWt && ds.comp == 1);
+}
+
+vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>> &edges)
+{
+	// Write your code here.
+	DSU ds(n);
+
+	vector<vector<int> > ourEdges;
+	int m = edges.size();
+
+	for (int i = 0; i < m; i++)
+	{
+		int u = edges[i][0];
+		int v = edges[i][1];
+		int w = edges[i][2];
+		ourEdges.push_back({w, u, v, i});
+	}
+
+	sort(ourEdges.begin(), ourEdges.end());
+
+	vector<int> mst(m, 0);
+
+	int wt = createMst(ds, ourEdges, m, mst);
+
+	vector<int> critical(m, 0);
+
+	for (int i = 0; i < m; i++)
+	{
+		if (mst[i] == 1)
+		{
+			bool isCritical = !checkMst(ourEdges, m, n, {-1}, i, wt);
+			critical[i] = isCritical;
+		}
+	}
+
+	vector<int> psCritical(m, 0);
+
+	for (int i = 0; i < m; i++)
+	{
+		if (critical[i] == 0)
+		{
+			bool isPseudo = checkMst(ourEdges, m, n, edges[i], -1, wt);
+			psCritical[i] = isPseudo;
+		}
+	}
+
+	vector<vector<int> > ans;
+	vector<int> temp1;
+	vector<int> temp2;
+
+	for (int i = 0; i < m; i++)
+	{
+		if (critical[i] == 1) {
+			temp1.push_back(i);
+		}
+
+		if (psCritical[i] == 1) {
+			temp2.push_back(i);
+		}
+	}
+
+	if (temp1.size() == 0) {
+		ans.push_back({-1});
+	}
+	else
+		ans.push_back(temp1);
+
+	if (temp2.size() == 0) {
+		ans.push_back({-1});
+	}
+	else
+		ans.push_back(temp2);
+
+	return ans;
+}
