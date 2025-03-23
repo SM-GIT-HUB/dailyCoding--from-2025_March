@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+
+int getGcd(int a, int b, int &x, int &y)
+{
+    if (a == 0)
+    {
+        x = 0, y = 1;
+        return b;
+    }
+
+    int x1 = 0, y1 = 0;
+    int gcd = getGcd(b % a, a, x1, y1);
+
+    x = y1 - (b / a) * x1;
+    y = x1;
+    return gcd;
+}
+
+vector<int> extended_gcd(int a, int b){
+    // Write your code here.
+    int d, x, y;
+    d = getGcd(a, b, x, y);
+
+    return {d, x, y};
+}
+    
