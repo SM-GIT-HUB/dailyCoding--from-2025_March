@@ -1,0 +1,114 @@
+class Solution {
+public:
+    int recur(int index, int n, vector<int>& coins, int amount)
+    {
+        if (amount < 0) {
+            return 0;
+        }
+        
+        if (index >= n) {
+            return (amount == 0);
+        }
+
+        int ans = recur(index, n, coins, amount - coins[index]);
+        ans += recur(index, n, coins, amount);
+
+        int c = coins[index];
+
+        for (int x = c; x <= amount; x += c)
+        {
+            ans += recur(index + 1, n, coins, amount - x);
+        }
+
+        return ans;
+    }
+
+    int memoization(int index, int n, vector<int>& coins, int amount, vector<vector<int> >& dp)
+    {
+        if (amount < 0) {
+            return 0;
+        }
+        
+        if (index >= n) {
+            return (amount == 0);
+        }
+
+        if (dp[index][amount] != -1) {
+            return dp[index][amount];
+        }
+
+        int ans = memoization(index, n, coins, amount - coins[index], dp);
+        ans += memoization(index + 1, n, coins, amount, dp);
+
+        return dp[index][amount] = ans;
+    }
+
+    int tabulation(int n, vector<int>& coins, int amount)
+    {
+        long long mod = 1LL + INT_MAX;
+        vector<vector<long long> > dp(n + 1, vector<long long>(amount + 1, 0));
+        dp[n][0] = 1;
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int amt = 0; amt <= amount; amt++)
+            {
+                long long ans = 0;
+                
+                if (amt - coins[index] >= 0) {
+                    ans = (ans + dp[index][amt - coins[index]]) % mod;
+                }
+
+                ans = (ans + dp[index + 1][amt]) % mod;
+
+                dp[index][amt] = ans;
+            }
+        }
+
+        return dp[0][amount];
+    }
+
+    int spaceOpt(int n, vector<int>& coins, int amount)
+    {
+        long long mod = 1LL + INT_MAX;
+        vector<long long> nextRow(amount + 1, 0);
+        vector<long long> currRow(amount + 1, 0);
+        nextRow[0] = 1;
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int amt = 0; amt <= amount; amt++)
+            {
+                long long ans = 0;
+                
+                if (amt - coins[index] >= 0) {
+                    ans = (ans + currRow[amt - coins[index]]) % mod;
+                }
+
+                ans = (ans + nextRow[amt]) % mod;
+
+                currRow[amt] = ans;
+            }
+
+            nextRow = currRow;
+        }
+
+        return nextRow[amount];
+    }
+
+    int change(int amount, vector<int>& coins) {
+        int n = coins.size();
+
+        // int ans = recur(0, n, coins, amount);
+
+        // vector<vector<int> > dp(n, vector<int>(amount + 1, -1));
+
+        // int ans = memoization(0, n, coins, amount, dp);
+
+        // int ans = tabulation(n, coins, amount);
+
+        int ans = spaceOpt(n, coins, amount);
+
+        return ans;
+    }
+};
