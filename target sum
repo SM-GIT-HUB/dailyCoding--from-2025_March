@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int spaceOpt(int n, int d, int sum, vector<int>& arr)
+    {
+        vector<int> nextRow(sum + 1, 0);
+        vector<int> currRow(sum + 1, 0);
+
+        for (int curr = 0; curr <= sum; curr++)
+        {
+            int rem = sum - curr;
+
+            nextRow[curr] = ((rem - curr) == d);
+        }
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int curr = sum; curr >= 0; curr--)
+            {
+                int rem = sum - curr;
+
+                int ans = 0;
+
+                if (curr + arr[index] <= sum) {
+                    ans = nextRow[curr + arr[index]];;
+                }
+
+                ans = ans + nextRow[curr];
+
+                currRow[curr] = ans;
+            }
+
+            nextRow = currRow;
+        }
+
+        return nextRow[0];
+        cout << endl;
+    }
+
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int sum = 0;
+
+        for (int x : nums)
+        {
+            sum += x;
+        }
+
+        int ans = spaceOpt(n, target, sum, nums);
+
+        return ans;
+    }
+};
