@@ -1,0 +1,132 @@
+
+class Solution {
+  public:
+    int recur(int index, int n, int w, vector<int>& val, vector<int>& wt)
+    {
+        if (w < 0 || index >= n) {
+            return 0;
+        }
+        
+        int include = 0;
+        
+        if (w - wt[index] >= 0) {
+            include = val[index] + recur(index + 1, n, w - wt[index], val, wt);
+        }
+        
+        int exclude = recur(index + 1, n, w, val, wt);
+        
+        return max(include, exclude);
+    }
+    
+    int memoization(int index, int n, int w, vector<int>& val, vector<int>& wt, vector<vector<int> >& dp)
+    {
+        if (w < 0 || index >= n) {
+            return 0;
+        }
+        
+        if (dp[index][w] != -1) {
+            return dp[index][w];
+        }
+        
+        int include = 0;
+        
+        if (w - wt[index] >= 0) {
+            include = val[index] + memoization(index + 1, n, w - wt[index], val, wt, dp);
+        }
+        
+        int exclude = memoization(index + 1, n, w, val, wt, dp);
+        
+        return dp[index][w] = max(include, exclude);
+    }
+    
+    int tabulation(int n, int totalW, vector<int>& val, vector<int>& wt)
+    {
+        vector<vector<int> > dp(n + 1, vector<int>(totalW + 1, 0));
+        
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int w = totalW; w >= 0; w--)
+            {
+                int include = 0;
+                
+                if (w - wt[index] >= 0) {
+                    include = val[index] + dp[index + 1][w - wt[index]];
+                }
+                
+                int exclude = dp[index + 1][w];
+                
+                dp[index][w] = max(include, exclude);
+            }
+        }
+        
+        return dp[0][totalW];
+    }
+    
+    int spaceOpt1(int n, int totalW, vector<int>& val, vector<int>& wt)
+    {
+        vector<int> nextRow(totalW + 1, 0);
+        vector<int> currRow(totalW + 1, 0);
+        
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int w = totalW; w >= 0; w--)
+            {
+                int include = 0;
+                
+                if (w - wt[index] >= 0) {
+                    include = val[index] + nextRow[w - wt[index]];
+                }
+                
+                int exclude = nextRow[w];
+                
+                currRow[w] = max(include, exclude);
+            }
+            
+            nextRow = currRow;
+        }
+        
+        return nextRow[totalW];
+    }
+    
+    int spaceOpt2(int n, int totalW, vector<int>& val, vector<int>& wt)
+    {
+        vector<int> currRow(totalW + 1, 0);
+        
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int w = totalW; w >= 0; w--)
+            {
+                int include = 0;
+                
+                if (w - wt[index] >= 0) {
+                    include = val[index] + currRow[w - wt[index]];
+                }
+                
+                int exclude = currRow[w];
+                
+                currRow[w] = max(include, exclude);
+            }
+        }
+        
+        return currRow[totalW];
+    }
+  
+    int knapsack(int W, vector<int> &val, vector<int> &wt) {
+        // code here
+        int n = val.size();
+        
+        // int ans = recur(0, n, W, val, wt);
+        
+        // vector<vector<int> > dp(n, vector<int>(W + 1, -1));
+        
+        // int ans = memoization(0, n, W, val, wt, dp);
+        
+        // int ans = tabulation(n, W, val, wt);
+        
+        // int ans = spaceOpt1(n, W, val, wt);
+        
+        int ans = spaceOpt2(n, W, val, wt);
+        
+        return ans;
+    }
+};
