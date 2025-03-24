@@ -1,0 +1,80 @@
+class Solution {
+public:
+    long long recur(vector<int>& coins, int amount)
+    {
+        if (amount < 0) {
+            return (1e9 + 1);
+        }
+
+        if (amount == 0) {
+            return 0;
+        }
+
+        long long ans = LLONG_MAX;
+
+        for (auto &c : coins)
+        {
+            ans = min(ans, 1 + recur(coins, amount - c));
+        }
+
+        return ans;
+    }
+
+    long long memoization(vector<int>& coins, int amount, vector<long long>& dp)
+    {
+        if (amount < 0) {
+            return (1e9 + 1);
+        }
+
+        if (amount == 0) {
+            return 0;
+        }
+
+        if (dp[amount] != -1) {
+            return dp[amount];
+        }
+
+        long long ans = LLONG_MAX;
+
+        for (auto &c : coins)
+        {
+            ans = min(ans, 1 + memoization(coins, amount - c, dp));
+        }
+
+        return dp[amount] = ans;
+    }
+
+    int tabulation(vector<int>& coins, int amount)
+    {
+        vector<long long> dp(amount + 1, INT_MAX);
+        dp[0] = 0;
+
+        for (int amt = 1; amt <= amount; amt++)
+        {
+            for (auto &c : coins)
+            {
+                if (amt - c >= 0) {
+                    dp[amt] = min(dp[amt], 1 + dp[amt - c]);
+                }
+            }
+        }
+
+        return (dp[amount] >= INT_MAX)? -1 : dp[amount];
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+        // int ans = recur(coins, amount);
+
+        // vector<long long> dp(amount + 1, -1);
+
+        // int ans = memoization(coins, amount, dp);
+
+        int ans = tabulation(coins, amount);
+
+        // if (ans >= (1e9 + 1)) {
+        //     return -1;
+        // }
+        
+        return ans;
+    }
+};
