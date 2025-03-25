@@ -64,7 +64,7 @@ class Solution {
         return dp[0][w];
     }
     
-    int spaceOpt(int n, int w, vector<int>& profit, vector<int>& weight)
+    int spaceOpt1(int n, int w, vector<int>& profit, vector<int>& weight)
     {
         vector<int> next(w + 1, 0);
         vector<int> curr(w + 1, 0);
@@ -89,6 +89,29 @@ class Solution {
     
         return next[w];
     }
+    
+    int spaceOpt2(int n, int w, vector<int>& profit, vector<int>& weight)
+    {
+        vector<int> curr(w + 1, 0);
+    
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int wt = 0; wt <= w; wt++)
+            {
+                int include = 0;
+    
+                if (wt - weight[index] >= 0) {
+                    include = profit[index] + curr[wt - weight[index]];
+                }
+    
+                int exclude = curr[wt];
+    
+                curr[wt] = max(include, exclude);
+            }
+        }
+    
+        return curr[w];
+    }
   
     int knapSack(vector<int>& profit, vector<int>& weight, int w) {
         // code here
@@ -102,7 +125,9 @@ class Solution {
         
         // int ans = tabulation(n, w, profit, weight);
         
-        int ans = spaceOpt(n, w, profit, weight);
+        // int ans = spaceOpt1(n, w, profit, weight);
+        
+        int ans = spaceOpt2(n, w, profit, weight);
     
         return ans;
     }
