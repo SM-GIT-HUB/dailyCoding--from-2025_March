@@ -1,52 +1,72 @@
 #include <bits/stdc++.h> 
+struct obj {
+public:
+    int x;
+    int y;
+    int row;
+    int col;
+};
+
 class comp {
 public:
-    bool operator()(auto x, auto y)
+    bool operator()(auto a, auto b)
     {
-        int one = x.first + x.second;
-        int two = y.first + y.second;
+        int one = a.x + a.y;
+        int two = b.x + b.y;
         
         if (one == two) {
-            return (x.first < y.first);
+            return (a.x > b.x);
         }
         else
-            return (one < two);
+            return (one > two);
     }
 };
+
+string getS(int row, int col)
+{
+    return to_string(row) + " " + to_string(col);
+}
 
 vector<vector<int>> findPairs (int n, int m, vector<int> &arr1, vector<int> &arr2, int k)
 {
     // Write your code here.
-    priority_queue<pair<int, int>, vector<pair<int, int> >, comp> pq;
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            pq.push({arr1[i], arr2[j]});
-
-            if (pq.size() > k) {
-                pq.pop();
-            }
-        }
-    }
-
+    priority_queue<obj, vector<obj>, comp> pq;
     vector<vector<int> > ans;
 
-    while (!pq.empty())
+    unordered_set<string> sett;
+    pq.push({arr1[0], arr2[0], 0, 0});
+
+    for (int i = 0; i < k; i++)
     {
-        ans.push_back({pq.top().first, pq.top().second});
+        obj top = pq.top();
         pq.pop();
+
+        int x = top.x, y = top.y;
+        int row = top.row, col = top.col;
+
+        ans.push_back({x, y});
+
+        int row1 = row + 1;
+        int col1 = col + 1;
+
+        if (row1 < n && col1 < m && sett.count(getS(row1, col1)) == 0)
+        {
+            pq.push({arr1[row1], arr2[col1], row1, col1});
+            sett.insert(getS(row1, col1));
+        }
+
+        if (row1 < n && sett.count(getS(row1, col)) == 0)
+        {
+            pq.push({arr1[row1], arr2[col], row1, col});
+            sett.insert(getS(row1, col));
+        }
+
+        if (col1 < m && sett.count(getS(row, col1)) == 0)
+        {
+            pq.push({arr1[row], arr2[col1], row, col1});
+            sett.insert(getS(row, col1));
+        }
     }
-
-    // sort(ans.begin(), ans.end(), [&](auto x, auto y) {
-    //     if (x[0] + x[1] == y[0] + y[1]) {
-    //         return (x[0] < y[0]);
-    //     }
-    //     return (x[0] + x[1] < y[0] + y[1]);
-    // });
-
-    reverse(ans.begin(), ans.end());
 
     return ans;
 }
