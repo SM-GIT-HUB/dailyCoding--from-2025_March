@@ -1,0 +1,52 @@
+#include <bits/stdc++.h> 
+class comp {
+public:
+    bool operator()(auto x, auto y)
+    {
+        int one = x.first + x.second;
+        int two = y.first + y.second;
+        
+        if (one == two) {
+            return (x.first < y.first);
+        }
+        else
+            return (one < two);
+    }
+};
+
+vector<vector<int>> findPairs (int n, int m, vector<int> &arr1, vector<int> &arr2, int k)
+{
+    // Write your code here.
+    priority_queue<pair<int, int>, vector<pair<int, int> >, comp> pq;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            pq.push({arr1[i], arr2[j]});
+
+            if (pq.size() > k) {
+                pq.pop();
+            }
+        }
+    }
+
+    vector<vector<int> > ans;
+
+    while (!pq.empty())
+    {
+        ans.push_back({pq.top().first, pq.top().second});
+        pq.pop();
+    }
+
+    // sort(ans.begin(), ans.end(), [&](auto x, auto y) {
+    //     if (x[0] + x[1] == y[0] + y[1]) {
+    //         return (x[0] < y[0]);
+    //     }
+    //     return (x[0] + x[1] < y[0] + y[1]);
+    // });
+
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
