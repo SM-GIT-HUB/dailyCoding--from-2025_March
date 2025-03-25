@@ -1,0 +1,68 @@
+#include<bits/stdc++.h>
+
+vector<int> findFreeIntervals(vector<vector<int>> &schedules) {
+    /*	
+		'schedules': vector of 'N' vectors, where schedules[i] 
+					 is a vector of intergers in which every two 
+					 numbers shows an interval in which Problem Setter 
+					 with id 'i' works.
+	*/
+
+	// Write your code here
+
+	vector<vector<int> > ins;
+
+	for (auto &s : schedules)
+	{
+		for (int i = 0; i < s.size(); i += 2)
+		{
+			ins.push_back({s[i], s[i + 1]});
+		}
+	}
+
+	sort(ins.begin(), ins.end());
+	vector<int> ans;
+
+	if (ins[0][0] > 0)
+	{
+		ans.push_back(0);
+		ans.push_back(ins[0][0] - 1);
+	}
+
+	int n = ins.size();
+	int index = 0;
+	int maxi = 0;
+
+	while (index < n)
+	{
+		int start = ins[index][0];
+		int end = ins[index][1];
+
+		maxi = max(end, maxi);
+
+		int i = index + 1;
+
+		while (i < n && end >= ins[i][0])
+		{
+			end = max(ins[i][1], end);
+			maxi = max(end, maxi);
+			i++;
+		}
+
+		if (i < n && end < ins[i][0] - 1)
+		{
+			ans.push_back(end + 1);
+			ans.push_back(ins[i][0] - 1);
+		}
+
+		index = i;
+	}
+
+	if (maxi < 1e8)
+	{
+		ans.push_back(maxi + 1);
+		ans.push_back(1e8);
+	}
+
+	return ans;
+}
