@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+int minimumCost(int n, string &s, vector<int> &cost) {
+    // Write your code here.
+    int ans = 0;
+
+    int index = 0;
+
+    while (index < n)
+    {
+        char ch = s[index];
+        int maxi = 0;
+        int count = 0;
+        int temp = 0;
+
+        while (index < n && s[index] == ch)
+        {
+            count++;
+            temp += cost[index];
+            maxi = max(cost[index], maxi);
+            index++;
+        }
+
+        if (count > 1)
+        {
+            temp = temp - maxi;
+            ans += temp;
+        }
+    }
+
+    return ans;
+}
