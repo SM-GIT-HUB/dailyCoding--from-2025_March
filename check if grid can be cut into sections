@@ -1,0 +1,64 @@
+class Solution {
+public:
+    bool checkValidCuts(int n, vector<vector<int>>& rectangles) {
+        vector<pair<int, int> > xn;
+        vector<pair<int, int> > yn;
+
+        for (auto &r : rectangles)
+        {
+            xn.push_back({r[0], r[2]});
+            yn.push_back({r[1], r[3]});
+        }
+
+        sort(xn.begin(), xn.end());
+        sort(yn.begin(), yn.end());
+
+        int m = xn.size();
+        int ans = 0;
+        
+        int index = 0;
+
+        while (index < m && ans < 3)
+        {
+            int start = xn[index].first;
+            int end = xn[index].second;
+
+            int i = index + 1;
+
+            while (i < m && end > xn[i].first)
+            {
+                end = max(xn[i].second, end);
+                i++;
+            }
+
+            ans++;
+            index = i;
+        }
+
+        if (ans >= 3) {
+            return true;
+        }
+
+        ans = 0;
+        index = 0;
+
+        while (index < m && ans < 3)
+        {
+            int start = yn[index].first;
+            int end = yn[index].second;
+
+            int i = index + 1;
+
+            while (i < m && end > yn[i].first)
+            {
+                end = max(yn[i].second, end);
+                i++;
+            }
+
+            ans++;
+            index = i;
+        }
+
+        return (ans >= 3);
+    }
+};
