@@ -1,0 +1,109 @@
+
+// User function Template for C++
+
+class Solution {
+  public:
+    int recur(int index, int n, int w, vector<int>& profit, vector<int>& weight)
+    {
+        if (w < 0 || index >= n) {
+            return 0;
+        }
+    
+        int include = 0;
+    
+        if (w - weight[index] >= 0) {
+            include = profit[index] + recur(index, n, w - weight[index], profit, weight);
+        }
+    
+        int exclude = recur(index + 1, n, w, profit, weight);
+    
+        return max(include, exclude);
+    }
+    
+    int memoization(int index, int n, int w, vector<int>& profit, vector<int>& weight, vector<vector<int> >& dp)
+    {
+        if (w < 0 || index >= n) {
+            return 0;
+        }
+    
+        if (dp[index][w] != -1) {
+            return dp[index][w];
+        }
+    
+        int include = 0;
+    
+        if (w - weight[index] >= 0) {
+            include = profit[index] + memoization(index, n, w - weight[index], profit, weight, dp);
+        }
+    
+        int exclude = memoization(index + 1, n, w, profit, weight, dp);
+    
+        return dp[index][w] = max(include, exclude);
+    }
+    
+    int tabulation(int n, int w, vector<int>& profit, vector<int>& weight)
+    {
+        vector<vector<int> > dp(n + 1, vector<int>(w + 1, 0));
+    
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int wt = 0; wt <= w; wt++)
+            {
+                int include = 0;
+    
+                if (wt - weight[index] >= 0) {
+                    include = profit[index] + dp[index][wt - weight[index]];
+                }
+    
+                int exclude = dp[index + 1][wt];
+    
+                dp[index][wt] = max(include, exclude);
+            }
+        }
+    
+        return dp[0][w];
+    }
+    
+    int spaceOpt(int n, int w, vector<int>& profit, vector<int>& weight)
+    {
+        vector<int> next(w + 1, 0);
+        vector<int> curr(w + 1, 0);
+    
+        for (int index = n - 1; index >= 0; index--)
+        {
+            for (int wt = 0; wt <= w; wt++)
+            {
+                int include = 0;
+    
+                if (wt - weight[index] >= 0) {
+                    include = profit[index] + curr[wt - weight[index]];
+                }
+    
+                int exclude = next[wt];
+    
+                curr[wt] = max(include, exclude);
+            }
+    
+            next = curr;
+        }
+    
+        return next[w];
+    }
+  
+    int knapSack(vector<int>& profit, vector<int>& weight, int w) {
+        // code here
+        int n = weight.size();
+        
+        // int ans = recur(0, n, w, profit, weight);
+
+        // vector<vector<int> > dp(n, vector<int>(w + 1, -1));
+    
+        // int ans = memoization(0, n, w, profit, weight, dp);
+        
+        // int ans = tabulation(n, w, profit, weight);
+        
+        int ans = spaceOpt(n, w, profit, weight);
+    
+        return ans;
+    }
+};
