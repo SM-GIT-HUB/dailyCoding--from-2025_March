@@ -1,0 +1,11 @@
+#include <bits/stdc++.h> 
+int flipSomeBits(int num, vector<int> &arr, int n)
+{
+	// Write your code here.
+	for (int x : arr)
+	{
+		num = num ^ (1 << (x - 1));
+	}
+
+	return num;
+}
