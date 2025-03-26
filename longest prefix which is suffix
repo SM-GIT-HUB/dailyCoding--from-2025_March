@@ -1,0 +1,22 @@
+string longestPrefixSuffix(string &str){
+    // Write your code here.
+    int n = str.size();
+    vector<int> lps(n, 0);
+
+    int len = 0;
+    int index = 1;
+
+    while (index < n)
+    {
+        if (str[len] == str[index]) {
+            lps[index++] = ++len;
+        }
+        else if (len == 0) {
+            lps[index++] = 0;
+        }
+        else
+            len = lps[len - 1];
+    }
+
+    return str.substr(0, lps[n - 1]);
+}
