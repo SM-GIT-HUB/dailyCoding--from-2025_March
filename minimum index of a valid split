@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+        int n = nums.size();
+        int elem = -1;
+        int count = 0;
+
+        for (int x : nums)
+        {
+            if (x == elem) {
+                count++;
+            }
+            else
+                count--;
+            
+            if (count < 0)
+            {
+                elem = x;
+                count = 1;
+            }
+        }
+
+        count = 0;
+
+        for (int x : nums)
+        {
+            if (elem == x) {
+                count++;
+            }
+        }
+
+        if (count <= n / 2) {
+            return -1;
+        }
+
+        int count1 = 0;
+        int count2 = count;
+
+        for (int i = 0; i < n; i++)
+        {
+            int size1 = i - 0 + 1;
+            int size2 = n - i - 1;
+
+            if (nums[i] == elem)
+            {
+                count1++;
+                count2--;
+            }
+
+            if (count1 > size1 / 2 && count2 > size2 / 2) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+};
