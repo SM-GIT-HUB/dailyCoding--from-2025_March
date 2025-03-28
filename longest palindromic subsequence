@@ -1,0 +1,136 @@
+#include <bits/stdc++.h> 
+
+int recur(int start, int end, string &s)
+{
+    if (start > end) {
+        return 0;
+    }
+
+    if (start == end) {
+        return 1;
+    }
+
+    int ans = 0;
+
+    if (s[start] == s[end]) {
+        ans = 2 + recur(start + 1, end - 1, s);
+    }
+    else
+    {
+        int ans1 = recur(start + 1, end, s);
+        int ans2 = recur(start, end - 1, s);
+
+        ans = max(ans1, ans2);
+    }
+
+    return ans;
+}
+
+int memoization(int start, int end, string &s, vector<vector<int> >& dp)
+{
+    if (start > end) {
+        return 0;
+    }
+
+    if (start == end) {
+        return 1;
+    }
+
+    if (dp[start][end] != -1) {
+        return dp[start][end];
+    }
+
+    int ans = 0;
+
+    if (s[start] == s[end]) {
+        ans = 2 + memoization(start + 1, end - 1, s, dp);
+    }
+    else
+    {
+        int ans1 = memoization(start + 1, end, s, dp);
+        int ans2 = memoization(start, end - 1, s, dp);
+
+        ans = max(ans1, ans2);
+    }
+
+    return dp[start][end] = ans;
+}
+
+int tabulation(int n, string &s)
+{
+    vector<vector<int> > dp(n + 1, vector<int>(n + 1, 0));
+
+    for (int start = n - 1; start >= 0; start--)
+    {
+        dp[start][start] = 1;
+        for (int end = start + 1; end < n; end++)
+        {
+            int ans = 0;
+
+            if (s[start] == s[end]) {
+                ans = 2 + dp[start + 1][end - 1];
+            }
+            else
+            {
+                int ans1 = dp[start + 1][end];
+                int ans2 = dp[start][end - 1];
+
+                ans = max(ans1, ans2);
+            }
+
+            dp[start][end] = ans;
+        }
+    }
+
+    return dp[0][n - 1];
+}
+
+int spaceOpt(int n, string &s)
+{
+    vector<int> next(n + 1, 0);
+    vector<int> curr(n + 1, 0);
+
+    for (int start = n - 1; start >= 0; start--)
+    {
+        curr[start] = 1;
+        for (int end = start + 1; end < n; end++)
+        {
+            int ans = 0;
+
+            if (s[start] == s[end]) {
+                ans = 2 + next[end - 1];
+            }
+            else
+            {
+                int ans1 = next[end];
+                int ans2 = curr[end - 1];
+
+                ans = max(ans1, ans2);
+            }
+
+            curr[end] = ans;
+        }
+
+        next = curr;
+    }
+
+    return next[n - 1];
+}
+
+int longestPalindromeSubsequence(string s)
+{
+    // Write your code here.
+    int n = s.size();
+
+    // int ans = recur(0, n - 1, s);
+
+    // vector<vector<int> > dp(n, vector<int>(n, -1));
+
+    // int ans = memoization(0, n - 1, s, dp);
+
+    // int ans = tabulation(n, s);
+
+    int ans = spaceOpt(n, s);
+
+    return ans;
+}
