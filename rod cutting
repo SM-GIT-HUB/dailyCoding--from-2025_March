@@ -1,0 +1,99 @@
+int recur(int cut, int n, vector<int>& price)
+{
+	if (n == 0) {
+		return 0;
+	}
+
+	if (cut > n) {
+		return price[n - 1];
+	}
+
+	int ans = price[cut - 1] + recur(cut, n - cut, price);
+	ans = max(ans, recur(cut + 1, n, price));
+
+	return ans;
+}
+
+int memoization(int cut, int n, vector<int>& price, vector<vector<int> >& dp)
+{
+	if (n == 0) {
+		return 0;
+	}
+
+	if (cut > n) {
+		return price[n - 1];
+	}
+
+	if (dp[cut][n] != -1) {
+		return dp[cut][n];
+	}
+
+	int ans = price[cut - 1] + memoization(cut, n - cut, price, dp);
+	ans = max(ans, memoization(cut + 1, n, price, dp));
+
+	return dp[cut][n] = ans;
+}
+
+int tabulation(int n, vector<int>& price)
+{
+	vector<vector<int> > dp(n + 2, vector<int>(n + 1, 0));
+
+	for (int index = n; index >= 1; index--)
+	{
+		for (int len = 1; len <= n; len++)
+		{
+			if (len < index) {
+				dp[index][len] = price[len - 1];
+			}
+			else
+			{
+				int ans = price[index - 1] + dp[index][len - index];
+				dp[index][len] = max(dp[index + 1][len], ans);
+			}
+		}
+	}
+
+	return dp[1][n];
+}
+
+int spaceOpt(int n, vector<int>& price)
+{
+	vector<vector<int> > dp(n + 2, vector<int>(n + 1, 0));
+	vector<int> next(n + 1, 0);
+	vector<int> curr(n + 1, 0);
+
+	for (int index = n; index >= 1; index--)
+	{
+		for (int len = 1; len <= n; len++)
+		{
+			if (len < index) {
+				curr[len] = price[len - 1];
+			}
+			else
+			{
+				int ans = price[index - 1] + curr[len - index];
+				curr[len] = max(next[len], ans);
+			}
+		}
+
+		next = curr;
+	}
+
+	return next[n];
+}
+
+int cutRod(vector<int> &price, int n)
+{
+	// Write your code here.
+	// int ans = recur(1, n, price);
+
+	// vector<vector<int> > dp(n + 1, vector<int>(n + 1, -1));
+
+	// int ans = memoization(1, n, price, dp);
+
+	// int ans = tabulation(n, price);
+
+	int ans = spaceOpt(n, price);
+
+	return ans;
+}
