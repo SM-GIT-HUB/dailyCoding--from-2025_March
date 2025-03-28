@@ -1,0 +1,88 @@
+#include <bits/stdc++.h> 
+const int mod = 1e9 + 7;
+
+long long recur(long long n)
+{
+    if (n == 0) {
+        return 1;
+    }
+
+    if (n == 2) {
+        return 3;
+    }
+
+    long long ans =( (4 * (recur(n - 2) % mod)) % mod - recur(n - 4) + mod) % mod;
+
+    return ans;
+}
+
+long long memoization(long long n, vector<long long>& dp)
+{
+    if (n == 0) {
+        return 1;
+    }
+
+    if (n == 2) {
+        return 3;
+    }
+
+    if (dp[n] != -1) {
+        return dp[n];
+    }
+
+
+    long long ans = ( (4 * (memoization(n - 2, dp) % mod)) % mod - memoization(n - 4, dp) + mod) % mod;
+
+    return dp[n] = ans;
+}
+
+int tabulation(int n)
+{
+    vector<long long> dp(n + 1, 0);
+    dp[0] = 1;
+    dp[2] = 3;
+
+    for (int index = 4; index <= n; index += 2)
+    {
+        long long ans = ( (4 * dp[index - 2]) % mod - dp[index - 4] + mod) % mod;
+
+        dp[index] = ans;
+    }
+
+    return dp[n];
+}
+
+int spaceOpt(int n)
+{
+    long long prev2 = 1;
+    long long prev1 = 3;
+    long long ans = 3;
+
+    for (int index = 4; index <= n; index += 2)
+    {
+        ans = ( (4 * prev1) % mod - prev2 + mod) % mod;
+
+        prev2 = prev1;
+        prev1 = ans;
+    }
+
+    return ans;
+}
+
+int dominosRearrangement(int n)
+{
+    // Write your code here.
+    if (n & 1) {
+        return 0;
+    }
+
+    // long long ans = recur(n) % mod;
+
+    // vector<long long> dp(n + 1, -1);
+
+    // long long ans = memoization(n, dp);
+
+    int ans = tabulation(n);
+
+    return ans;
+}
