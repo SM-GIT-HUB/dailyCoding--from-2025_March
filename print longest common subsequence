@@ -1,0 +1,56 @@
+string tabulation(int m, int n, string &s, string &t)
+{
+	vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+
+	for (int in1 = m - 1; in1 >= 0; in1--)
+	{
+		for (int in2 = n - 1; in2 >= 0; in2--)
+		{
+			int ans = 0;
+
+			if (s[in1] == t[in2]) {
+				ans = 1 + dp[in1 + 1][in2 + 1];
+			}
+			else
+			{
+				int skip1 = dp[in1 + 1][in2];
+				int skip2 = dp[in1][in2 + 1];
+
+				ans = max(skip1, skip2);
+			}
+
+			dp[in1][in2] = ans;
+		}
+	}
+
+	string ans = "";
+
+	int in1 = 0, in2 = 0;
+
+	while (in1 < m && in2 < n)
+	{
+		if (s[in1] == t[in2])
+		{
+			ans += s[in1];
+			in1++;
+			in2++;
+		}
+		else
+		{
+			if (dp[in1 + 1][in2] > dp[in1][in2 + 1]) {
+				in1++;
+			}
+			else
+				in2++;
+		}
+	}
+
+	return ans;
+}
+
+string findLCS(int m, int n,string &s1, string &s2)
+{
+	// Write your code here.
+	string ans = tabulation(m, n, s1, s2);
+	return ans;
+}
