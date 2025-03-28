@@ -1,0 +1,127 @@
+#include<bits/stdc++.h>
+
+int recur(int in1, int in2, int &m, int &n, string &s, string &t)
+{
+	if (in1 >= m || in2 >= n) {
+		return 0;
+	}
+
+	int ans = 0;
+
+	if (s[in1] == t[in2]) {
+		ans = 1 + recur(in1 + 1, in2 + 1, m, n, s, t);
+	}
+	else
+	{
+		int skip1 = recur(in1 + 1, in2, m ,n, s, t);
+		int skip2 = recur(in1, in2 + 1, m, n, s, t);
+
+		ans = max(skip1, skip2);
+	}
+
+	return ans;
+}
+
+int memoization(int in1, int in2, int &m, int &n, string &s, string &t, vector<vector<int> >& dp)
+{
+	if (in1 >= m || in2 >= n) {
+		return 0;
+	}
+
+	if (dp[in1][in2] != -1) {
+		return dp[in1][in2];
+	}
+
+	int ans = 0;
+
+	if (s[in1] == t[in2]) {
+		ans = 1 + memoization(in1 + 1, in2 + 1, m, n, s, t, dp);
+	}
+	else
+	{
+		int skip1 = memoization(in1 + 1, in2, m ,n, s, t, dp);
+		int skip2 = memoization(in1, in2 + 1, m, n, s, t, dp);
+
+		ans = max(skip1, skip2);
+	}
+
+	return dp[in1][in2] = ans;
+}
+
+int tabulation(int m, int n, string &s, string &t)
+{
+	vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+
+	for (int in1 = m - 1; in1 >= 0; in1--)
+	{
+		for (int in2 = n - 1; in2 >= 0; in2--)
+		{
+			int ans = 0;
+
+			if (s[in1] == t[in2]) {
+				ans = 1 + dp[in1 + 1][in2 + 1];
+			}
+			else
+			{
+				int skip1 = dp[in1 + 1][in2];
+				int skip2 = dp[in1][in2 + 1];
+
+				ans = max(skip1, skip2);
+			}
+
+			dp[in1][in2] = ans;
+		}
+	}
+
+	return dp[0][0];
+}
+
+int spaceOpt(int m, int n, string &s, string &t)
+{
+	vector<int> next(n + 1, 0);
+	vector<int> curr(n + 1, 0);
+
+	for (int in1 = m - 1; in1 >= 0; in1--)
+	{
+		for (int in2 = n - 1; in2 >= 0; in2--)
+		{
+			int ans = 0;
+
+			if (s[in1] == t[in2]) {
+				ans = 1 + next[in2 + 1];
+			}
+			else
+			{
+				int skip1 = next[in2];
+				int skip2 = curr[in2 + 1];
+
+				ans = max(skip1, skip2);
+			}
+
+			curr[in2] = ans;
+		}
+
+		next = curr;
+	}
+
+	return next[0];
+}
+
+int lcs(string s, string t)
+{
+	//Write your code here
+	int m = s.size();
+	int n = t.size();
+
+	// int ans = recur(0, 0, m, n, s, t);
+
+	// vector<vector<int> > dp(m, vector<int>(n, -1));
+
+	// int ans = memoization(0, 0, m, n, s, t, dp);
+
+	// int ans = tabulation(m, n, s, t);
+
+	int ans = spaceOpt(m, n, s, t);
+
+	return ans;
+}
