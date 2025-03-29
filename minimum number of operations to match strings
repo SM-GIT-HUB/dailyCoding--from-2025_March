@@ -1,0 +1,68 @@
+int tabulation(int n1, int n2, string &s1, string &s2)
+{
+    vector<vector<int> > dp(n1 + 1, vector<int>(n2 + 1, 0));
+    
+    for (int one = n1 - 1; one >= 0; one--)
+    {
+        for (int two = n2 - 1; two >= 0; two--)
+        {
+            int ans = 0;
+            
+            if (s1[one] == s2[two]) {
+                ans = 1 + dp[one + 1][two + 1];
+            }
+            else
+            {
+                int oneAns = dp[one + 1][two];
+                int twoAns = dp[one][two + 1];
+                
+                ans = max(oneAns, twoAns);
+            }
+            
+            dp[one][two] = ans;
+        }
+    }
+    
+    return dp[0][0];
+}
+
+
+int spaceOpt(int n1, int n2, string &s1, string &s2)
+{
+    vector<int> next(n2 + 1, 0);
+    vector<int> curr(n2 + 1, 0);
+    
+    for (int one = n1 - 1; one >= 0; one--)
+    {
+        for (int two = n2 - 1; two >= 0; two--)
+        {
+            int ans = 0;
+            
+            if (s1[one] == s2[two]) {
+                ans = 1 + next[two + 1];
+            }
+            else
+            {
+                int oneAns = next[two];
+                int twoAns = curr[two + 1];
+                
+                ans = max(oneAns, twoAns);
+            }
+            
+            curr[two] = ans;
+        }
+        
+        swap(next, curr);
+    }
+    
+    return next[0];
+}
+
+int canYouMake(string &s1, string &s2){
+    // Write your code here.
+    int m = s1.size();
+    int n = s2.size();
+
+    int ans = m + n - spaceOpt(m, n, s1, s2) * 2;
+    return ans;
+}
