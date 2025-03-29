@@ -1,0 +1,47 @@
+#include <bits/stdc++.h> 
+
+pair<int, int> getLen(int index, int n, int *arr)
+{
+    int left = index - 1;
+    int right = index + 1;
+
+    if (arr[index] < arr[left] || arr[index] < arr[right]) {
+        return {0, right};
+    }
+
+    while (left >= 0 && arr[left] < arr[left + 1])
+    {
+        left--;
+    }
+
+    while (right < n && arr[right - 1] > arr[right])
+    {
+        right++;
+    }
+
+    int len = right - left - 1;
+
+    if (left == index - 1 || right == index + 1) {
+        len = 0;
+    }
+
+    return {len, right};
+}
+
+int longestMountain(int *arr, int n)
+{
+    // Write your code here.
+    int ans = 0;
+
+    int index = 1;
+
+    while (index < n - 1)
+    {
+        pair<int, int> p = getLen(index, n, arr);
+        ans = max(p.first, ans);
+
+        index = p.second;
+    }
+
+    return ans;
+}
