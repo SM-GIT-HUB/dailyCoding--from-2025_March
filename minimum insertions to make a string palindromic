@@ -1,0 +1,159 @@
+int recur(int start, int end, string &s)
+{
+	if (start >= end) {
+		return 0;
+	}
+
+	int ans = 0;
+
+	if (s[start] == s[end]) {
+		ans = recur(start + 1, end - 1, s);
+	}
+	else
+	{
+		int ans1 = 1 + recur(start + 1, end, s);
+		int ans2 = 1 + recur(start, end - 1, s);
+
+		ans = min(ans1, ans2);
+	}
+
+	return ans;
+}
+
+int memoization(int start, int end, string &s, vector<vector<int> >& dp)
+{
+	if (start >= end) {
+		return 0;
+	}
+
+	if (dp[start][end] != -1) {
+		return dp[start][end];
+	}
+
+	int ans = 0;
+
+	if (s[start] == s[end]) {
+		ans = memoization(start + 1, end - 1, s, dp);
+	}
+	else
+	{
+		int ans1 = 1 + memoization(start + 1, end, s, dp);
+		int ans2 = 1 + memoization(start, end - 1, s, dp);
+
+		ans = min(ans1, ans2);
+	}
+
+	return dp[start][end] = ans;
+}
+
+int tabulation(int n, string &s)
+{
+	vector<vector<long long> > dp(n + 1, vector<long long>(n + 1, 0));
+
+	for (int start = n - 1; start >= 0; start--)
+	{
+		for (int end = start + 1; end < n; end++)
+		{
+			long long ans = 0;
+
+			if (s[start] == s[end]) {
+				ans = dp[start + 1][end - 1];
+			}
+			else
+			{
+				long long ans1 = 1 + dp[start + 1][end];
+				long long ans2 = 1 + dp[start][end - 1];
+
+				ans = min(ans1, ans2);
+			}
+
+			dp[start][end] = ans;
+		}
+	}
+
+	return dp[0][n - 1];
+}
+
+int spaceOpt(int n, string &s)
+{
+	vector<long long> next(n + 1, 0);
+	vector<long long> curr(n + 1, 0);
+
+	for (int start = n - 1; start >= 0; start--)
+	{
+		for (int end = start + 1; end < n; end++)
+		{
+			long long ans = 0;
+
+			if (s[start] == s[end]) {
+				ans = next[end - 1];
+			}
+			else
+			{
+				long long ans1 = 1 + next[end];
+				long long ans2 = 1 + curr[end - 1];
+
+				ans = min(ans1, ans2);
+			}
+
+			curr[end] = ans;
+		}
+
+		swap(next, curr);
+	}
+
+	return next[n - 1];
+}
+
+int spaceOpt2(int n, string &s)
+{
+	vector<long long> curr(n + 1, 0);
+
+	for (int start = n - 1; start >= 0; start--)
+	{
+		long long prev = 0;
+
+		for (int end = start + 1; end < n; end++)
+		{
+			long long temp = curr[end];
+
+			long long ans = 0;
+
+			if (s[start] == s[end]) {
+				ans = prev;
+			}
+			else
+			{
+				long long ans1 = 1 + curr[end];
+				long long ans2 = 1 + curr[end - 1];
+
+				ans = min(ans1, ans2);
+			}
+
+			curr[end] = ans;
+			prev = temp;
+		}
+	}
+
+	return curr[n - 1];
+}
+
+int minimumInsertions(string &str)
+{
+	// Write your code here.
+	int n = str.size();
+
+	// int ans = recur(0, n - 1, str);
+
+	// vector<vector<int> > dp(n, vector<int>(n, -1));
+
+	// int ans = memoization(0, n - 1, str, dp);
+
+	// int ans = tabulation(n, str);
+
+	// int ans = spaceOpt(n, str);
+
+	int ans = spaceOpt2(n, str);
+
+	return ans;
+}
