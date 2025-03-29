@@ -5,7 +5,6 @@ vector<int> findSpans(vector<int> &price) {
 
     vector<int> stack;
     stack.push_back(-1);
-    stack.push_back(0);
 
     vector<int> ans(n, 0);
     
