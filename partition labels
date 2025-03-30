@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        int chars[26];
+        int n = s.size();
+
+        vector<int> ans;
+
+        for (int i = 0; i < n; i++)
+        {
+            chars[s[i] - 'a'] = i;
+        }
+
+        int prevStart = 0;
+        int maxi = chars[s[0] - 'a'];
+
+        for (int i = 0; i < n; i++)
+        {
+            if (i > maxi)
+            {
+                ans.push_back(maxi - prevStart + 1);
+                prevStart = maxi + 1;
+                maxi = chars[s[i] - 'a'];
+            }
+
+            maxi = max(chars[s[i] - 'a'], maxi);
+        }
+
+        ans.push_back(maxi - prevStart + 1);
+
+        return ans;
+    }
+};
