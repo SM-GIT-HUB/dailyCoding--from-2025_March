@@ -1,0 +1,147 @@
+#include<bits/stdc++.h>
+
+int recur(int in1, int in2, int &m, int &n, string &s1, string &s2)
+{
+    if (in1 >= m) {
+        return (n - in2);
+    }
+
+    if (in2 >= n) {
+        return (m - in1);
+    }
+
+    int ans = 0;
+
+    if (s1[in1] == s2[in2]) {
+        ans = recur(in1 + 1, in2 + 1, m, n, s1, s2);
+    }
+    else
+    {
+        int ans1 = 1 + recur(in1 + 1, in2, m, n, s1, s2);
+        int ans2 = 1 + recur(in1 + 1, in2 + 1, m, n, s1, s2);
+        int ans3 = 1 + recur(in1, in2 + 1, m, n, s1, s2);
+
+        ans = min(ans1, min(ans2, ans3));
+    }
+
+    return ans;
+}
+
+int memoization(int in1, int in2, int &m, int &n, string &s1, string &s2, vector<vector<int> >& dp)
+{
+    if (in1 >= m) {
+        return (n - in2);
+    }
+
+    if (in2 >= n) {
+        return (m - in1);
+    }
+
+    if (dp[in1][in2] != -1) {
+        return dp[in1][in2];
+    }
+
+    int ans = 0;
+
+    if (s1[in1] == s2[in2]) {
+        ans = memoization(in1 + 1, in2 + 1, m, n, s1, s2, dp);
+    }
+    else
+    {
+        int ans1 = 1 + memoization(in1 + 1, in2, m, n, s1, s2, dp);
+        int ans2 = 1 + memoization(in1 + 1, in2 + 1, m, n, s1, s2, dp);
+        int ans3 = 1 + memoization(in1, in2 + 1, m, n, s1, s2, dp);
+
+        ans = min(ans1, min(ans2, ans3));
+    }
+
+    return dp[in1][in2] = ans;
+}
+
+int tabulation(int m, int n, string &s1, string &s2)
+{
+    vector<vector<int> > dp(m + 1, vector<int>(n + 1, 0));
+
+    for (int in1 = m - 1; in1 >= 0; in1--)
+    {
+        dp[in1][n] = m - in1;
+        for (int in2 = n - 1; in2 >= 0; in2--)
+        {
+            dp[m][in2] = n - in2;
+
+            int ans = 0;
+
+            if (s1[in1] == s2[in2]) {
+                ans = dp[in1 + 1][in2 + 1];
+            }
+            else
+            {
+                int ans1 = 1 + dp[in1 + 1][in2];
+                int ans2 = 1 + dp[in1 + 1][in2 + 1];
+                int ans3 = 1 + dp[in1][in2 + 1];
+
+                ans = min(ans1, min(ans2, ans3));
+            }
+
+            dp[in1][in2] = ans;
+        }
+    }
+
+    return dp[0][0];
+}
+
+int spaceOpt(int m, int n, string &s1, string &s2)
+{
+    vector<int> next(n + 1, 0);
+    vector<int> curr(n + 1, 0);
+
+    for (int in1 = m - 1; in1 >= 0; in1--)
+    {
+        curr[n] = m - in1;
+        for (int in2 = n - 1; in2 >= 0; in2--)
+        {
+            if (in1 == m - 1) {
+                next[in2] = n - in2;
+            }
+
+            int ans = 0;
+
+            if (s1[in1] == s2[in2]) {
+                ans = next[in2 + 1];
+            }
+            else
+            {
+                int ans1 = 1 + next[in2];
+                int ans2 = 1 + next[in2 + 1];
+                int ans3 = 1 + curr[in2 + 1];
+
+                ans = min(ans1, min(ans2, ans3));
+            }
+
+            curr[in2] = ans;
+        }
+
+        next = curr;
+    }
+
+    return next[0];
+}
+
+int editDistance(string s1, string s2)
+{
+    //write you code here
+    int m = s1.size();
+    int n = s2.size();
+
+    // int ans = recur(0, 0, m, n, s1, s2);
+
+    // vector<vector<int> > dp(m, vector<int>(n, -1));
+
+    // int ans = memoization(0, 0, m, n, s1, s2, dp);
+
+    // int ans = tabulation(m, n, s1, s2);
+
+    int ans = spaceOpt(m, n, s1, s2);
+
+    return ans;
+}
