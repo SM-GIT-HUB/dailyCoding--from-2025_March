@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+bool ninjaGram(string &str)
+{
+    // Write your code here
+    int smallChars[26] = {0};
+    int bigChars[26] = {0};
+    int count = 0;
+
+    auto check = [&](char ch) {
+        if (isalpha(ch)) {
+            return 1;
+        }
+        else
+            return -1;
+    };
+
+    for (char x : str)
+    {
+        int get = check(x);
+
+        if (get == 1)
+        {
+            x = tolower(x);
+            smallChars[x - 'a']++;
+
+            if (smallChars[x - 'a'] == 1) {
+                count++;
+            }
+        }
+    }
+
+    return (count == 26);
+}
