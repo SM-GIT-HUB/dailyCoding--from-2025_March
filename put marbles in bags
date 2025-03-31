@@ -1,0 +1,22 @@
+class Solution {
+public:
+    long long putMarbles(vector<int>& ws, int k) {
+        int n = ws.size();
+        vector<long long> cuts(n - 1, 0);
+
+        for (int i = 0; i < n - 1; i++)
+        {
+            cuts[i] = 1LL * ws[i] + ws[i + 1];
+        }
+
+        sort(cuts.begin(), cuts.end());
+        long long ans = 0;
+
+        for (int i = 0; i < k - 1; i++)
+        {
+            ans += cuts[n - 2 - i] - cuts[i];
+        }
+
+        return ans;
+    }
+};
