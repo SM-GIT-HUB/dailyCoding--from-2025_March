@@ -1,0 +1,143 @@
+#include<bits/stdc++.h>
+
+int recur(int index, int n, int canBuy, vector<int>& prices)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    int ans = 0;
+
+    if (canBuy)
+    {
+        int include = -prices[index] + recur(index + 1, n, 0, prices);
+        int exclude = recur(index + 1, n, 1, prices);
+
+        ans = max(ans, max(include, exclude));
+    }
+    else
+    {
+        int include = prices[index] + recur(index + 2, n, 1, prices);
+        int exclude = recur(index + 1, n, 0, prices);
+
+        ans = max(ans, max(include, exclude));
+    }
+
+    return ans;
+}
+
+int memoization(int index, int n, int canBuy, vector<int>& prices, vector<vector<int> >& dp)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    if (dp[index][canBuy] != -1) {
+        return dp[index][canBuy];
+    }
+
+    int ans = 0;
+
+    if (canBuy)
+    {
+        int include = -prices[index] + memoization(index + 1, n, 0, prices, dp);
+        int exclude = memoization(index + 1, n, 1, prices, dp);
+
+        ans = max(ans, max(include, exclude));
+    }
+    else
+    {
+        int include = prices[index] + memoization(index + 2, n, 1, prices, dp);
+        int exclude = memoization(index + 1, n, 0, prices, dp);
+
+        ans = max(ans, max(include, exclude));
+    }
+
+    return dp[index][canBuy] = ans;
+}
+
+int tabulation(int n, vector<int>& prices)
+{
+    vector<vector<int> > dp(n + 2, {0, 0});
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int canBuy = 0; canBuy < 2; canBuy++)
+        {
+            int ans = 0;
+
+            if (canBuy)
+            {
+                int include = -prices[index] + dp[index + 1][0];
+                int exclude = dp[index + 1][1];
+
+                ans = max(ans, max(include, exclude));
+            }
+            else
+            {
+                int include = prices[index] + dp[index + 2][1];
+                int exclude = dp[index + 1][0];
+
+                ans = max(ans, max(include, exclude));
+            }
+
+            dp[index][canBuy] = ans;
+        }
+    }
+
+    return dp[0][1];
+}
+
+int spaceOpt(int n, vector<int>& prices)
+{
+    vector<int> next2(2, 0);
+    vector<int> next1(2, 0);
+    vector<int> curr(2, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int canBuy = 0; canBuy < 2; canBuy++)
+        {
+            int ans = 0;
+
+            if (canBuy)
+            {
+                int include = -prices[index] + next1[0];
+                int exclude = next1[1];
+
+                ans = max(ans, max(include, exclude));
+            }
+            else
+            {
+                int include = prices[index] + next2[1];
+                int exclude = next1[0];
+
+                ans = max(ans, max(include, exclude));
+            }
+
+            curr[canBuy] = ans;
+        }
+
+        next2 = next1;
+        next1 = curr;
+    }
+
+    return next1[1];
+}
+
+int stockProfit(vector<int> &prices) {
+    // Write your code here.
+    int n = prices.size();
+
+    // int ans = recur(0, n, 1, prices);
+
+    // vector<vector<int> > dp(n, {-1, -1});
+
+    // int ans = memoization(0, n, 1, prices, dp);
+
+    // int ans = tabulation(n, prices);
+
+    int ans = spaceOpt(n, prices);
+
+    return ans;
+}
