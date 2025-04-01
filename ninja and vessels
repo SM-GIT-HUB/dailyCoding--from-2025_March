@@ -1,0 +1,79 @@
+#include <bits/stdc++.h> 
+
+struct pair_hash {
+	size_t operator()(const pair<int, int>& p) const {
+		auto h1 = hash<int>()(p.first);
+		auto h2 = hash<int>()(p.second);
+
+		return h1 ^ (h2 << 1);
+	}
+};
+
+int ninjaAndVessels(int m, int n, int w) {
+	// Write your code here.
+	int mgcdn = gcd(m, n);
+
+	if (w % mgcdn != 0 || w > max(m, n)) {
+		return -1;
+	}
+
+	queue<pair<int, pair<int, int> > > q;
+	unordered_set<pair<int, int>, pair_hash> sett;
+
+	q.push({0, {0, 0}});
+	sett.insert({0, 0});
+
+	auto check = [&](int steps, int &x, int &y) {
+		if (sett.count({x, y}) == 0)
+		{
+			sett.insert({x, y});
+			q.push({steps + 1, {x,y}});
+		}
+	};
+
+	while (!q.empty())
+	{
+		pair<int, pair<int, int> > top = q.front();
+		q.pop();
+
+		int steps = top.first;
+		int x = top.second.first;
+		int y = top.second.second;
+
+		if (x == w || y == w) {
+			return steps;
+		}
+
+		int newX = m;
+		int newY = y;
+
+		check(steps, newX, newY);
+
+		newX = x;
+		newY = n;
+
+		check(steps, newX, newY);
+
+		newX = 0;
+		newY = y;
+
+		check(steps, newX, newY);
+
+		newX = x;
+		newY = 0;
+
+		check(steps, newX, newY);
+
+		newX = max(0, x - (n - y));
+		newY = min(n, x + y);
+
+		check(steps, newX, newY);
+
+		newX = min(m, x + y);
+		newY = max(0, y - (m - x));
+
+		check(steps, newX, newY);
+	}
+
+	return -1;
+}
