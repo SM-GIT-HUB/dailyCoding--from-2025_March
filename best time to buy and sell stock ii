@@ -1,0 +1,140 @@
+#include<bits/stdc++.h>
+
+long long recur(int index, int canBuy, int n, long *values)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    long long ans = 0;
+
+    if (canBuy)
+    {
+        long long ans1 = - 1LL * values[index] + recur(index + 1, 0, n, values);
+        long long ans2 = recur(index + 1, canBuy, n, values);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+    else
+    {
+        long long ans1 = 1LL * values[index] + recur(index + 1, 1, n, values);
+        long long ans2 = recur(index + 1, 0, n, values);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+
+    return ans;
+}
+
+long long memoization(int index, int canBuy, int n, long *values, vector<vector<long long> >& dp)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    if (dp[index][canBuy] != -1) {
+        return dp[index][canBuy];
+    }
+
+    long long ans = 0;
+
+    if (canBuy)
+    {
+        long long ans1 = - 1LL * values[index] + memoization(index + 1, 0, n, values, dp);
+        long long ans2 = memoization(index + 1, canBuy, n, values, dp);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+    else
+    {
+        long long ans1 = 1LL * values[index] + memoization(index + 1, 1, n, values, dp);
+        long long ans2 = memoization(index + 1, 0, n, values, dp);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+
+    return dp[index][canBuy] = ans;
+}
+
+long long tabulation(int n, long *values)
+{
+    vector<vector<long long> > dp(n + 1, {0, 0});
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int canBuy = 1; canBuy >= 0; canBuy--)
+        {
+            long long ans = 0;
+
+            if (canBuy)
+            {
+                long long ans1 = - 1LL * values[index] + dp[index + 1][0];
+                long long ans2 = dp[index + 1][1];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                long long ans1 = 1LL * values[index] + dp[index + 1][1];
+                long long ans2 = dp[index + 1][0];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            dp[index][canBuy] = ans;
+        }
+    }
+
+    return dp[0][1];
+}
+
+long long spaceOpt(int n, long *values)
+{
+    vector<long long> next = {0, 0};
+    vector<long long> curr = {0, 0};
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int canBuy = 1; canBuy >= 0; canBuy--)
+        {
+            long long ans = 0;
+
+            if (canBuy)
+            {
+                long long ans1 = - 1LL * values[index] + next[0];
+                long long ans2 = next[1];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                long long ans1 = 1LL * values[index] + next[1];
+                long long ans2 = next[0];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            curr[canBuy] = ans;
+        }
+
+        next = curr;
+    }
+
+    return next[1];
+}
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+    // long long ans = recur(0, 1, n, values);
+
+    // vector<vector<long long> > dp(n, {-1, -1});
+
+    // long long ans = memoization(0, 1, n, values, dp);
+
+    // long long ans = tabulation(n, values);
+
+    long long ans = spaceOpt(n, values);
+
+    return ans;
+}
