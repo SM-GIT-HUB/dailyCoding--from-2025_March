@@ -1,0 +1,64 @@
+class Solution {
+public:
+    long long recur(int index, int n, vector<vector<int> >& qs)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        long long include = qs[index][0] + recur(index + 1 + qs[index][1], n, qs);
+        long long exclude = recur(index + 1, n, qs);
+
+        return max(include, exclude);
+    }
+
+    long long memoization(int index, int n, vector<vector<int> >& qs, vector<long long>& dp)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        if (dp[index] != -1) {
+            return dp[index];
+        }
+
+        long long include = qs[index][0] + memoization(index + 1 + qs[index][1], n, qs, dp);
+        long long exclude = memoization(index + 1, n, qs, dp);
+
+        return dp[index] = max(include, exclude);
+    }
+
+    long long tabulation(int n, vector<vector<int> >& qs)
+    {
+        vector<long long> dp(n + 1, 0);
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            long long include = qs[index][0];
+
+            if (index + 1 + qs[index][1] < n) {
+                include += dp[index + 1 + qs[index][1]];
+            }
+
+            long long exclude = dp[index + 1];
+
+            dp[index] = max(include, exclude);
+        }
+
+        return dp[0];
+    }
+
+    long long mostPoints(vector<vector<int>>& qs) {
+        int n = qs.size();
+
+        // long long ans = recur(0, n, qs);
+
+        // vector<long long> dp(n, -1);
+
+        // long long ans = memoization(0, n, qs, dp);
+
+        long long ans = tabulation(n, qs);
+
+        return ans;
+    }
+};
