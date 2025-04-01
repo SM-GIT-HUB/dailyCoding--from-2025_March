@@ -1,0 +1,112 @@
+#include <bits/stdc++.h> 
+
+int tabulation(int n, int k, vector<int>& prices)
+{
+    vector<vector<int> > dp(n + 1, vector<int>(k + 1, 0));
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = k - 1; op >= 0; op--)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + dp[index + 1][op + 1];
+                int ans2 = dp[index + 1][op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + dp[index + 1][op + 1];
+                int ans2 = dp[index + 1][op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            dp[index][op] = ans;
+        }
+    }
+
+    return dp[0][0];
+}
+
+int spaceOpt(int n, int k, vector<int>& prices)
+{
+    vector<int> next(k + 1, 0);
+    vector<int> curr(k + 1, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = k - 1; op >= 0; op--)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + next[op + 1];
+                int ans2 = next[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + next[op + 1];
+                int ans2 = next[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            curr[op] = ans;
+        }
+
+        next = curr;
+    }
+
+    return next[0];
+}
+
+int spaceOpt2(int n, int k, vector<int>& prices)
+{
+    vector<int> dp(k + 1, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = 0; op < k; op++)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + dp[op + 1];
+                int ans2 = dp[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + dp[op + 1];
+                int ans2 = dp[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            dp[op] = ans;
+        }
+    }
+
+    return dp[0];
+}
+
+int maximumProfit(vector<int> &prices, int n, int k)
+{
+    // Write your code here.
+    // int ans = tabulation(n, 2 * k, prices);
+
+    // int ans = spaceOpt(n, 2 * k, prices);
+
+    int ans = spaceOpt2(n, 2 * k, prices);
+
+    return ans;
+}
