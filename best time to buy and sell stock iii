@@ -1,0 +1,173 @@
+#include <bits/stdc++.h> 
+
+int recur(int index, int op, int n, vector<int>& prices)
+{
+    if (index >= n || op >= 4) {
+        return 0;
+    }
+
+    int ans = 0;
+
+    if (!(op & 1))
+    {
+        int ans1 = -prices[index] + recur(index + 1, op + 1, n, prices);
+        int ans2 = recur(index + 1, op, n, prices);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+    else
+    {
+        int ans1 = prices[index] + recur(index + 1, op + 1, n, prices);
+        int ans2 = recur(index + 1, op, n, prices);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+
+    return ans;
+}
+
+int memoization(int index, int op, int n, vector<int>& prices, vector<vector<int> >& dp)
+{
+    if (index >= n || op >= 4) {
+        return 0;
+    }
+
+    if (dp[index][op] != -1) {
+        return dp[index][op];
+    }
+
+    int ans = 0;
+
+    if (!(op & 1))
+    {
+        int ans1 = -prices[index] + memoization(index + 1, op + 1, n, prices, dp);
+        int ans2 = memoization(index + 1, op, n, prices, dp);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+    else
+    {
+        int ans1 = prices[index] + memoization(index + 1, op + 1, n, prices, dp);
+        int ans2 = memoization(index + 1, op, n, prices, dp);
+
+        ans = max(ans, max(ans1, ans2));
+    }
+
+    return dp[index][op] = ans;
+}
+
+int tabulation(int n, vector<int>& prices)
+{
+    vector<vector<int> > dp(n + 1, vector<int>(5, 0));
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = 3; op >= 0; op--)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + dp[index + 1][op + 1];
+                int ans2 = dp[index + 1][op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + dp[index + 1][op + 1];
+                int ans2 = dp[index + 1][op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            dp[index][op] = ans;
+        }
+    }
+
+    return dp[0][0];
+}
+
+int spaceOpt(int n, vector<int>& prices)
+{
+    vector<int> next(5, 0);
+    vector<int> curr(5, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = 3; op >= 0; op--)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + next[op + 1];
+                int ans2 = next[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + next[op + 1];
+                int ans2 = next[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            curr[op] = ans;
+        }
+
+        next = curr;
+    }
+
+    return next[0];
+}
+
+int spaceOpt2(int n, vector<int>& prices)
+{
+    vector<int> dp(5, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        for (int op = 0; op < 4; op++)
+        {
+            int ans = 0;
+            
+            if (!(op & 1))
+            {
+                int ans1 = -prices[index] + dp[op + 1];
+                int ans2 = dp[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+            else
+            {
+                int ans1 = prices[index] + dp[op + 1];
+                int ans2 = dp[op];
+
+                ans = max(ans, max(ans1, ans2));
+            }
+
+            dp[op] = ans;
+        }
+    }
+
+    return dp[0];
+}
+
+int maxProfit(vector<int> &prices, int n) {
+    // Write your code here
+    // int ans = recur(0, 0, n, prices);
+
+    // vector<vector<int> > dp(n, {-1, -1, -1, -1});
+
+    // int ans = memoization(0, 0, n, prices, dp);
+
+    // int ans = tabulation(n, prices);
+
+    // int ans = spaceOpt(n, prices);
+
+    int ans = spaceOpt2(n, prices);
+
+    return ans;
+}
