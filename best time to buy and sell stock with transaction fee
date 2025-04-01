@@ -1,0 +1,76 @@
+int memoization(int index, int n, int canBuy, int fee, vector<int>& prices, vector<vector<int> >& dp)
+{
+	if (index >= n) {
+		return 0;
+	}
+
+	if (dp[index][canBuy] != -1) {
+		return dp[index][canBuy];
+	}
+
+	int ans = 0;
+
+	if (canBuy)
+	{
+		int include = -prices[index] + memoization(index + 1, n, 0, fee, prices, dp);
+		int exclude = memoization(index + 1, n, 1, fee, prices, dp);
+
+		ans = max(ans, max(include, exclude));
+	}
+	else
+	{
+		int include = prices[index] - fee + memoization(index + 1, n, 1, fee, prices, dp);
+		int exclude = memoization(index + 1, n, 0, fee, prices, dp);
+
+		ans = max(ans, max(include, exclude));
+	}
+
+	return dp[index][canBuy] = ans;
+}
+
+int spaceOpt(int n, int fee, vector<int>& prices)
+{
+	vector<int> next(2, 0);
+	vector<int> curr(2, 0);
+
+	for (int index = n - 1; index >= 0; index--)
+	{
+		for (int canBuy = 0; canBuy < 2; canBuy++)
+		{
+			int ans = 0;
+
+			if (canBuy)
+			{
+				int include = -prices[index] + next[0];
+				int exclude = next[1];
+
+				ans = max(ans, max(include, exclude));
+			}
+			else
+			{
+				int include = prices[index] - fee + next[1];
+				int exclude = next[0];
+
+				ans = max(ans, max(include, exclude));
+			}
+
+			curr[canBuy] = ans;
+		}
+
+		next = curr;
+	}
+
+	return next[1];
+}
+
+int maximumProfit(vector<int> &prices, int n, int fee)
+{
+	// Write your code here.
+	// vector<vector<int> > dp(n, {-1, -1});
+
+	// int ans = memoization(0, n, 1, fee, prices, dp);
+
+	int ans = spaceOpt(n, fee, prices);
+
+	return ans;
+}
