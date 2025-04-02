@@ -1,0 +1,42 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the linkedList class structure:
+
+    class Node {
+    public:
+        int data;
+        Node *next;
+
+        Node(int val) {
+            this->data = val;
+            next = NULL;
+        }
+        ~Node() {
+            if (next != NULL) {
+                delete next;
+            }
+        }
+};
+
+************************************************************/
+
+Node* modularNode(int k, Node* head) {
+    // Write your code here.
+    Node* ans = nullptr;
+
+    int count = 1;
+    Node* curr = head;
+
+    while (curr)
+    {
+        if (count % k == 0) {
+            ans = curr;
+        }
+
+        curr = curr->next;
+        count++;
+    }
+
+    return ans;
+}
