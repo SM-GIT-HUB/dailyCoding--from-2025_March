@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int check(string &a, string &b)
+    {
+        int size1 = a.size();
+        int size2 = b.size();
+
+        if (size1 + 1 != size2) {
+            return 0;
+        }
+
+        int i = 0, j = 0;
+        int count = 0;
+
+        while (i < size1 && j < size2 && count < 2)
+        {
+            if (a[i] != b[j])
+            {
+                j++;
+                count++;
+            }
+            else
+            {
+                i++;
+                j++;
+            }
+        }
+
+        return (count <= 1);
+    }
+
+    int longestStrChain(vector<string>& words) {
+        int n = words.size();
+        sort(words.begin(), words.end(), [&](string &a, string &b) {
+            return (a.size() < b.size());
+        });
+
+        vector<int> dp(n, 1);
+        int maxi = 1;
+
+        for (int i = 1; i < n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (check(words[j], words[i])) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+
+            maxi = max(dp[i], maxi);
+        }
+
+        return maxi;
+    }
+};
