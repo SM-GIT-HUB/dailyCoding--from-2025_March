@@ -1,0 +1,70 @@
+class Solution {
+public:
+    string smallestNumber(string s) {
+        int n = s.size();
+        int currMax = 0;
+        int last = 0;
+        int ds = 0;
+        int j = 0;
+        string ans = "";
+
+        for (int i = 0; i < n; i++)
+        {
+            j = i + 1;
+            ds = 0;
+
+            while (j < n && s[j] == 'D')
+            {
+                ds++;
+                j++;
+            }
+
+            if (s[i] == 'I')
+            {
+                if (i == 0)
+                {
+                    currMax = ds + 2;
+                    last++;
+
+                    ans += last + '0';
+                    ans += currMax + '0';
+
+                    last = currMax;
+                }
+                else
+                {
+                    currMax = currMax + ds + 1;
+
+                    last = currMax;
+                    ans += last + '0';
+                }
+
+                for (int k = 0; k < ds; k++)
+                {
+                    last--;
+                    ans += last + '0';
+                    i++;
+                }
+            }
+            else
+            {
+                if (i == 0)
+                {
+                    currMax = ds + 2;
+
+                    ans += currMax + '0';
+                    ans += currMax - 1 + '0';
+
+                    last = currMax - 1;
+                }
+                else
+                {
+                    last--;
+                    ans += last + '0';
+                }
+            }
+        }
+
+        return ans;
+    }
+};
