@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+
+void preCompute(unordered_set<string>& sett)
+{
+	int num = 1;
+
+	for (int i = 0; i < 31; i++)
+	{
+		string curr = to_string(num);
+		sort(curr.begin(), curr.end());
+
+		sett.insert(curr);
+		num = num << 1;
+	}
+}
+
+bool reorderedPowerOf2(int n)
+{
+	// Write your code here.
+	if (n == 0) {
+		return false;
+	}
+
+	unordered_set<string> sett;
+
+	preCompute(sett);
+
+	string num = to_string(n);
+	sort(num.begin(), num.end());
+
+	return (sett.count(num));
+}
