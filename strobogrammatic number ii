@@ -1,0 +1,45 @@
+#include <bits/stdc++.h> 
+
+void track(int left, int right, int n, string &output, vector<string>& ans, vector<string>& pairs)
+{
+	if (left >= right)
+	{
+		ans.push_back(output);
+		return;
+	}
+
+	for (auto &p : pairs)
+	{
+		if (p[0] == '0' && right == n - 1) {
+			continue;
+		}
+
+		output[left] = p[0];
+		output[right] = p[1];
+		
+		track(left + 1, right - 1, n, output, ans, pairs);
+	}
+}
+
+vector<string> findStrobogrammatic(int n) {
+	// Write your code here.
+	vector<string> pairs = {"00", "11", "88", "69", "96"};
+	vector<string> ans;
+	string output = string(n, ' ');
+
+	if (n & 1)
+	{
+		string s = "018";
+
+		for (int i = 0; i < 3; i++)
+		{
+			output[n / 2] = s[i];
+			track(0, n - 1, n, output, ans, pairs);
+		}
+	}
+	else {
+		track(0, n - 1, n, output, ans, pairs);
+	}
+
+	return ans;
+}
