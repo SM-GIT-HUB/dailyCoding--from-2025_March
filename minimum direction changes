@@ -1,0 +1,51 @@
+#include <bits/stdc++.h> 
+
+int minDirectionChanges(vector<vector<char>> grid, int m, int n)
+{
+    // Write your code here
+    vector<vector<int> > cost(m, vector<int>(n, INT_MAX));
+    deque<pair<int, int> > dq;
+
+    int dx[4] = {-1, 1, 0, 0}; //u-d-l-r
+    int dy[4] = {0, 0, -1, 1};
+
+    char dir[4] = {'D', 'U', 'R', 'L'};
+
+    dq.push_back({m - 1, n - 1});
+    cost[m - 1][n - 1] = 0;
+
+    auto check = [&](int x, int y) {
+        return (x >= 0 && x < m && y >= 0 && y < n);
+    };
+
+    while (!dq.empty())
+    {
+        int x = dq.front().first;
+        int y = dq.front().second;
+        dq.pop_front();
+
+        for (int i = 0; i < 4; i++)
+        {
+            int newX = x + dx[i], newY = y + dy[i];
+
+            if (check(newX, newY))
+            {
+                int change = (grid[newX][newY] != dir[i]);
+                int newCost = cost[x][y] + change;
+
+                if (newCost < cost[newX][newY])
+                {
+                    cost[newX][newY] = newCost;
+
+                    if (change == 0) {
+                        dq.push_front({newX, newY});
+                    }
+                    else
+                        dq.push_back({newX, newY});
+                }
+            }
+        }
+    }
+
+    return cost[0][0];
+}
