@@ -1,0 +1,55 @@
+#include <bits/stdc++.h> 
+vector<int> spiralPathMatrix(vector<vector<int>> mat, int m, int n) 
+{
+    // Write your code here.
+    vector<int> ans;
+
+    int count = m * n;
+    int up = 0, right = n - 1;
+    int down = m - 1, left = 0;
+
+    while (count > 0)
+    {
+        //up
+
+        for (int i = left; count > 0 && i <= right; i++)
+        {
+            ans.push_back(mat[up][i]);
+            count--;
+        }
+        
+        up++;
+
+        //right
+
+        for (int i = up; count > 0 && i <= down; i++)
+        {
+            ans.push_back(mat[i][right]);
+            count--;
+        }
+
+        right--;
+
+        //down
+
+        for (int i = right; count > 0 && i >= left; i--)
+        {
+            ans.push_back(mat[down][i]);
+            count--;
+        }
+
+        down--;
+
+        //left
+
+        for (int i = down; count > 0 && i >= up; i--)
+        {
+            ans.push_back(mat[i][left]);
+            count--;
+        }
+
+        left++;
+    }
+
+    return ans;
+}
