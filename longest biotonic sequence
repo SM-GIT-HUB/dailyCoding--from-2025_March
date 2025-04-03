@@ -1,0 +1,33 @@
+int longestBitonicSubsequence(vector<int>& arr, int n)
+{
+	// Write your code here.
+
+	vector<int> dp1(n, 1);
+	vector<int> dp2(n, 1);
+
+	int ans = 1;
+
+	for (int i = 1; i < n; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			if (arr[j] < arr[i]) {
+				dp1[i] = max(dp1[i], dp1[j] + 1);
+			}
+		}
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		for (int k = n - 1; k > i; k--)
+		{
+			if (arr[k] < arr[i]) {
+				dp2[i] = max(dp2[i], dp2[k] + 1);
+			}
+		}
+		
+		ans = max(dp1[i] + dp2[i] - 1, ans);
+	}
+
+	return ans;
+}
