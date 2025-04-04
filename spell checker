@@ -1,0 +1,101 @@
+class Node {
+public:
+    bool isTerminal;
+    Node* children[26];
+
+    Node()
+    {
+        isTerminal = false;
+
+        for (auto &nd : children)
+        {
+            nd = nullptr;
+        }
+    }
+};
+
+class Trie {
+public:
+    Node* root;
+
+    Trie()
+    {
+        root = new Node();
+    }
+
+    void insert(string &word)
+    {
+        Node* curr = root;
+
+        for (char x : word)
+        {
+            if (curr->children[x - 'a'] == nullptr) {
+                curr->children[x - 'a'] = new Node();
+            }
+            
+            curr = curr->children[x - 'a'];
+        }
+
+        curr->isTerminal = true;
+    }
+
+    void search(string &output, Node* &curr, vector<string>& ans)
+    {
+        if (curr->isTerminal) {
+            ans.push_back(output);
+            return;
+        }
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (curr->children[i])
+            {
+                output += i + 'a';
+                search(output, curr->children[i], ans);
+                output.pop_back();
+            }
+        }
+    }
+
+    void check(string &word, vector<string>& ans, vector<string>& dict)
+    {
+        string output = "";
+
+        Node* curr = root;
+
+        for (char x : word)
+        {
+            if (curr->children[x - 'a'] == nullptr) {
+                break;
+            }
+            
+            output += x;
+            curr = curr->children[x - 'a'];
+        }
+
+        // if (curr == root) {
+        //     ans = dict;
+        // }
+        // else
+            search(output, curr, ans);
+    }
+};
+
+vector<string> spellChecker(vector<string> &dictionary, string &query) {
+    // Write your code here.
+    vector<string> ans;
+    Trie tr;
+
+    for (string &word : dictionary)
+    {
+        if (query == word) {
+            return ans;
+        }
+
+        tr.insert(word);
+    }
+
+    tr.check(query, ans, dictionary);
+
+    return ans;
+}
