@@ -1,0 +1,45 @@
+#include <bits/stdc++.h> 
+string zigzagConversion(string s, int row) {
+    // Write your code here.
+    if (row == 1) {
+        return s;
+    }
+
+    string ans = "";
+    int n = s.size();
+
+    for (int i = 0; i < row; i++)
+    {
+        int down = 2 * row - 2 * i - 3;
+        int up = 2 * i - 1;
+
+        int j = i;
+        int flag = 1;
+
+        while (j < n)
+        {
+            if (flag)
+            {
+                int k = j;
+                j += down + 1;
+
+                if (k != j) {
+                    ans += s[k];
+                }
+            }
+            else
+            {
+                int k = j;
+                j += up + 1;
+
+                if (k != j) {
+                    ans += s[k];
+                }
+            }
+            
+            flag = !flag;
+        }
+    }
+    
+    return ans;
+}
