@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+void sortOddEven(vector<int>& nums){
+    // Write your code here
+    sort(nums.begin(), nums.end(), [&](int a, int b) {
+        if ((a & 1) && (b & 1)) {
+            return a > b;
+        }
+        else if (a & 1) {
+            return true;
+        }
+        else if (b & 1) {
+            return false;
+        }
+        else
+            return a < b;
+    });
+}
