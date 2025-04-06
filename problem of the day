@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+
+long long getNum(int n, int m)
+{
+	long long ans = 1;
+
+	for (int i = 0; i < m; i++)
+	{
+		ans = ans * n;	
+	}
+
+	return ans;
+}
+
+int findKthFromRight(int n, int m, int k) 
+{
+	// Write your code here.
+	string sum = to_string(getNum(n, m));
+	// cout << sum << endl;
+	return sum[sum.size() - k] - '0';
+}
