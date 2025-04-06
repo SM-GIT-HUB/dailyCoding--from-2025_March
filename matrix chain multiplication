@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+
+int recur(int i, int j, vector<int>& arr)
+{
+    if (i == j) {
+        return 0;
+    }
+
+    int ans = INT_MAX;
+
+    for (int k = i; k < j; k++)
+    {
+        int currAns = recur(i, k, arr) + recur(k + 1, j, arr) + arr[i - 1] * arr[k] * arr[j];
+        ans = min(currAns, ans);
+    }
+
+    return ans;
+}
+
+int memoization(int i, int j, vector<int>& arr, vector<vector<int> >& dp)
+{
+    if (i == j) {
+        return 0;
+    }
+
+    if (dp[i][j] != -1) {
+        return dp[i][j];
+    }
+
+    int ans = INT_MAX;
+
+    for (int k = i; k < j; k++)
+    {
+        int currAns = memoization(i, k, arr, dp) + memoization(k + 1, j, arr, dp) + arr[i - 1] * arr[k] * arr[j];
+        ans = min(currAns, ans);
+    }
+
+    return dp[i][j] = ans;
+}
+
+int tabulation(int n, vector<int>& arr)
+{
+    vector<vector<int> > dp(n, vector<int>(n, 0));
+
+    for (int i = n - 1; i >= 1; i--)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            int ans = INT_MAX;
+            
+            for (int k = i; k < j; k++)
+            {
+                int currAns = dp[i][k] + dp[k + 1][j] + arr[i - 1] * arr[k] * arr[j];
+                ans = min(currAns, ans);
+            }
+
+            dp[i][j] = ans;
+        }
+    }
+
+    return dp[1][n - 1];
+}
+
+int matrixMultiplication(vector<int> &arr, int N)
+{
+    // Write your code here.
+    // int ans = recur(1, N - 1, arr);
+
+    // vector<vector<int> > dp(N, vector<int>(N, -1));
+
+    // int ans = memoization(1, N - 1, arr, dp);
+
+    int ans = tabulation(N, arr);
+
+    return ans;
+}
