@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+vector<int> findAnagramsIndices(string str, string ptr, int m, int n)
+{
+    // Write you code here.
+    vector<int> mapp1(26, 0);
+
+    for (char x : ptr)
+    {
+        mapp1[x - 'A']++;
+    }
+
+    vector<int> mapp2(26, 0);
+    vector<int> ans;
+
+    for (int i = 0; i < n; i++)
+    {
+        mapp2[str[i] - 'A']++;
+    }
+
+    if (mapp1 == mapp2) {
+        ans.push_back(0);
+    }
+
+    for (int i = 1; i <= m - n; i++)
+    {
+        mapp2[str[i - 1] - 'A']--;
+        mapp2[str[i + n - 1] - 'A']++;
+
+        if (mapp1 == mapp2) {
+            ans.push_back(i);
+        }
+    }
+
+    return ans;
+}
