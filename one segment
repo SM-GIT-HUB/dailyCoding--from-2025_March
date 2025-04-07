@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+bool oneSegment(string str) {
+	// Write your code here.
+	int one = 0;
+	int n = str.size();
+
+	int index = 0;
+
+	while (index < n)
+	{
+		int some = str[index];
+
+		if (some == '0')
+		{
+			index++;
+			continue;
+		}
+
+		if (one == 1) {
+			return false;
+		}
+
+		int i = index;
+
+		while (i < n && str[i] == '1')
+		{
+			i++;
+		}
+
+		one++;
+		index = i;
+	}
+
+	return true;
+}
