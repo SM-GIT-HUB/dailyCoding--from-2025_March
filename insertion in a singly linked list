@@ -1,0 +1,47 @@
+/************************************************************
+
+    Following is the LinkedList class structure:
+
+    class Node {
+    public:
+        int data;
+        Node *next;
+
+        Node(int val) {
+            this->data = val;
+            next = NULL;
+        }
+        ~Node() {
+            if (next != NULL) {
+                delete next;
+            }
+        }
+};
+
+************************************************************/
+
+Node * insert(Node * head, int n, int pos, int val) {
+    // Write your code here
+    Node* curr = head;
+
+    if (pos == 0)
+    {
+        Node* temp = new Node(val);
+        temp->next = head;
+        return temp;
+    }
+
+    Node* prev = nullptr;
+
+    while (pos--)
+    {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    Node* temp = new Node(val);
+    temp->next = curr;
+    prev->next = temp;
+
+    return head;
+}
