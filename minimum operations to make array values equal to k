@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        int arr[101] = {0};
+        int count = 0;
+
+        for (int x : nums)
+        {
+            if (x < k) {
+                return -1;
+            }
+
+            if (x > k && arr[x] == 0)
+            {
+                arr[x] = 1;
+                count++;
+            }
+        }
+
+        return count;
+    }
+};
