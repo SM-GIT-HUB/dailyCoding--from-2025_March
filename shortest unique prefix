@@ -1,0 +1,85 @@
+#include <bits/stdc++.h> 
+
+class Node {
+public:
+    int totalChildren;
+    bool isTerminal;
+    Node* children[26];
+
+    Node()
+    {
+        totalChildren = 0;
+        isTerminal = false;
+
+        for (int i = 0; i < 26; i++)
+        {
+            children[i] = nullptr;
+        }
+    }
+};
+
+class Trie {
+public:
+    Node* root = nullptr;
+
+    Trie()
+    {
+        root = new Node();
+    }
+
+    void insert(string word)
+    {
+        Node* curr = root;
+
+        for (char x : word)
+        {
+            int index = x - 'a';
+
+            if (curr->children[index] == nullptr) {
+                curr->children[index] = new Node();
+            }
+            
+            curr->totalChildren++;
+            curr = curr->children[index];
+        }
+
+        curr->isTerminal = true;
+    }
+
+    void getAns(string &word, vector<string>& ans)
+    {
+        string output = "";
+        Node* curr = root;
+
+        for (char &x : word)
+        {
+            if (curr->totalChildren == 1 && curr->isTerminal == false) {
+                break;
+            }
+
+            output.push_back(x);
+            curr = curr->children[x - 'a'];
+        }
+
+        ans.push_back(output);
+    }
+};
+
+vector<string> shortestUniquePrefix(vector<string> s, int n) {
+    // Write your code here.
+    Trie tr;
+
+    for (auto &w : s)
+    {
+        tr.insert(w);
+    }
+
+    vector<string> ans;
+    
+    for (string &w : s)
+    {
+        tr.getAns(w, ans);
+    }
+
+    return ans;
+}
