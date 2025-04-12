@@ -1,0 +1,34 @@
+#include <bits/stdc++.h> 
+int minTransactions(int k, vector < int > & arr) {
+    // Write your code here.
+    int sum = 0;
+    int n = arr.size();
+
+    for (int x : arr)
+    {
+        sum += x;
+    }
+
+    if (sum % n) {
+        return -1;
+    }
+
+    int target = sum / n;
+    int ans = 0;
+
+    for (int x : arr)
+    {
+        if (x > target)
+        {
+            int give = x - target;
+
+            if (give % k) {
+                return -1;
+            }
+
+            ans += give / k;
+        }
+    }
+
+    return ans;
+}
