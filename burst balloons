@@ -1,0 +1,88 @@
+class Solution {
+public:
+    int recur(int start, int end, vector<int>& nums)
+    {
+        if (start > end) {
+            return 0;
+        }
+
+        int ans = INT_MIN;
+
+        for (int index = start; index <= end; index++)
+        {
+            int currAns = nums[start - 1] * nums[index] * nums[end + 1] + recur(start, index - 1, nums) + recur(index + 1, end, nums);
+            
+            if (currAns > ans) {
+                ans = currAns;
+            }
+        }
+
+        return ans;
+    }
+
+    int memoization(int start, int end, vector<int>& nums, vector<vector<int> >& dp)
+    {
+        if (start > end) {
+            return 0;
+        }
+
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+
+        int ans = INT_MIN;
+
+        for (int index = start; index <= end; index++)
+        {
+            int currAns = nums[start - 1] * nums[index] * nums[end + 1] + memoization(start, index - 1, nums, dp) + memoization(index + 1, end, nums, dp);
+            
+            if (currAns > ans) {
+                ans = currAns;
+            }
+        }
+
+        return dp[start][end] = ans;
+    }
+
+    int tabulation(int n, vector<int>& nums)
+    {
+        vector<vector<int> > dp(n + 2, vector<int>(n + 2, 0));
+
+        for (int start = n; start >= 1; start--)
+        {
+            for (int end = start; end <= n; end++)
+            {
+                int ans = INT_MIN;
+
+                for (int index = start; index <= end; index++)
+                {
+                    int currAns = nums[start - 1] * nums[index] * nums[end + 1] + dp[start][index - 1] + dp[index + 1][end];
+                    
+                    if (currAns > ans) {
+                        ans = currAns;
+                    }
+                }
+
+                dp[start][end] = ans;
+            }
+        }
+
+        return dp[1][n];
+    }
+
+    int maxCoins(vector<int>& nums) {
+        int n = nums.size();
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+
+        // int ans = recur(1, n, nums);
+
+        // vector<vector<int> > dp(n + 2, vector<int>(n + 2, -1));
+
+        // int ans = memoization(1, n, nums, dp);
+
+        int ans = tabulation(n, nums);
+
+        return ans;
+    }
+};
