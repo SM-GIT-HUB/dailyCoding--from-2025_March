@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+int findMaxElement(vector < pair < int, int > > & arr, int n, int m) {
+    // Write Your Code here.
+    vector<int> diff(n + 2, 0);
+
+    for (auto &p : arr)
+    {
+        diff[p.first] += 1;
+        diff[p.second + 1] -= 1;
+    }
+
+    int maxi = 0, curr = 0;
+
+    for (int i = 1; i <= n; i++)
+    {
+        curr += diff[i];
+        maxi = max(curr, maxi);
+    }
+    
+    return maxi;
+}
