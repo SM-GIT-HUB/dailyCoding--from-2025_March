@@ -1,97 +1,82 @@
-#include <bits/stdc++.h> 
-
-int recur(int i, int j, vector<int>& cuts)
-{
-    if (i > j) {
-        return 0;
-    }
-
-    int minCost = INT_MAX;
-
-    for (int k = i; k <= j; k++)
+class Solution {
+public:
+    int recur(int i, int j, vector<int>& cuts)
     {
-        int currCost = cuts[j + 1] - cuts[i - 1] + recur(i, k - 1, cuts) + recur(k + 1, j, cuts);
-
-        if (currCost < minCost) {
-            minCost = currCost;
+        if (i > j) {
+            return 0;
         }
-    }
 
-    return minCost;
-}
+        int ans = INT_MAX;
 
-int memoization(int i, int j, vector<int>& cuts, vector<vector<int> >& dp)
-{
-    if (i > j) {
-        return 0;
-    }
-
-    if (dp[i][j] != -1) {
-        return dp[i][j];
-    }
-
-    int minCost = INT_MAX;
-
-    for (int k = i; k <= j; k++)
-    {
-        int currCost = cuts[j + 1] - cuts[i - 1] + memoization(i, k - 1, cuts, dp) + memoization(k + 1, j, cuts, dp);
-
-        if (currCost < minCost) {
-            minCost = currCost;
-        }
-    }
-
-    return dp[i][j] = minCost;
-}
-
-int tabulation(int c, vector<int>& cuts)
-{
-    vector<vector<int> > dp(c + 2, vector<int>(c + 2, 0));
-
-    for (int i = c; i >= 1; i--)
-    {
-        for (int j = i; j <= c; j++)
+        for (int k = i; k <= j; k++)
         {
-            int minCost = INT_MAX;
-
-            for (int k = i; k <= j; k++)
-            {
-                int currCost = cuts[j + 1] - cuts[i - 1] + dp[i][k - 1] + dp[k + 1][j];
-
-                // if (i <= k - 1) {
-                //     currCost += dp[i][k - 1];
-                // }
-
-                // if (k + 1 <= j) {
-                //     currCost += dp[k + 1][j];
-                // }
-
-                if (currCost < minCost) {
-                    minCost = currCost;
-                }
-            }
-
-            dp[i][j] = minCost;
+            int currAns = cuts[j + 1] - cuts[i - 1] + recur(i, k - 1, cuts) + recur(k + 1, j, cuts);
+            ans = min(currAns, ans);
         }
+
+        return ans;
     }
 
-    return dp[1][c];
-}
+    int memoization(int i, int j, vector<int>& cuts, vector<vector<int> >& dp)
+    {
+        if (i > j) {
+            return 0;
+        }
 
-int cost(int n, int c, vector<int> &cuts){
-    // Write your code here.
-    sort(cuts.begin(), cuts.end());
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
 
-    cuts.insert(cuts.begin(), 0);
-    cuts.push_back(n);
+        int ans = INT_MAX;
 
-    // int ans = recur(1, c, cuts);
+        for (int k = i; k <= j; k++)
+        {
+            int currAns = cuts[j + 1] - cuts[i - 1] + memoization(i, k - 1, cuts, dp) + memoization(k + 1, j, cuts, dp);
+            ans = min(currAns, ans);
+        }
 
-    // vector<vector<int> > dp(c + 2, vector<int>(c + 2, -1));
+        return dp[i][j] = ans;
+    }
 
-    // int ans = memoization(1, c, cuts, dp);
+    int tabulation(int c, vector<int>& cuts)
+    {
+        vector<vector<int> > dp(c + 2, vector<int>(c + 2, 0));
 
-    int ans = tabulation(c, cuts);
+        for (int i = c; i >= 1; i--)
+        {
+            for (int j = i; j <= c; j++)
+            {
+                int ans = INT_MAX;
 
-    return ans;
-}
+                for (int k = i; k <= j; k++)
+                {
+                    int currAns = cuts[j + 1] - cuts[i - 1] + dp[i][k - 1] + dp[k + 1][j];
+                    ans = min(currAns, ans);
+                }
+
+                dp[i][j] = ans;
+            }
+        }
+
+        return dp[1][c];
+    }
+
+    int minCost(int n, vector<int>& cuts) {
+        int c = cuts.size();
+
+        cuts.push_back(0);
+        cuts.push_back(n);
+
+        sort(cuts.begin(), cuts.end());
+
+        // int ans = recur(1, c, cuts);
+
+        // vector<vector<int> > dp(c + 2, vector<int>(c + 2, -1));
+
+        // int ans = memoization(1, c, cuts, dp);
+
+        int ans = tabulation(c, cuts);
+
+        return ans;
+    }
+};
