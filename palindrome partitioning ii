@@ -1,0 +1,108 @@
+class Solution {
+public:
+    bool isPalin(int start, int end, string &str)
+    {
+        while (start < end)
+        {
+            if (str[start++] != str[end--]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    int recur(int index, int n, string &str)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        int ans = INT_MAX;
+
+        for (int i = index; i < n; i++)
+        {
+            if (isPalin(index, i, str))
+            {
+                int currAns = 1 + recur(i + 1, n, str);
+
+                if (currAns < ans) {
+                    ans = currAns;
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    int memoization(int index, int n, string &str, vector<int>& dp)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        if (dp[index] != -1) {
+            return dp[index];
+        }
+
+        int ans = INT_MAX;
+
+        for (int i = index; i < n; i++)
+        {
+            if (isPalin(index, i, str))
+            {
+                int currAns = 1 + memoization(i + 1, n, str, dp);
+
+                if (currAns < ans) {
+                    ans = currAns;
+                }
+            }
+        }
+
+        return dp[index] = ans;
+    }
+
+    int tabulation(int n, string &str)
+    {
+        vector<int> dp(n + 1, 0);
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            int ans = INT_MAX;
+
+            for (int i = index; i < n; i++)
+            {
+                if (isPalin(index, i, str))
+                {
+                    int currAns = 1 + dp[i + 1];
+
+                    if (currAns < ans) {
+                        ans = currAns;
+                    }
+                }
+            }
+
+            dp[index] = ans;
+        }
+
+        return dp[0];
+    }
+
+    int minCut(string str) {
+        int n = str.size();
+
+        if (isPalin(0, n - 1, str)) {
+            return 0;
+        }
+
+        // int ans = recur(0, n, str);
+
+        // vector<int> dp(n, -1);
+
+        // int ans = memoization(0, n, str, dp);
+
+        int ans = tabulation(n, str);
+
+        return (ans - 1);
+    }
+};
