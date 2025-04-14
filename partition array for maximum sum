@@ -1,0 +1,87 @@
+int recur(int index, int n, int k, vector<int>& arr)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    int ans = 0;
+    int maxi = arr[index];
+
+    for (int i = index; i < n && i < (index + k); i++)
+    {
+        maxi = max(arr[i], maxi);
+        int currAns = maxi * (i - index + 1) + recur(i + 1, n, k, arr);
+
+        if (currAns > ans) {
+            ans = currAns;
+        }
+    }
+
+    return ans;
+}
+
+int memoization(int index, int n, int k, vector<int>& arr, vector<int>& dp)
+{
+    if (index >= n) {
+        return 0;
+    }
+
+    if (dp[index] != -1) {
+        return dp[index];
+    }
+
+    int ans = 0;
+    int maxi = arr[index];
+
+    for (int i = index; i < n && i < (index + k); i++)
+    {
+        maxi = max(arr[i], maxi);
+        int currAns = maxi * (i - index + 1) + memoization(i + 1, n, k, arr, dp);
+
+        if (currAns > ans) {
+            ans = currAns;
+        }
+    }
+
+    return dp[index] = ans;
+}
+
+int tabulation(int n, int k, vector<int>& arr)
+{
+    vector<int> dp(n + 1, 0);
+
+    for (int index = n - 1; index >= 0; index--)
+    {
+        int ans = 0;
+        int maxi = arr[index];
+
+        for (int i = index; i < n && i < (index + k); i++)
+        {
+            maxi = max(arr[i], maxi);
+            int currAns = maxi * (i - index + 1) + dp[i + 1];
+
+            if (currAns > ans) {
+                ans = currAns;
+            }
+        }
+
+        dp[index] = ans;
+    }
+
+    return dp[0];
+}
+
+int maximumSubarray(vector<int> &arr, int k) {
+    // Write your code here.
+    int n = arr.size();
+
+    // int ans = recur(0, n, k, arr);
+
+    // vector<int> dp(n, -1);
+
+    // int ans = memoization(0, n, k, arr, dp);
+
+    int ans = tabulation(n, k, arr);
+
+    return ans;
+}
