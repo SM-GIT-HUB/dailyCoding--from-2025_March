@@ -1,0 +1,230 @@
+const int mod = 1e9 + 7;
+
+int recur(int start, int end, string &exp, bool isTrue)
+{
+    if (start > end) {
+        return 0;
+    }
+
+    if (start == end)
+    {
+        if (isTrue) {
+            return (exp[start] == 'T');
+        }
+        else
+            return (exp[end] == 'F');
+    }
+
+    long long ans = 0;
+
+    for (int i = start + 1; i < end; i += 2)
+    {
+        int leftT = recur(start, i - 1, exp, 1);
+        int leftF = recur(start, i - 1, exp, 0);
+        int rightT = recur(i + 1, end, exp, 1);
+        int rightF = recur(i + 1, end, exp, 0);
+
+        if (exp[i] == '|')
+        {
+            if (isTrue)
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+                ans = ((leftT * rightT) % mod + ans) % mod;
+            }
+            else
+                ans = ((leftF * rightF) % mod + ans) % mod;
+        }
+        else if (exp[i] == '&')
+        {
+            if (isTrue) {
+                ans = ((leftT * rightT) % mod + ans) % mod;
+            }
+            else
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+                ans = ((leftF * rightF) % mod + ans) % mod;
+            }
+        }
+        else if (exp[i] == '^')
+        {
+            if (isTrue)
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+            }
+            else
+            {
+                ans = ((leftT * rightT) % mod + ans) % mod;
+                ans = ((leftF * rightF) % mod + ans) % mod;
+            }
+        }
+    }
+
+    return ans;
+}
+
+int memoization(int start, int end, string &exp, bool isTrue, vector<vector<vector<int> > >& dp)
+{
+    if (start > end) {
+        return 0;
+    }
+
+    if (start == end)
+    {
+        if (isTrue) {
+            return (exp[start] == 'T');
+        }
+        else
+            return (exp[end] == 'F');
+    }
+
+    if (dp[start][end][isTrue] != -1) {
+        return dp[start][end][isTrue];
+    }
+
+    long long ans = 0;
+
+    for (int i = start + 1; i < end; i += 2)
+    {
+        long long leftT = memoization(start, i - 1, exp, 1, dp);
+        long long leftF = memoization(start, i - 1, exp, 0, dp);
+        long long rightT = memoization(i + 1, end, exp, 1, dp);
+        long long rightF = memoization(i + 1, end, exp, 0, dp);
+
+        if (exp[i] == '|')
+        {
+            if (isTrue)
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+                ans = ((leftT * rightT) % mod + ans) % mod;
+            }
+            else
+                ans = ((leftF * rightF) % mod + ans) % mod;
+        }
+        else if (exp[i] == '&')
+        {
+            if (isTrue) {
+                ans = ((leftT * rightT) % mod + ans) % mod;
+            }
+            else
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+                ans = ((leftF * rightF) % mod + ans) % mod;
+            }
+        }
+        else if (exp[i] == '^')
+        {
+            if (isTrue)
+            {
+                ans = ((leftF * rightT) % mod + ans) % mod;
+                ans = ((leftT * rightF) % mod + ans) % mod;
+            }
+            else
+            {
+                ans = ((leftT * rightT) % mod + ans) % mod;
+                ans = ((leftF * rightF) % mod + ans) % mod;
+            }
+        }
+    }
+
+    return dp[start][end][isTrue] = ans;
+}
+
+int tabulation(int n, string &exp)
+{
+    vector<vector<vector<long long> > > dp(n + 1, vector<vector<long long> >(n + 1, {0, 0}));
+
+    for (int start = n - 1; start >= 0; start -= 2)
+    {
+        dp[start][start][1] = (exp[start] == 'T');
+        dp[start][start][0] = (exp[start] == 'F');
+
+        for (int end = start + 2; end < n; end += 2)
+        {
+            for (int isTrue = 0; isTrue < 2; isTrue++)
+            {
+                long long ans = 0;
+
+                for (int i = start + 1; i < end; i += 2)
+                {
+                    long long leftT = 0;
+                    long long leftF = 0;
+                    long long rightT = 0;
+                    long long rightF = 0;
+
+                    if (i - 1 >= 0)
+                    {
+                        leftT = dp[start][i - 1][1];
+                        leftF = dp[start][i - 1][0];
+                    }
+
+                    if (i + 1 < n)
+                    {
+                        rightT = dp[i + 1][end][1];
+                        rightF = dp[i + 1][end][0];
+                    }
+
+                    if (exp[i] == '|')
+                    {
+                        if (isTrue)
+                        {
+                            ans = ((leftF * rightT) % mod + ans) % mod;
+                            ans = ((leftT * rightF) % mod + ans) % mod;
+                            ans = ((leftT * rightT) % mod + ans) % mod;
+                        }
+                        else
+                            ans = ((leftF * rightF) % mod + ans) % mod;
+                    }
+                    else if (exp[i] == '&')
+                    {
+                        if (isTrue) {
+                            ans = ((leftT * rightT) % mod + ans) % mod;
+                        }
+                        else
+                        {
+                            ans = ((leftF * rightT) % mod + ans) % mod;
+                            ans = ((leftT * rightF) % mod + ans) % mod;
+                            ans = ((leftF * rightF) % mod + ans) % mod;
+                        }
+                    }
+                    else if (exp[i] == '^')
+                    {
+                        if (isTrue)
+                        {
+                            ans = ((leftF * rightT) % mod + ans) % mod;
+                            ans = ((leftT * rightF) % mod + ans) % mod;
+                        }
+                        else
+                        {
+                            ans = ((leftT * rightT) % mod + ans) % mod;
+                            ans = ((leftF * rightF) % mod + ans) % mod;
+                        }
+                    }
+                }
+
+                dp[start][end][isTrue] = ans;
+            }
+        }
+    }
+
+    return dp[0][n - 1][1];
+}
+
+int evaluateExp(string &exp) {
+    // Write your code here.
+    int n = exp.size();
+    
+    // int ans = recur(0, n - 1, exp, 1);
+
+    // vector<vector<vector<int> > > dp(n, vector<vector<int> >(n, {-1, -1}));
+    
+    // int ans = memoization(0, n - 1, exp, 1, dp);
+
+    int ans = tabulation(n, exp);
+
+    return ans;
+}
