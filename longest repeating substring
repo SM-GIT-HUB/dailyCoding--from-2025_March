@@ -1,0 +1,26 @@
+int longestRepeatingSubstring(string &str, int k) {
+    // Write your code here.
+    int start = 0, end = 0;
+    int n = str.size();
+    int freq[26] = {0};
+    int maxFreq = 0;
+
+    int ans = 0;
+    
+    while (end < n)
+    {
+        freq[str[end] - 'A']++;
+        maxFreq = max(freq[str[end] - 'A'], maxFreq);
+
+        while (end - start + 1 - maxFreq > k)
+        {
+            freq[str[start] - 'A']--;
+            start++;
+        }
+
+        ans = max(end - start + 1, ans);
+        end++;
+    }
+
+    return ans;
+}
