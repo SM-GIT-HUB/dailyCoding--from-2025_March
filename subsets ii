@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+
+void track(int index, int n, vector<int>& arr, vector<int>& output, vector<vector<int> >& ans)
+{
+    ans.push_back(output);
+    
+    for (int i = index; i < n; i++)
+    {
+        if (i > index && arr[i] == arr[i - 1]) {
+            continue;
+        }
+
+        output.push_back(arr[i]);
+        track(i + 1, n, arr, output, ans);
+        output.pop_back();
+    }
+}
+
+vector<vector<int>> uniqueSubsets(int n, vector<int> &arr)
+{
+    // Write your code here.
+    sort(arr.begin(), arr.end());
+
+    vector<int> output;
+    vector<vector<int> > ans;
+
+    ans.push_back({});
+    
+    track(0, n, arr, output, ans);
+    
+    return ans;
+}
