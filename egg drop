@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int recur(int moves, int eggs)
+    {
+        if (eggs == 0 || moves == 0) {
+            return 0;
+        }
+
+        if (moves == 1 || eggs == 1) {
+            return moves;
+        }
+        
+        return 1 + recur(moves - 1, eggs - 1) + recur(moves - 1, eggs);
+    }
+
+    int memoization(int moves, int eggs, vector<vector<int> >& dp)
+    {
+        if (eggs == 0 || moves == 0) {
+            return 0;
+        }
+
+        if (moves == 1 || eggs == 1) {
+            return moves;
+        }
+
+        if (dp[eggs][moves] != -1) {
+            return dp[eggs][moves];
+        }
+        
+        return dp[eggs][moves] = 1 + memoization(moves - 1, eggs - 1, dp) + memoization(moves - 1, eggs, dp);
+    }
+
+    int superEggDrop(int n, int k) {
+        int moves = 0;
+
+        // while (recur(moves, n) < k)
+        // {
+        //     moves++;
+        // }
+        
+        vector<vector<int> > dp(n + 1, vector<int>(k + 1, -1));
+        
+        while (memoization(moves, n, dp) < k)
+        {
+            moves++;
+        }
+
+        return moves;
+    }
+};
