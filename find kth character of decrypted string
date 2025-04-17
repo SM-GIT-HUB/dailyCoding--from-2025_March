@@ -1,0 +1,42 @@
+char kThCharaterOfDecryptedString(string s, long long k)
+{
+    //  Write your code here.
+    int index = 0;
+    int n = s.size();
+
+    while (index < n)
+    {
+        int i = index;
+
+        while (i < n && isalpha(s[i]))
+        {
+            i++;
+        }
+
+        int len = i - index;
+
+        string temp = "";
+
+        while (i < n && !isalpha(s[i]))
+        {
+            temp += s[i++];
+        }
+
+        long long total = 1LL * len * stoll(temp);
+
+        if (k > total) {
+            k -= total;
+        }
+        else
+        {
+            k--;
+            k = k % len;
+
+            return s[index + k];
+        }
+
+        index = i;
+    }
+    
+    return '#';
+}
