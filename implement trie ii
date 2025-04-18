@@ -1,0 +1,135 @@
+#include <bits/stdc++.h> 
+class Trie{
+    struct Node {
+        int isTerminal;
+        Node* children[26];
+
+        Node()
+        {
+            isTerminal = 0;
+
+            for (int i = 0; i < 26; i++)
+            {
+                children[i] = nullptr;
+            }
+        }
+    };
+public:
+    Node* root = nullptr;
+
+    Trie(){
+        // Write your code here.
+        root = new Node();
+    }
+
+    void deleteNodes(Node* &curr)
+    {
+        if (!curr) {
+            return;
+        }
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (curr->children[i]) {
+                deleteNodes(curr->children[i]);
+            }
+        }
+
+        delete curr;
+    }
+
+    void insert(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int index = 0;
+
+        for (char x : word)
+        {
+            index = x - 'a';
+
+            if (!curr->children[index]) {
+                curr->children[index] = new Node();
+            }
+
+            curr = curr->children[index];
+        }
+
+        curr->isTerminal++;
+    }
+
+    int countWordsEqualTo(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int index = 0;
+
+        for (char x : word)
+        {
+            index = x - 'a';
+
+            if (!curr->children[index]) {
+                return 0;
+            }
+
+            curr = curr->children[index];
+        }
+
+        return curr->isTerminal;
+    }
+
+    void searchInto(Node* &curr, int &ans)
+    {
+        ans += curr->isTerminal;
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (curr->children[i]) {
+                searchInto(curr->children[i], ans);
+            }
+        }
+    }
+
+    int countWordsStartingWith(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int index = 0;
+
+        for (char x : word)
+        {
+            index = x - 'a';
+
+            if (!curr->children[index]) {
+                return 0;
+            }
+
+            curr = curr->children[index];
+        }
+
+        int ans = 0;
+        searchInto(curr, ans);
+
+        return ans;
+    }
+
+    void erase(string &word){
+        // Write your code here.
+        Node* curr = root;
+        int index = 0;
+
+        for (char x : word)
+        {
+            index = x - 'a';
+
+            if (!curr->children[index]) {
+                return;
+            }
+
+            curr = curr->children[index];
+        }
+
+        curr->isTerminal--;
+    }
+
+    ~Trie() {
+        deleteNodes(root);
+    }
+};
