@@ -1,0 +1,116 @@
+class Solution {
+    class obj {
+    public:
+        int start;
+        int end;
+        int profit;
+
+        obj(int s, int e, int p) : start(s), end(e), profit(p) {}
+    };
+
+public:
+    int binSearch(int prev, int front, int back, vector<obj>& jobs)
+    {
+        int ans = -1;
+        
+        while (front <= back)
+        {
+            int mid = front + (back - front) / 2;
+
+            if (jobs[mid].start >= prev)
+            {
+                ans = mid;
+                back = mid - 1;
+            }
+            else
+                front = mid + 1;
+        }
+
+        return ans;
+    }
+
+    int recur(int index, int n, vector<obj>& jobs)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        int include = jobs[index].profit;
+        int exclude = recur(index + 1, n, jobs);
+
+        int in = binSearch(jobs[index].end, index + 1, n - 1, jobs);
+
+        if (in != -1) {
+            include += recur(in, n, jobs);
+        }
+
+        return max(include, exclude);
+    }
+
+    int memoization(int index, int n, vector<obj>& jobs, vector<int>& dp)
+    {
+        if (index >= n) {
+            return 0;
+        }
+
+        if (dp[index] != -1) {
+            return dp[index];
+        }
+
+        int include = jobs[index].profit;
+        int exclude = memoization(index + 1, n, jobs, dp);
+
+        int in = binSearch(jobs[index].end, index + 1, n - 1, jobs);
+
+        if (in != -1) {
+            include += memoization(in, n, jobs, dp);
+        }
+
+        return dp[index] = max(include, exclude);
+    }
+
+    int tabulation(int n, vector<obj>& jobs)
+    {
+        vector<int> dp(n + 1, 0);
+
+        for (int index = n - 1; index >= 0; index--)
+        {
+            int include = jobs[index].profit;
+            int exclude = dp[index + 1];
+
+            int in = binSearch(jobs[index].end, index + 1, n - 1, jobs);
+
+            if (in != -1) {
+                include += dp[in];
+            }
+
+            dp[index] = max(include, exclude);
+        }
+
+        return dp[0];
+    }
+
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        vector<obj> jobs;
+        int n = profit.size();
+
+        for (int i = 0; i < n; i++)
+        {
+            jobs.emplace_back(startTime[i], endTime[i], profit[i]);
+        }
+
+        sort(jobs.begin(), jobs.end(), [](obj &a, obj &b) {
+            return (a.start < b.start);
+        });
+
+        // int ans = recur(0, n, jobs);
+
+        // vector<int> dp(n, -1);
+
+        // int ans = memoization(0, n, jobs, dp);
+
+        int ans = tabulation(n, jobs);
+
+        return ans;
+    }
+};
