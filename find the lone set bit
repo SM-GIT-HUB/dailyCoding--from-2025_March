@@ -1,0 +1,6 @@
+#include <bits/stdc++.h> 
+int findSetBit(int n) {   
+    // Write your code here
+    return (__builtin_popcount(n) == 1)? (log2(n) + 1) : -1;
+}
+
