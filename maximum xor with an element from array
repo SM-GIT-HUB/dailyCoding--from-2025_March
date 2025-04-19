@@ -1,0 +1,99 @@
+class Solution {
+public:
+    struct Node {
+        Node* children[2];
+
+        Node()
+        {
+            children[0] = nullptr;
+            children[1] = nullptr;
+        }
+    };
+
+    class Trie {
+    public:
+        Node* root = nullptr;
+
+        Trie()
+        {
+            root = new Node();
+        }
+
+        void insert(int num)
+        {
+            Node* curr = root;
+
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = (num >> i) & 1;
+
+                if (!curr->children[bit]) {
+                    curr->children[bit] = new Node();
+                }
+
+                curr = curr->children[bit];
+            }
+        }
+
+        int search(int num)
+        {
+            int currAns = 0;
+            Node* curr = root;
+
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = (num >> i) & 1;
+                int oppBit = !bit;
+
+                if (curr->children[oppBit])
+                {
+                    currAns = currAns | (1 << i);
+                    curr = curr->children[oppBit];
+                }
+                else
+                    curr = curr->children[bit];
+            }
+
+            return currAns;
+        }
+    };
+
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        int n = nums.size();
+        int qn = queries.size();
+        vector<tuple<int, int, int> > qs;
+
+        Trie tr;
+        vector<int> ans(qn, -1);
+
+        for (int i = 0; i < qn; i++)
+        {
+            qs.push_back({queries[i][1], queries[i][0], i});
+        }
+
+        sort(nums.begin(), nums.end());
+        sort(qs.begin(), qs.end());
+
+        int index = 0;
+
+        for (int i = 0; i < qn; i++)
+        {
+            int mi = get<0>(qs[i]);
+            int xi = get<1>(qs[i]);
+            int idx = get<2>(qs[i]);
+
+            int flag = 0;
+
+            while (index < n && nums[index] <= mi)
+            {
+                tr.insert(nums[index++]);
+            }
+
+            if (index > 0) {
+                ans[idx] = tr.search(xi);
+            }
+        }
+
+        return ans;
+    }
+};
