@@ -1,0 +1,82 @@
+class Solution {
+public:
+    struct Node {
+        Node* children[2];
+
+        Node()
+        {
+            children[0] = nullptr;
+            children[1] = nullptr;
+        }
+    };
+
+    class Trie {
+    public:
+        Node* root = nullptr;
+
+        Trie()
+        {
+            root = new Node();
+        }
+
+        void insert(int num)
+        {
+            Node* curr = root;
+
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = (num >> i) & 1;
+
+                if (!curr->children[bit]) {
+                    curr->children[bit] = new Node();
+                }
+
+                curr = curr->children[bit];
+            }
+        }
+
+        int search(int num)
+        {
+            int currAns = 0;
+            Node* curr = root;
+
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = (num >> i) & 1;
+                int oppBit = !bit;
+
+                if (curr->children[oppBit])
+                {
+                    currAns = currAns | (1 << i);
+                    curr = curr->children[oppBit];
+                }
+                else
+                    curr = curr->children[bit];
+            }
+
+            return currAns;
+        }
+    };
+
+    int findMaximumXOR(vector<int>& nums) {
+        Trie tr;
+        int ans = 0;
+        int tempAns = 0;
+
+        for (int x : nums)
+        {
+            tr.insert(x);
+        }
+
+        for (int x : nums)
+        {
+            tempAns = tr.search(x);
+
+            if (tempAns > ans) {
+                ans = tempAns;
+            }
+        }
+
+        return ans;
+    }
+};
