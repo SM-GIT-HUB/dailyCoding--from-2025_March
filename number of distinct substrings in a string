@@ -1,0 +1,36 @@
+
+
+/*You are required to complete this method */
+
+struct Node {
+    unordered_map<int, Node*> children;
+};
+
+int countDistinctSubstring(string s)
+{
+    //Your code here
+    int n = s.size();
+    Node* root = new Node();
+    
+    int ans = 0;
+    
+    for (int i = 0; i < n; i++)
+    {
+        Node* curr = root;
+        
+        for (int j = i; j < n; j++)
+        {
+            int index = s[j] - 'a';
+            
+            if (!curr->children[index])
+            {
+                curr->children[index] = new Node();
+                ans++;
+            }
+            
+            curr = curr->children[index];
+        }
+    }
+    
+    return (ans + 1);
+}
