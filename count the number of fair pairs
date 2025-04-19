@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int binSearch1(int &elem, int index, int &n, int &target, vector<int>& nums)
+    {
+        int ans = -1;
+        int start = index, end = n - 1;
+
+        while (start <= end)
+        {
+            int mid = start + (end - start) / 2;
+            int x = elem + nums[mid];
+
+            if (x == target)
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else if (x < target) {
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+
+        return (ans != -1)? ans : start;
+    }
+
+    int binSearch2(int &elem, int index, int &n, int &target, vector<int>& nums)
+    {
+        int ans = -1;
+        int start = index, end = n - 1;
+
+        while (start <= end)
+        {
+            int mid = start + (end - start) / 2;
+            int x = elem + nums[mid];
+
+            if (x == target)
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else if (x < target) {
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+
+        return (ans != -1)? ans : end;
+    }
+
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+
+        long long ans = 0;
+
+        for (int index = 0; index < n - 1; index++)
+        {
+            int first = binSearch1(nums[index], index + 1, n, lower, nums);
+            int last = binSearch2(nums[index], index + 1, n, upper, nums);
+
+            if (first <= last) {
+                ans = ans + last - first + 1;
+            }
+        }
+
+        return ans;
+    }
+};
