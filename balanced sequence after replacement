@@ -1,0 +1,86 @@
+#include <bits/stdc++.h> 
+
+bool match(char x, char y)
+{
+	return (x == '(' && y == ')') || (x == '{' && y == '}') || (x == '[' && y == ']');
+}
+
+bool isOpen(char x)
+{
+	return (x == '(' || x == '{' || x == '[');
+}
+
+int recur(int index, int n, vector<char>& stack, string &str)
+{
+	if (index >= n) {
+		return stack.empty();
+	}
+
+	char curr = str[index];
+	int ans = 0;
+
+	char ops[6] = {'(', '{', '[', ')', '}', ']'};
+
+	if (curr == 'X')
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			stack.push_back(ops[i]);
+			ans = recur(index + 1, n, stack, str);
+			stack.pop_back();
+
+			if (ans) {
+				return true;
+			}
+		}
+
+		for (int i = 3; i < 6; i++)
+		{
+			if (!stack.empty() && match(stack.back(), ops[i]))
+			{
+				char last = stack.back();
+				stack.pop_back();
+				ans = recur(index + 1, n, stack, str);
+				stack.push_back(last);
+
+				if (ans) {
+					return ans;
+				}
+			}
+		}
+	}
+	else
+	{
+		if (isOpen(curr))
+		{
+			stack.push_back(curr);
+			ans = recur(index + 1, n, stack, str);
+			stack.pop_back();
+		}
+		else
+		{
+			if (stack.empty() || !match(stack.back(), curr)) {
+				return false;
+			}
+			
+			char last = stack.back();
+			stack.pop_back();
+			ans = recur(index + 1, n, stack, str);
+			stack.push_back(last);
+		}
+	}
+
+	return ans;
+}
+
+bool isValid(string &str)
+{
+	// Write your code here.
+	int n = str.size();
+
+	vector<char> stack;
+
+	int ans = recur(0, n, stack, str);
+
+	return ans;
+}
