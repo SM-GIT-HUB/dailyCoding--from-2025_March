@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numRabbits(vector<int>& answers) {
+        int ans = 0;
+        unordered_map<int, int> mapp;
+
+        for (int x : answers)
+        {
+            mapp[x]++;
+        }
+
+        for (auto &it : mapp)
+        {
+            int groupSize = it.first + 1;
+            int count = it.second;
+
+            int groups = (count + groupSize - 1) / groupSize;
+            ans += (groups * groupSize);
+        }
+
+        return ans;
+    }
+};
