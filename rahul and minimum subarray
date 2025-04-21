@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+int minSubArrayLen(vector<int>& arr, int target, int n) {
+    // Write your code here.
+    int ans = INT_MAX;
+    int start = 0, end = 0;
+
+    int sum = 0;
+
+    while (end < n)
+    {
+        sum += arr[end];
+
+        while (sum > target)
+        {
+            ans = min(end - start + 1, ans);
+            sum = sum - arr[start++];
+        }
+
+        end++;
+    }
+
+    return (ans == INT_MAX)? 0 : ans;
+}
