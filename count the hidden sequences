@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int numberOfArrays(vector<int>& diff, int lower, int upper) {
+        long long mini = 0, maxi = 0;
+        long long currSum = 0;
+
+        for (int d : diff)
+        {
+            currSum += d;
+            mini = min(mini, currSum);
+            maxi = max(maxi, currSum);
+        }
+
+        long long validStarts = (upper - lower) - (maxi - mini) + 1;
+
+        return (validStarts > 0) ? validStarts : 0;
+    }
+};
