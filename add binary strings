@@ -1,0 +1,111 @@
+#include<bits/stdc++.h>
+
+bool match1(char x, char y)
+{
+    return (x == '1' && y == '1');
+}
+
+bool match2(char x, char y)
+{
+    return ((x == '0' && y == '1') || (x == '1' && y == '0'));
+}
+
+string addBinaryString(string &a, string &b, int m, int n)
+{
+    // Write your code here.
+    string ans = "";
+
+    int i = m - 1, j = n - 1;
+    int carry = 0;
+
+    while (i >= 0 && j >= 0)
+    {
+        char x = a[i--];
+        char y = b[j--];
+
+        if (match1(x, y))
+        {
+            if (carry) {
+                ans.push_back('1');
+            }
+            else
+                ans.push_back('0');
+            
+            carry = 1;
+        }
+        else if(match2(x, y))
+        {
+            if (carry) {
+                ans.push_back('0');
+            }
+            else
+                ans.push_back('1');
+        }
+        else
+        {
+            if (carry)
+            {
+                ans.push_back('1');
+                carry = 0;
+            }
+            else
+                ans.push_back('0');
+        }
+    }
+
+    while (i >= 0)
+    {
+        char x = a[i--];
+
+        if (x == '1')
+        {
+            if (carry) {
+                ans.push_back('0');
+            }
+            else
+                ans.push_back('1');
+        }
+        else
+        {
+            if (carry)
+            {
+                ans.push_back('1');
+                carry = 0;
+            }
+            else
+                ans.push_back('0');
+        }
+    }
+
+    while (j >= 0)
+    {
+        char y = b[j--];
+
+        if (y == '1')
+        {
+            if (carry) {
+                ans.push_back('0');
+            }
+            else
+                ans.push_back('1');
+        }
+        else
+        {
+            if (carry)
+            {
+                ans.push_back('1');
+                carry = 0;
+            }
+            else
+                ans.push_back('0');
+        }
+    }
+
+    if (carry) {
+        ans.push_back('1');
+    }
+
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
