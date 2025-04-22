@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+
+long long titleToNumber(string str) {
+    // Write your code here
+    long long ans = 0;
+    long long t6 = 1;
+
+    int n = str.size();
+
+    for (int i = n - 1; i >= 0; i--)
+    {
+        ans = ans + t6 * (str[i] - 'A' + 1);
+        t6 = t6 * 26;
+    }
+
+    return ans;
+}
