@@ -1,0 +1,60 @@
+
+int merge(int start, int mid, int end, vector<int>& arr)
+{
+    vector<int> merged;
+
+    int count = 0;
+    int i = start, j = mid + 1;
+
+    while (i <= mid && j <= end)
+    {
+        if (arr[i] <= arr[j]) {
+            merged.push_back(arr[i++]);
+        }
+        else
+        {
+            count += mid - i + 1;
+            merged.push_back(arr[j++]);
+        }
+    }
+
+    while (i <= mid)
+    {
+        merged.push_back(arr[i++]);
+    }
+
+    while (j <= end)
+    {
+        merged.push_back(arr[j++]);
+    }
+
+    for (int x : merged)
+    {
+        arr[start++] = x;
+    }
+
+    return count;
+}
+
+int mergeSort(int start, int end, vector<int>& arr)
+{
+    if (start >= end) {
+        return 0;
+    }
+
+    int count = 0;
+    int mid = start + (end - start) / 2;
+    
+    count += mergeSort(start, mid, arr);
+    count += mergeSort(mid + 1, end, arr);
+    count += merge(start, mid, end, arr);
+
+    return count;
+}
+
+int numberOfInversions(vector<int>&a, int n) {
+    // Write your code here.
+    int ans = mergeSort(0, n - 1, a);
+
+    return ans;
+}
