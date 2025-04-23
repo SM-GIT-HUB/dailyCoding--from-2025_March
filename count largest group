@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int getSum(int num)
+    {
+        int sum = 0;
+
+        while (num != 0)
+        {
+            sum += num % 10;
+            num = num / 10;
+        }
+
+        return sum;
+    }
+
+    int countLargestGroup(int n) {
+        int mapp[37] = {0};
+
+        int curr = 0;
+        int largest = 0;
+
+        int ans = 0;
+
+        for (int i = 1; i <= n; i++)
+        {
+            curr = ++mapp[getSum(i)];
+            
+            if (curr == largest) {
+                ans++;
+            }
+            else if (curr > largest)
+            {
+                largest = curr;
+                ans = 1;
+            }
+        }
+
+        return ans;
+    }
+};
