@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int countAtMost(int k, int n, vector<int>& arr)
+    {
+        int count = 0;
+        int distinct = 0;
+        int start = 0, end = 0;
+        
+        int mapp[2001] = {0};
+
+        while (end < n)
+        {
+            mapp[arr[end]]++;
+
+            if (mapp[arr[end]] == 1) {
+                distinct++;
+            }
+
+            while (start <= end && distinct > k)
+            {
+                if (--mapp[arr[start++]] == 0) {
+                    distinct--;
+                }
+            }
+
+            count += end - start + 1;
+            end++;
+        }
+
+        return count;
+    }
+
+    int countCompleteSubarrays(vector<int>& nums) {
+        unordered_set<int> sett(nums.begin(), nums.end());
+
+        int n = nums.size();
+        int k = sett.size();
+
+        return countAtMost(k, n, nums) - countAtMost(k - 1, n, nums);
+    }
+};
