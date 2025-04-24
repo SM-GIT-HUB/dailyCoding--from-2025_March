@@ -1,7 +1,6 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include<bits/stdc++.h>
 
-map<int, string> mp = {
+map<int, string> mapp = {
     {100, "hundred"}, {90, "ninety"}, {80, "eighty"}, {70, "seventy"},
     {60, "sixty"}, {50, "fifty"}, {40, "forty"}, {30, "thirty"},
     {20, "twenty"}, {19, "nineteen"}, {18, "eighteen"}, {17, "seventeen"},
@@ -11,23 +10,24 @@ map<int, string> mp = {
     {4, "four"}, {3, "three"}, {2, "two"}, {1, "one"}, {0, "zero"}
 };
 
-string numberToWords(int nums)
+string getWord(int nums)
 {
-    if (mp.count(nums)) {
-        return mp[nums];
+    if (mapp.count(nums)) {
+        return mapp[nums];
     }
     
-    string result = mp[(nums / 10) * 10];
-    int ones = nums % 10;
+    string word = mapp[(nums / 10) * 10];
+    int single = nums % 10;
 
-    if (ones > 0) {
-        result += " " + mp[ones];
+    if (single > 0) {
+        word += " " + mapp[single];
     }
 
-    return result;
+    return word;
 }
 
-int countVowels(const string& s) {
+int getVowels(const string& s)
+{
     int count = 0;
 
     for (char c : s)
@@ -45,23 +45,23 @@ string stringPair(int n, vector<int>& num) {
 
     for (auto v : num)
     {
-        string s = numberToWords(v);
-        D += countVowels(s);
+        string str = getWord(v);
+        D += getVowels(str);
     }
 
-    int pairCount = 0;
-    unordered_map<int, int> freqMap;
+    int pairs = 0;
+    unordered_map<int, int> freq;
 
     for (int i = 0; i < n; i++)
     {
-        int complement = D - num[i];
+        int elem = D - num[i];
 
-        if (freqMap[complement] > 0) {
-            pairCount += freqMap[complement];
+        if (freq[elem] > 0) {
+            pairs += freq[elem];
         }
 
-        freqMap[num[i]]++;
+        freq[num[i]]++;
     }
 
-    return numberToWords(pairCount);
+    return getWord(pairs);
 }
