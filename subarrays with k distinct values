@@ -1,0 +1,37 @@
+int countAtMost(int k, int n, vector<int>& arr)
+{
+    int count = 0;
+    int distinct = 0;
+    int start = 0, end = 0;
+    
+    unordered_map<int, int> mapp;
+
+    while (end < n)
+    {
+        mapp[arr[end]]++;
+
+        if (mapp[arr[end]] == 1) {
+            distinct++;
+        }
+
+        while (start <= end && distinct > k)
+        {
+            if (--mapp[arr[start++]] == 0) {
+                distinct--;
+            }
+        }
+
+        count += end - start + 1;
+        end++;
+    }
+
+    return count;
+}
+
+int kDistinctSubarrays(vector<int> &arr, int n, int k)
+{
+    // Write your code here
+    int ans = countAtMost(k, n, arr) - countAtMost(k - 1, n, arr);
+
+    return ans;
+}
