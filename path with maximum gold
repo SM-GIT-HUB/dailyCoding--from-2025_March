@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int track(int x, int y, int m, int n, vector<vector<int> >& grid, vector<vector<int> >& visited)
+    {
+        if (x >= m || y >= n) {
+            return 0;
+        }
+
+        visited[x][y] = 1;
+
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y] && grid[x][y]);
+        };
+
+        int ans = grid[x][y];
+        int up = ans, right = ans;
+        int down = ans, left = ans;
+
+        if (check(x - 1, y)) {
+            up += track(x - 1, y, m, n, grid, visited);
+        }
+
+        if (check(x, y + 1)) {
+            right += track(x, y + 1, m, n, grid, visited);
+        }
+
+        if (check(x + 1, y)) {
+            down += track(x + 1, y, m, n, grid, visited);
+        }
+
+        if (check(x, y - 1)) {
+            left += track(x, y - 1, m, n, grid, visited);
+        }
+
+        visited[x][y] = 0;
+
+        return max({up, right, down, left});
+    }
+
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        int ans = 0;
+        vector<vector<int> > visited(m, vector<int>(n, 0));
+
+        for (int x = 0; x < m; x++)
+        {
+            for (int y = 0; y < n; y++)
+            {
+                if (grid[x][y]) {
+                    ans = max(track(x, y, m, n, grid, visited), ans);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
