@@ -1,0 +1,178 @@
+
+// User function Template for C++
+
+class Solution {
+  public:
+    int recur(int x, int y, int m, int n, vector<vector<int> >& mat)
+    {
+        if (y == n - 1) {
+            return mat[x][y];
+        }
+        
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n);
+        };
+        
+        int rightUp = mat[x][y];
+        int right = mat[x][y];
+        int rightDown = mat[x][y];
+        
+        if (check(x - 1, y + 1)) {
+            rightUp += recur(x - 1, y + 1, m, n, mat);
+        }
+        
+        if (check(x, y + 1)) {
+            right += recur(x, y + 1, m, n, mat);
+        }
+        
+        if (check(x + 1, y + 1)) {
+            rightDown += recur(x + 1, y + 1, m, n, mat);
+        }
+        
+        return max(rightUp, max(right, rightDown));
+    }
+    
+    int memoization(int x, int y, int m, int n, vector<vector<int> >& mat, vector<vector<int> >& dp)
+    {
+        if (y == n - 1) {
+            return mat[x][y];
+        }
+        
+        if (dp[x][y] != -1) {
+            return dp[x][y];
+        }
+        
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n);
+        };
+        
+        int rightUp = mat[x][y];
+        int right = mat[x][y];
+        int rightDown = mat[x][y];
+        
+        if (check(x - 1, y + 1)) {
+            rightUp += memoization(x - 1, y + 1, m, n, mat, dp);
+        }
+        
+        if (check(x, y + 1)) {
+            right += memoization(x, y + 1, m, n, mat, dp);
+        }
+        
+        if (check(x + 1, y + 1)) {
+            rightDown += memoization(x + 1, y + 1, m, n, mat, dp);
+        }
+        
+        return dp[x][y] = max(rightUp, max(right, rightDown));
+    }
+    
+    int tabulation(int m, int n, vector<vector<int> >& mat)
+    {
+        vector<vector<int> > dp(m, vector<int>(n, 0));
+        
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n);
+        };
+        
+        int ans = 0;
+        
+        for (int y = n - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < m; x++)
+            {
+                int rightUp = mat[x][y];
+                int right = mat[x][y];
+                int rightDown = mat[x][y];
+                
+                if (check(x - 1, y + 1)) {
+                    rightUp += dp[x - 1][y + 1];
+                }
+                
+                if (check(x, y + 1)) {
+                    right += dp[x][y + 1];
+                }
+                
+                if (check(x + 1, y + 1)) {
+                    rightDown += dp[x + 1][y + 1];
+                }
+                
+                dp[x][y] = max(rightUp, max(right, rightDown));
+                
+                if (y == 0) {
+                    ans = max(dp[x][y], ans);
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    int spaceOpt(int m, int n, vector<vector<int> >& mat)
+    {
+        vector<int> next(m, 0);
+        vector<int> curr(m, 0);
+        
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n);
+        };
+        
+        int ans = 0;
+        
+        for (int y = n - 1; y >= 0; y--)
+        {
+            for (int x = 0; x < m; x++)
+            {
+                int rightUp = mat[x][y];
+                int right = mat[x][y];
+                int rightDown = mat[x][y];
+                
+                if (check(x - 1, y + 1)) {
+                    rightUp += next[x - 1];
+                }
+                
+                if (check(x, y + 1)) {
+                    right += next[x];
+                }
+                
+                if (check(x + 1, y + 1)) {
+                    rightDown += next[x + 1];
+                }
+                
+                curr[x] = max(rightUp, max(right, rightDown));
+                
+                if (y == 0) {
+                    ans = max(curr[x], ans);
+                }
+            }
+            
+            next = curr;
+        }
+        
+        return ans;
+    }
+  
+    int maxGold(vector<vector<int>>& mat) {
+        // code here
+        int m = mat.size();
+        int n = mat[0].size();
+        
+        // int ans = 0;
+        
+        // for (int x = 0; x < m; x++)
+        // {
+        //     ans = max(recur(x, 0, m, n, mat), ans);
+        // }
+        
+        // vector<vector<int> > dp(m, vector<int>(n, -1));
+        
+        // for (int x = 0; x < m; x++)
+        // {
+        //     ans = max(memoization(x, 0, m, n, mat, dp), ans);
+        // }
+        
+        // int ans = tabulation(m, n, mat);
+        
+        int ans = spaceOpt(m, n, mat);
+        
+        return ans;
+    }
+};
