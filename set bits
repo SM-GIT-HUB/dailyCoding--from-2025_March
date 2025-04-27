@@ -1,40 +1,18 @@
-class Solution {
-public:
-    long long minOperation(vector<int>& arr) {
-        int n = arr.size();
-        long long total = 0;
+#include <bits/stdc++.h> 
+#include <iostream>
 
-        // Total operations assuming all elements unique
-        for (int len = 1; len <= n; ++len) {
-            
-            // number of subarrays of length len
-            int cnt = n - len + 1; 
-            
-            // operations needed for each subarray
-            int ops = len / 2;              
-            total += 1LL * cnt * ops;
-        }
+using namespace std;
 
-        // Map value -> list of positions
-        unordered_map<int, vector<int>> pos;
-        for (int i = 0; i < n; ++i) {
-            pos[arr[i]].push_back(i);
-        }
+    //Write your countBits function here
 
-        // Count saved operations
-        long long save = 0;
-        for (auto it : pos) {
-            
-            vector<int> p = it.second;
-            int m = p.size();
-            for (int i = 0; i < m; ++i) {
-                for (int j = i + 1; j < m; ++j) {
-                    save += min(p[i] + 1, n - p[j]);
-                }
-            }
-        }
+int countBits(int n)
+{
+    return __builtin_popcount(n);
+}
 
-        // Final answer
-        return total - save;
-    }
-};
+int main() {
+    int n;
+    cin >> n;
+    cout<<countBits(n);
+    return 0;
+}
