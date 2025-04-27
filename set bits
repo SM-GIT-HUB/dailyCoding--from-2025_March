@@ -1,0 +1,40 @@
+class Solution {
+public:
+    long long minOperation(vector<int>& arr) {
+        int n = arr.size();
+        long long total = 0;
+
+        // Total operations assuming all elements unique
+        for (int len = 1; len <= n; ++len) {
+            
+            // number of subarrays of length len
+            int cnt = n - len + 1; 
+            
+            // operations needed for each subarray
+            int ops = len / 2;              
+            total += 1LL * cnt * ops;
+        }
+
+        // Map value -> list of positions
+        unordered_map<int, vector<int>> pos;
+        for (int i = 0; i < n; ++i) {
+            pos[arr[i]].push_back(i);
+        }
+
+        // Count saved operations
+        long long save = 0;
+        for (auto it : pos) {
+            
+            vector<int> p = it.second;
+            int m = p.size();
+            for (int i = 0; i < m; ++i) {
+                for (int j = i + 1; j < m; ++j) {
+                    save += min(p[i] + 1, n - p[j]);
+                }
+            }
+        }
+
+        // Final answer
+        return total - save;
+    }
+};
