@@ -1,0 +1,62 @@
+
+
+/* The functions which
+builds the segment tree */
+
+void buildTree(int *seg, int index, int start, int end, int *arr)
+{
+	if (start > end) {
+		return;
+	}
+	
+	if (start == end)
+	{
+		seg[index] = arr[start];
+		return;
+	}
+	
+	int mid = start + (end - start) / 2;
+	int left = 2 * index + 1;
+	int right = 2 * index + 2;
+	
+	buildTree(seg, left, start, mid, arr);
+	buildTree(seg, right, mid + 1, end, arr);
+	
+	seg[index] = min(seg[left], seg[right]);
+}
+
+int query(int *seg, int index, int start, int end, int l, int r)
+{
+	if (start >= l && end <= r) {
+		return seg[index];
+	}
+	
+	if (end < l || start > r) {
+		return INT_MAX;
+	}
+	
+	int mid = start + (end - start) / 2;
+	
+	int left = query(seg, 2 * index + 1, start, mid, l, r);
+	int right = query(seg, 2 * index + 2, mid + 1, end, l, r);
+	
+	return min(left, right);
+}
+
+int *constructST(int arr[], int n) {
+    // Your code here
+    int *seg = new int[4 * n];
+    
+    buildTree(seg, 0, 0, n - 1, arr);
+    
+    return seg;
+}
+
+/* The functions returns the
+ min element in the range
+ from a and b */
+int RMQ(int st[], int n, int a, int b) {
+    
+    // Your code here
+    return query(st, 0, 0, n - 1, a, b);
+}
