@@ -1,0 +1,42 @@
+
+class Solution {
+  public:
+    long long getNum(long long m)
+    {
+        long long sum = 0;
+        
+        while (m != 0)
+        {
+            sum = sum + (m % 10) * (m % 10);
+            m = m / 10;
+        }
+        
+        return sum;
+    }
+    
+    bool isHappy(long long m)
+    {
+        long long slow = m;
+        long long fast = getNum(m);
+        
+        while (fast != -1 && slow != fast)
+        {
+            slow = getNum(slow);
+            fast = getNum(getNum(fast));
+        }
+        
+        return (fast == 1);
+    }
+  
+    int nextHappy(int N) {
+        // code here
+        N++;
+        
+        while (!isHappy(N))
+        {
+            N++;
+        }
+        
+        return N;
+    }
+};
