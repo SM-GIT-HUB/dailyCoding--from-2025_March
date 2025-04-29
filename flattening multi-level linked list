@@ -1,0 +1,62 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+    class Node {
+      public:
+        T data;
+        Node<T> *next;
+        Node<T> *child;
+
+        Node(T data) {
+            this->data = data;
+            next = NULL;
+            child = NULL;
+        }
+    };
+
+*****************************************************************/
+
+void track(Node<int>* &root, int level, vector<pair<Node<int>*, Node<int>*> >& mapp)
+{
+    if (root == nullptr) {
+        return;
+    }
+
+    Node<int>* curr = root;
+
+    while (curr)
+    {
+        if (mapp.size() == level) {
+            mapp.push_back({curr, curr});
+        }
+        else
+        {
+            mapp[level].second->next = curr;
+            mapp[level].second = curr;
+        }
+
+        if (curr->child) {
+            track(curr->child, level + 1, mapp);
+        }
+
+        curr = curr->next;
+    }
+}
+
+Node<int> *flattenMultiLinkedList(Node<int> *head) {
+    // Write your code here.
+    vector<pair<Node<int>*, Node<int>* > > mapp;
+
+    track(head, 0, mapp);
+
+    Node<int>* ans = mapp[0].first;
+
+    for (int i = 0; i < mapp.size() - 1; i++)
+    {
+        mapp[i].second->next = mapp[i + 1].first;
+    }
+
+    return ans;
+}
