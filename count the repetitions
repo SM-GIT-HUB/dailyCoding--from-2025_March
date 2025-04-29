@@ -11,7 +11,7 @@ int repetition(string &s1, string &s2, int n1, int n2)
     {
         one = 0;
 
-        while (one < s1n && two < s2n)
+        while (one < s1n)
         {
             if (s1[one] == s2[two])
             {
