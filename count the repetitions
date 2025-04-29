@@ -1,0 +1,33 @@
+int repetition(string &s1, string &s2, int n1, int n2)
+{
+    // Write your code here.
+    int s1n = s1.size();
+    int s2n = s2.size();
+
+    int one = 0, two = 0;
+    int count = 0;
+
+    while (n1--)
+    {
+        one = 0;
+
+        while (one < s1n && two < s2n)
+        {
+            if (s1[one] == s2[two])
+            {
+                one++;
+                two++;
+
+                if (two >= s2n)
+                {
+                    two = 0;
+                    count++;
+                }
+            }
+            else
+                one++;
+        }
+    }
+
+    return (count / n2);
+}
