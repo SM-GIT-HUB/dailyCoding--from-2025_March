@@ -1,0 +1,13 @@
+#include <bits/stdc++.h> 
+vector<string> printPatt(int n)
+{
+    // Write your code here
+    vector<string> ans;
+
+    while (n)
+    {
+        ans.push_back(string(n--, '*'));
+    }
+
+    return ans;
+}
