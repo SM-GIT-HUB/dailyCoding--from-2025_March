@@ -1,0 +1,12 @@
+#include <bits/stdc++.h> 
+char findAddedCharacter(string &s, string &t) {
+    // Write your code here.
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s[i] != t[i]) {
+            return t[i];
+        }
+    }
+
+    return t.back();
+}
