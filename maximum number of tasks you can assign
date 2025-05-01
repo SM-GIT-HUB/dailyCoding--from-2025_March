@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int maxTaskAssign(vector<int>& tasks, vector<int>& workers, int pills, int strength) {
+        int n = tasks.size(), m = workers.size();
+
+        sort(tasks.begin(), tasks.end());
+        sort(workers.begin(), workers.end());
+
+        auto check = [&](int mid) {
+            int p = pills;
+            deque<int> dq;
+            
+            int index = m - 1;
+            
+            for (int i = mid - 1; i >= 0; --i)
+            {
+                while (index >= m - mid && workers[index] + strength >= tasks[i])
+                {
+                    dq.push_front(workers[index--]);
+                }
+
+                if (dq.empty()) {
+                    return false;
+                }
+                else if (dq.back() >= tasks[i]) {
+                    dq.pop_back();
+                }
+                else
+                {
+                    if (!p) {
+                        return false;
+                    }
+
+                    dq.pop_front();
+                    p--;
+                }
+            }
+
+            return true;
+        };
+
+        int start = 1, end = min(m, n), ans = 0;
+
+        while (start <= end)
+        {
+            int mid = (start + end) / 2;
+
+            if (check(mid))
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        return ans;
+    }
+};
