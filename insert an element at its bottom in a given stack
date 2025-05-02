@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+
+void pushBottom(stack<int>& st, int x)
+{
+    if (st.empty())
+    {
+        st.push(x);
+        return;
+    }
+
+    int y = st.top();
+    st.pop();
+
+    pushBottom(st, x);
+    st.push(y);
+}
+
+stack<int> pushAtBottom(stack<int>& myStack, int x) 
+{
+    // Write your code here.
+    pushBottom(myStack, x);
+    return myStack;
+}
