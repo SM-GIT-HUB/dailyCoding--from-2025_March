@@ -1,0 +1,60 @@
+
+const int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+void dfs(int x, int y, int m, int n, char **arr)
+{
+  arr[x][y] = '.';
+
+  auto check = [&](int x, int y) {
+    return (x >= 0 && x < m && y >= 0 && y < n && arr[x][y] == 'O');
+  };
+
+  for (auto &d : dirs)
+  {
+    int newX = x + d[0];
+    int newY = y + d[1];
+
+    if (check(newX, newY)) {
+      dfs(newX, newY, m, n, arr);
+    }
+  }
+}
+
+void replaceOWithX(char** arr, int m, int n)
+{
+  //Write your code here
+  for (int i = 0; i < m; i++)
+  {
+    if (arr[i][0] == 'O') {
+      dfs(i, 0, m, n, arr);
+    }
+
+    if (arr[i][n - 1] == 'O') {
+      dfs(i, n - 1, m, n, arr);
+    }
+  }
+
+  for (int i = 0; i < n; i++)
+  {
+    if (arr[0][i] == 'O') {
+      dfs(0, i, m, n, arr);
+    }
+
+    if (arr[m - 1][i] == 'O') {
+      dfs(m - 1, i, m, n, arr);
+    }
+  }
+
+  for (int i = 0; i < m; i++)
+  {
+    for (int j = 0; j < n; j++)
+    {
+      if (arr[i][j] == '.') {
+        arr[i][j] = 'O';
+      }
+      else if (arr[i][j] == 'O') {
+        arr[i][j] = 'X';
+      }
+    }
+  }
+}
