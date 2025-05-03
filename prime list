@@ -1,0 +1,59 @@
+
+// User function Template for C++
+
+/*
+class Node{
+public:
+    int val;
+    Node *next;
+    Node(int num){
+        val=num;
+        next=NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void getPrimes(vector<int>& primes)
+    {
+        primes.push_back(2);
+        vector<int> isPrime(10010 / 2, 1);
+        
+        for (int i = 1; i < isPrime.size(); i++)
+        {
+            if (isPrime[i])
+            {
+                int prime = 2 * i + 1;
+                primes.push_back(prime);
+                
+                for (int j = i + prime; j < isPrime.size(); j += prime)
+                {
+                    isPrime[j] = 0;
+                }
+            }
+        }
+    }
+  
+    Node *primeList(Node *head) {
+        // code here
+        vector<int> primes;
+        getPrimes(primes);
+        
+        Node* curr = head;
+        
+        while (curr)
+        {
+            int data = curr->val;
+            auto it = lower_bound(primes.begin(), primes.end(), data);
+            
+            int higher = *it;
+            int lower = (it == primes.begin())? higher : *(it - 1);
+            
+            curr->val = (data - lower <= higher - data)? lower : higher;
+            curr = curr->next;
+        }
+        
+        return head;
+    }
+};
