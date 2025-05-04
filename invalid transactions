@@ -1,0 +1,57 @@
+#include <bits/stdc++.h> 
+
+struct Trnsc {
+    int index;
+    int time;
+    int amount;
+    int city;
+};
+
+vector<vector<int>> invalid_transactions(vector<vector<int>> &trnsc, int n){
+    // Write your code here.
+    vector<vector<int> > ans;
+    vector<int> invalid(n, 0);
+    unordered_map<int, vector<Trnsc> > mapp;
+
+    for (int i = 0; i < n; i++)
+    {
+        mapp[trnsc[i][0]].emplace_back(Trnsc{i, trnsc[i][1], trnsc[i][2], trnsc[i][3]});
+    }
+
+    for (auto &it : mapp)
+    {
+        auto &tr = it.second;
+        int m = tr.size();
+
+        for (int index = 0; index < m; index++)
+        {
+            if (tr[index].amount > 1000)
+            {
+                invalid[tr[index].index] = 1;
+                continue;
+            }
+
+            for (int i = 0; i < m; i++)
+            {
+                if (i == index || tr[index].city == tr[i].city || invalid[tr[index].index]) {
+                    continue;
+                }
+
+                if (abs(tr[index].time - tr[i].time) <= 60)
+                {
+                    invalid[tr[index].index] = 1;
+                    invalid[tr[i].index] = 1;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        if (invalid[i]) {
+            ans.push_back(trnsc[i]);
+        }
+    }
+
+    return ans;
+}
