@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int numEquivDominoPairs(vector<vector<int>>& dominoes) {
+        int mapp[100] = {0};
+        int ans = 0;
+
+        for (auto &d : dominoes)
+        {
+            int key = 10 * min(d[0], d[1]) + max(d[0], d[1]);
+            ans += mapp[key];
+            mapp[key]++;
+        }
+
+        return ans;
+    }
+};
