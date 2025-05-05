@@ -1,0 +1,42 @@
+
+// User function Template for C++
+class Solution {
+  public:
+    int findTarget(vector<int>& arr, int target) {
+        // code here
+        int n = arr.size();
+        
+        if (n == 1) {
+            return (arr[0] == target)? 0 : -1;
+        }
+        
+        int start = 0, end = n - 1;
+        
+        while (start <= end)
+        {
+            int mid = start + (end - start) / 2;
+            
+            int onemi = mid - 1;
+            int onep = mid + 1;
+            
+            if (onemi >= 0 && arr[onemi] == target) {
+                return onemi;
+            }
+            
+            if (onep < n && arr[onep] == target) {
+                return onep;
+            }
+            
+            if (arr[mid] == target) {
+                return mid;
+            }
+            else if (target > arr[mid]) {
+                start = mid + 2;
+            }
+            else
+                end = mid - 2;
+        }
+        
+        return -1;
+    }
+};
