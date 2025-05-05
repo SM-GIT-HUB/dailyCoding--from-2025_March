@@ -1,0 +1,15 @@
+
+const int mod = 1e9 + 7;
+
+int countRectangles(int n)
+{
+	// Write your code here
+	long long m = n;
+
+	long long totalRec = (m * (m + 1) / 2) % mod;
+	totalRec = (totalRec * totalRec) % mod;
+
+	long long totalSq = (m * (m + 1) * (2 * m + 1) / 6) % mod;
+
+	return (int)(totalRec - totalSq + mod) % mod;
+}
