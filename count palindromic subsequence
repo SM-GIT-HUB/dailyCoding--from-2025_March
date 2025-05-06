@@ -1,0 +1,48 @@
+
+const int mod = 1e9 + 7;
+
+int memoization(int start, int end, string &s, vector<vector<int> >& dp)
+{
+	if (start > end) {
+		return 0;
+	}
+
+	if (start == end) {
+		return 1;
+	}
+
+	if (dp[start][end] != -1) {
+		return dp[start][end];
+	}
+
+	long long ans = 0;
+
+	if (s[start] == s[end])
+	{
+		long long includeStart = memoization(start + 1, end, s, dp);
+		long long includeEnd = memoization(start, end - 1, s, dp);
+
+		ans = (includeStart + includeEnd + 1) % mod;
+	}
+	else
+	{
+		long long includeStart = memoization(start + 1, end, s, dp);
+		long long includeEnd = memoization(start, end - 1, s, dp);
+		long long excludeBoth = memoization(start + 1, end - 1, s, dp);
+
+		ans = (includeStart + includeEnd - excludeBoth) % mod;
+	}
+
+	return dp[start][end] = ans;
+}
+
+int countPalindromicSubsequences(string &s){
+	// Write your code here.
+	int n = s.size();
+
+	vector<vector<int> > dp(n, vector<int>(n, -1));
+
+	int ans = memoization(0, n - 1, s, dp);
+
+	return ans;
+}
