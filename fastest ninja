@@ -1,0 +1,16 @@
+#include <bits/stdc++.h> 
+bool fastestNinja(int n, int x, int y, vector<vector<int>> &position) {
+	// Write your code here
+	long long bob = abs(x) + abs(y);
+
+	for (auto &p : position)
+	{
+		long long currDist = 1LL * abs(x - p[0]) + abs(y - p[1]);
+
+		if (currDist <= bob) {
+			return false;
+		}
+	}
+
+	return true;
+}
