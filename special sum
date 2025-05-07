@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+int specialSum(vector<int> &arr, int n)
+{
+	// Write your code here. 
+	int ans = INT_MAX;
+	int sum1 = 0, sum2 = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		sum1 += arr[i];
+		sum2 += arr[n - i - 1];
+
+		ans = min(ans, sum1 + sum2);
+	}
+
+	return ans;
+}
