@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+int minSwaps(vector<int> &arr, int n)
+{
+    // Write your code here.
+    unordered_map<int, int> mapp;
+
+    for (int i = 0; i < 2 * n; i++)
+    {
+        mapp[arr[i]] = i;
+    }
+
+    int ans = 0;
+
+    for (int i = 0; i < 2 * n; i += 2)
+    {
+        int one = arr[i];
+        int exp = (one & 1)? one - 1 : one + 1;
+
+        if (arr[i + 1] != exp)
+        {
+            int index = mapp[exp];
+
+            mapp[arr[i + 1]] = index;
+            mapp[arr[index]] = i + 1;
+
+            swap(arr[i + 1], arr[index]);
+            ans++;
+        }
+    }
+
+    return ans;
+}
