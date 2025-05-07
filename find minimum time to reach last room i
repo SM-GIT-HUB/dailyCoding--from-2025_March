@@ -1,0 +1,75 @@
+class Solution {
+public:
+    struct obj {
+        int time;
+        int x;
+        int y;
+    };
+
+    class comp {
+    public:
+        bool operator() (obj a, obj b)
+        {
+            return (a.time > b.time);
+        }
+    };
+
+    int minTimeToReach(vector<vector<int>>& move) {
+        int m = move.size();
+        int n = move[0].size();
+
+        int x = 0, y = 0;
+        int newX = 0, newY = 0;
+        int time = 0;
+        int newTime = 0;
+
+        priority_queue<obj, vector<obj>, comp> pq;
+        vector<vector<int> > minTime(m, vector<int>(n, INT_MAX));
+
+        pq.push({0, 0, 0});
+
+        int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n);
+        };
+
+        while (!pq.empty())
+        {
+            obj curr = pq.top();
+            pq.pop();
+
+            time = curr.time;
+            x = curr.x;
+            y = curr.y;
+
+            if (time > minTime[x][y]) {
+                continue;
+            }
+
+            minTime[x][y] = time;
+
+            if (x == m - 1 && y == n - 1) {
+                break;
+            }
+
+            for (auto &d : dirs)
+            {
+                newX = x + d[0], newY = y + d[1];
+
+                if (check(newX, newY))
+                {
+                    newTime = max(time + 1, move[newX][newY] + 1);
+
+                    if (newTime < minTime[newX][newY])
+                    {
+                        minTime[newX][newY] = newTime;
+                        pq.push({newTime, newX, newY});
+                    }
+                }
+            }
+        }
+
+        return minTime[m - 1][n - 1];
+    }
+};
