@@ -1,0 +1,33 @@
+
+// User function template for C++
+
+class Solution {
+  public:
+    int findMissing(vector<int> &arr) {
+        // code here
+        int n = arr.size();
+        
+        int diff1 = min(arr[1] - arr[0], arr[n - 1] - arr[n - 2]);
+        int diff2 = (arr[n - 1] - arr[0]) / n;
+        
+        if (diff1 != diff2) {
+            return arr[n - 1] + diff1;
+        }
+        
+        int start = 0, end = n - 1;
+        
+        while (start < end)
+        {
+            int mid = start + (end - start) / 2;
+            int expt = arr[0] + mid  * diff1;
+            
+            if (arr[mid] == expt) {
+                start = mid + 1;
+            }
+            else
+                end = mid;
+        }
+        
+        return arr[0] + start * diff1;
+    }
+};
