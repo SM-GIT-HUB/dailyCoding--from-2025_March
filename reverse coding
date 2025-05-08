@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+vector<vector<int>> ninjaCity(vector<vector<int>> &mat)
+{
+    //write your code here
+    int m = mat.size();
+    int n = mat[0].size();
+    vector<vector<int> > ans(m);
+
+    for (int row = 0; row < m; row++)
+    {
+        ans[row].reserve(n);
+
+        for (int col = n - 1; col >= 0; col--)
+        {
+            ans[row].push_back(mat[row][col]);
+        }
+    }
+
+    return ans;
+}
