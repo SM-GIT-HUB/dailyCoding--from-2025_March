@@ -1,0 +1,24 @@
+int minimumSwap(vector<int> &arr, int n)
+{
+    // Write your code here.
+    int zeroes = 0;
+    int ones = 0;
+
+    int zeroLeft = 0, oneLeft = 0;
+
+    for (int x : arr)
+    {
+        if (x == 0)
+        {
+            zeroes++;
+            zeroLeft += ones;
+        }
+        else
+        {
+            ones++;
+            oneLeft += zeroes;
+        }
+    }
+
+    return min(zeroLeft, oneLeft);
+}
