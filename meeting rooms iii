@@ -1,0 +1,71 @@
+
+// User function Template for C++
+class Solution {
+  public:
+    struct comp {
+        bool operator()(auto &a, auto &b)
+        {
+            if (a.first == b.first) {
+                return (a.second > b.second);
+            }
+            
+            return (a.first > b.first);
+        }
+    };
+  
+    int mostBooked(int n, vector<vector<int>> &meets) {
+        // code here
+        int ans = 0;
+        vector<int> rooms(n, 0);
+        
+        int meetN = meets.size();
+        sort(meets.begin(), meets.end());
+        
+        priority_queue<int, vector<int>, greater<> > available;
+        priority_queue<pair<int, int>, vector<pair<int, int> >, comp> pq;
+        
+        for (int i = 0; i < n; i++)
+        {
+            available.push(i);
+        }
+        
+        for (int i = 0; i < meetN; i++)
+        {
+            int start = meets[i][0];
+            int end = meets[i][1];
+            
+            int roomNo = 0;
+            
+            while (!pq.empty() && pq.top().first <= start)
+            {
+                available.push(pq.top().second);
+                pq.pop();
+            }
+            
+            if (!available.empty())
+            {
+                roomNo = available.top();
+                available.pop();
+            }
+            else
+            {
+                pair<int, int> p = pq.top();
+                pq.pop();
+                
+                int freeTime = p.first;
+                roomNo = p.second;
+                
+                end = freeTime + end - start;
+            }
+            
+            rooms[roomNo]++;
+            pq.push({end, roomNo});
+            
+            if (rooms[roomNo] > rooms[ans] || (rooms[roomNo] == rooms[ans] && roomNo < ans)) {
+                ans = roomNo;
+            }
+        }
+        
+        return ans;
+    }
+};
