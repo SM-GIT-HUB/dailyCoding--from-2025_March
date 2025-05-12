@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> findEvenNumbers(vector<int>& digits) {
+        vector<int> ans;
+        int count[10] = {0};
+
+        for (int x : digits)
+        {
+            count[x]++;
+        }
+
+        for (int num = 100; num < 999; num += 2)
+        {
+            int isPos = 1;
+            int tempNum = num;
+            int tempCount[10] = {0};
+
+            while (tempNum != 0)
+            {
+                int dig = tempNum % 10;
+                tempCount[dig]++;
+
+                if (count[dig] < tempCount[dig])
+                {
+                    isPos = 0;
+                    break;
+                }
+
+                tempNum = tempNum / 10;
+            }
+
+            if (isPos) {
+                ans.push_back(num);
+            }
+        }
+
+        return ans;
+    }
+};
