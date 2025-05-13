@@ -1,0 +1,80 @@
+
+// User function Template for C++
+
+class Solution {
+    long long mod = (long long)INT_MAX + 1;
+    
+  public:
+    long long tabulation(int n, int r)
+    {
+        if (r > n) {
+            return 0;
+        }
+        
+        vector<vector<long long> > dp(n + 2, vector<long long>(r + 2, 0));
+        dp[0][0] = 1;
+        
+        for (int cn = 1; cn <= n; cn++)
+        {
+            if (cn <= r) {
+                dp[cn][cn] = 1;
+            }
+            
+            dp[cn][0] = 1;
+            
+            for (int cr = 1; cr <= r && cr < cn; cr++)
+            {
+                long long ans = (dp[cn - 1][cr] + dp[cn - 1][cr - 1]) % mod;
+                dp[cn][cr] = ans;
+            }
+        }
+        
+        return dp[n][r];
+    }
+    
+    long long spaceOpt(int n, int r)
+    {
+        if (r > n) {
+            return 0;
+        }
+        
+        vector<long long> curr(r + 2, 0);
+        vector<long long> prev(r + 2, 0);
+        
+        prev[0] = 1;
+        
+        for (int cn = 1; cn <= n; cn++)
+        {
+            if (cn <= r) {
+                curr[cn] = 1;
+            }
+            
+            curr[0] = 1;
+            
+            for (int cr = 1; cr <= r && cr < cn; cr++)
+            {
+                long long ans = (prev[cr] + prev[cr - 1]) % mod;
+                curr[cr] = ans;
+            }
+            
+            prev = curr;
+        }
+        
+        return prev[r];
+    }
+  
+    int nCr(int n, int r) {
+        // code here
+        // long long ans = recur(n, r);
+        
+        // vector<vector<long long> > dp(n + 1, vector<long long>(r + 1, -1));
+        
+        // long long ans = memoization(n, r, dp);
+        
+        // long long ans = tabulation(n, r);
+        
+        long long ans = spaceOpt(n, r);
+        
+        return (int)ans;
+    }
+};
