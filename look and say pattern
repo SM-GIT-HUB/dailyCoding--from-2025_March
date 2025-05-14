@@ -1,0 +1,40 @@
+
+class Solution {
+  public:
+    string count(string &str)
+    {
+        string temp = "";
+        int n = str.size();
+
+        int index = 0;
+        char x = 'a';
+        int i = 0;
+
+        while (index < n)
+        {
+            x = str[index];
+            i = index + 1;
+
+            while (i < n && str[i] == x)
+            {
+                i++;
+            }
+
+            temp += to_string(i - index) + x;
+            index = i;
+        }
+
+        return temp;
+    }
+  
+    string countAndSay(int n) {
+        string ans = "1";
+
+        for (int i = 1; i < n; i++)
+        {
+            ans = count(ans);
+        }
+
+        return ans;
+    }
+};
