@@ -1,0 +1,60 @@
+
+class Solution {
+  public:
+    struct obj{
+        int data;
+        int row;
+        int col;
+    };
+    
+    class comp {
+    public:
+        bool operator()(obj &a, obj &b)
+        {
+            return (a.data > b.data);
+        }
+    };
+  
+    vector<int> findSmallestRange(vector<vector<int>>& arr) {
+        // code here
+        int m = arr.size();
+        int n = arr[0].size();
+        
+        priority_queue<obj, vector<obj>, comp> pq;
+        
+        int mini = INT_MAX, maxi = INT_MIN;
+        
+        for (int i = 0; i < m; i++)
+        {
+            pq.push({arr[i][0], i, 0});
+            
+            mini = min(mini, arr[i][0]);
+            maxi = max(arr[i][0], maxi);
+        }
+        
+        vector<int> ans = {mini, maxi};
+        
+        while (!pq.empty())
+        {
+            obj curr = pq.top();
+            pq.pop();
+            
+            mini = curr.data;
+            int row = curr.row;
+            int col = curr.col;
+            
+            if (maxi - mini < ans[1] - ans[0]) {
+                ans = {mini, maxi};
+            }
+            
+            if (col + 1 == n) {
+                break;
+            }
+            
+            pq.push({arr[row][col + 1], row, col + 1});
+            maxi = max(arr[row][col + 1], maxi);
+        }
+        
+        return ans;
+    }
+};
