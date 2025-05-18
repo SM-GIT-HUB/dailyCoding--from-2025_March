@@ -1,0 +1,68 @@
+
+/* A binary tree node has data, pointer to left child
+   and a pointer to right child
+class Node
+{
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int x){
+        data = x;
+        left = right = NULL;
+    }
+}; */
+class Solution {
+  public:
+    vector<int> findSpiral(Node* root) {
+        // code here
+        if (!root) {
+            return {};
+        }
+
+        vector<int> ans;
+
+        vector<Node*> one;
+        vector<Node*> two;
+
+        two.push_back(root);
+        Node* top = nullptr;
+
+        while (!one.empty() || !two.empty())
+        {
+            while (!two.empty())
+            {
+                top = two.back();
+                two.pop_back();
+
+                ans.push_back(top->data);
+
+                if (top->right) {
+                    one.push_back(top->right);
+                }
+
+                if (top->left) {
+                    one.push_back(top->left);
+                }
+            }
+            
+            while (!one.empty())
+            {
+                top = one.back();
+                one.pop_back();
+
+                ans.push_back(top->data);
+
+                if (top->left) {
+                    two.push_back(top->left);
+                }
+
+                if (top->right) {
+                    two.push_back(top->right);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
