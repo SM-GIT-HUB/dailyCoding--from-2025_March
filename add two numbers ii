@@ -1,0 +1,75 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* &root)
+    {
+        ListNode* prev = nullptr;
+        ListNode* curr = root;
+        ListNode* forward = nullptr;
+
+        while (curr)
+        {
+            forward = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = forward;
+        }
+
+        return prev;
+    }
+
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* one = reverseList(l1);
+        ListNode* two = reverseList(l2);
+
+        int carry = 0;
+        ListNode* ans = new ListNode{-1, nullptr};
+        ListNode* curr = ans;
+
+        while (one && two)
+        {
+            int sum = one->val + two->val + carry;
+            carry = sum / 10;
+
+            curr->next = new ListNode{sum % 10, nullptr};
+            curr = curr->next;
+            one = one->next;
+            two = two->next;
+        }
+
+        while (one)
+        {
+            int sum = one->val + carry;
+            carry = sum / 10;
+
+            curr->next = new ListNode{sum % 10, nullptr};
+            curr = curr->next;
+            one = one->next;
+        }
+
+        while (two)
+        {
+            int sum = two->val + carry;
+            carry = sum / 10;
+
+            curr->next = new ListNode{sum % 10, nullptr};
+            curr = curr->next;
+            two = two->next;
+        }
+
+        if (carry) {
+            curr->next = new ListNode{carry, nullptr};
+        }
+
+        return reverseList(ans->next);
+    }
+};
