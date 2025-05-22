@@ -47,6 +47,67 @@ class Solution {
         
         return dp[start][end] = ans;
     }
+    
+    int tabulation(int n, string &s)
+    {
+        vector<vector<int> > dp(n + 1, vector<int>(n + 1, 0));
+        
+        for (int start = n - 1; start >= 0; start--)
+        {
+            for (int end = start + 1; end < n; end++)
+            {
+                int ans = 0;
+                
+                if (s[start] == s[end]) {
+                    ans = dp[start + 1][end - 1];
+                }
+                else
+                {
+                    int delStart = 1 + dp[start + 1][end];
+                    int delEnd = 1 + dp[start][end - 1];
+                    
+                    ans = min(delStart, delEnd);
+                }
+                
+                dp[start][end] = ans;
+            }
+        }
+        
+        return dp[0][n - 1];
+    }
+    
+    int spaceOpt(int n, string &s)
+    {
+        vector<int> next(n + 1, 0);
+        vector<int> curr(n + 1, 0);
+        
+        for (int start = n - 1; start >= 0; start--)
+        {
+            curr[start] = 0;
+            
+            for (int end = start + 1; end < n; end++)
+            {
+                int ans = 0;
+                
+                if (s[start] == s[end]) {
+                    ans = next[end - 1];
+                }
+                else
+                {
+                    int delStart = 1 + next[end];
+                    int delEnd = 1 + curr[end - 1];
+                    
+                    ans = min(delStart, delEnd);
+                }
+                
+                curr[end] = ans;
+            }
+            
+            next = curr;
+        }
+        
+        return next[n - 1];
+    }
   
     int minDeletions(string s) {
         // code here
@@ -54,9 +115,13 @@ class Solution {
         
         // int ans = recur(0, n - 1, s);
         
-        vector<vector<int> > dp(n, vector<int>(n, -1));
+        // vector<vector<int> > dp(n, vector<int>(n, -1));
         
-        int ans = memoization(0, n - 1, s, dp);
+        // int ans = memoization(0, n - 1, s, dp);
+        
+        // int ans = tabulation(n, s);
+        
+        int ans = spaceOpt(n, s);
         
         return ans;
     }
