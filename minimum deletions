@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    int recur(int start, int end, string &s)
+    {
+        if (start >= end) {
+            return 0;
+        }
+        
+        int ans = 0;
+        
+        if (s[start] == s[end]) {
+            ans = recur(start + 1, end - 1, s);
+        }
+        else
+        {
+            int delStart = 1 + recur(start + 1, end, s);
+            int delEnd = 1 + recur(start, end - 1, s);
+            
+            ans = min(delStart, delEnd);
+        }
+        
+        return ans;
+    }
+    
+    int memoization(int start, int end, string &s, vector<vector<int> >& dp)
+    {
+        if (start >= end) {
+            return 0;
+        }
+        
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+        
+        int ans = 0;
+        
+        if (s[start] == s[end]) {
+            ans = memoization(start + 1, end - 1, s, dp);
+        }
+        else
+        {
+            int delStart = 1 + memoization(start + 1, end, s, dp);
+            int delEnd = 1 + memoization(start, end - 1, s, dp);
+            
+            ans = min(delStart, delEnd);
+        }
+        
+        return dp[start][end] = ans;
+    }
+  
+    int minDeletions(string s) {
+        // code here
+        int n = s.size();
+        
+        // int ans = recur(0, n - 1, s);
+        
+        vector<vector<int> > dp(n, vector<int>(n, -1));
+        
+        int ans = memoization(0, n - 1, s, dp);
+        
+        return ans;
+    }
+};
