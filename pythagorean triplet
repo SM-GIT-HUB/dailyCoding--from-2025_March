@@ -1,0 +1,36 @@
+class Solution {
+  public:
+    bool pythagoreanTriplet(vector<int>& arr) {
+        // code here
+        int maxi = 0;
+        
+        for (int x : arr)
+        {
+            if (x > maxi) {
+                maxi = x;
+            }
+        }
+        
+        vector<int> mapp(maxi + 1, 0);
+        
+        for (int x : arr)
+        {
+            mapp[x] = 1;
+        }
+        
+        for (int i = 1; i <= maxi; i++)
+        {
+            for (int j = i + 1; j <= maxi; j++)
+            {
+                int sum = i * i + j * j;
+                int curr = sqrt(sum);
+                
+                if (mapp[i] && mapp[j] && curr <= maxi && mapp[curr] && (curr * curr == sum)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+};
