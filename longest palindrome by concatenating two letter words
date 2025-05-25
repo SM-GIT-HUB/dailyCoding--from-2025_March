@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int longestPalindrome(vector<string>& words) {
+        int matches = 0;
+        unordered_map<string, int> mapp;
+
+        int flag = 0;
+
+        for (auto &w : words)
+        {
+            string org = w;
+            string rev = string(1, w[1]) + string(1, w[0]);
+
+            if (mapp[rev] > 0)
+            {
+                matches++;
+                mapp[rev]--;
+            }
+            else
+                mapp[org]++;
+
+            if (w[0] == w[1]) {
+                flag += (mapp[w] > 0)? 1 : -1;
+            }
+        }
+
+        int ans = 4 * matches + (flag > 0) * 2;
+        return ans;
+    }
+};
