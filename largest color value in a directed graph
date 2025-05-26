@@ -1,0 +1,68 @@
+class Solution {
+public:
+    int largestPathValue(string colors, vector<vector<int>>& edges) {
+        int n = colors.size();
+
+        if (edges.size() == 0) {
+            return 1;
+        }
+
+        vector<int> inDegree(n, 0);
+        vector<vector<int> > adj(n);
+
+        for (auto &e : edges)
+        {
+            adj[e[0]].push_back(e[1]);
+            inDegree[e[1]]++;
+        }
+
+        queue<int> q;
+        vector<array<int, 26> > dp(n);
+
+        for (int node = 0; node < n; node++)
+        {
+            if (inDegree[node] == 0) {
+                q.push(node);
+            }
+
+            dp[node][colors[node] - 'a'] = 1;
+        }
+
+        int ans = 0;
+        int visited = 0;
+
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            for (int adjNode : adj[node])
+            {
+                for (int c = 0; c < 26; c++)
+                {
+                    int add = (colors[adjNode] - 'a' == c)? 1 : 0;
+
+                    if (dp[node][c] + add > dp[adjNode][c]) {
+                        dp[adjNode][c] = dp[node][c] + add;
+                    }
+
+                    if (dp[adjNode][c] > ans) {
+                        ans = dp[adjNode][c];
+                    }
+                }
+
+                if (--inDegree[adjNode] == 0) {
+                    q.push(adjNode);
+                }
+            }
+
+            visited++;
+        }
+
+        if (visited < n) {
+            return -1;
+        }
+
+        return ans;
+    }
+};
