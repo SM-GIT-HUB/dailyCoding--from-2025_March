@@ -1,0 +1,35 @@
+
+class Solution {
+  public:
+    void track(int &index, int n, int start, int end, vector<int>& pre, vector<int>& inn, vector<int>& ans)
+    {
+        if (index >= n || start > end) {
+            return;
+        }
+        
+        if (start == end)
+        {
+            ans.push_back(pre[index++]);
+            return;
+        }
+        
+        int elem = pre[index++];
+        int elemIn = lower_bound(inn.begin() + start, inn.begin() + end + 1, elem) - inn.begin();
+        
+        track(index, n, start, elemIn - 1, pre, inn, ans);
+        track(index, n, elemIn + 1, end, pre, inn, ans);
+    }
+  
+    vector<int> leafNodes(vector<int>& preorder) {
+        // code here
+        vector<int> inorder(preorder.begin(), preorder.end());
+        sort(inorder.begin(), inorder.end());
+        
+        int index = 0;
+        vector<int> ans;
+        
+        track(index, preorder.size(), 0, preorder.size() - 1, preorder, inorder, ans);
+        
+        return ans;
+    }
+};
