@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int dfs(int node, int edgeCount, int &k, vector<vector<int> >& adj, int parent)
+    {
+        if (edgeCount > k) {
+            return 0;
+        }
+
+        if (edgeCount == k) {
+            return 1;
+        }
+
+        int ans = 1;
+
+        for (int adjNode : adj[node])
+        {
+            if (adjNode != parent) {
+                ans += dfs(adjNode, edgeCount + 1, k, adj, node);
+            }
+        }
+
+        return ans;
+    }
+
+    vector<int> maxTargetNodes(vector<vector<int>>& edges1, vector<vector<int>>& edges2, int k) {
+        int m = edges1.size() + 1;
+        int n = edges2.size() + 1;
+
+        vector<vector<int> > adj1(m), adj2(n);
+        
+        for (auto &e : edges1)
+        {
+            adj1[e[0]].push_back(e[1]);
+            adj1[e[1]].push_back(e[0]);
+        }
+
+        for (auto &e : edges2)
+        {
+            adj2[e[0]].push_back(e[1]);
+            adj2[e[1]].push_back(e[0]);
+        }
+
+        vector<int> ans;
+        int maxCount = 0;
+
+        for (int sNode = 0; sNode < n; sNode++)
+        {
+            int sCount = dfs(sNode, 1, k, adj2, -1);
+
+            if (sCount > maxCount) {
+                maxCount = sCount;
+            }
+        }
+
+        for (int node = 0; node < m; node++)
+        {   
+            int count = dfs(node, 0, k, adj1, -1);
+            ans.push_back(count + maxCount);
+        }
+
+        return ans;
+    }
+};
