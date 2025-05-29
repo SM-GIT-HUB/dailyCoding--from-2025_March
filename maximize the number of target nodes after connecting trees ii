@@ -1,0 +1,92 @@
+class Solution {
+public:
+    vector<int> maxTargetNodes(vector<vector<int>>& edges1, vector<vector<int>>& edges2) {
+        int m = edges1.size() + 1;
+        int n = edges2.size() + 1;
+
+        vector<vector<int> > adj1(m), adj2(n);
+        
+        for (auto &e : edges1)
+        {
+            adj1[e[0]].push_back(e[1]);
+            adj1[e[1]].push_back(e[0]);
+        }
+
+        for (auto &e : edges2)
+        {
+            adj2[e[0]].push_back(e[1]);
+            adj2[e[1]].push_back(e[0]);
+        }
+
+        vector<int> depth1(m, -1);
+        vector<int> depth2(n, -1);
+
+        depth1[0] = 0;
+        depth2[0] = 0;
+
+        queue<int> q;
+
+        q.push(0);
+        int even1 = 1, odd1 = 0;
+
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            for (int adjNode : adj1[node])
+            {
+                if (depth1[adjNode] == -1)
+                {
+                    q.push(adjNode);
+                    depth1[adjNode] = depth1[node] + 1;
+
+                    if (depth1[adjNode] & 1) {
+                        odd1++;
+                    }
+                    else
+                        even1++;
+                    
+                }
+            }
+        }
+
+        q.push(0);
+        int even2 = 1, odd2 = 0;
+
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            for (int adjNode : adj2[node])
+            {
+                if (depth2[adjNode] == -1)
+                {
+                    q.push(adjNode);
+                    depth2[adjNode] = depth2[node] + 1;
+
+                    if (depth2[adjNode] & 1) {
+                        odd2++;
+                    }
+                    else
+                        even2++;
+                }
+            }
+        }
+
+        vector<int> ans;
+        int maxi = max(odd2, even2);
+
+        for (int node = 0; node < m; node++)
+        {
+            if (depth1[node] & 1) {
+                ans.push_back(odd1 + maxi);
+            }
+            else
+                ans.push_back(even1 + maxi);
+        }
+
+        return ans;
+    }
+};
