@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+int minimumDistance(int arr[], int n, int x, int y)
+{
+	// Write your code here
+	int xin = -1;
+	int yin = -1;
+
+	int ans = INT_MAX;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (arr[i] == x)
+		{
+			if (yin != -1) {
+				ans = min(ans, abs(i - yin));
+			}
+
+			xin = i;
+		}
+		else if (arr[i] == y)
+		{
+			if (xin != -1) {
+				ans = min(ans, abs(i - xin));
+			}
+
+			yin = i;
+		}
+	}
+
+	return (ans == INT_MAX)? -1 : ans;
+}
