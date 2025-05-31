@@ -1,0 +1,79 @@
+class Solution {
+public:
+    int getCol(int num, int row, int n)
+    {
+        if (n & 1)
+        {
+            if (row & 1) {
+                return (n - 1 - (num - 1) % n);
+            }
+            else
+                return ((num - 1) % n);
+        }
+        else
+        {
+            if (row & 1) {
+                return ((num - 1) % n);
+            }
+            else
+                return (n - 1 - (num - 1) % n);
+        }
+    }
+
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
+        vector<int> visited(n * n + 1, 0);
+
+        queue<int> q;
+        q.push(1);
+        visited[1] = 1;
+
+        int rolls = 0;
+        int row = 0, col = 0;
+
+        while (!q.empty())
+        {
+            int size = q.size();
+
+            while (size--)
+            {
+                int curr = q.front();
+                q.pop();
+
+                if (curr + 6 >= n * n) {
+                    return (rolls + 1);
+                }
+
+                for (int num = curr + 1; num <= curr + 6; num++)
+                {
+                    if (visited[num]) {
+                        continue;
+                    }
+
+                    row = n - 1 - (num - 1) / n;
+                    col = getCol(num, row, n);
+
+                    if (board[row][col] == -1) {
+                        q.push(num);
+                    }
+                    else
+                    {
+                        int dest = board[row][col];
+
+                        if (dest == n * n) {
+                            return rolls + 1;
+                        }
+
+                        q.push(board[row][col]);
+                    }
+
+                    visited[num] = 1;
+                }
+            }
+
+            rolls++;
+        }
+
+        return -1;
+    }
+};
