@@ -1,0 +1,53 @@
+class Queue {
+    // Define the data members(if any) here.
+    vector<int> stack1;
+    vector<int> stack2;
+
+    void makeBalance()
+    {
+        if (stack2.size()) {
+            return;
+        }
+
+        while (stack1.size())
+        {
+            stack2.push_back(stack1.back());
+            stack1.pop_back();
+        }
+    }
+
+    public:
+    Queue() {
+        // Initialize your data structure here.
+    }
+
+    void enQueue(int val) {
+        // Implement the enqueue() function.
+        stack1.push_back(val);
+    }
+
+    int deQueue() {
+        // Implement the dequeue() function.
+        makeBalance();
+
+        if (!stack2.size()) {
+            return -1;
+        }
+
+        int val = stack2.back();
+        stack2.pop_back();
+
+        return val;
+    }
+
+    int peek() {
+        // Implement the peek() function here.
+        makeBalance();
+        return (stack2.size())? stack2.back() : -1;
+    }
+
+    bool isEmpty() {
+        // Implement the isEmpty() function here.
+        return !(stack1.size() || stack2.size());
+    }
+};
