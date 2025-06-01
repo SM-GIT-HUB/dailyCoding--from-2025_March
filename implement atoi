@@ -1,0 +1,43 @@
+int myAtoi(char *s) {
+        // Your code here
+        int n = 0;
+        int index = 0;
+        
+        while (s[n] != '\0')
+        {
+            n++;
+            
+            if (s[index] == ' ') {
+                index++;
+            }
+        }
+        
+        int minus = (s[index] == '-')? -1 : 1;
+        
+        if (minus == -1 || s[index] == '+') {
+            index++;
+        }
+        
+        long long ans = 0;
+        
+        for (int i = index; i < n; i++)
+        {
+            if (s[i] < '0' || s[i] > '9') {
+                break;
+            }
+            
+            ans = ans * 10 + (s[i] - '0');
+        }
+        
+        ans = ans * minus;
+        
+        if (ans > INT_MAX) {
+            return INT_MAX;
+        }
+        
+        if (ans < INT_MIN) {
+            return INT_MIN;
+        }
+        
+        return ans;
+    }
