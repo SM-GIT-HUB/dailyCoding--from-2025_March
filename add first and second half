@@ -1,0 +1,148 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+    class Node
+    {
+    public:
+        int data;
+        Node *next;
+        Node(int data)
+        {
+            this->data = data;
+            this->next = NULL;
+        }
+    };
+
+*****************************************************************/
+
+Node* getMid(Node* slow)
+{
+    Node* fast = slow->next;
+
+    while (fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+int getNum(Node* root)
+{
+    int sum = 0;
+
+    while (root)
+    {
+        sum = sum * 10 + root->data;
+        root = root->next;
+    }
+
+    return sum;
+}
+
+Node* reverseList(Node* root)
+{
+    Node* prev = nullptr;
+    Node* curr = root;
+    Node* forward = nullptr;
+
+    while (curr)
+    {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+
+    return prev;
+}
+
+Node* makeNum(Node* one, Node* two)
+{
+    Node* root = new Node(-1);
+    Node* temp = root;
+
+    while (one && one->next && one->data == 0)
+    {
+        one = one->next;
+    }
+
+    while (two && two->next && two->data == 0)
+    {
+        two = two->next;
+    }
+
+    one = reverseList(one);
+    two = reverseList(two);
+
+    int carry = 0;
+
+    while (one && two)
+    {
+        int sum = one->data + two->data + carry;
+
+        temp->next = new Node(sum % 10);
+        one = one->next;
+        two = two->next;
+        temp = temp->next;
+
+        carry = sum / 10;
+    }
+
+    while (one)
+    {
+        int sum = one->data + carry;
+
+        temp->next = new Node(sum % 10);
+        one = one->next;
+        temp = temp->next;
+
+        carry = sum / 10;
+    }
+
+    while (two)
+    {
+        int sum = two->data + carry;
+
+        temp->next = new Node(sum % 10);
+        two = two->next;
+        temp = temp->next;
+
+        carry = sum / 10;
+    }
+
+    if (carry)
+    {
+        temp->next = new Node(carry);
+        temp = temp->next;
+    }
+
+    if (root == temp) {
+        return new Node(0);
+    }
+
+    return reverseList(root->next);
+}
+
+Node *addFirstAndSecondHalf(Node *head1){
+    // Write your code here.
+    if (!head1) {
+        return head1;
+    }
+        
+    Node* mid = getMid(head1);
+    Node* head2 = mid->next;
+    mid->next = nullptr;
+
+    Node* root = makeNum(head1, head2);
+
+    head1 = reverseList(head1);
+    head2 = reverseList(head2);
+
+    mid->next = head2;
+
+    return root;
+}
