@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+int maxLength(vector<int> &arr){
+    // Write your code here.
+    int n = arr.size();
+    int ans = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        unordered_set<int> sett;
+        int mini = INT_MAX;
+        int maxi = INT_MIN;
+
+        for (int j = i; j < n; j++)
+        {
+            if (sett.count(arr[j])) {
+                break;
+            }
+
+            sett.insert(arr[j]);
+            mini = min(mini, arr[j]);
+            maxi = max(arr[j], maxi);
+
+            if (maxi - mini + 1 == j - i + 1) {
+                ans = max(j - i + 1, ans);
+            }
+        }
+    }
+
+    return ans;
+}
