@@ -1,0 +1,38 @@
+int palinCount(string arr) {
+    // Write your code here.
+    int n = arr.size();
+    int ans = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        int mapp = 0;
+        int odd = 0;
+
+        for (int j = i; j < n; j++)
+        {
+            mapp = mapp ^ (1 << arr[j] - 'a');
+            int bit = mapp & (1 << arr[j] - 'a');
+
+            if (bit) {
+                odd++;
+            }
+            else
+                odd--;
+            
+            if ((j - i + 1) & 1)
+            {
+                if (odd == 1) {
+                    ans++;
+                }
+            }
+            else
+            {
+                if (odd == 0) {
+                    ans++;
+                }
+            }
+        }
+    }
+
+    return ans;
+}
