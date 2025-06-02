@@ -1,0 +1,21 @@
+int minRemoval(vector<vector<int>> &inters) {
+        // code here
+        int n = inters.size();
+        sort(inters.begin(), inters.end(), [&](auto &a, auto &b) {
+            return (a[1] < b[1]);
+        });
+        
+        int ans = 0;
+        int lastEnd = INT_MIN;
+        
+        for (int i = 0; i < inters.size(); i++)
+        {
+            if (inters[i][0] >= lastEnd) {
+                lastEnd = inters[i][1];
+            }
+            else
+                ans++;
+        }
+        
+        return ans;
+    }
