@@ -1,0 +1,36 @@
+// User function Template for C++
+
+class Solution {
+  public:
+    vector<vector<int>> insertInterval(vector<vector<int>> &intervals, vector<int> &newInterval) {
+        // code here
+        int n = intervals.size();
+        
+        int index = 0;
+        vector<vector<int> > ans;
+        
+        while (index < n && intervals[index][1] < newInterval[0])
+        {
+            ans.push_back(intervals[index++]);
+        }
+        
+        int mini = newInterval[0];
+        int maxi = newInterval[1];
+        
+        while (index < n && maxi >= intervals[index][0])
+        {
+            mini = min(mini, intervals[index][0]);
+            maxi = max(intervals[index][1], maxi);
+            index++;
+        }
+        
+        ans.push_back({mini, maxi});
+        
+        for (int i = index; i < n; i++)
+        {
+            ans.push_back(intervals[i]);
+        }
+        
+        return ans;
+    }
+};
