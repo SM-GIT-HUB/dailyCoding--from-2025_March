@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxCandies(vector<int>& status, vector<int>& candies, vector<vector<int>>& keys, vector<vector<int>>& containedBoxes, vector<int>& initialBoxes) {
+        int n = status.size();
+        vector<int> mapp(n, 0);
+
+        int ans = 0;
+        queue<int> q;
+
+        for (int x : initialBoxes)
+        {
+            mapp[x] = 1;
+
+            if (status[x] == 1) {
+                q.push(x);
+            }
+        }
+
+        while (!q.empty())
+        {
+            int curr = q.front();
+            q.pop();
+
+            if (mapp[curr] == 2) {
+                continue;
+            }
+
+            mapp[curr] = 2;
+            ans += candies[curr];
+
+            for (int x : containedBoxes[curr])
+            {
+                if (status[x] == 1 && mapp[x] != 2) {
+                    q.push(x);
+                }
+                else if (mapp[x] == 0) {
+                    mapp[x] = 1;
+                }
+            }
+
+            for (int x : keys[curr])
+            {
+                status[x] = 1;
+
+                if (mapp[x] == 1) {
+                    q.push(x);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
