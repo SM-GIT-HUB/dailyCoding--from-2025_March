@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+bool checkMeta(string &str1, string &str2)
+{
+    // Write your code here.
+    int start = -1, end = -1;
+
+    if (str1.size() != str2.size() || str1 == str2) {
+        return 0;
+    }
+
+    for (int i = 0; i < str1.size(); i++)
+    {
+        if (str1[i] != str2[i])
+        {
+            if (start != -1 && end != -1) {
+                return 0;
+            }
+            else if (start != -1 && (str1[start] != str2[i] || str1[i] != str2[start])) {
+                return 0;
+            }
+            else if (start != -1) {
+                end = i;
+            }
+            else
+                start = i;
+        }
+    }
+
+    return (start != -1 && end != -1);
+}
