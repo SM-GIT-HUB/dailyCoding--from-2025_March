@@ -1,0 +1,64 @@
+class Solution {
+public:
+    class DSUorder {
+    public:
+        vector<int> parent;
+        
+        DSUorder(int n)
+        {
+            parent.resize(n + 1);
+            
+            for (int i = 0; i <= n; i++)
+            {
+                parent[i] = i;
+            }
+        }
+        
+        int findUltParent(int node)
+        {
+            if (parent[node] == node) {
+                return node;
+            }
+            
+            return parent[node] = findUltParent(parent[node]);
+        }
+        
+        void unionByOrder(int u, int v)
+        {
+            int uParent = findUltParent(u);
+            int vParent = findUltParent(v);
+            
+            if (uParent == vParent) {
+                return;
+            }
+            else if (uParent < vParent) {
+                parent[vParent] = uParent;
+            }
+            else if (uParent > vParent) {
+                parent[uParent] = vParent;
+            }
+        }
+        
+        bool sameComp(int u, int v)
+        {
+            return (findUltParent(u) == findUltParent(v));
+        }
+    };
+
+    string smallestEquivalentString(string s1, string s2, string baseStr) {
+        DSUorder ds(26);
+        int n = s1.size();
+
+        for (int i = 0; i < n; i++)
+        {
+            ds.unionByOrder(s1[i] - 'a', s2[i] - 'a');
+        }
+        
+        for (char &x : baseStr)
+        {
+            x = ds.findUltParent(x - 'a') + 'a';
+        }
+
+        return baseStr;
+    }
+};
