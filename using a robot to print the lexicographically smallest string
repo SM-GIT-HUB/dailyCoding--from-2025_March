@@ -1,0 +1,56 @@
+class Solution {
+public:
+    string robotWithString(string s) {
+        int index = 0;
+        int n = s.size();
+
+        string ans = "";
+        char ch = 'a';
+        vector<int> stack;
+
+        while (index < n)
+        {
+            int i = index;
+            int j = -1;
+
+            while (!stack.empty() && stack.back() + 'a' <= ch)
+            {
+                ans.push_back(stack.back() + 'a');
+                stack.pop_back();
+            }
+
+            for (int i = index; i < n; i++)
+            {
+                if (s[i] == ch)
+                {
+                    j = i;
+                    ans.push_back(ch);
+                }
+            }
+
+            if (j == -1)
+            {
+                ch++;
+                continue;
+            }
+
+            for (int i = index; i <= j; i++)
+            {
+                if (s[i] != ch) {
+                    stack.push_back(s[i] - 'a');
+                }
+            }
+
+            ch++;
+            index = j + 1;
+        }
+
+        while (stack.size())
+        {
+            ans.push_back(stack.back() + 'a');
+            stack.pop_back();
+        }
+
+        return ans;
+    }
+};
