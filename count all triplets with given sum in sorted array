@@ -1,0 +1,56 @@
+class Solution {
+  public:
+    int countTriplets(vector<int> &arr, int target) {
+        // Code Here
+        int ans = 0;
+        
+        for (int index = 0; index < arr.size() - 2; index++)
+        {
+            int start = index + 1, end = arr.size() - 1;
+
+            while (start < end)
+            {
+                int elem = arr[index] + arr[start] + arr[end];
+                
+                if (elem == target)
+                {
+                    if (arr[start] == arr[end])
+                    {
+                        int total = end - start;
+                        ans += (total * (total + 1)) / 2;
+                        break;
+                    }
+                    else
+                    {
+                        int startCount = 1;
+                        int endCount = 1;
+                        
+                        while (start + 1 < end && arr[start] == arr[start + 1])
+                        {
+                            start++;
+                            startCount++;
+                        }
+                        
+                        while (end - 1 > start && arr[end] == arr[end - 1])
+                        {
+                            end--;
+                            endCount++;
+                        }
+                        
+                        ans += startCount * endCount;
+                        start++;
+                        end--;
+                    }
+                }
+                else if (target > elem) {
+                    start++;
+                }
+                else
+                    end--;
+                    
+            }
+        }
+        
+        return ans;
+    }
+};
