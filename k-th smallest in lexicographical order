@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int getCount(int n, long long curr, long long next)
+    {
+        long long steps = 0;
+
+        while (curr <= n)
+        {
+            steps += min(1LL + n, next) - curr;
+            curr = curr * 10;
+            next = next * 10;
+        }
+
+        return steps;
+    }
+
+    int findKthNumber(int n, int k) {
+        long long curr = 1;
+        k--;
+
+        while (k > 0)
+        {
+            long long steps = getCount(n, curr, curr + 1);
+
+            if (steps <= k)
+            {
+                k -= steps;
+                curr++;
+            }
+            else
+            {
+                curr = curr * 10;
+                k--;
+            }
+        }
+
+        return curr;
+    }
+};
