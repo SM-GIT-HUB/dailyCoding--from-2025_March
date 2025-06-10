@@ -1,0 +1,120 @@
+#include <bits/stdc++.h> 
+
+const int mod = 1e9 + 7;
+
+int primes[] = {2, 3, 5, 7, 11, 13, 17, 19};
+
+int numToMask[21];
+
+void preCompute()
+{
+	for (int num = 1; num <= 20; num++)
+	{
+		int val = num;
+		int mask = 0;
+
+		int valid = 1;
+
+		for (int i = 0; i < 8; i++)
+		{
+			int prime = primes[i];
+
+			if (val % prime == 0)
+			{
+				int count = 0;
+
+				while (val % prime == 0)
+				{
+					val = val / prime;
+					count++;
+				}
+
+				if (count > 1)
+				{
+					valid = 0;
+					break;
+				}
+
+				mask = mask | (1 << i);
+			}
+		}
+
+		if (valid && val == 1) {
+			numToMask[num] = mask;
+		}
+		else
+			numToMask[num] = -1;
+	}
+}
+
+long long modPow(long long base, long long exp, long long m)
+{
+	long long res = 1;
+
+	while (exp > 0)
+	{
+		if (exp & 1) {
+			res = (res * base) % m;
+		}
+
+		base = (base * base) % m;
+		exp = exp / 2;
+	}
+
+	return res;
+}
+
+int unitPowerSubsets(vector<int>& arr)
+{
+	// Write your code here.
+	preCompute();
+	int freq[21] = {0};
+
+	for (int x : arr)
+	{
+		freq[x]++;
+	}
+
+	int count1 = freq[1];
+	vector<long long> dp(1 << 8, 0);
+
+	dp[0] = 1;
+
+	for (int num = 2; num < 21; num++)
+	{
+		int mask = numToMask[num];
+
+		if (mask == -1 || freq[num] == 0) {
+			continue;
+		}
+
+		// long long ways = (1LL << freq[num]) - 1;
+		long long ways = freq[num];
+
+		vector<long long> newDp = dp;
+
+		for (int oldMask = 0; oldMask < (1 << 8); oldMask++)
+		{
+			if ((oldMask & mask) == 0)
+			{
+				int newMask = oldMask | mask;
+				newDp[newMask] = (newDp[newMask] + dp[oldMask] * ways) % mod;
+			}
+		}
+
+		dp = newDp;
+	}
+
+	long long ans = 0;
+
+	for (int i = 1; i < (1 << 8); i++)
+	{
+		ans = (ans + dp[i]) % mod;
+	}
+
+	if (count1 > 0) {
+		ans = (ans * modPow(2, count1, mod)) % mod;
+	}
+
+	return ans;
+}
