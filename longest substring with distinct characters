@@ -1,0 +1,36 @@
+class Solution {
+  public:
+    int longestUniqueSubstr(string &s) {
+        // code here
+        int n = s.size();
+        int duplicates = 0;
+        
+        int mapp[26] = {0};
+        
+        int ans = 0;
+        int start = 0, end = 0;
+        
+        while (end < n)
+        {
+            int f = ++mapp[s[end] - 'a'];
+            
+            if (f > 1) {
+                duplicates++;
+            }
+            
+            while (duplicates)
+            {
+                f = --mapp[s[start++] - 'a'];
+                
+                if (f == 1) {
+                    duplicates--;
+                }
+            }
+            
+            ans = max(end - start + 1, ans);
+            end++;
+        }
+        
+        return ans;
+    }
+};
