@@ -1,0 +1,36 @@
+/*The Node structure is
+class Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+
+    Node(int x){
+        data = x;
+        left = NULL;
+        right = NULL;
+    }
+};*/
+
+class Solution {
+  public:
+    int isEnd(Node *root, int mini, int maxi)
+    {
+        if (root == nullptr) {
+            return 0;
+        }
+        
+        if (root->data - 1 <= mini && root->data + 1 >= maxi) {
+            return 1;
+        }
+        
+        return (isEnd(root->left, mini, root->data) || isEnd(root->right, root->data, maxi));
+    }
+  
+    bool isDeadEnd(Node *root) {
+        // Code here
+        int ans = isEnd(root, 0, INT_MAX);
+        
+        return ans;
+    }
+};
