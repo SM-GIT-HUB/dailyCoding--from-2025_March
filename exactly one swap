@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    int countStrings(string &s) {
+        // code here
+        int n = s.size();
+        int mapp[26] = {0};
+        
+        int flag = 0;
+        
+        for (char x : s)
+        {
+            mapp[x - 'a']++;
+        }
+        
+        int ans = 0;
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i]) {
+                ans += mapp[i] * (n - mapp[i]);
+            }
+            
+            if (mapp[i] > 1) {
+                flag = 1;
+            }
+        }
+        
+        return flag? (ans / 2) + 1 : (ans / 2);
+    }
+};
