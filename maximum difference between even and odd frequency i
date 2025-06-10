@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxDifference(string s) {
+        int mapp[26] = {0};
+
+        for (char x : s)
+        {
+            mapp[x - 'a']++;
+        }
+
+        int miniEven = 101;
+        int maxiOdd = 0;
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i] & 1) {
+                maxiOdd = max(mapp[i], maxiOdd);
+            }
+            else if (mapp[i])
+                miniEven = min(miniEven, mapp[i]);
+        }
+
+        return (maxiOdd - miniEven);
+    }
+};
