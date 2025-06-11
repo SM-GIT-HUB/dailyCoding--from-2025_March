@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    int findLength(vector<int> &color, vector<int> &radius) {
+        // code here
+        int n = color.size();
+        vector<int> stack;
+        
+        for (int i = 0; i < n; i++)
+        {
+            stack.push_back(i);
+            
+            while (stack.size() > 1)
+            {
+                int curr = stack.back();
+                stack.pop_back();
+                
+                if (color[stack.back()] == color[curr] && radius[stack.back()] == radius[curr]) {
+                    stack.pop_back();
+                }
+                else
+                {
+                    stack.push_back(curr);
+                    break;
+                }
+            }
+        }
+        
+        return stack.size();
+    }
+};
