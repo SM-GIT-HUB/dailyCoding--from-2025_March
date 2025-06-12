@@ -1,0 +1,17 @@
+#include<bits/stdc++.h>
+
+long reverseBits(long n) {
+    // Write your code here.
+    long m = 0;
+    
+    for (int i = 0; i < 32; i++)
+    {
+        if (n & 1) {
+            m = m | (1LL << (31 - i));
+        }
+
+        n = n >> 1;
+    }
+
+    return m;
+}
