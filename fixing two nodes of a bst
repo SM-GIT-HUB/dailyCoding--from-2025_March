@@ -1,0 +1,70 @@
+/*
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+    Node(int val)
+    {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void dfs(Node* root, Node* &prev, Node* &ourNode, int yes)
+    {
+        if (!root || ourNode) {
+            return;
+        }
+        
+        if (yes) {
+            dfs(root->left, prev, ourNode, yes);
+        }
+        else
+            dfs(root->right, prev, ourNode, yes);
+            
+        if (yes)
+        {
+            if (prev && prev->data > root->data)
+            {
+                ourNode = prev;
+                return;
+            }
+        }
+        else
+        {
+            if (prev && prev->data < root->data)
+            {
+                ourNode = prev;
+                return;
+            }
+        }
+        
+        prev = root;
+        
+        if (yes) {
+            dfs(root->right, prev, ourNode, yes);
+        }
+        else
+            dfs(root->left, prev, ourNode, yes);
+    }
+  
+    void correctBST(Node* root) {
+        // add code here.
+        Node* leftNode = nullptr;
+        Node* rightNode = nullptr;
+        
+        Node* prev = nullptr;
+        dfs(root, prev, leftNode, 1);
+        
+        prev = nullptr;
+        dfs(root, prev, rightNode, 0);
+        
+        leftNode->data = leftNode->data ^ rightNode->data;
+        rightNode->data = leftNode->data ^ rightNode->data;
+        leftNode->data = leftNode->data ^ rightNode->data;
+    }
+};
