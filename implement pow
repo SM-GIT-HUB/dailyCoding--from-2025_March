@@ -1,0 +1,36 @@
+// User function Template for C++
+class Solution {
+  public:
+    double power(double b, int e) {
+        // code here
+        if (e == 0) {
+            return 1;
+        }
+        
+        if (b == 0) {
+            return 0.0;
+        }
+        
+        int exp = abs(e);
+        double ans = 1.0;
+        
+        double mini = -(1e4 - 1);
+        double maxi = 1e4 + 1;
+        
+        while (ans > mini && ans < maxi && exp > 0)
+        {
+            if (exp & 1) {
+                ans = ans * b;
+            }
+            
+            b = b * b;
+            exp = exp >> 1;
+        }
+        
+        if (e < 0) {
+            ans = 1.0 / ans;
+        }
+        
+        return (ans <= mini || ans >= maxi)? 0.0 : ans;
+    }
+};
