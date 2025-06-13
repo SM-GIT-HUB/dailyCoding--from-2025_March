@@ -1,0 +1,55 @@
+#include <bits/stdc++.h> 
+
+const int singles[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+void generate(int start, int end, string &temp, vector<int>& ans, int &n)
+{
+	if (start > end)
+	{
+		int num = stoi(temp);
+
+		if (num <= n) {
+			ans.push_back(num);
+		}
+
+		return;
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (start == 0 && i == 0) {
+			continue;
+		}
+
+		temp[start] = singles[i] + '0';
+		temp[end] = singles[i] + '0';
+
+		generate(start + 1, end - 1, temp, ans, n);
+	}
+}
+
+vector<int> getPalindromes(int n)
+{
+	// Write your code here
+    vector<int> ans;
+	
+	for (int i = 0; i < min(n, 9); i++)
+	{
+		ans.push_back(i + 1);
+	}
+
+	if (n <= 9) {
+		return ans;
+	}
+
+	int digits = log10(n) + 1;
+
+	for (int i = 2; i <= digits; i++)
+	{
+		string temp = string(i, '0');
+		generate(0, i - 1, temp, ans, n);
+	}
+
+	return ans;
+}
+
