@@ -1,0 +1,48 @@
+// User Fuction template for C++
+/*
+// Tree Node
+class Node {
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    // Function to return maximum path sum from any node in a tree.
+    int getSum(Node* root, int &ans)
+    {
+        if (!root) {
+            return 0;
+        }
+        
+        int leftSum = getSum(root->left, ans);
+        int rightSum = getSum(root->right, ans);
+        
+        if (leftSum < 0) {
+            leftSum = 0;
+        }
+        
+        if (rightSum < 0) {
+            rightSum = 0;
+        }
+        
+        ans = max(root->data + leftSum + rightSum, ans);
+        return (root->data + max(leftSum, rightSum));
+    }
+    
+    int findMaxSum(Node *root) {
+        // code here
+        int ans = INT_MIN;
+        
+        getSum(root, ans);
+        
+        return ans;
+    }
+};
