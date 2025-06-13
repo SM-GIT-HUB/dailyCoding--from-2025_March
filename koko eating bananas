@@ -1,0 +1,41 @@
+class Solution {
+  public:
+    int isPos(int s, int k, vector<int>& arr)
+    {
+        int hours = 0;
+        
+        for (int x : arr)
+        {
+            hours += (x / s) + (x % s != 0);
+            
+            if (hours > k) {
+                return 0;
+            }
+        }
+        
+        return 1;
+    }
+  
+    int kokoEat(vector<int>& arr, int k) {
+        // Code here
+        int n = arr.size();
+
+        int ans = 0;
+        int start = 1, end = 1e6;
+        
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            if (isPos(mid, k, arr))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return ans;
+    }
+};
