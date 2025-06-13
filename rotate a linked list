@@ -1,0 +1,72 @@
+/*
+
+struct Node {
+    int data;
+    struct Node *next;
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
+
+*/
+
+class Solution {
+  public:
+    void getTailAndSize(Node* head, Node* &tail, int &size)
+    {
+        Node* slow = head;
+        Node* fast = head;
+        
+        while (fast && fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next;
+            
+            if (!fast->next) {
+                tail = fast;
+            }
+            
+            fast = fast->next;
+            
+            if (fast && !fast->next) {
+                tail = fast;
+            }
+            
+            size++;
+        }
+        
+        size = size << 1;
+        
+        if (fast) {
+            size++;
+        }
+    }
+  
+    Node* rotate(Node* head, int k) {
+        // Your code here
+        Node* tail = nullptr;
+        int size = 0;
+        
+        getTailAndSize(head, tail, size);
+        
+        k = k % size;
+        
+        if (k == 0) {
+            return head;
+        }
+        
+        Node* curr = head;
+        
+        while (--k)
+        {
+            curr = curr->next;
+        }
+        
+        tail->next = head;
+        head = curr->next;
+        curr->next = nullptr;
+        
+        return head;
+    }
+};
