@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int isPos(int x, int n, int p, vector<int>& arr)
+    {
+        int diff = 0;
+        int count = 0;
+        int index = 0;
+
+        while (index < n - 1 && count < p)
+        {
+            diff = abs(arr[index] - arr[index + 1]);
+
+            if (diff <= x)
+            {
+                count++;
+                index += 2;
+            }
+            else
+                index++;
+        }
+
+        return (count == p);
+    }
+
+    int minimizeMax(vector<int>& arr, int p) {
+        if (p == 0) {
+            return 0;
+        }
+
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+
+        int ans = 0;
+        int mid = 0;
+        int start = 0, end = arr.back() - arr[0];
+
+        while (start <= end)
+        {
+            mid = start + (end - start) / 2;
+
+            if (isPos(mid, n, p, arr))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+
+        return ans;
+    }
+};
