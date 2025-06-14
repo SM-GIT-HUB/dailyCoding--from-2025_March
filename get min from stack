@@ -1,0 +1,68 @@
+class Solution {
+    int mini;
+    vector<int> stack;
+  public:
+    Solution() {
+        // code here
+        int mini = 0;
+    }
+
+    // Add an element to the top of Stack
+    void push(int x) {
+        // code here
+        if (stack.empty())
+        {
+            mini = x;
+            stack.push_back(x);
+            return;
+        }
+        
+        if (x > mini) {
+            stack.push_back(x);
+        }
+        else
+        {
+            stack.push_back(2 * x - mini);
+            mini = x;
+        }
+    }
+
+    // Remove the top element from the Stack
+        
+    void pop() {
+        // code here
+        if (stack.empty()) {
+            return;
+        }
+        
+        if (stack.back() > mini) {
+            stack.pop_back();
+        }
+        else
+        {
+            mini = 2 * mini - stack.back();
+            stack.pop_back();
+        }
+    }
+
+        
+    // Returns top element of the Stack
+    int peek() {
+        // code here
+        if (stack.empty()) {
+            return -1;
+        }
+        else if (stack.back() > mini) {
+            return stack.back();
+        }
+        else
+            return mini;
+    }
+        
+
+    // Finds minimum element of Stack
+    int getMin() {
+        // code here
+        return (stack.empty())? -1 : mini;
+    }
+};
