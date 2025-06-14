@@ -1,0 +1,95 @@
+
+class SegTree {
+public:
+    int n;
+    vector<int> tree;
+
+    SegTree(vector<int>& arr)
+    {
+        n = arr.size();
+        tree.resize(4 * n);
+        build(arr, 0, 0, n - 1);
+    }
+
+    void build(vector<int>& arr, int node, int start, int end)
+    {
+        if (start == end) {
+            tree[node] = (arr[start] % 2 == 0)? 1 : 0;
+        }
+        else
+        {
+            int mid = start + (end - start) / 2;
+            build(arr, 2 * node + 1, start, mid);
+            build(arr, 2 * node + 2, mid + 1, end);
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+        }
+    }
+
+    void update(int index, int value, int node, int start, int end)
+    {
+        if (start == end) {
+            tree[node] = (value % 2 == 0)? 1 : 0;
+        }
+        else
+        {
+            int mid = start + (end - start) / 2;
+
+            if (index <= mid) {
+                update(index, value, 2 * node + 1, start, mid);
+            }
+            else
+                update(index, value, 2 * node + 2, mid + 1, end);
+            
+            tree[node] = tree[2 * node + 1] + tree[2 * node + 2];
+        }
+    }
+
+    int queryEven(int l, int r, int node, int start, int end)
+    {
+        if (r < start || l > end) {
+            return 0;
+        }
+
+        if (l <= start && end <= r) {
+            return tree[node];
+        }
+
+        int mid = start + (end - start) / 2;
+
+        int left = queryEven(l, r, 2 * node + 1, start, mid);
+        int right = queryEven(l, r, 2 * node + 2, mid + 1, end);
+
+        return (left + right);
+    }
+};
+
+vector<int> solve(int n, vector<int> &arr, int q, vector<vector<int>> &queries)
+{
+    // Write your code here.
+    SegTree st(arr);
+    vector<int> ans;
+
+    for (auto &q : queries)
+    {
+        int type = q[0];
+        int x = q[1];
+        int y = q[2];
+
+        if (type == 0) {
+            st.update(x, y, 0, 0, n - 1);
+        }
+        else if (type == 1)
+        {
+            int evenCount = st.queryEven(x, y, 0, 0, n - 1);
+            ans.push_back(evenCount);
+        }
+        else
+        {
+            int evenCount = st.queryEven(x, y, 0, 0, n - 1);
+            int oddCount = (y - x + 1) - evenCount;
+            ans.push_back(oddCount);
+        }
+    }
+
+    return ans;
+}
