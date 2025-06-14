@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int minMaxDifference(int num) {
+        string temp = to_string(num);
+
+        int i = 0;
+
+        while (i < temp.size() && temp[i] == '9')
+        {
+            i++;
+        }
+
+        char x = temp[i];
+
+        for (; i < temp.size(); i++)
+        {
+            if (x == temp[i]) {
+                temp[i] = '9';
+            }
+        }
+
+        int num1 = stoi(temp);
+        temp = to_string(num);
+
+        x = temp[0];
+
+        for (char &y : temp)
+        {
+            if (x == y) {
+                y = '0';
+            }
+        }
+
+        return num1 - stoi(temp);
+    }
+};
