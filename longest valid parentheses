@@ -1,0 +1,29 @@
+
+class Solution {
+  public:
+    int maxLength(string& s) {
+        // code here
+        int ans = 0;
+        vector<int> stack;
+        stack.push_back(-1);
+        
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s[i] == '(') {
+                stack.push_back(i);
+            }
+            else
+            {
+                stack.pop_back();
+                
+                if (!stack.empty()) {
+                    ans = max(i - stack.back(), ans);
+                }
+                else
+                    stack.push_back(i);
+            }
+        }
+        
+        return ans;
+    }
+};
