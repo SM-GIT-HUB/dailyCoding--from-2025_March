@@ -1,0 +1,42 @@
+class Solution {
+  public:
+    int evaluate(vector<string>& arr) {
+        // code here
+        vector<long long> stack;
+        
+        auto check = [](char x) {
+            return (x == '+' || x == '-' || x == '*' || x == '/');
+        };
+        
+        auto opr = [](long long x, long long y, char op) {
+            if (op == '+') {
+                return (x + y);
+            }
+            else if (op == '-') {
+                return (x - y);
+            }
+            else if (op == '*') {
+                return x * y;
+            }
+            else
+                return (x / y);
+        };
+        
+        for (string &s : arr)
+        {
+            if (s.size() == 1 && check(s[0]))
+            {
+                long long y = stack.back();
+                stack.pop_back();
+                long long x = stack.back();
+                stack.pop_back();
+                
+                stack.push_back(opr(x, y, s[0]));
+            }
+            else
+                stack.push_back(stoi(s));
+        }
+        
+        return stack.back();
+    }
+};
