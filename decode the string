@@ -1,0 +1,47 @@
+
+class Solution {
+  public:
+    string decodedString(string &s) {
+        // code here
+        vector<int> count;
+        vector<string> stack;
+        
+        int k = 0;
+        string curr = "";
+        
+        for (char x : s)
+        {
+            if (isdigit(x)) {
+                k = 10 * k + (x - '0');
+            }
+            else if (x == '[')
+            {
+                count.push_back(k);
+                stack.push_back(curr);
+                curr = "";
+                k = 0;
+            }
+            else if (x == ']')
+            {
+                int repeat = count.back();
+                string prev = stack.back();
+                
+                count.pop_back();
+                stack.pop_back();
+                
+                string temp = "";
+                
+                for (int i = 0; i < repeat; i++)
+                {
+                    temp = temp + curr;
+                }
+                
+                curr = prev + temp;
+            }
+            else
+                curr.push_back(x);
+        }
+        
+        return curr;
+    }
+};
