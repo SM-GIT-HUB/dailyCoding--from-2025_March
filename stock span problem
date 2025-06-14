@@ -1,0 +1,23 @@
+class Solution {
+  public:
+    vector<int> calculateSpan(vector<int>& arr) {
+        // write code here
+        vector<int> ans;
+        vector<int> stack;
+        
+        stack.push_back(-1);
+        
+        for (int i = 0; i < arr.size(); i++)
+        {
+            while (stack.back() != -1 && arr[stack.back()] <= arr[i])
+            {
+                stack.pop_back();
+            }
+            
+            ans.push_back(i - stack.back());
+            stack.push_back(i);
+        }
+        
+        return ans;
+    }
+};
