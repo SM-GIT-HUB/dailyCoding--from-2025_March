@@ -1,0 +1,45 @@
+class Solution {
+public:
+    void changeDigit(char ch, char d, string &s)
+    {
+        for (char &x : s)
+        {
+            if (x == ch) {
+                x = d;
+            }
+        }
+    }
+
+    int maxDiff(int num) {
+        string curr = to_string(num);
+        int n = curr.size();
+
+        int index = 0;
+
+        while (index < n && curr[index] == '9')
+        {
+            index++;
+        }
+
+        string temp = curr;
+
+        if (index != n) {
+            changeDigit(curr[index], '9', temp);
+        }
+
+        index = 0;
+
+        while (index < n && (curr[index] == '1' || curr[index] == '0'))
+        {
+            index++;
+        }
+        
+        if (index == 0) {
+            changeDigit(curr[index], '1', curr);
+        }
+        else if (index != n)
+            changeDigit(curr[index], '0', curr);
+
+        return stoi(temp) - stoi(curr);
+    }
+};
