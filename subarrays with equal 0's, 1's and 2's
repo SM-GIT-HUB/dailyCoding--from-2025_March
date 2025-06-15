@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+int countSubarrays(int n, vector<int> arr) {
+    // Write your code here.
+    int ans = 0;
+    unordered_map<string, int> mapp;
+
+    int zeros = 0;
+    int ones = 0;
+    int twos = 0;
+
+    mapp["0#0"] = 1;
+
+    for (int x : arr)
+    {
+        if (x == 0) {
+            zeros++;
+        }
+        else if (x == 1) {
+            ones++;
+        }
+        else
+            twos++;
+
+        string key = to_string(ones - zeros) + "#" + to_string(twos - ones);
+
+        ans += mapp[key]++;
+    }
+
+    return ans;
+}
