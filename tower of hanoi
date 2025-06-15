@@ -1,0 +1,21 @@
+void track(int n, int from, int aux, int to, vector<vector<int> >& ans)
+{
+    if (n == 1)
+    {
+        ans.push_back({from, to});
+        return;
+    }
+
+    track(n - 1, from, to, aux, ans);
+    ans.push_back({from, to});
+    track(n - 1, aux, from, to, ans);
+}
+
+vector<vector<int>> towerOfHanoi(int n)
+{
+    //    Write your code here.
+    vector<vector<int> > ans;
+    track(n, 1, 2, 3, ans);
+
+    return ans;
+}
