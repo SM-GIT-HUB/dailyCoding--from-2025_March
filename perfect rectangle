@@ -1,0 +1,49 @@
+#include <bits/stdc++.h> 
+int perfectRectangle(vector<vector<int>> &rectangles)
+{
+	// Write your code here
+    unordered_set<string> sett;
+
+    for (auto &r : rectangles)
+    {
+        int x1 = r[0];
+        int y1 = r[1];
+        int x2 = r[2];
+        int y2 = r[3];
+
+        string key1 = to_string(x1) + "#" + to_string(y1);
+        string key2 = to_string(x2) + "#" + to_string(y1);
+        string key3 = to_string(x2) + "#" + to_string(y2);
+        string key4 = to_string(x1) + "#" + to_string(y2);
+
+        // cout << key1 << ' ' << key2 << ' ' << key3 << ' ' << key4 << endl;
+
+        if (sett.count(key1)) {
+            sett.erase(key1);
+        }
+        else
+            sett.insert(key1);
+
+        if (sett.count(key2)) {
+            sett.erase(key2);
+        }
+        else
+            sett.insert(key2);
+
+        if (sett.count(key3)) {
+            sett.erase(key3);
+        }
+        else
+            sett.insert(key3);
+
+        if (sett.count(key4)) {
+            sett.erase(key4);
+        }
+        else
+            sett.insert(key4);
+    }
+
+    // cout << sett.size() << ' ';
+
+    return sett.size() == 4;
+}
