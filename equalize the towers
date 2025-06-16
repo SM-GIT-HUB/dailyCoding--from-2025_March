@@ -1,0 +1,41 @@
+class Solution {
+  public:
+    int getCost(int elem, vector<int>& hs, vector<int>& cost)
+    {
+        int total = 0;
+        
+        for (int i = 0; i < hs.size(); i++)
+        {
+            total += abs(hs[i] - elem) * cost[i];
+        }
+        
+        return total;
+    }
+  
+    int minCost(vector<int>& heights, vector<int>& cost) {
+        // code here
+        int start = INT_MAX, end = INT_MIN;
+        
+        for (int x : heights)
+        {
+            start = min(start, x);
+            end = max(x, end);
+        }
+        
+        while (start < end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            int cost1 = getCost(mid, heights, cost);
+            int cost2 = getCost(mid + 1, heights, cost);
+            
+            if (cost1 < cost2) {
+                end = mid;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return getCost(start, heights, cost);
+    }
+};
