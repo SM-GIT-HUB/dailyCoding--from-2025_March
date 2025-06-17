@@ -1,0 +1,38 @@
+class Solution {
+  public:
+    int minimumCoins(vector<int>& arr, int k) {
+        // code here
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        
+        vector<int> sum(n, 0);
+        sum[0] = arr[0];
+        
+        for (int i = 1; i < n; i++)
+        {
+            sum[i] = sum[i - 1] + arr[i];
+        }
+        
+        int ans = INT_MAX;
+        
+        for (int i = 0; i < n; i++)
+        {
+            int x = arr[i];
+            int index = upper_bound(arr.begin() + i, arr.end(), x + k) - arr.begin();
+            
+            int totalSumToReduce = 0;
+            
+            if (i > 0) {
+                totalSumToReduce = sum[i - 1];
+            }
+            
+            if (index < n) {
+                totalSumToReduce += (sum[n - 1] - sum[index - 1]) - (x + k) * (n - index);
+            }
+            
+            ans = min(ans, totalSumToReduce);
+        }
+        
+        return ans;
+    }
+};
