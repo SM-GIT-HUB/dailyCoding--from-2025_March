@@ -1,0 +1,45 @@
+class Solution {
+  public:
+    int isPalin(int start, int end, string &str)
+    {
+        while (start < end)
+        {
+            if (str[start] != str[end]) {
+                return 0;
+            }
+            
+            start++, end--;
+        }
+        
+        return 1;
+    }
+  
+    void track(int index, int n, string &s, vector<string>& temp, vector<vector<string> >& ans)
+    {
+        if (index == n)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        for (int i = index; i < n; i++)
+        {
+            if (isPalin(index, i, s))
+            {
+                temp.emplace_back(s.substr(index, i - index + 1));
+                track(i + 1, n, s, temp, ans);
+                temp.pop_back();
+            }
+        }
+    }
+  
+    vector<vector<string>> palinParts(string &s) {
+        // code here
+        vector<vector<string> > ans;
+        vector<string> temp;
+        
+        track(0, s.size(), s, temp, ans);
+        
+        return ans;
+    }
+};
