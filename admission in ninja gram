@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+bool ninjaGram(string &str)
+{
+    // Write your code here
+    int mapp = 0;
+
+    for (char x : str)
+    {
+        if (x >= 'a' && x <= 'z') {
+            mapp = mapp | (1 << (x - 'a'));
+        }
+        else if (x >= 'A' && x <= 'Z') {
+            mapp = mapp | (1 << (x - 'A'));
+        }
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (!(mapp & (1 << i))) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
