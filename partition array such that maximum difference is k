@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int partitionArray(vector<int>& arr, int k) {
+        sort(arr.begin(), arr.end());
+
+        int cuts = 0;
+        int mini = arr[0];
+
+        for (int x : arr)
+        {
+            if (x - mini > k)
+            {
+                cuts++;
+                mini = x;
+            }
+        }
+
+        return (cuts + 1);
+    }
+};
