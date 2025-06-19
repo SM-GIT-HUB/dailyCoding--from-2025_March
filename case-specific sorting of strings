@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    string caseSort(string& s) {
+        // code here
+        int n = s.size();
+        
+        int mappLower[26] = {0};
+        int mappUpper[26] = {0};
+        
+        for (char x : s)
+        {
+            if (x < 'a') {
+                mappUpper[x - 'A']++;
+            }
+            else
+                mappLower[x - 'a']++;
+        }
+        
+        string ans;
+        int upIndex = 0;
+        int lowIndex = 0;
+        
+        for (char x : s)
+        {
+            if (x < 'a')
+            {
+                while (mappUpper[upIndex] == 0) upIndex++;
+                
+                ans.push_back(upIndex + 'A');
+                mappUpper[upIndex]--;
+            }
+            else
+            {
+                while (mappLower[lowIndex] == 0) lowIndex++;
+                
+                ans.push_back(lowIndex + 'a');
+                mappLower[lowIndex]--;
+            }
+        }
+        
+        return ans;
+    }
+};
