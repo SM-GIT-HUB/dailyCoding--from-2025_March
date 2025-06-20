@@ -1,0 +1,42 @@
+class Solution {
+  public:
+    bool validgroup(vector<int> &arr, int k) {
+        // code here
+        int n = arr.size();
+        
+        if (n % k) {
+            return 0;
+        }
+        
+        unordered_map<int, int> mapp;
+        
+        for (int x : arr)
+        {
+            mapp[x]++;
+        }
+        
+        int groups = 0;
+        sort(arr.begin(), arr.end());
+        
+        for (int x : arr)
+        {
+            if (mapp[x])
+            {
+                mapp[x]--;
+                
+                for (int i = 1; i < k; i++)
+                {
+                    if (mapp[x + i]) {
+                        mapp[x + i]--;
+                    }
+                    else
+                        return 0;
+                }
+                
+                groups++;
+            }
+        }
+        
+        return (groups == (n / k));
+    }
+};
