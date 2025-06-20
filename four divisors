@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+int sumFourDivisors(vector<int> &arr, int n)
+{
+    // Write your code here.
+    int ans = 0;
+
+    auto getCount = [](int num) {
+        if (num < 6) {
+            return 0;
+        }
+
+        int sum = 1 + num;
+        int count = 2;
+
+        for (int i = 2; i * i <= num && count <= 4; i++)
+        {
+            if (num % i == 0)
+            {
+                sum += (i == num / i)? i : i + (num / i);
+                count += (i == num / i)? 1 : 2;
+            }
+        }
+
+        return (count == 4)? sum : 0;
+    };
+
+    for (int x : arr)
+    {
+        ans += getCount(x);
+    }
+
+    return ans;
+}
