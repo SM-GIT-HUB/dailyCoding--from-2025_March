@@ -1,0 +1,144 @@
+class Solution {
+    class SegTree {
+    private:
+        int size;
+        vector<int>& arr;
+        vector<int> segArr;
+
+        void buildTree(int index, int start, int end)
+        {
+            if (start == end)
+            {
+                segArr[index] = start;
+                return;
+            }
+
+            int left = 2 * index + 1;
+            int right = left + 1;
+            int mid = start + ((end - start) >> 1);
+
+            buildTree(left, start, mid);
+            buildTree(right, mid + 1, end);
+
+            int leftIdx = segArr[left];
+            int rightIdx = segArr[right];
+
+            segArr[index] = (arr[leftIdx] >= arr[rightIdx])? leftIdx : rightIdx;
+        }
+
+        void updatePoint(int index, int start, int end, int idx)
+        {
+            if (start == end)
+            {
+                arr[idx] = -1;
+                segArr[index] = idx;
+                return;
+            }
+
+            int left = 2 * index + 1;
+            int right = left + 1;
+            int mid = start + ((end - start) >> 1);
+
+            if (idx <= mid) {
+                updatePoint(left, start, mid, idx);
+            }
+            else
+                updatePoint(right, mid + 1, end, idx);
+
+            int leftIdx = segArr[left];
+            int rightIdx = segArr[right];
+
+            segArr[index] = (arr[leftIdx] >= arr[rightIdx])? leftIdx : rightIdx;
+        }
+
+        int rangeQuery(int index, int start, int end, int qSt, int qEn)
+        {
+            if (end < qSt || qEn < start) {
+                return -1;
+            }
+
+            if (qSt <= start && end <= qEn) {
+                return segArr[index];
+            }
+
+            int left = 2 * index + 1;
+            int right = left + 1;
+            int mid = start + ((end - start) >> 1);
+
+            int leftIdx = rangeQuery(left, start, mid, qSt, qEn);
+            int rightIdx = rangeQuery(right, mid + 1, end, qSt, qEn);
+
+            if (leftIdx == -1) return rightIdx;
+            if (rightIdx == -1) return leftIdx;
+
+            return (arr[leftIdx] >= arr[rightIdx])? leftIdx : rightIdx;
+        }
+
+    public:
+        SegTree(vector<int>& input) : arr(input)
+        {
+            size = input.size();
+            segArr.resize(4 * size);
+            buildTree(0, 0, size - 1);
+        }
+
+        void pointUpdate(int index)
+        {
+            updatePoint(0, 0, size - 1, index);
+        }
+
+        int queryRange(int qSt, int qEn)
+        {
+            return rangeQuery(0, 0, size - 1, qSt, qEn);
+        }
+
+        int get(int index)
+        {
+            return arr[index];
+        }
+    };
+    
+public:
+    int numOfUnplacedFruits(vector<int>& fruits, vector<int>& baskets) {
+        int ans = 0;
+        int n = baskets.size();
+
+        SegTree st(baskets);
+
+        for (int x : fruits)
+        {
+            int index = st.queryRange(0, n - 1);
+
+            if (st.get(index) < x)
+            {
+                ans++;
+                continue;
+            }
+
+            int curr = -1;
+            int start = 0, end = n - 1;
+
+            while (start <= end)
+            {
+                int mid = start + ((end - start) >> 1);
+                index = st.queryRange(start, mid);
+
+                if (index != -1 && st.get(index) >= x)
+                {
+                    curr = index;
+                    end = mid - 1;
+                }
+                else
+                    start = mid + 1;
+            }
+
+            if (curr != -1 && st.get(curr) >= x) {
+                st.pointUpdate(curr);
+            }
+            else
+                ans++;
+        }
+
+        return ans;
+    }
+};
