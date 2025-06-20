@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void getPos(char ch, int &x, int &y, int &north, int &south, int &east, int &west)
+    {
+        if (ch == 'N')
+        {
+            y++;
+            north++;
+        }
+        else if (ch == 'S')
+        {
+            y--;
+            south++;
+        }
+        else if (ch == 'E')
+        {
+            x++;
+            east++;
+        }
+        else
+        {
+            x--;
+            west++;
+        }
+    }
+
+    int getMaxDist(int x, int y, int k, int north, int south, int east, int west)
+    {
+        if (k && x >= 0)
+        {
+            int mul = min(k, west);
+            x = x + 2 * mul;
+            k = k - mul;
+        }
+        else
+        {
+            int mul = min(k, east);
+            x = x - 2 * mul;
+            k = k - mul;
+        }
+
+        if (k && y >= 0)
+        {
+            int mul = min(k, south);
+            y = y + 2 * mul;
+            k = k - mul;
+        }
+        else
+        {
+            int mul = min(k, north);
+            y = y - 2 * mul;
+            k = k - mul;
+        }
+
+        return abs(x) + abs(y);
+    }
+
+    int maxDistance(string s, int k) {
+        int x = 0, y = 0;
+
+        int north = 0, south = 0;
+        int east = 0, west = 0;
+
+        int ans = 0;
+
+        for (char ch : s)
+        {
+            getPos(ch, x, y, north, south, east, west);
+            ans = max(getMaxDist(x, y, k, north, south, east, west), ans);
+        }
+
+        return ans;
+    }
+};
