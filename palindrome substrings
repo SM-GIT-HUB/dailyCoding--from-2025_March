@@ -1,0 +1,35 @@
+
+class Solution {
+  public:
+    int expandCenter(int start, int end, int n, string &str)
+    {
+        int count = 0;
+        if (start != end) count = 1;
+        
+        while (start >= 0 && end < n && str[start] == str[end])
+        {
+            start--;
+            end++;
+            count++;
+        }
+        
+        return count - 1;
+    }
+  
+    int countPS(string &s) {
+        // code here
+        int ans = 0;
+        int n = s.size();
+        
+        for (int i = 0; i < n; i++)
+        {
+            ans += expandCenter(i, i, n, s);
+            
+            if (i + 1 < n && s[i] == s[i + 1]) {
+                ans += expandCenter(i, i + 1, n, s);
+            }
+        }
+        
+        return ans;
+    }
+};
