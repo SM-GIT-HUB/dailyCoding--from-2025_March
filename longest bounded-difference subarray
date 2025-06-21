@@ -1,0 +1,51 @@
+class Solution {
+  public:
+    vector<int> longestSubarray(vector<int>& arr, int x) {
+        // code here
+        deque<pair<int, int> > maxQ;
+        deque<pair<int, int> > minQ;
+        
+        int maxi = 0;
+        int n = arr.size();
+        int start = 0, end = 0;
+        array<int, 2> maxAns = {-1, -1};
+        
+        while (end < n)
+        {
+            int elem = arr[end];
+            
+            while (!maxQ.empty() && maxQ.back().first <= elem) maxQ.pop_back();
+            while (!minQ.empty() && minQ.back().first >= elem) minQ.pop_back();
+            
+            maxQ.push_back({elem, end});
+            minQ.push_back({elem, end});
+            
+            while (maxQ.front().first - minQ.front().first > x)
+            {
+                start++;
+                
+                while (maxQ.front().second < start) maxQ.pop_front();
+                while (minQ.front().second < start) minQ.pop_front();
+            }
+            
+            int currAns = end - start + 1;
+            
+            if (currAns > maxi)
+            {
+                maxi = currAns;
+                maxAns = {start, end};
+            }
+            
+            end++;
+        }
+        
+        vector<int> ans;
+        
+        for (int i = maxAns[0]; i <= maxAns[1]; i++)
+        {
+            ans.push_back(arr[i]);
+        }
+        
+        return ans;
+    }
+};
