@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int minimumDeletions(string word, int k) {
+        int mapp[26] = {0};
+
+        for (char ch : word)
+        {
+            mapp[ch - 'a']++;
+        }
+
+        int ans = 1e6;
+
+        for (int x = 0; x < 26; x++)
+        {
+            int currAns = 0;
+
+            if (mapp[x] == 0) continue;
+            
+            for (int y = 0; y < 26; y++)
+            {
+                if (x == y || mapp[y] == 0) continue;
+
+                if (mapp[y] < mapp[x]) {
+                    currAns += mapp[y];
+                }
+                else if (mapp[y] > mapp[x] + k) {
+                    currAns += mapp[y] - mapp[x] - k;
+                }
+            }
+
+            if (currAns < ans) {
+                ans = currAns;
+            }
+        }
+
+        return ans;
+    }
+};
