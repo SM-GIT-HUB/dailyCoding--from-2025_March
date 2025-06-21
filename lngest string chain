@@ -1,0 +1,60 @@
+class Solution {
+  public:
+    int isPred(string &y, string &x)
+    {
+        int n = x.size();
+        
+        int count = 0;
+        int one = 0, two = 0;
+        
+        while (one < n && two < n - 1 && count < 2)
+        {
+            if (x[one] != y[two])
+            {
+                one++;
+                count++;
+            }
+            else
+            {
+                one++;
+                two++;
+            }
+        }
+        
+        return (count < 2);
+    }
+  
+    int longestStringChain(vector<string>& words) {
+        // Code here
+        unordered_map<int, vector<pair<string, int> > > mapp;
+        
+        for (int i = 0; i < words.size(); i++)
+        {
+            mapp[words[i].size()].push_back({words[i], i});
+        }
+        
+        int ans = 1;
+        vector<int> dp(words.size(), 1);
+        
+        for (int len = 2; len <= 10; len++)
+        {
+            for (auto &p: mapp[len])
+            {
+                string x = p.first;
+                
+                for (auto &v : mapp[len - 1])
+                {
+                    string y = v.first;
+                    
+                    if (isPred(y, x)) {
+                        dp[p.second] = max(dp[v.second] + 1, dp[p.second]);
+                    }
+                }
+                
+                ans = max(dp[p.second], ans);
+            }
+        }
+        
+        return ans;
+    }
+};
