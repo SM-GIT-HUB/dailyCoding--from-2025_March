@@ -1,0 +1,30 @@
+int totalIndexes(vector<int> &A, vector<int> &B) {
+    // Write your code here.
+    int n = A.size();
+
+    vector<int> pA(n + 1, 0);
+    vector<int> pB(n + 1, 0);
+
+    pA[0] = A[0];
+    pB[0] = B[0];
+
+    for (int i = 1; i < n; i++)
+    {
+        pA[i] = A[i] + pA[i - 1];
+        pB[i] = B[i] + pB[i - 1];
+    }
+
+    int ans = 0;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        int sum1A = pA[i];
+        int sum2A = pA[n - 1] - pA[i];
+        int sum1B = pB[i];
+        int sum2B = pB[n - 1] - pB[i];
+
+        if (sum1A == sum2A && sum2A == sum1B && sum1B == sum2B) ans++;
+    }
+
+    return ans;
+}
