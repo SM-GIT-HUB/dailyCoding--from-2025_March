@@ -1,69 +1,44 @@
 class Solution {
   public:
-    void dfs(int index, vector<int>& arr, vector<vector<int> >& prev, vector<int>& chain, vector<vector<int> >& chains)
-    {
-        chain.push_back(arr[index]);
-        
-        if (prev[index].empty())
-        {
-            chains.push_back(chain);
-            reverse(chains.back().begin(), chains.back().end());
-        }
-        else
-        {
-            for (int p : prev[index])
-            {
-                dfs(p, arr, prev, chain, chains);
-            }
-        }
-        
-        chain.pop_back();
-    }
-  
     vector<int> largestSubset(vector<int>& arr) {
         // Code here
         int n = arr.size();
-        sort(arr.begin(), arr.end());
+        sort(arr.rbegin(), arr.rend());
         
         vector<int> dp(n, 1);
-        vector<vector<int> > prev(n);
+        vector<int> prev(n, -1);
         
-        int ans = 1;
+        int maxi = 1;
+        int index = 0;
         
         for (int i = 1; i < n; i++)
         {
             for (int j = 0; j < i; j++)
             {
-                if (arr[i] % arr[j] == 0)
+                if (arr[j] % arr[i] == 0)
                 {
                     if (dp[j] + 1 > dp[i])
                     {
                         dp[i] = dp[j] + 1;
-                        prev[i] = {j};
-                    }
-                    else if (dp[j] + 1 == dp[i]) {
-                        prev[i].push_back(j);
+                        prev[i] = j;
                     }
                 }
-                
             }
             
-            ans = max(dp[i], ans);
-        }
-        
-        vector<vector<int> > chains;
-        
-        for (int i = 0; i < n; i++)
-        {
-            if (dp[i] == ans)
+            if (dp[i] > maxi)
             {
-                vector<int> chain;
-                dfs(i, arr, prev, chain, chains);
+                maxi = dp[i];
+                index = i;
             }
         }
         
-        sort(chains.begin(), chains.end());
+        vector<int> ans;
         
-        return chains.back();
+        for (int i = index; i != -1; i = prev[i])
+        {
+            ans.push_back(arr[i]);
+        }
+        
+        return ans;
     }
 };
