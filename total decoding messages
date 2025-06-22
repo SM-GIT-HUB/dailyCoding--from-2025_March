@@ -1,0 +1,84 @@
+class Solution {
+  public:
+    int memoization(int index, int n, string &s, vector<int>& dp)
+    {
+        if (index == n) return 1;
+        if (s[index] == '0') return 0;
+        
+        if (dp[index] != -1) return dp[index];
+        
+        int ans = 0;
+        
+        ans += memoization(index + 1, n, s, dp);
+        
+        if (index < n - 1)
+        {
+            int curr = (s[index] - '0') * 10 + (s[index + 1] - '0');
+            if (curr <= 26) ans += memoization(index + 2, n, s, dp);
+        }
+        
+        return dp[index] = ans;
+    }
+    
+    int tabulation(int n, string &s)
+    {
+        vector<int> dp(n + 1, 0);
+        dp[n] = 1;
+        
+        for (int index = n - 1; index >= 0; index--)
+        {
+            if (s[index] == '0') continue;
+            int ans = dp[index + 1];
+            
+            if (index < n - 1)
+            {
+                int curr = (s[index] - '0') * 10 + (s[index + 1] - '0');
+                if (curr <= 26) ans += dp[index + 2];
+            }
+            
+            dp[index] = ans;
+        }
+        
+        return dp[0];
+    }
+    
+    int spaceOpt(int n, string &s)
+    {
+        if (s[0] == '0') return 0;
+        
+        int one = 1;
+        int two = 0;
+        int curr = 0;
+        
+        for (int index = n - 1; index >= 0; index--)
+        {
+            if (s[index] == '0') 
+            {
+                two = one;
+                one = 0;
+                continue;
+            }
+            
+            int ans = one;
+            
+            if (index < n - 1)
+            {
+                int curr = (s[index] - '0') * 10 + (s[index + 1] - '0');
+                if (curr <= 26) ans += two;
+            }
+            
+            curr = ans;
+            two = one;
+            one = curr;
+        }
+        
+        return curr;
+    }
+    
+    int countWays(string &digits) {
+        // Code here
+        int n = digits.size();
+
+        return spaceOpt(n, digits);
+    }
+};
