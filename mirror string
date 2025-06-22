@@ -1,0 +1,19 @@
+#include <bits/stdc++.h> 
+bool isReflectionEqual(string &s)
+{
+	// Write your code here.
+	string chars = "AHIMOTUVWXY";
+	int start = 0, end = s.size() - 1;
+
+	while (start <= end)
+	{
+		if (s[start] != s[end] || chars.find(s[start]) == string::npos) {
+			return 0;
+		}
+
+		start++;
+		end--;
+	}
+
+	return 1;
+}
