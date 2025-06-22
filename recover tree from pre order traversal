@@ -1,0 +1,72 @@
+#include <bits/stdc++.h> 
+/*
+ 	Definition of a binary tree
+ 	class TreeNode
+ 	{
+ 		public:
+		T data;
+		TreeNode<T> *left;
+		TreeNode<T> *right;
+
+		TreeNode(T data)
+		{
+			this->data = data;
+			left = NULL;
+			right = NULL;
+		}
+
+		~TreeNode()
+		{
+			if (left != NULL)
+			{
+				delete left;
+			}
+			if (right != NULL)
+			{
+				delete right;
+			}
+		}
+	};
+*/
+
+TreeNode<int>* dfs(int &index, int n, string &s, int level)
+{
+	if (index == n) return nullptr;
+
+	int i = index;
+	int dashes = 0;
+
+	while (i < n && s[i] == '-')
+	{
+		dashes++;
+		i++;
+	}
+
+	if (dashes != level) return nullptr;
+
+	string curr = "";
+
+	while (i < n && s[i] != '-')
+	{
+		curr.push_back(s[i++]);
+	}
+
+	index = i;
+
+	TreeNode<int>* root = new TreeNode<int>(stoi(curr));
+	root->left = dfs(index, n, s, level + 1);
+	root->right = dfs(index, n, s, level + 1);
+
+	return root;
+}
+
+TreeNode<int> *recoverFromPreorder(string S)
+{
+    //write your code here
+	int n = S.size();
+
+	int index = 0;
+
+	TreeNode<int>* ans = dfs(index, n, S, 0);
+	return ans;
+}
