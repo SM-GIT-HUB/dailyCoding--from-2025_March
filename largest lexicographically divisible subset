@@ -1,0 +1,69 @@
+class Solution {
+  public:
+    void dfs(int index, vector<int>& arr, vector<vector<int> >& prev, vector<int>& chain, vector<vector<int> >& chains)
+    {
+        chain.push_back(arr[index]);
+        
+        if (prev[index].empty())
+        {
+            chains.push_back(chain);
+            reverse(chains.back().begin(), chains.back().end());
+        }
+        else
+        {
+            for (int p : prev[index])
+            {
+                dfs(p, arr, prev, chain, chains);
+            }
+        }
+        
+        chain.pop_back();
+    }
+  
+    vector<int> largestSubset(vector<int>& arr) {
+        // Code here
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        
+        vector<int> dp(n, 1);
+        vector<vector<int> > prev(n);
+        
+        int ans = 1;
+        
+        for (int i = 1; i < n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (arr[i] % arr[j] == 0)
+                {
+                    if (dp[j] + 1 > dp[i])
+                    {
+                        dp[i] = dp[j] + 1;
+                        prev[i] = {j};
+                    }
+                    else if (dp[j] + 1 == dp[i]) {
+                        prev[i].push_back(j);
+                    }
+                }
+                
+            }
+            
+            ans = max(dp[i], ans);
+        }
+        
+        vector<vector<int> > chains;
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (dp[i] == ans)
+            {
+                vector<int> chain;
+                dfs(i, arr, prev, chain, chains);
+            }
+        }
+        
+        sort(chains.begin(), chains.end());
+        
+        return chains.back();
+    }
+};
