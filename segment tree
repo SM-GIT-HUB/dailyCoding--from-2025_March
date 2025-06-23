@@ -1,0 +1,306 @@
+class SegTree {
+private:
+    int size;
+    vector<int> segArr;
+
+    void buildTree(int index, int start, int end, vector<int>& arr)
+    {
+        if (start == end)
+        {
+            segArr[index] = arr[start];
+            return;
+        }
+
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+
+        segArr[index] = min(segArr[left], segArr[right]);
+    }
+
+    int rangeQueryMin(int index, int start, int end, int qStart, int qEnd)
+    {
+        if (end < qStart || qEnd < start) {
+            return INT_MAX;
+        }
+        
+        if (qStart <= start && end <= qEnd) {
+            return segArr[index];
+        }
+
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        int leftAns = rangeQueryMin(left, start, mid, qStart, qEnd);
+        int rightAns = rangeQueryMin(right, mid + 1, end, qStart, qEnd);
+
+        return min(leftAns, rightAns);
+    }
+
+    void rangeUpdatePoint(int index, int updateIndex, int val, int start, int end)
+    {
+        if (start == end)
+        {
+            segArr[index] = val;
+            return;
+        }
+
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        if (updateIndex <= mid) {
+            rangeUpdatePoint(left, updateIndex, val, start, mid);
+        }
+        else
+            rangeUpdatePoint(right, updateIndex, val, mid + 1, end);
+
+        segArr[index] = min(segArr[left], segArr[right]);
+    }
+
+public:
+    SegTree(int n, vector<int>& arr)
+    {
+        size = n;
+        segArr.resize(4 * n);
+        buildTree(0, 0, size - 1, arr);
+    }
+
+    int getMin(int qStart, int qEnd)
+    {
+        return rangeQueryMin(0, 0, size - 1, qStart, qEnd);
+    }
+
+    void pointUpdate(int index, int val)
+    {
+        rangeUpdatePoint(0, index, val, 0, size - 1);
+    }
+};
+
+
+class SegLazy {
+private:
+    int size;
+    vector<int> segArr;
+    vector<int> lazyArr;
+
+    void buildTree(int index, int start, int end, vector<int>& arr)
+    {
+        if (start == end)
+        {
+            segArr[index] = arr[start];
+            return;
+        }
+
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+
+        segArr[index] = segArr[left] + segArr[right];
+    }
+
+    void lazyUpdate(int index, int start, int end, int val)
+    {
+        int left = 2 * index + 1;
+        int right = left + 1;
+
+        segArr[index] += val * (end - start + 1);
+
+        if (start != end)
+        {
+            lazyArr[left] += val;
+            lazyArr[right] += val;
+        }
+
+        lazyArr[index] = 0;
+    }
+
+    void rangeUpdate(int index, int start, int end, int val, int qStart, int qEnd)
+    {
+        if (lazyArr[index]) {
+            lazyUpdate(index, start, end, lazyArr[index]);
+        }
+
+        if (end < qStart || start > qEnd) {
+            return;
+        }
+
+        if (qStart <= start && end <= qEnd)
+        {
+            lazyUpdate(index, start, end, val);
+            return;
+        }
+        
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        rangeUpdate(left, start, mid, val, qStart, qEnd);
+        rangeUpdate(right, mid + 1, end, val, qStart, qEnd);
+
+        segArr[index] = segArr[left] + segArr[right];
+    }
+
+    int rangeQuery(int index, int start, int end, int qStart, int qEnd)
+    {
+        int left = 2 * index + 1;
+        int right = left + 1;
+
+        if (lazyArr[index]) {
+            lazyUpdate(index, start, end, lazyArr[index]);
+        }
+
+        if (end < qStart || qEnd < start) {
+            return 0;
+        }
+        
+        if (qStart <= start && end <= qEnd) {
+            return segArr[index];
+        }
+
+        int mid = start + ((end - start) >> 1);
+
+        int leftAns = rangeQuery(left, start, mid, qStart, qEnd);
+        int rightAns = rangeQuery(right, mid + 1, end, qStart, qEnd);
+
+        return (leftAns + rightAns);
+    }
+
+public:
+    SegLazy(int n, vector<int>& arr)
+    {
+        size = n;
+        segArr.resize(4 * n);
+        lazyArr.resize(4 * n);
+        buildTree(0, 0, size - 1, arr);
+    }
+
+    void updateRange(int qStart, int qEnd, int val)
+    {
+        rangeUpdate(0, 0, size - 1, val, qStart, qEnd);
+    }
+
+    int queryRange(int qStart, int qEnd)
+    {
+        return rangeQuery(0, 0, size - 1, qStart, qEnd);
+    }
+};
+
+
+class SegLazyMin {
+private:
+    int size;
+    vector<int> segArr;
+    vector<int> lazyArr;
+
+    void buildTree(int index, int start, int end, vector<int>& arr)
+    {
+        if (start == end)
+        {
+            segArr[index] = arr[start];
+            return;
+        }
+
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+
+        segArr[index] = min(segArr[left], segArr[right]);
+    }
+
+    void lazyUpdate(int index, int start, int end, int val)
+    {
+        int left = 2 * index + 1;
+        int right = left + 1;
+
+        segArr[index] += val;
+
+        if (start != end)
+        {
+            lazyArr[left] += val;
+            lazyArr[right] += val;
+        }
+
+        lazyArr[index] = 0;
+    }
+
+    void rangeUpdate(int index, int start, int end, int val, int qStart, int qEnd)
+    {
+        if (lazyArr[index]) {
+            lazyUpdate(index, start, end, lazyArr[index]);
+        }
+
+        if (end < qStart || start > qEnd) {
+            return;
+        }
+
+        if (qStart <= start && end <= qEnd)
+        {
+            lazyUpdate(index, start, end, val);
+            return;
+        }
+        
+        int left = 2 * index + 1;
+        int right = left + 1;
+        int mid = start + ((end - start) >> 1);
+
+        rangeUpdate(left, start, mid, val, qStart, qEnd);
+        rangeUpdate(right, mid + 1, end, val, qStart, qEnd);
+
+        segArr[index] = min(segArr[left], segArr[right]);
+    }
+
+    int rangeQuery(int index, int start, int end, int qStart, int qEnd)
+    {
+        int left = 2 * index + 1;
+        int right = left + 1;
+
+        if (lazyArr[index]) {
+            lazyUpdate(index, start, end, lazyArr[index]);
+        }
+
+        if (end < qStart || qEnd < start) {
+            return INT_MAX;
+        }
+        
+        if (qStart <= start && end <= qEnd) {
+            return segArr[index];
+        }
+
+        int mid = start + ((end - start) >> 1);
+
+        int leftAns = rangeQuery(left, start, mid, qStart, qEnd);
+        int rightAns = rangeQuery(right, mid + 1, end, qStart, qEnd);
+
+        return min(leftAns, rightAns);
+    }
+
+public:
+    SegLazyMin(int n, vector<int>& arr)
+    {
+        size = n;
+        segArr.resize(4 * n);
+        lazyArr.resize(4 * n);
+        buildTree(0, 0, size - 1, arr);
+    }
+
+    void updateRange(int qStart, int qEnd, int val)
+    {
+        rangeUpdate(0, 0, size - 1, val, qStart, qEnd);
+    }
+
+    int queryRange(int qStart, int qEnd)
+    {
+        return rangeQuery(0, 0, size - 1, qStart, qEnd);
+    }
+};
