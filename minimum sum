@@ -10,7 +10,7 @@ class Solution {
         
         string curr = "";
         
-        while (i >= 0 && j >= 0)
+        while (j >= 0)
         {
             sum = carry + (one[i--] - '0') + (two[j--] - '0');
             curr.push_back(sum % 10 + '0');
@@ -24,16 +24,9 @@ class Solution {
             carry = sum / 10;
         }
         
-        while (j >= 0)
-        {
-            sum = carry + (one[j--] - '0');
-            curr.push_back(sum % 10 + '0');
-            carry = sum / 10;
-        }
-        
         if (carry) curr.push_back(carry + '0');
         
-        while (curr.size() && curr.back() == '0') curr.pop_back();
+        while (curr.size() > 1 && curr.back() == '0') curr.pop_back();
         
         reverse(curr.begin(), curr.end());
         return curr;
@@ -41,36 +34,16 @@ class Solution {
   
     string minSum(vector<int> &arr) {
         // code here
-        unordered_map<int, int> mapp;
+        sort(arr.begin(), arr.end());
         
-        for (int x : arr)
-        {
-            mapp[x]++;
-        }
-        
+        int i = 0;
         string one, two;
         
-        int num = 0;
-        int count = 0;
-        int n = arr.size();
-        
-        while (count < n)
+        while (i < arr.size())
         {
-            while (mapp[num] == 0) num++;
-            
-            mapp[num]--;
-            one.push_back(num + '0');
-            
-            count++;
-            
-            if (count == n) break;
-            
-            while (mapp[num] == 0) num++;
-            
-            mapp[num]--;
-            two.push_back(num + '0');
-            
-            count++;
+            one.push_back(arr[i++] + '0');
+            if (i == arr.size()) break;
+            two.push_back(arr[i++] + '0');
         }
         
         return getNum(one, two);
