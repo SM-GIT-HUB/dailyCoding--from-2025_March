@@ -1,0 +1,54 @@
+#include <bits/stdc++.h> 
+/* ***************************************
+    
+    Following is the TreeNode class structure:
+    
+    class TreeNode{
+    public:
+
+        int val;
+        TreeNode *left;
+        TreeNode *right;
+
+        TreeNode(int v){
+            this->val = v;
+            this->left = nullptr;
+            this->right = nullptr;
+        }
+        
+    };
+
+*****************************************/
+
+vector<TreeNode*> generate(int start, int end)
+{
+    if (start > end) return {nullptr};
+
+    vector<TreeNode*> currAns;
+
+    for (int i = start; i <= end; i++)
+    {
+        vector<TreeNode*> lefts = generate(start, i - 1);
+        vector<TreeNode*> rights = generate(i + 1, end);
+
+        for (TreeNode* l : lefts)
+        {
+            for (TreeNode* r : rights)
+            {
+                TreeNode* root = new TreeNode(i);
+                root->left = l;
+                root->right = r;
+                currAns.push_back(root);
+            }
+        }
+    }
+
+    return currAns;
+}
+
+vector<TreeNode*> uniqueBST(int n)
+{
+    // Write your code here.
+    vector<TreeNode*> ans = generate(1, n);
+    return ans;
+}
