@@ -1,0 +1,56 @@
+class Solution {
+public:
+    void checkAndCount(string &curr, int &k, int &count, long long &sum)
+    {
+        long long num = stoll(curr);
+        long long temp = num;
+        string baseK;
+
+        while (num > 0)
+        {
+            baseK.push_back(num % k + '0');
+            num = num / k;
+        }
+
+        int start = 0, end = baseK.size() - 1;
+
+        while (start <= end)
+        {
+            if (baseK[start++] != baseK[end--]) return;
+        }
+        
+        sum += temp;
+        count++;
+    }
+
+    void generate(int start, int end, int &k, int &n, string &curr, int &count, long long &sum)
+    {
+        if (count >= n) return;
+
+        if (start > end)
+        {
+            checkAndCount(curr, k, count, sum);
+            return;
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (start == 0 && i == 0) continue;
+            curr[start] = curr[end] = i + '0';
+            generate(start + 1, end - 1, k, n, curr, count, sum);
+        }
+    }
+
+    long long kMirror(int k, int n) {
+        int count = 0;
+        long long sum = 0;
+
+        for (int len = 1; count < n; len++)
+        {
+            string curr = string(len, '0');
+            generate(0, len - 1, k, n, curr, count, sum);
+        }
+
+        return sum;
+    }
+};
