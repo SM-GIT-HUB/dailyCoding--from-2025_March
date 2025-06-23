@@ -1,21 +1,99 @@
 #include <bits/stdc++.h> 
+
+class SegTree {
+private:
+	int size;
+	vector<int> segArr;
+	vector<int> lazy;
+
+	void lazyUpdate(int index, int val, int start, int end)
+	{
+		int left = 2 * index + 1;
+		int right = left + 1;
+
+		segArr[index] += val * (end - start + 1);
+
+		if (start != end)
+		{
+			lazy[left] += val;
+			lazy[right] += val;
+		}
+
+		lazy[index] = 0;
+	}
+
+	void rangeUpdate(int index, int start, int end, int val, int qStart, int qEnd)
+	{
+		int left = 2 * index + 1;
+		int right = left + 1;
+		int mid = start + ((end - start) >> 1);
+
+		if (lazy[index]) lazyUpdate(index, lazy[index], start, end);
+
+		if (start > qEnd || end < qStart) {
+			return;
+		}
+		else if (qStart <= start && end <= qEnd)
+		{
+			lazyUpdate(index, val, start, end);
+			return;
+		}
+
+		rangeUpdate(left, start, mid, val, qStart, qEnd);
+		rangeUpdate(right, mid + 1, end, val, qStart, qEnd);
+	}
+
+	int rangeQuery(int index, int start, int end, int qStart, int qEnd)
+	{
+		int left = 2 * index + 1;
+		int right = left + 1;
+		int mid = start + ((end - start) >> 1);
+
+		if (lazy[index]) lazyUpdate(index, lazy[index], start, end);
+
+		if (start > qEnd || end < qStart) {
+			return 0;
+		}
+		else if (qStart <= start && end <= qEnd) {
+			return segArr[index];
+		}
+
+		return rangeQuery(left, start, mid, qStart, qEnd) + rangeQuery(right, mid + 1, end, qStart, qEnd);
+	}
+
+public:
+	SegTree(int n)
+	{
+		size = n;
+		segArr.resize(4 * n, 0);
+		lazy.resize(4 * n, 0);
+	}
+
+	void updateRange(int qStart, int qEnd, int val)
+	{
+		rangeUpdate(0, 0, size - 1, val, qStart, qEnd);
+	}
+
+	int queryRange(int index)
+	{
+		return rangeQuery(0, 0, size - 1, index, index);
+	}
+};
+
 vector< int > corpFlightBookings(vector< vector < int > > &bookings, int n) {
 	// Write your code here.
-	vector<int> arr(n + 1, 0);
+	SegTree st(n);
 
 	for (auto &v : bookings)
 	{
-		arr[v[0] - 1] += v[2];
-		arr[v[1]] -= v[2];
+		st.updateRange(v[0] - 1, v[1] - 1, v[2]);
 	}
 
-	int sum = 0;
 	vector<int> ans;
 
 	for (int i = 0; i < n; i++)
 	{
-		sum += arr[i];
-		ans.push_back(sum);
+		ans.push_back(st.queryRange(i));
 	}
 
 	return ans;
