@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool asteroidsDestroyed(long long mass, vector<int>& roids) {
+        int prev = -1;
+        int index = 0;
+
+        while (true)
+        {
+            for (int i = index; i < roids.size(); i++)
+            {
+                if (mass >= roids[i])
+                {
+                    mass += roids[i];
+                    swap(roids[index], roids[i]);
+                    index++;
+                }
+            }
+
+            if (index == roids.size()) return 1;
+            if (index == prev) return 0;
+
+            prev = index;
+        }
+
+        return (index == roids.size());
+    }
+};
