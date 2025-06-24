@@ -1,0 +1,48 @@
+#include <bits/stdc++.h> 
+
+void dfs(int node, int parent, int &timer, vector<int>& low, vector<int>& time, bitset<10001>& visited, int &ans, vector<vector<int> >& adj)
+{
+    visited[node] = 1;
+    low[node] = time[node] = timer++;
+
+    for (int adjNode : adj[node])
+    {
+        if (!visited[adjNode])
+        {
+            dfs(adjNode, node, timer, low, time, visited, ans, adj);
+            low[node] = min(low[node], low[adjNode]);
+
+            if (low[adjNode] >= time[node]) ans++;
+        }
+        else if (adjNode != parent) {
+            low[node] = min(low[node], time[adjNode]);
+        }
+    }
+}
+
+int biconnectedComponents(int n, int m, vector<pair<int,int> > edges){
+    // Write your code here.
+    vector<vector<int> > adj(n + 1);
+
+    for (auto &e : edges)
+    {
+        adj[e.first].push_back(e.second);
+        adj[e.second].push_back(e.first);
+    }
+
+    vector<int> low(n + 1, 0);
+    vector<int> time(n + 1, 0);
+    
+    int ans = 0;
+    int timer = 0;
+    bitset<10001> visited;
+
+    for (int node = 1; node <= n; node++)
+    {
+        if (!visited[node]) {
+            dfs(node, -1, timer, low, time, visited, ans, adj);
+        }
+    }
+
+    return ans;
+}
