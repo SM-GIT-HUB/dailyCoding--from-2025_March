@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numberOfBeams(vector<string>& bank) {
+        int lastRow = 0;
+        int currRow = 0;
+        int m = bank.size();
+        int n = bank[0].size();
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++)
+        {
+            currRow = 0;
+
+            for (int j = 0; j < n; j++)
+            {
+                if (bank[i][j] == '1') currRow++;
+            }
+
+            if (currRow)
+            {
+                ans += lastRow * currRow;
+                lastRow = currRow;
+            }
+        }
+
+        return ans;
+    }
+};
