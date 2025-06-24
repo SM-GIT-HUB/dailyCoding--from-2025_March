@@ -1,0 +1,28 @@
+int totalStrings(string s) {
+    //Write your code here
+    int ans = 0;
+
+    int n = s.size();
+    int start = 0, end = 0;
+
+    int mapp[26] = {0};
+    int diff = 0;
+
+    while (end < n)
+    {
+        while (end < n && diff < 3)
+        {
+            if (mapp[s[end] - 'a'] == 0 && diff == 2) break;
+            if (++mapp[s[end++] - 'a'] == 1) diff++;
+        }
+
+        if (end == n) break;
+
+        ans += (end - start);
+        
+        if (--mapp[s[start++] - 'a'] == 0) diff--;
+    }
+
+    ans += (end - start) * (end - start + 1) / 2;
+    return ans;
+}
