@@ -1,0 +1,25 @@
+class Solution {
+  public:
+    string maxSubseq(string& s, int k) {
+        // code here
+        int n = s.size();
+        string ans;
+        
+        int count = 0;
+        
+        for (char x : s)
+        {
+            while (count < k && ans.size() && ans.back() < x)
+            {
+                count++;
+                ans.pop_back();
+            }
+            
+            ans.push_back(x);
+        }
+        
+        while (ans.size() != n - k) ans.pop_back();
+        
+        return ans;
+    }
+};
