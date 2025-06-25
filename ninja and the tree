@@ -1,0 +1,82 @@
+#include <bits/stdc++.h> 
+using namespace std;
+
+/************************************************************
+    Following is the Binary Tree node structure:
+
+    class TreeNode {
+    public :
+        int data;
+        TreeNode *left;
+        TreeNode *right;
+
+        TreeNode(int data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+        ~TreeNode() {
+            if(left){
+                delete left;
+            }
+            if(right){
+                delete right;
+            }
+        }
+    };
+*************************************************************/
+
+
+void inOrder(TreeNode<int>* root, TreeNode<int>* &pred, TreeNode<int>* &one)
+{
+	if (!root || one) return;
+
+	inOrder(root->left, pred, one);
+
+	if (pred && pred->data > root->data)
+	{
+		one = pred;
+		return;
+	}
+
+	pred = root;
+
+	inOrder(root->right, pred, one);
+}
+
+void revInOrder(TreeNode<int>* root, TreeNode<int>* &pred, TreeNode<int>* &two)
+{
+	if (!root || two) return;
+
+	revInOrder(root->right, pred, two);
+
+	if (pred && pred->data < root->data)
+	{
+		two = pred;
+		return;
+	}
+
+	pred = root;
+
+	revInOrder(root->left, pred, two);
+}
+
+void recoverTree(TreeNode<int>* root) {
+    // Write your code here.
+	TreeNode<int>* one = nullptr;
+	TreeNode<int>* two = nullptr;
+
+	TreeNode<int>* pred = nullptr;
+
+	inOrder(root, pred, one);
+
+	pred = nullptr;
+
+	revInOrder(root, pred, two);
+
+	if (!one || !two) return;
+
+	int temp = one->data;
+	one->data = two->data;
+	two->data = temp;
+}
