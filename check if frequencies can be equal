@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    bool sameFreq(string& s) {
+        // code here
+        int mapp[26] = {0};
+        for (char &x : s) mapp[x - 'a']++;
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (!mapp[i]) continue;
+            
+            int count = 0;
+            int freq = mapp[i];
+            
+            for (int j = 0; j < 26 && count < 2; j++)
+            {
+                if (mapp[j] < freq) count += mapp[j];
+                else if (mapp[j] >= freq) count += mapp[j] - freq;
+            }
+            
+            if (count < 2) return 1;
+        }
+        
+        return 0;
+    }
+};
