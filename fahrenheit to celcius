@@ -1,0 +1,19 @@
+#include <bits/stdc++.h> 
+
+int convert(int f)
+{
+	return (f - 32) * 5 / 9;
+}
+
+vector<vector<int>> fahrenheitToCelsius(int s, int e, int w)
+{
+	//type your code here
+	vector<vector<int> > ans;
+
+	for (int f = s; f <= e; f += w)
+	{
+		ans.push_back({f, convert(f)});
+	}
+
+	return ans;
+}
