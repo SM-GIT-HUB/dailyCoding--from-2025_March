@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int maximumInvitations(vector<int>& adj) {
+        int n = adj.size();
+        
+        queue<int> q;
+        vector<int> inDegree(n, 0);
+        vector<int> chainLen(n, 1);
+
+        for (int node = 0; node < n; node++) inDegree[adj[node]]++;
+
+        for (int node = 0; node < n; node++)
+        {
+            if (inDegree[node] == 0) q.push(node);
+        }
+
+        while (!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+
+            int adjNode = adj[node];
+            
+            if (chainLen[node] + 1 > chainLen[adjNode]) {
+                chainLen[adjNode] = chainLen[node] + 1;
+            }
+
+            if (--inDegree[adjNode] == 0) q.push(adjNode);
+        }
+
+        int maxCycle = 0;
+        int maxChain = 0;
+
+        for (int node = 0; node < n; node++)
+        {
+            if (inDegree[node] == 0) continue;
+
+            int len = 0;
+            int curr = node;
+
+            while (inDegree[curr])
+            {
+                len++;
+                inDegree[curr] = 0;
+                curr = adj[curr];
+            }
+
+            if (len == 2) {
+                maxChain += chainLen[node] + chainLen[adj[node]];
+            }
+            else
+                maxCycle = (len > maxCycle)? len : maxCycle;
+        }
+
+        return max(maxCycle, maxChain);
+    }
+};
