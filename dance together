@@ -1,0 +1,49 @@
+#include <bits/stdc++.h> 
+using namespace std;
+
+int bpm(int boy, vector<vector<int> >& girlPartner, vector<int>& boyPartner, bitset<101>& visited)
+{
+    for (int girl: girlPartner[boy])
+    {
+        if (!visited[girl])
+        {
+            visited[girl] = 1;
+
+            if (boyPartner[girl] == -1 || bpm(boyPartner[girl], girlPartner, boyPartner, visited))
+            {
+                boyPartner[girl] = boy;
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+vector<vector<int>> danceTogether(vector<vector<int>> edges, int n, int m, int k)
+{
+    // Write your code here
+    vector<vector<int> > girlPartner(n + 1);
+    for (int i = 0; i < k; i++)
+    {
+        vector<int> &e = edges[i];
+        girlPartner[e[0]].push_back(e[1]);
+    }
+
+    vector<int> boyPartner(m + 1, -1);
+
+    for (int boy = 1; boy <= n; boy++)
+    {
+        bitset<101> visited;
+        bpm(boy, girlPartner, boyPartner, visited);
+    }
+
+    vector<vector<int> > ans;
+
+    for (int girl = 1; girl <= m; girl++)
+    {
+        if (boyPartner[girl] != -1) ans.push_back({boyPartner[girl], girl});
+    }
+
+    return ans;
+}
