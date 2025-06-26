@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+vector < int > findAllSelfDividingNumbers(int lower, int upper) {
+    // Write your code here
+    vector<int> ans;
+
+    for (int num = lower; num <= upper; num++)
+    {
+        string curr = to_string(num);
+
+        if (curr.find('0') != string::npos) continue;
+        int flag = 0;
+
+        for (char x : curr)
+        {
+            if (num % (x - '0'))
+            {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (!flag) ans.push_back(num);
+    }
+
+    return ans;
+}
