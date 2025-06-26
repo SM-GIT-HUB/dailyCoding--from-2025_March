@@ -1,0 +1,30 @@
+int minValue(string &s, int k) {
+        // code here
+        int mapp[26] = {0};
+        for (int x : s) mapp[x - 'a']++;
+        
+        priority_queue<int> pq;
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i]) pq.push(mapp[i]);
+        }
+        
+        while (k--)
+        {
+            int curr = pq.top();
+            pq.pop();
+            
+            if (--curr) pq.push(curr);
+        }
+        
+        int ans = 0;
+        
+        while (!pq.empty())
+        {
+            ans += pq.top() * pq.top();
+            pq.pop();
+        }
+        
+        return ans;
+    }
