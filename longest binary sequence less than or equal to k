@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int longestSubsequence(string s, int k) {
+        int count = 0;
+        long long num = 0;
+
+        for (int i = s.size() - 1; i >= 0; i--)
+        {
+            if (s[i] == '0') {
+                count++;
+            }
+            else if (count <= 62 && (1LL << count) <= k - num) {
+                num = num + (1LL << count++);
+            }
+        }
+
+        return count;
+    }
+};
