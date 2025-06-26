@@ -1,0 +1,34 @@
+class Solution {
+public:
+    void change(int index, int up, string &str)
+    {
+        for (int i = index; i < up; i++)
+        {
+            if (str[i] < 97) str[i] += 32;
+        }
+    }
+
+    string capitalizeTitle(string title) {
+        int idx = 0;
+        int n = title.size();
+
+        while (idx < n)
+        {
+            int i = idx;
+            while (i < n && title[i] != ' ') i++;
+
+            int len = i - idx;
+
+            if (len <= 2) change(idx, i, title);
+            else
+            {
+                title[idx] = (title[idx] < 97)? title[idx] : title[idx] - 32;
+                change(idx + 1, i, title);
+            }
+
+            idx = i + 1;
+        }
+
+        return title;
+    }
+};
