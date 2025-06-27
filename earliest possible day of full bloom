@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int earliestFullBloom(vector<int>& plantTime, vector<int>& growTime) {
+        vector<pair<int, int> > ps;
+        int n = plantTime.size();
+
+        for (int i = 0; i < n; i++) ps.push_back({plantTime[i], growTime[i]});
+        sort(ps.begin(), ps.end(), [](pair<int, int>& a, pair<int, int>& b) {
+            return (a.second > b.second);
+        });
+
+        int day = 0;
+        int ans = 0;
+
+        for (pair<int, int> &curr : ps)
+        {
+            day += curr.first;
+            ans = max(day + curr.second, ans);
+        }
+
+        return ans;
+    }
+};
