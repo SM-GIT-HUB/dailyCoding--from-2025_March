@@ -1,0 +1,87 @@
+class Solution {
+  public:
+    struct obj {
+        int u;
+        int v;
+        int dist;
+        
+        obj (int u, int v, int d): u(u), v(v), dist(d) {}
+    };
+    
+    class DSU {
+    public:
+        vector<int> rank;
+        vector<int> parent;
+        
+        DSU (int n)
+        {
+            rank.resize(n + 1, 1);
+            parent.resize(n + 1);
+            
+            for (int i = 0; i < n; i++) parent[i] = i;
+        }
+        
+        int findUltParent(int node)
+        {
+            if (parent[node] == node) return node;
+            return parent[node] = findUltParent(parent[node]);
+        }
+        
+        void unionByRank(int u, int v)
+        {
+            int uPar = findUltParent(u);
+            int vPar = findUltParent(v);
+            
+            if (rank[uPar] >= rank[vPar])
+            {
+                parent[vPar] = uPar;
+                if (rank[uPar] == rank[vPar]) rank[uPar]++;
+            }
+            else
+                parent[uPar] = vPar;
+        }
+        
+        int sameComp(int u, int v)
+        {
+            return (findUltParent(u) == findUltParent(v));
+        }
+    };
+  
+    int minCost(vector<vector<int>>& houses) {
+        // code here
+        vector<obj> hs;
+        int n = houses.size();
+        
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                hs.emplace_back(i, j, abs(houses[i][0] - houses[j][0]) + abs(houses[i][1] - houses[j][1]));
+            }
+        }
+        
+        sort(hs.begin(), hs.end(), [](obj &a, obj &b){
+            return (a.dist < b.dist);
+        });
+        
+        DSU ds(n);
+        int ans = 0;
+        
+        for (obj &curr : hs)
+        {
+            int u = curr.u;
+            int v = curr.v;
+            int dist = curr.dist;
+            
+            if (ds.sameComp(u, v)) continue;
+            
+            n--;
+            ans += dist;
+            ds.unionByRank(u, v);
+            
+            if (n == 1) break;
+        }
+        
+        return ans;
+    }
+};
