@@ -1,0 +1,45 @@
+#include <bits/stdc++.h> 
+
+bool crossRiver(vector < int > & safe) 
+{
+    // Write your code here.
+    unordered_set<int> isSafe;
+    unordered_set<string> sett;
+    for (int x : safe) isSafe.insert(x);
+
+    if (!isSafe.count(safe[0] + 1)) return 0;
+
+    queue<pair<int, int> > q;
+    q.push({safe[1], 1});
+
+    auto validate = [&](int spot, int jump) {
+        if (!isSafe.count(spot + jump)) return;
+        string key = to_string(spot + jump) + "|" + to_string(jump);
+
+        if (!sett.count(key))
+        {
+            sett.insert(key);
+            q.push({spot + jump, jump});
+        }
+    };
+    
+    while (!q.empty())
+    {
+        pair<int, int> curr = q.front();
+        q.pop();
+
+        int spot = curr.first;
+        int jump = curr.second;
+
+        if (spot == safe.back()) return 1;
+
+        if (jump - 1 > 0) {
+            validate(spot, jump - 1);
+        }
+
+        validate(spot, jump);
+        validate(spot, jump + 1);
+    }
+
+    return 0;
+}
