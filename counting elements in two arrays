@@ -1,0 +1,16 @@
+class Solution {
+  public:
+    vector<int> countLessEq(vector<int>& a, vector<int>& b) {
+        // code here
+        int maxi = 1e5 + 1;
+        int mapp[maxi] = {0};
+        
+        for (int x : b) mapp[x]++;
+        for (int i = 1; i <= maxi; i++) mapp[i] += mapp[i - 1];
+        
+        vector<int> ans;
+        
+        for (int x : a) ans.push_back(mapp[x]);
+        return ans;
+    }
+};
