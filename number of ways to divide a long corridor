@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int numberOfWays(string c) {
+        int seats = 0;
+        int mod = 1e9 + 7;
+
+        for (char x : c)
+        {
+            if (x == 'S') seats++;
+        }
+
+        if (seats & 1 || !seats) return 0;
+        if (seats == 2) return 1;
+
+        int prevEnd = -1;
+
+        seats = 0;
+        long long ans = 1;
+
+        for (int i = 0; i < c.size(); i++)
+        {
+            if (c[i] == 'S')
+            {
+                if (seats == 0) {
+                    if (prevEnd != -1) ans = (ans * (i - prevEnd)) % mod;
+                }
+                else
+                    prevEnd = i;
+
+                seats = !seats;
+            }
+        }
+
+        return ans;
+    }
+};
