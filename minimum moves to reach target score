@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minMoves(int target, int doubles) {
+        if (doubles == 0) return (target - 1);
+
+        int moves = 0;
+
+        while (doubles && target > 1)
+        {
+            if (!(target & 1))
+            {
+                doubles--;
+                target = target / 2;
+            }
+            else
+                target--;
+            
+            moves++;
+        }
+
+        return moves + (target - 1);
+    }
+};
