@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int check(int x, int y, int m, int n)
+    {
+        return (x >= 0 && x < m && y >= 0 && y < n);
+    }
+
+    vector<vector<int>> highestRankedKItems(vector<vector<int>>& grid, vector<int>& pricing, vector<int>& start, int k) {
+        queue<array<int, 4> > q;
+        vector<array<int, 4> > items;
+        
+        int m = grid.size();
+        int n = grid[0].size();
+
+        q.push({0, grid[start[0]][start[1]], start[0], start[1]});
+        grid[start[0]][start[1]] = 0;
+
+        int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+        while (!q.empty() && items.size() < k)
+        {
+            int size = q.size();
+
+            while (size--)
+            {
+                array<int, 4> curr = q.front();
+                q.pop();
+
+                if (curr[1] >= pricing[0] && curr[1] <= pricing[1]) {
+                    items.push_back({curr[0], curr[1], curr[2], curr[3]});
+                }
+
+                for (auto &d : dirs)
+                {
+                    int x = curr[2] + d[0];
+                    int y = curr[3] + d[1];
+
+                    if (check(x, y, m, n) && grid[x][y])
+                    {
+                        q.push({curr[0] + 1, grid[x][y], x, y});
+                        grid[x][y] = 0;
+                    }
+                }
+            }
+        }
+
+        vector<vector<int> > ans;
+        sort(items.begin(), items.end());
+
+        for (array<int, 4> &c : items)
+        {
+            ans.push_back({c[2], c[3]});
+            if (ans.size() == k) break;
+        }
+
+        return ans;
+    }
+};
