@@ -1,0 +1,19 @@
+vector<int> MinimumCoins(int n)
+{
+    // Write your code here
+    vector<int> ans;
+    int coins[] = {1, 2, 5, 10, 20, 50, 100, 500, 1000};
+    int idx = 8;
+
+    while (n)
+    {
+        while (coins[idx] > n) idx--;
+
+        int total = n / coins[idx];
+        for (int i = 0; i < total; i++) ans.push_back(coins[idx]);
+
+        n = n % coins[idx];
+    }
+
+    return ans;
+}
