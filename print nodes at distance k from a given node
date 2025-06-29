@@ -1,0 +1,84 @@
+/*************************************************************
+
+    Following is the Binary Tree node structure for reference:
+
+    class BinaryTreeNode{
+	public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+
+void dfs1(BinaryTreeNode<int>* root, unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>* >& parent)
+{
+    if (!root) return;
+
+    if (root->left)
+    {
+        parent[root->left] = root;
+        dfs1(root->left, parent);
+    }
+
+    if (root->right)
+    {
+        parent[root->right] = root;
+        dfs1(root->right, parent);
+    }
+}
+
+void dfs2(BinaryTreeNode<int>* root, int dis, int k, vector<BinaryTreeNode<int>*>& ans)
+{
+    if (!root) return;
+
+    if (dis == k)
+    {
+        ans.push_back(root);
+        return;
+    }
+
+    dfs2(root->left, dis + 1, k, ans);
+    dfs2(root->right, dis + 1, k, ans);
+}
+
+void dfs3(BinaryTreeNode<int>* root, int dis, int k, vector<BinaryTreeNode<int>*>& ans, unordered_set<BinaryTreeNode<int>*>& sett, unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>* >& parent)
+{
+    if (!root) return;
+    sett.insert(root);
+
+    if (dis == k)
+    {
+        ans.push_back(root);
+        return;
+    }
+
+    if (root->left && !sett.count(root->left)) dfs3(root->left, dis + 1, k, ans, sett, parent);
+    if (root->right && !sett.count(root->right)) dfs3(root->right, dis + 1, k, ans, sett, parent);
+    if (parent[root] && !sett.count(parent[root])) dfs3(parent[root], dis + 1, k, ans, sett, parent);
+}
+
+vector<BinaryTreeNode<int>*> printNodesAtDistanceK(BinaryTreeNode<int>* root, BinaryTreeNode<int>* target, int k) {
+    // Write your code here.
+    if (k == 0) return {target};
+
+    unordered_map<BinaryTreeNode<int>*, BinaryTreeNode<int>* > parent;
+    dfs1(root, parent);
+    
+    vector<BinaryTreeNode<int>*> ans;
+    
+    dfs2(target, 0, k, ans);
+    
+    unordered_set<BinaryTreeNode<int>*> sett;
+    sett.insert(target);
+
+    dfs3(parent[target], 1, k, ans, sett, parent);
+
+    return ans;
+}
