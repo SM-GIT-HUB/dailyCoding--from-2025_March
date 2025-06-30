@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> findLonely(vector<int>& nums) {
+        int mapp[1000002] = {0};
+        for (int x : nums) mapp[x]++;
+
+        vector<int> ans;
+
+        for (int x : nums)
+        {
+            if (mapp[x] == 1 && (!x || !mapp[x - 1]) && !mapp[x + 1]) ans.push_back(x);
+        }
+
+        return ans;
+    }
+};
