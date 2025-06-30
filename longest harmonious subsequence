@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findLHS(vector<int>& arr) {
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        
+        int ans = 0;
+        int start = 0, end = 0;
+
+        while (end < n)
+        {
+            int diff = arr[end] - arr[start];
+
+            if (diff == 1)
+            {
+                ans = max(end - start + 1, ans);
+                end++;
+            }
+            else if (diff < 1) end++;
+            else start++;
+        }
+
+        return ans;
+    }
+};
