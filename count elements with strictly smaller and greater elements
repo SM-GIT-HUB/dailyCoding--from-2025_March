@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int countElements(vector<int>& nums) {
+        int mini = 1e6;
+        int maxi = -mini;
+        int miniCount = 0, maxiCount = 0;
+
+        for (int x : nums)
+        {
+            if (x < mini)
+            {
+                mini = x;
+                miniCount = 1;
+            }
+            else if (x == mini) {
+                miniCount++;
+            }
+
+            if (x > maxi)
+            {
+                maxi = x;
+                maxiCount = 1;
+            }
+            else if (x == maxi) {
+                maxiCount++;
+            }
+        }
+
+        if (mini == maxi) return 0;
+        return (nums.size() - miniCount - maxiCount);
+    }
+};
