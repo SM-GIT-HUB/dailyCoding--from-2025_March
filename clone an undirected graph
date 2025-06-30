@@ -1,0 +1,52 @@
+// User function Template for C++
+
+// struct Node {
+//     int val;
+//     vector<Node*> neighbors;
+//     Node() {
+//         val = 0;
+//         neighbors = vector<Node*>();
+//     }
+//     Node(int _val) {
+//         val = _val;
+//         neighbors = vector<Node*>();
+//     }
+//     Node(int _val, vector<Node*> _neighbors) {
+//         val = _val;
+//         neighbors = _neighbors;
+//     }
+// };
+
+class Solution {
+  public:
+    Node* gClone(Node* root, unordered_set<int>& visited, unordered_map<int, Node*>& mapp)
+    {
+        Node* curr = new Node(root->val);
+        visited.insert(root->val);
+        mapp[root->val] = curr;
+        
+        for (Node* adjNode : root->neighbors)
+        {
+            Node* insertNode = nullptr;
+            
+            if (!visited.count(adjNode->val)) {
+                insertNode = gClone(adjNode, visited, mapp);
+            }
+            else
+                insertNode = mapp[adjNode->val];
+            
+            curr->neighbors.push_back(insertNode);
+        }
+        
+        return curr;
+    }
+  
+    Node* cloneGraph(Node* node) {
+        // code here
+        unordered_set<int> visited;
+        unordered_map<int, Node*> mapp;
+        
+        Node* root = gClone(node, visited, mapp);
+        return root;
+    }
+};
