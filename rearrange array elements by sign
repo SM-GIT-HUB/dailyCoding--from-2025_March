@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int i = 0, j = 1;
+        vector<int> ans(nums.size());
+
+        for (int idx = 0; idx < nums.size(); idx++)
+        {
+            if (nums[idx] < 0)
+            {
+                ans[j] = nums[idx];
+                j += 2;
+            }
+            else
+            {
+                ans[i] = nums[idx];
+                i += 2;
+            }
+        }
+
+        return ans;
+    }
+};
