@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    int getDist(vector<int>& e, vector<vector<array<int, 2> > >& adj)
+    {
+        int u = e[0];
+        int v = e[1];
+        int w = e[2];
+        
+        vector<int> dist(adj.size(), 1e9);
+        dist[u] = 0;
+        
+        priority_queue<array<int, 2>, vector<array<int, 2> >, greater<array<int, 2> > > pq;
+        
+        pq.push({0, u});
+        
+        while (!pq.empty())
+        {
+            array<int, 2> curr = pq.top();
+            pq.pop();
+            
+            int node = curr[1];
+            int wt = curr[0];
+            
+            if (wt > dist[node]) continue;
+            
+            for (auto &vec : adj[node])
+            {
+                int adjNode = vec[0];
+                int w = vec[1];
+                
+                if ((node == u && adjNode == v) || (node == v && adjNode == u)) continue;
+                
+                if (wt + w < dist[adjNode])
+                {
+                    dist[adjNode] = wt + w;
+                    pq.push({dist[adjNode], adjNode});
+                }
+            }
+        }
+        
+        return dist[v] + w;
+    }
+  
+    int findMinCycle(int n, vector<vector<int>>& edges) {
+        // code here
+        vector<vector<array<int, 2> > > adj(n);
+        
+        for (auto &e : edges)
+        {
+            adj[e[0]].push_back({e[1], e[2]});
+            adj[e[1]].push_back({e[0], e[2]});
+        }
+        
+        int ans = INT_MAX;
+        
+        for (auto &e : edges)
+        {
+            ans = min(ans, getDist(e, adj));
+        }
+        
+        return ans;
+    }
+};
