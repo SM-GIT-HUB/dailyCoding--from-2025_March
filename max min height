@@ -1,0 +1,67 @@
+class Solution {
+  public:
+    int isPos(int mid, int k, int w, int n, vector<int>& arr, vector<int>& diff)
+    {
+        int add = 0;
+        int flag = 0;
+        
+        for (int i = 0; i < n; i++)
+        {
+            add += diff[i];
+            int curr = arr[i] + add;
+            
+            if (i - 1 >= 0) diff[i - 1] = 0;
+            
+            if (!flag && curr < mid)
+            {
+                int req = mid - curr;
+                
+                if (k < req)
+                {
+                    flag = 1;
+                    continue;
+                }
+                
+                diff[i] += req;
+                if (i + w < n) diff[i + w] -= req;
+                
+                add += req;
+                k = k - req;
+            }
+        }
+        
+        diff[n - 1] = 0;
+        
+        return !flag;
+    }
+  
+    int maxMinHeight(vector<int> &arr, int k, int w) {
+        // code here
+        int start = 1e9, end = 0;
+        
+        for (int x : arr)
+        {
+            start = min(start, x);
+            end = max(x, end);
+        }
+        
+        end += k;
+        int ans = -1;
+        vector<int> diff(arr.size(), 0);
+        
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            if (isPos(mid, k, w, arr.size(), arr, diff))
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        
+        return ans;
+    }
+};
