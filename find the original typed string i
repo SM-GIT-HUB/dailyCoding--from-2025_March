@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int possibleStringCount(string word) {
+        int idx = 0;
+        int n = word.size();
+
+        int ans = 0;
+
+        while (idx < n)
+        {
+            int i = idx;
+            while (i < n && word[i] == word[idx]) i++;
+
+            if (i - idx > 1) ans += (i - idx - 1);
+            idx = i;
+        }
+
+        return (ans + 1);
+    }
+};
