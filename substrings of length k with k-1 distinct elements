@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    int substrCount(string &s, int k) {
+        // code here
+        if (k > s.size()) return 0;
+        
+        int m = k - 1;
+        int n = s.size();
+        
+        int distinct = 0;
+        int mapp[26] = {0};
+        
+        int ans = 0;
+        
+        for (int i = 0; i < k; i++)
+        {
+            if (++mapp[s[i] - 'a'] == 1) distinct++;
+        }
+        
+        if (distinct == m) ans++;
+        
+        for (int i = 1; i + k - 1 < n; i++)
+        {
+            if (--mapp[s[i - 1] - 'a'] == 0) distinct--;
+            if (++mapp[s[i + k - 1] - 'a'] == 1) distinct++;
+            
+            if (distinct == m) ans++;
+        }
+        
+        return ans;
+    }
+};
