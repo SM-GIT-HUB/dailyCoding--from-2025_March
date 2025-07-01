@@ -1,0 +1,48 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+    class Node{
+    public:
+        int data;
+        Node *next;
+        Node(int data){
+            
+            this->data = data;
+            this->next = NULL;
+        }
+    };
+
+*****************************************************************/
+
+Node *getListAfterAddingNodes(Node *head, int k){
+    //	Write your code here.
+    if (!head) return head;
+
+    int sum = 0;
+    int m = k;
+    Node* prev = nullptr;
+    Node* curr = head;
+
+    while (curr)
+    {
+        if (m == 0)
+        {
+            Node* newNode = new Node(sum);
+            prev->next = newNode;
+            newNode->next = curr;
+            m = k;
+            sum = 0;
+        }
+
+        sum += curr->data;
+        prev = curr;
+        curr = curr->next;
+        m--;
+    }
+
+    prev->next = new Node(sum);
+
+    return head;
+}
