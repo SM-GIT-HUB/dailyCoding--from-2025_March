@@ -1,0 +1,22 @@
+class Solution {
+  public:
+    vector<int> singleNum(vector<int>& arr) {
+        // Code here.
+        int xorr = 0;
+        for (int x : arr) xorr = xorr ^ x;
+        
+        int setBit = xorr & (-xorr);
+        
+        int one = 0;
+        
+        for (int x : arr)
+        {
+            if (x & setBit) one = one ^ x;
+        }
+        
+        int two = xorr ^ one;
+        
+        if (one < two) return {one, two};
+        return {two, one};
+    }
+};
