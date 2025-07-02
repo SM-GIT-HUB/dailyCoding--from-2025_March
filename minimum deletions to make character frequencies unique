@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+
+int minDeletions(string str) {
+    // Write your code here.
+    int mapp[26] = {0};
+    for (char x : str) mapp[x - 'a']++;
+
+    unordered_set<int> sett;
+    int ans = 0;
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (sett.count(mapp[i]))
+        {
+            int count = 0;
+
+            while (mapp[i] > 0 && sett.count(mapp[i]))
+            {
+                mapp[i]--;
+                count++;
+            }
+
+            ans += count;
+            if (mapp[i]) sett.insert(mapp[i]);
+        }
+        else
+            sett.insert(mapp[i]);
+    }
+
+    return ans;
+}
