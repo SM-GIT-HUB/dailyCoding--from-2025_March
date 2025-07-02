@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    int totalElements(vector<int> &arr) {
+        // code here
+        int ans = 0;
+        int n = arr.size();
+        
+        int distinct = 0;
+        int start = 0, end = 0;
+        unordered_map<int, int> mapp;
+        
+        while (end < n)
+        {
+            if (++mapp[arr[end]] == 1) distinct++;
+            
+            while (distinct > 2)
+            {
+                if (--mapp[arr[start++]] == 0) distinct--;
+            }
+            
+            ans = max(end - start + 1, ans);
+            end++;
+        }
+        
+        return ans;
+    }
+};
