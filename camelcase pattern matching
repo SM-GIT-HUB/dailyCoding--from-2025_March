@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    vector<string> camelCase(vector<string> &arr, string &pat) {
+        // code here
+        int n = pat.size();
+        vector<string> ans;
+        
+        for (string &w : arr)
+        {
+            int idx = 0;
+            int flag = 1;
+            
+            for (char x : w)
+            {
+                if (x >= 'A' && x <= 'Z')
+                {
+                    if (idx < n && pat[idx] != x)
+                    {
+                        flag = 0;
+                        break;
+                    }
+                    else if (idx == n) {
+                        break;
+                    }
+                    
+                    idx++;
+                }
+            }
+            
+            if (flag && idx == n) ans.push_back(w);
+        }
+        
+        return ans;
+    }
+};
