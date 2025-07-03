@@ -1,0 +1,23 @@
+string findLargest(vector<int> &arr) {
+        // code here
+        auto comp = [](int x, int y) {
+            string xs = to_string(x);
+            string ys = to_string(y);
+            
+            return (xs + ys) > (ys + xs);
+        };
+        
+        sort(arr.begin(), arr.end(), comp);
+        
+        if (arr[0] == 0) return "0";
+        
+        string ans = "";
+        
+        for (int x : arr)
+        {
+            string curr = to_string(x);
+            for (char x : curr) ans.push_back(x);
+        }
+        
+        return ans;
+    }
