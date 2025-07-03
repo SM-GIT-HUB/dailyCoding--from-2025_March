@@ -1,0 +1,18 @@
+int minRepeats(string& s1, string& s2) {
+        // code here
+        string curr = s1;
+        int count = 1;
+        
+        while (curr.size() < s2.size())
+        {
+            curr += s1;
+            count++;
+        }
+        
+        if (curr.find(s2) != string::npos) return count;
+        
+        curr += s1;
+        
+        if (curr.find(s2) != string::npos) return (count + 1);
+        return -1;
+    }
