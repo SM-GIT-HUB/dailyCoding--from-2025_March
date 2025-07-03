@@ -1,0 +1,54 @@
+class Solution {
+  public:
+    int prec(char x)
+    {
+    	if (x == '^') return 5;
+    	if (x == '*' || x == '/') return 1;
+    	if (x == '+' || x == '-') return 0;
+    	return -1;
+    }
+  
+    string infixToPostfix(string& s) {
+        // code here
+        string stack;
+    	string ans = "";
+    	
+    	string curr = "^*/+-()";
+    
+    	for (char x : s)
+    	{
+    		if (curr.find(x) == string::npos) {
+    			ans.push_back(x);
+    		}
+    		else if (x == '(') {
+    			stack.push_back('(');
+    		}
+    		else if (x == ')')
+    		{
+    			while (stack.back() != '(')
+    			{
+    				ans.push_back(stack.back());
+    				stack.pop_back();
+    			}
+    			stack.pop_back();
+    		}
+    		else
+    		{
+    			while (!stack.empty() && prec(x) <= prec(stack.back()))
+    			{
+    				ans.push_back(stack.back());
+    				stack.pop_back();
+    			}
+    			stack.push_back(x);
+    		}
+    	}
+    
+    	while (!stack.empty())
+    	{
+    		ans.push_back(stack.back());
+    		stack.pop_back();
+    	}
+    
+    	return ans;
+    }
+};
