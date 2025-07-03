@@ -1,0 +1,49 @@
+class Solution {
+  public:
+    int isPos(int day, int m, int k, vector<int>& arr)
+    {
+        int count = 0;
+        int bouqs = 0;
+        
+        for (int x : arr)
+        {
+            if (x <= day)
+            {
+                count++;
+                
+                if (count == k)
+                {
+                    bouqs++;
+                    count = 0;
+                }
+            }
+            else
+                count = 0;
+                
+            if (bouqs == m) break;
+        }
+        
+        return (bouqs >= m);
+    }
+  
+    int minDaysBloom(int m, int k, vector<int> &arr) {
+        // Code here
+        int ans = -1;
+        int start = 1, end = 1e9;
+        
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            if (isPos(mid, m, k, arr))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return ans;
+    }
+};
