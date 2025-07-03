@@ -1,0 +1,29 @@
+#include <bits/stdc++.h> 
+
+int track(int idx, long long num, int len, int maxi)
+{
+    if (idx == len) return (num <= maxi);
+
+    int ans = 0;
+
+    for (int i = 1; i <= 5; i++)
+    {
+        ans += track(idx + 1, num * 10 + i, len, maxi);
+    }
+
+    return ans;
+}
+
+int countSpecialNumbers(int n)
+{ 
+    // Write your code here
+    int ans = 0;
+    int len = log10(n) + 1;
+
+    for (int i = 1; i <= len; i++)
+    {
+        ans += track(0, 0, i, n);
+    }
+
+    return ans;
+}
