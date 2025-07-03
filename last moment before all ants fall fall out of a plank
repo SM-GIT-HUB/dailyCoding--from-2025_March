@@ -1,0 +1,12 @@
+class Solution {
+  public:
+    int getLastMoment(int n, vector<int>& left, vector<int>& right) {
+        // code here
+        int ans = 0;
+        
+        for (int x : left) ans = max(x, ans);
+        for (int x : right) ans = max(n - x, ans);
+        
+        return ans;
+    }
+};
