@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+int minimumDistance(vector<string> &arr, string book1, string book2) {
+  	// Write your code here.
+	int i = -1;
+	int j = -1;
+
+	int ans = INT_MAX;
+
+	for (int idx = 0; idx < arr.size(); idx++)
+	{
+		if (arr[idx] == book1)
+		{
+			i = idx;
+
+			if (j != -1)
+			{
+				ans = min(ans, idx - j);
+				j = -1;
+			}
+		}
+
+		if (arr[idx] == book2)
+		{
+			j = idx;
+
+			if (i != -1)
+			{
+				ans = min(ans, idx - i);
+				i = -1;
+			}
+		}
+	}
+
+	return ans;
+}
