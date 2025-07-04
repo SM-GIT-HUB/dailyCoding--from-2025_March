@@ -1,0 +1,21 @@
+class Solution {
+public:
+    char kthCharacter(long long k, vector<int>& ops) {
+        int shift = 0;        
+        int n = ops.size();
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            if (k == 0) return 'a';
+            long long len = (i < 62)? (1LL << i) : k;
+
+            if (k > len)
+            {
+                k = k - len;
+                if (ops[i] == 1) shift++;
+            }
+        }
+
+        return (shift % 26 + 'a');
+    }
+};
