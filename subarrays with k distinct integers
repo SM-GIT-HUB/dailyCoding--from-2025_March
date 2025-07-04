@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    int getCount(vector<int>& arr, int k)
+    {
+        int n = arr.size();
+        unordered_map<int, int> mapp;
+        
+        int count = 0;
+        int distinct = 0;
+        int start = 0, end = 0;
+        
+        while (end < n)
+        {
+            if (++mapp[arr[end]] == 1) distinct++;
+            
+            while (distinct > k)
+            {
+                if (--mapp[arr[start++]] == 0) distinct--;
+            }
+            
+            count += end - start + 1;
+            end++;
+        }
+        
+        return count;
+    }
+  
+    int exactlyK(vector<int> &arr, int k) {
+        // code here
+        return getCount(arr, k) - getCount(arr, k - 1);
+    }
+};
