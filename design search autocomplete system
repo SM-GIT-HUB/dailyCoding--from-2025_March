@@ -1,0 +1,111 @@
+#include <bits/stdc++.h> 
+class AutocompleteSystem {
+public:
+    struct Node {
+        Node* children[26];
+        int count;
+        int isTerminal;
+
+        Node()
+        {
+            count = 0;
+            isTerminal = 0;
+            for (int i = 0; i < 26; i++) children[i] = nullptr;
+        }
+    };
+
+    class Trie {
+    public:
+        Node* root;
+
+        Trie()
+        {
+            root = new Node();
+        }
+
+        void insert(string word, int time)
+        {
+            Node* curr = root;
+
+            for (char x : word)
+            {
+                if (x == '#') break;
+                if (!curr->children[x - 'a']) curr->children[x - 'a'] = new Node();
+                curr = curr->children[x - 'a'];
+            }
+
+            curr->isTerminal = 1;
+            curr->count += time;
+        }
+
+        void searchInto(Node* curr, string &word, vector<pair<string, int> >& ss)
+        {
+            if (curr->isTerminal) {
+                ss.push_back({word, curr->count});
+            }
+
+            for (int i = 0; i < 26; i++)
+            {
+                if (curr->children[i])
+                {
+                    word.push_back(i + 'a');
+                    searchInto(curr->children[i], word, ss);
+                    word.pop_back();
+                }
+            }
+        }
+
+        void search(string &word, vector<pair<string, int> >& ss)
+        {
+            Node* curr = root;
+
+            for (char x : word)
+            {
+                if (!curr->children[x - 'a']) return;
+                curr = curr->children[x - 'a'];
+            }
+
+            searchInto(curr, word, ss);
+        }
+    };
+
+    string buffer = "";
+    Trie* tr;
+
+    AutocompleteSystem(vector<string> &sentences, vector<int> &times) {
+        // Write your code here.
+        tr = new Trie();
+
+        for (int i = 0; i < sentences.size(); i++)
+        {
+            tr->insert(sentences[i], times[i]);
+        }
+    }
+
+    vector<string> input(char c) {
+        // Write your code here.
+        buffer.push_back(c);
+
+        if (c == '#')
+        {
+            tr->insert(buffer, 1);
+            buffer = "";
+            return {};
+        }
+
+        vector<pair<string, int> > ss;
+        tr->search(buffer, ss);
+
+        sort(ss.begin(), ss.end(), [](auto &a, auto &b) {
+            if (a.second == b.second) return (a.first < b.first);
+            return (a.second > b.second);
+        });
+
+        vector<string> ans;
+        int len = min(3, (int)ss.size());
+
+        for (int i = 0; i < len; i++) ans.push_back(ss[i].first);
+
+        return ans;
+    }
+};
