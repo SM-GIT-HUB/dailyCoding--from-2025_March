@@ -1,0 +1,46 @@
+
+class Solution {
+  public:
+    vector<vector<int>> spiralFill(int m, int n, vector<int> &arr) {
+        // code here
+        int idx = 0;
+        int size = arr.size();
+        vector<vector<int> > ans(m, vector<int>(n));
+        
+        int up = 0, right = n - 1;
+        int down = m - 1, left = 0;
+        
+        while (idx < size)
+        {
+            for (int i = left; idx < size && i <= right; i++)
+            {
+                ans[up][i] = arr[idx++];
+            }
+            
+            up++;
+            
+            for (int i = up; idx < size && i <= down; i++)
+            {
+                ans[i][right] = arr[idx++];
+            }
+            
+            right--;
+            
+            for (int i = right; idx < size && i >= left; i--)
+            {
+                ans[down][i] = arr[idx++];
+            }
+            
+            down--;
+            
+            for (int i = down; idx < size && i >= up; i--)
+            {
+                ans[i][left] = arr[idx++];
+            }
+            
+            left++;
+        }
+        
+        return ans;
+    }
+};
