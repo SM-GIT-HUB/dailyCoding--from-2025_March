@@ -1,0 +1,36 @@
+int balanceSums(vector<vector<int>>& mat) {
+        // code here
+        int n = mat.size();
+        
+        int rows[n] = {0};
+        int cols[n] = {0};
+        
+        int maxi = 0;
+        
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                rows[i] += mat[i][j];
+                cols[j] += mat[i][j];
+                
+                maxi = max(maxi, max(rows[i], cols[j]));
+            }
+        }
+        
+        int ans = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                int increase = min(maxi - rows[i], maxi - cols[j]);
+                ans += increase;
+                
+                rows[i] += increase;
+                cols[j] += increase;
+            }
+        }
+        
+        return ans;
+    }
