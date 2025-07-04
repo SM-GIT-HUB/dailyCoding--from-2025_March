@@ -1,0 +1,31 @@
+class Solution {
+  public:
+    int minRemovals(vector<int> &arr, int k) {
+        // code here
+        int sum = -k;
+        for (int x : arr) sum += x;
+        
+        if (sum < 0) return -1;
+        if (sum == 0) return arr.size();
+        
+        int ans = 0;
+        int start = 0, end = 0;
+        
+        int curr = 0;
+        
+        while (end < arr.size())
+        {
+            curr += arr[end];
+            
+            while (curr > sum)
+            {
+                curr -= arr[start++];
+            }
+            
+            if (curr == sum) ans = max(end - start + 1, ans);
+            end++;
+        }
+        
+        return (ans)? (arr.size() - ans) : -1;
+    }
+};
