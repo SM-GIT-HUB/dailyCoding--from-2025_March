@@ -1,0 +1,31 @@
+
+class Solution {
+  public:
+    vector<vector<string>> groupShiftedString(vector<string> &arr) {
+        // Your code here
+        unordered_map<string, vector<int> > mapp;
+        
+        for (int idx = 0; idx < arr.size(); idx++)
+        {
+            string temp = arr[idx];
+            int shift = 'z' - temp[0];
+            
+            for (int i = 0; i < temp.size(); i++)
+            {
+                temp[i] = (temp[i] - 'a' + shift) % 26 + 'a';
+            }
+            
+            mapp[temp].push_back(idx);
+        }
+        
+        vector<vector<string> > ans;
+        
+        for (auto &it : mapp)
+        {
+            ans.push_back({});
+            for (int idx : it.second) ans.back().push_back(arr[idx]);
+        }
+        
+        return ans;
+    }
+};
