@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    int countSum(vector<int>& arr, int target) {
+        // code here
+        int ans = 0;
+        int n = arr.size();
+        if (n < 4) return ans;
+        
+        unordered_map<int, int> mapp;
+        
+        mapp[arr[0] + arr[1]]++;
+        
+        for (int i = 2; i < n - 1; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                ans += mapp[target - arr[i] - arr[j]];
+            }
+            
+            for (int j = 0; j < i; j++)
+            {
+                mapp[arr[j] + arr[i]]++;
+            }
+        }
+        
+        return ans;
+    }
+};
