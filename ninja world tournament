@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+int calculateScore(vector<string> &mR, int n)
+{
+    // Write your code here.
+    int last = -1;
+    vector<int> scores;
+
+    for (auto &m : mR)
+    {
+        if (m == "+")
+        {
+            scores.push_back(scores[last] + scores[last - 1]);
+            last++;
+        }
+        else if (m == "C")
+        {
+            scores.pop_back();
+            last--;
+        }
+        else if (m == "D")
+        {
+            scores.push_back(scores[last] * 2);
+            last++;
+        }
+        else
+        {
+            scores.push_back(stoi(m));
+            last++;
+        }
+    }
+
+    int ans = 0;
+    for (int x : scores) ans += x;
+
+    return ans;
+}
