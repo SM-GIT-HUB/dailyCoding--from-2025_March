@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int findLucky(vector<int>& arr) {
+        int mapp[501] = {0};
+        for (int x : arr) mapp[x]++;
+
+        int ans = -1;
+
+        for (int x : arr)
+        {
+            if (mapp[x] == x) {
+                if (x > ans) ans = x;
+            }
+        }
+
+        return ans;
+    }
+};
