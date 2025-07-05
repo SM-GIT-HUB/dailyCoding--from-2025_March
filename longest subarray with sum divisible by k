@@ -1,0 +1,30 @@
+// User function template for C++
+class Solution {
+  public:
+    int longestSubarrayDivK(vector<int>& arr, int k) {
+        // Complete the function
+        int ans = 0;
+        unordered_map<long long, int> mapp;
+        
+        long long sum = 0;
+        
+        for (int i = 0; i < arr.size(); i++)
+        {
+            sum += arr[i];
+            
+            if (sum % k == 0) {
+                ans = i + 1;
+            }
+            
+            int mod = (sum % k + k) % k;
+            
+            if (mapp.count(mod)) {
+                ans = max(i - mapp[mod], ans);
+            }
+            else
+                mapp[mod] = i;
+        }
+        
+        return ans;
+    }
+};
