@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int findFinalValue(vector<int>& nums, int original) {
+        bitset<1001> mapp;
+
+        for (int x : nums)
+        {
+            if (x == original) original = original << 1;
+            else mapp[x] = 1;
+        }
+
+        while (original < 1001 && mapp[original])
+        {
+            original = original << 1;
+        }
+
+        return original;
+    }
+};
