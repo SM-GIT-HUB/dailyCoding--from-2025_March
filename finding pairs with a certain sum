@@ -1,0 +1,37 @@
+class FindSumPairs {
+public:
+    vector<int> &arr2;
+    unordered_map<int, int> mapp1;
+    unordered_map<int, int> mapp2;
+
+    FindSumPairs(vector<int>& nums1, vector<int>& nums2): arr2(nums2) {
+        for (int x : nums1) mapp1[x]++;
+        for (int x : nums2) mapp2[x]++;
+    }
+    
+    void add(int index, int val) {
+        if (--mapp2[arr2[index]] == 0) mapp2.erase(arr2[index]);
+        
+        arr2[index] += val;
+        mapp2[arr2[index]]++;
+    }
+    
+    int count(int tot) {
+        int count = 0;
+
+        for (auto &it : mapp1)
+        {
+            int req = tot - it.first;
+            if (mapp2.count(req)) count += it.second * mapp2[req];
+        }
+
+        return count;
+    }
+};
+
+/**
+ * Your FindSumPairs object will be instantiated and called as such:
+ * FindSumPairs* obj = new FindSumPairs(nums1, nums2);
+ * obj->add(index,val);
+ * int param_2 = obj->count(tot);
+ */
