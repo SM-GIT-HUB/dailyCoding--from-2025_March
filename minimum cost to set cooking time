@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int getTime(char curr, int move, int push, int mins, int secs)
+    {
+        int cost = 0;
+        string smin = to_string(mins);
+        string ssec = to_string(secs);
+
+        if (smin != "0")
+        {
+            for (char x : smin)
+            {
+                if (x == curr) {
+                    cost += push;
+                }
+                else
+                {
+                    cost += move + push;
+                    curr = x;
+                }
+            }
+        }
+        
+        if (smin != "0")
+        {
+            if (ssec.size() < 2) {
+                ssec = "0" + ssec;
+            }
+        }
+        
+        for (char x : ssec)
+        {
+            if (x == curr) {
+                cost += push;
+            }
+            else
+            {
+                cost += move + push;
+                curr = x;
+            }
+        }
+
+        return cost;
+    }
+
+    int minCostSetTime(int startAt, int move, int push, int target) {
+        int mins = target / 60;
+        int secs = target % 60;
+
+        int ans = INT_MAX;
+
+        if (mins < 100) ans = getTime(startAt + '0', move, push, mins, secs);
+
+        if (mins && secs + 60 < 100) {
+            ans = min(ans, getTime(startAt + '0', move, push, mins - 1, secs + 60));
+        }
+
+        return ans;
+    }
+};
