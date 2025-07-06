@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int minimumSum(int num) {
+        string curr = to_string(num);
+        sort(curr.begin(), curr.end());
+
+        int ans = stoi(string(1, curr[0]) + string(1, curr[2])) + stoi(string(1, curr[1]) + string(1, curr[3]));
+        return ans;
+    }
+};
