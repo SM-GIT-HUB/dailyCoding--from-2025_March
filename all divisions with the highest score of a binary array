@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> maxScoreIndices(vector<int>& arr) {
+        int score = 0;
+        int n = arr.size();
+
+        for (int x : arr)
+        {
+            if (x == 1) score++;
+        }
+
+        int maxi = score;
+        vector<int> ans = {0};
+
+        for (int i = 1; i < n; i++)
+        {
+            if (arr[i - 1] == 0) score++;
+            else score--;
+
+            if (maxi == score) {
+                ans.push_back(i);
+            }
+            else if (score > maxi)
+            {
+                ans = {i};
+                maxi = score;
+            }
+        }
+
+        if (arr.back() == 0) score++;
+        else score--;
+
+        if (score == maxi) ans.push_back(n);
+        else if (score > maxi) ans = {n};
+
+        return ans;
+    }
+};
