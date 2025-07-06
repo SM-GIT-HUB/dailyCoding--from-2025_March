@@ -1,0 +1,103 @@
+#include <bits/stdc++.h> 
+/********************************************************
+
+    Following is the class structure of the Node class:
+    
+    class Node
+    {
+    	public:
+    	    int data;
+    	    Node *next;
+    	    Node(int data)
+    	    {
+    	        this->data = data;
+    	        this->next = NULL;
+    	    }
+    };
+
+********************************************************/
+
+vector< Node *> interweaveNodes(Node *head1, Node *head2) {
+	// Write your code here.t
+	if (!head1 && !head2) return {head1, head2};
+
+	Node* root1 = new Node(-1);
+	Node* temp = root1;
+	
+	Node* temp1 = head1;
+	Node* temp2 = head2->next;
+
+	while (temp1 && temp2)
+	{
+		Node* nextNode = new Node(temp1->data);
+		Node* newNode = new Node(temp2->data);
+		temp->next = nextNode;
+		nextNode->next = newNode;
+		temp = newNode;
+
+		temp1 = temp1->next;
+		if (temp1) temp1 = temp1->next;
+
+		temp2 = temp2->next;
+		if (temp2) temp2 = temp2->next;
+	}
+
+	while (temp1)
+	{
+		Node* nextNode = new Node(temp1->data);
+		temp->next = nextNode;
+		temp = nextNode;
+		temp1 = temp1->next;
+		if (temp1) temp1 = temp1->next;
+	}
+
+	while (temp2)
+	{
+		Node* nextNode = new Node(temp2->data);
+		temp->next = nextNode;
+		temp = nextNode;
+		temp2 = temp2->next;
+		if (temp2) temp2 = temp2->next;
+	}
+
+	Node* root2 = new Node(-1);
+	temp = root2;
+
+	temp1 = head1->next;
+	temp2 = head2;
+
+	while (temp1 && temp2)
+	{
+		Node* nextNode = new Node(temp2->data);
+		Node* newNode = new Node(temp1->data);
+		temp->next = nextNode;
+		nextNode->next = newNode;
+		temp = newNode;
+
+		temp1 = temp1->next;
+		if (temp1) temp1 = temp1->next;
+
+		temp2 = temp2->next;
+		if (temp2) temp2 = temp2->next;
+	}
+
+	while (temp1)
+	{
+		Node* nextNode = new Node(temp1->data);
+		temp->next = nextNode;
+		temp = nextNode;
+		temp1 = temp1->next;
+		if (temp1) temp1 = temp1->next;
+	}
+
+	while (temp2)
+	{
+		Node* nextNode = new Node(temp2->data);
+		temp->next = nextNode;
+		temp = nextNode;
+		temp2 = temp2->next;
+		if (temp2) temp2 = temp2->next;
+	}
+
+	return {root1->next, root2->next};
+}
