@@ -1,0 +1,87 @@
+class Solution {
+public:
+    class DSU {
+    public:
+        vector<int> parent;
+        vector<int> size;
+
+        DSU(int n)
+        {
+            size.resize(n + 1, 1);
+            parent.resize(n + 1);
+            for (int i = 0; i <= n; i++) parent[i] = i;
+        }
+
+        void unionBySize(int u, int v)
+        {
+            int uPar = ultParent(u);
+            int vPar = ultParent(v);
+
+            if (uPar == vPar) return;
+
+            if (size[uPar] >= size[vPar])
+            {
+                parent[vPar] = uPar;
+                size[uPar] += size[vPar];
+            }
+            else
+            {
+                parent[uPar] = vPar;
+                size[vPar] += size[uPar];
+            }
+        }
+
+        int ultParent(int u)
+        {
+            if (parent[u] == u) return u;
+            return parent[u] = ultParent(parent[u]);
+        }
+    };
+
+    vector<int> groupStrings(vector<string>& words) {
+        int n = words.size();
+        
+        DSU ds(n);
+        unordered_map<int, int> mapp;
+
+        for (int i = 0; i < n; i++)
+        {
+            int mask = 0;
+            for (char x : words[i]) mask = mask | (1 << (x - 'a'));
+
+            if (mapp.count(mask)) {
+                ds.unionBySize(i, mapp[mask]);
+            }
+            else
+                mapp[mask] = i;
+
+            for (int k = 0; k < 26; k++)
+            {
+                if (mask & (1 << k))
+                {
+                    int newMask = mask ^ (1 << k);
+
+                    if (mapp.count(newMask)) {
+                        ds.unionBySize(i, mapp[newMask]);
+                    }
+                    else
+                        mapp[newMask] = i;
+                }
+            }
+        }
+
+        int count = 0;
+        int maxi = 0;
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (ds.ultParent(i) == i)
+            {
+                count++;
+                if (ds.size[i] > maxi) maxi = ds.size[i];
+            }
+        }
+
+        return {count, maxi};
+    }
+};
