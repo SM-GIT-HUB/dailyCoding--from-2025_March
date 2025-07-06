@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+        vector<int> arr(nums.size());
+
+        int i = 0, j = 0;
+        for (int &x : nums)
+        {
+            if (x < pivot) i++;
+            else if (x == pivot) j++;
+        }
+
+        int k = i + j;
+        j = i;
+        i = 0;
+
+        for (int &x : nums)
+        {
+            if (x < pivot) arr[i++] = x;
+            else if (x == pivot) arr[j++] = x;
+            else arr[k++] = x;
+        }
+
+        return arr;
+    }
+};
