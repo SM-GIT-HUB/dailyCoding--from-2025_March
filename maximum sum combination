@@ -1,0 +1,54 @@
+class Solution {
+  public:
+    struct obj {
+        int x;
+        int y;
+        int data;
+    };
+  
+    vector<int> topKSumPairs(vector<int>& a, vector<int>& b, int k) {
+        // code here
+        sort(a.rbegin(), a.rend());
+        sort(b.rbegin(), b.rend());
+        
+        vector<int> ans;
+        unordered_set<string> sett;
+        
+        auto comp = [](obj &a, obj &b) {
+            return (a.data < b.data);
+        };
+        
+        priority_queue<obj, vector<obj>, decltype(comp)> pq(comp);
+        
+        pq.push({0, 0, a[0] + b[0]});
+        
+        while (ans.size() != k)
+        {
+            obj curr = pq.top();
+            pq.pop();
+            
+            int x = curr.x;
+            int y = curr.y;
+            
+            ans.push_back(curr.data);
+            if (ans.size() == k) break;
+            
+            string key1 = to_string(x + 1) + "|" + to_string(y);
+            string key2 = to_string(x) + "|" + to_string(y + 1);
+
+            if (!sett.count(key1) && (x + 1) < a.size())
+            {
+                pq.push({x + 1, y, a[x + 1] + b[y]});
+                sett.insert(key1);
+            }
+            
+            if (!sett.count(key2) && (y + 1) < b.size())
+            {
+                pq.push({x, y + 1, a[x] + b[y + 1]});
+                sett.insert(key2);
+            }
+        }
+        
+        return ans;
+    }
+};
