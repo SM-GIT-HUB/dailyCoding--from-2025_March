@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int minimumTime(string s) {
+        int n = s.size();
+
+        int curr = s[0] - '0';
+        int ans = curr + n - 1;
+
+        for (int i = 1; i < n; i++)
+        {
+            curr = min(curr + ((s[i] == '1') << 1), i + 1);
+            ans = min(ans, curr + n - i - 1);
+        }
+
+        return ans;
+    }
+};
