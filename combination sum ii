@@ -1,0 +1,38 @@
+// User function template for C++
+
+class Solution {
+  public:
+    // Function to find all combinations of elements
+    // in array arr that sum to target.
+    void track(int idx, int n, int target, vector<int>& temp, vector<int>& arr, vector<vector<int> >& ans)
+    {
+        if (target == 0)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        if (idx == n || target < 0) return;
+        
+        for (int i = idx; i < n; i++)
+        {
+            if (arr[i] > target) break;
+            if (i > idx && arr[i] == arr[i - 1]) continue;
+            
+            temp.push_back(arr[i]);
+            track(i + 1, n, target - arr[i], temp, arr, ans);
+            temp.pop_back();
+        }
+    }
+    
+    vector<vector<int>> uniqueCombinations(vector<int> &arr, int target) {
+        // Your code here
+        sort(arr.begin(), arr.end());
+        
+        vector<int> temp;
+        vector<vector<int> > ans;
+        
+        track(0, arr.size(), target, temp, arr, ans);
+        return ans;
+    }
+};
