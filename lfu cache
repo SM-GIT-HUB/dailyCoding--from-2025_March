@@ -1,0 +1,134 @@
+// User function Template for C++
+
+class LFUCache {
+  public:
+    struct Node {
+        int key, value, uses;
+        Node* next;
+        Node* prev;
+        
+        Node(int k, int v): key(k), value(v), uses(1) {}
+    };
+    
+    class List {
+    public:
+        Node* head;
+        Node* tail;
+        int size = 0;
+        
+        List()
+        {
+            size = 0;
+            head = new Node(-1, -1);
+            tail = new Node(-1, -1);
+            head->next = tail;
+            tail->prev = head;
+        }
+        
+        void removeNode(Node* curr)
+        {
+            Node* prev = curr->prev;
+            Node* next = curr->next;
+            
+            prev->next = next;
+            next->prev = prev;
+            size--;
+        }
+        
+        void addNode(Node* curr)
+        {
+            Node* temp = head->next;
+            
+            curr->next = temp;
+            temp->prev = curr;
+            curr->prev = head;
+            head->next = curr;
+            size++;
+        }
+        
+        int removeLast()
+        {
+            Node* temp = tail->prev;
+            
+            temp->prev->next = tail;
+            tail->prev = temp->prev;
+            
+            size--;
+            int k = temp->key;
+            
+            delete temp;
+            return k;
+        }
+    };
+    
+    int cap;
+    int size = 0;
+    int leastFreq = 1;
+    
+    unordered_map<int, Node*> mapp;
+    unordered_map<int, List*> freq;
+  
+    LFUCache(int cap) {
+        // code here
+        this->cap = cap;
+    }
+    
+    void update(Node* curr)
+    {
+        freq[curr->uses]->removeNode(curr);
+        if (leastFreq == curr->uses && freq[curr->uses]->size == 0) leastFreq++;
+        
+        curr->uses++;
+        
+        if (!freq.count(curr->uses)) freq[curr->uses] = new List();
+        freq[curr->uses]->addNode(curr);
+    }
+
+    int get(int key) {
+        // code here
+        if (!mapp.count(key)) return -1;
+        
+        Node* curr = mapp[key];
+        update(curr);
+        
+        return curr->value;
+    }
+
+        
+    void put(int key, int value) {
+        // code here
+        if (cap == 0) return;
+        
+        if (mapp.count(key))
+        {
+            Node* curr = mapp[key];
+            curr->value = value;
+            update(curr);
+        }
+        else
+        {
+            Node* curr = new Node(key, value);
+            mapp[key] = curr;
+            
+            if (size == cap)
+            {
+                int k = freq[leastFreq]->removeLast();
+                mapp.erase(k);
+            }
+            else
+                size++;
+            
+            if (!freq.count(1)) freq[1] = new List();
+            
+            freq[1]->addNode(curr);
+            leastFreq = 1;
+        }
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
