@@ -1,0 +1,52 @@
+/*You are required to complete this method*/
+
+class Solution{
+  public:
+    string makeStr(int a, int b, int c, int d)
+    {
+        return to_string(a) + "." + to_string(b) + "." + to_string(c) + "." + to_string(d);
+    }
+    
+    bool isOk(int a, int b, int c, int d)
+    {
+        return (a <= 255 && b <= 255 && c <= 255 && d <= 255);
+    }
+  
+    vector<string> generateIp(string &s) {
+        // Your code here
+        vector<string> ans;
+        
+        if (s.size() < 4 || s.size() > 12) return {};
+        
+        for (int i = 1; i < 4; i++)
+        {
+            for (int j = 1; j < 4; j++)
+            {
+                for (int k = 1; k < 4; k++)
+                {
+                    for (int l = 1; l < 4; l++)
+                    {
+                        if (i + j + k + l == s.size())
+                        {
+                            int a = stoi(s.substr(0, i));
+                            int b = stoi(s.substr(i, j));
+                            int c = stoi(s.substr(i + j, k));
+                            int d = stoi(s.substr(i + j + k, l));
+                            
+                            if (isOk(a, b, c, d))
+                            {
+                                string str = makeStr(a, b, c, d);
+                                
+                                if (str.size() == s.size() + 3) {
+                                    ans.push_back(str);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
