@@ -1,0 +1,78 @@
+class Solution {
+public:
+    int upperBound(int start, int end, int val, vector<vector<int> >& evs)
+    {
+        int ans = -1;
+
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+
+            if (evs[mid][0] > val)
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+
+        return ans;
+    }
+
+    int memoization(int idx, int n, int take, int k, vector<vector<int> >& evs, vector<vector<int> >& dp)
+    {
+        if (idx == n) return 0;
+        if (take == k) return 0;
+
+        if (dp[take][idx] != -1) return dp[take][idx];
+
+        int include = evs[idx][2];
+        int exclude = memoization(idx + 1, n, take, k, evs, dp);
+
+        int nextIdx = upperBound(idx + 1, n - 1, evs[idx][1], evs);
+
+        if (nextIdx != -1) {
+            include += memoization(nextIdx, n, take + 1, k, evs, dp);
+        }
+
+        return dp[take][idx] = max(include, exclude);
+    }
+
+    int spaceOpt(int n, int k, vector<vector<int> >& evs)
+    {
+        vector<int> next(n + 1, 0);
+        vector<int> curr(n + 1, 0);
+
+        for (int take = k - 1; take >= 0; take--)
+        {
+            for (int idx = n - 1; idx >= 0; idx--)
+            {
+                int include = evs[idx][2];
+                int exclude = curr[idx + 1];
+
+                int nextIdx = upperBound(idx + 1, n - 1, evs[idx][1], evs);
+
+                if (nextIdx != -1) {
+                    include += next[nextIdx];
+                }
+
+                curr[idx] = max(include, exclude);
+            }
+
+            next = curr;
+        }
+
+        return next[0];
+    }
+
+    int maxValue(vector<vector<int>>& events, int k) {
+        int n = events.size();
+        sort(events.begin(), events.end());
+
+        // vector<vector<int> > dp(k, vector<int>(n, -1));
+        // return memoization(0, n, 0, k, events, dp);
+
+        return spaceOpt(n, k, events);
+    }
+};
