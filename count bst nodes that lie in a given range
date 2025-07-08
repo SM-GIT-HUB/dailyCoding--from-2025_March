@@ -1,0 +1,35 @@
+/*
+// Tree Node
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    // Constructor to initialize a new node
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    int get(Node* root, int mini, int maxi, int l, int h)
+    {
+        if (!root) return 0;
+        if (maxi < l || mini > h) return 0;
+        
+        int leftCount = get(root->left, mini, root->data - 1, l, h);
+        int rightCount = get(root->right, root->data + 1, maxi, l, h);
+        
+        return ((root->data >= l && root->data <= h) + leftCount + rightCount);
+    }
+  
+    int getCount(Node *root, int l, int h) {
+        // your code here
+        return get(root, INT_MIN, INT_MAX, l, h);
+    }
+};
