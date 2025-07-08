@@ -4,21 +4,43 @@ public:
         if (num == 0) return 0;
 
         int min = (num < 0);
-        if (min) num = -num;
+        long long curr = num;
+        if (min) curr = -num;
+        
+        int count[10] = {0};
 
-        string curr = to_string(num);
-
-        if (min) sort(curr.rbegin(), curr.rend());
-        else sort(curr.begin(), curr.end());
-
-        if (curr.size() > 1 && curr[0] == '0')
+        while (curr)
         {
-            int i = 0;
-            while (curr[i] == '0') i++;
-            swap(curr[0], curr[i]);
+            count[curr % 10]++;
+            curr = curr / 10;
         }
 
-        long long ans = stoll(curr);
+        long long ans = 0;
+
+        if (min)
+        {
+            for (int i = 9; i >= 0; i--)
+            {
+                for (int k = 0; k < count[i]; k++) ans = ans * 10 + i;
+            }
+        }
+        else
+        {
+            for (int i = 1; i < 10; i++)
+            {
+                if (count[i])
+                {
+                    ans = i;
+                    count[i]--;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                for (int k = 0; k < count[i]; k++) ans = ans * 10 + i;
+            }
+        }
 
         return (min)? -ans : ans;
     }
