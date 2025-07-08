@@ -1,0 +1,78 @@
+class Bitset {
+public:
+    vector<int> b;
+    int size;
+    int flipped = 0;
+    int count1;
+
+    Bitset(int size) {
+        count1 = 0;
+        this->size = size;
+        b.resize(size / 32 + (size % 32 != 0));
+    }
+    
+    void fix(int idx) {
+        int index = idx / 32;
+        int bit = idx % 32;
+
+        if ((((b[index] >> bit) & 1) ^ flipped) == 0)
+        {
+            b[index] = b[index] ^ (1 << bit);
+            count1++;
+        }
+    }
+    
+    void unfix(int idx) {
+        int index = idx / 32;
+        int bit = idx % 32;
+
+        if ((((b[index] >> bit) & 1) ^ flipped) == 1)
+        {
+            b[index] = b[index] ^ (1 << bit);
+            count1--;
+        }
+    }
+    
+    void flip() {
+        flipped = !flipped;
+        count1 = size - count1;
+    }
+    
+    bool all() {
+        return (count1 == size);
+    }
+    
+    bool one() {
+        return (count1 != 0);
+    }
+    
+    int count() {
+        return count1;
+    }
+    
+    string toString() {
+        string curr;
+
+        for (int i = 0; i < size; i++)
+        {
+            int index = i / 32;
+            int bit = i % 32;
+
+            curr.push_back((((b[index] >> bit) & 1) ^ flipped) + '0');
+        }
+
+        return curr;
+    }
+};
+
+/**
+ * Your Bitset object will be instantiated and called as such:
+ * Bitset* obj = new Bitset(size);
+ * obj->fix(idx);
+ * obj->unfix(idx);
+ * obj->flip();
+ * bool param_4 = obj->all();
+ * bool param_5 = obj->one();
+ * int param_6 = obj->count();
+ * string param_7 = obj->toString();
+ */
