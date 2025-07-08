@@ -1,0 +1,45 @@
+/*
+struct Node
+{
+    int data;
+    struct Node* left;
+    struct Node* right;
+
+    Node(int x){
+        data = x;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    int getState(Node* root, int &ans)
+    {
+        if (!root) return 1;
+        if (!root->left && !root->right) return 0;
+        
+        int stateLeft = getState(root->left, ans);
+        int stateRight = getState(root->right, ans);
+        
+        if (!stateLeft || !stateRight)
+        {
+            ans++;
+            return 2;
+        }
+        else if (stateLeft == 2 || stateRight == 2) {
+            return 1;
+        }
+        else
+            return 0;
+    }
+  
+    int supplyVaccine(Node* root) {
+        // Your code here
+        int ans = 0;
+        int curr = getState(root, ans);
+        
+        if (curr == 0) ans++;
+        
+        return ans;
+    }
+};
