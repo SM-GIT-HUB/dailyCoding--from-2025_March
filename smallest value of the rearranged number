@@ -1,0 +1,25 @@
+class Solution {
+public:
+    long long smallestNumber(long long num) {
+        if (num == 0) return 0;
+
+        int min = (num < 0);
+        if (min) num = -num;
+
+        string curr = to_string(num);
+
+        if (min) sort(curr.rbegin(), curr.rend());
+        else sort(curr.begin(), curr.end());
+
+        if (curr.size() > 1 && curr[0] == '0')
+        {
+            int i = 0;
+            while (curr[i] == '0') i++;
+            swap(curr[0], curr[i]);
+        }
+
+        long long ans = stoll(curr);
+
+        return (min)? -ans : ans;
+    }
+};
