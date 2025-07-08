@@ -1,0 +1,55 @@
+/*Structure of the Node of the BST is as
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    // Constructor to initialize a new node
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void inOrder(Node* root, vector<Node*>& arr)
+    {
+        if (!root) return;
+        
+        inOrder(root->left, arr);
+        arr.push_back(root);
+        inOrder(root->right, arr);
+    }
+    
+    Node* getBst(int start, int end, vector<Node*>& arr)
+    {
+        if (start > end) return nullptr;
+        
+        if (start == end)
+        {
+            arr[start]->left = arr[start]->right = nullptr;
+            return arr[start];
+        }
+        
+        int mid = start + (end - start) / 2;
+        Node* root = arr[mid];
+        
+        root->left = getBst(start, mid - 1, arr);
+        root->right = getBst(mid + 1, end, arr);
+        
+        return root;
+    }
+  
+    Node* balanceBST(Node* root) {
+        // Code here
+        vector<Node*> arr;
+        inOrder(root, arr);
+        
+        root = getBst(0, arr.size() - 1, arr);
+        return root;
+    }
+};
