@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+string findDivision(int x, int y, int n) {
+	// Write your code here.
+	int min = ((x < 0 && y > 0) || (x > 0 && y < 0));
+	if (x < 0) x = -x;
+	if (y < 0) y = -y;
+	
+	string ans;
+
+	if (min) ans.push_back('-');
+	ans += to_string(x / y);
+
+	ans.push_back('.');
+
+	int rem = x % y;
+
+	for (int i = 0; i < n; i++)
+	{
+		rem = rem * 10;
+		ans.push_back((rem / y) + '0');
+		rem = rem % y;
+	}
+
+	return ans;
+}
