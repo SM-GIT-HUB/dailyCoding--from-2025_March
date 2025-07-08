@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int maximumANDSum(vector<int>& nums, int slots) {
+        vector<int> powers(slots, 0);
+        int totalStates = pow(3, slots);
+
+        powers[0] = 1;
+        for (int i = 1; i < slots; i++) powers[i] = powers[i - 1] * 3;
+
+        vector<int> states(totalStates, 0);
+        vector<int> occSlot(slots, 0);
+
+        for (int state = 0; state < totalStates; state++)
+        {
+            int count = 0;
+            int curr = state;
+
+            for (int slot = 0; slot < slots; slot++)
+            {
+                occSlot[slot] = curr % 3;
+                count += occSlot[slot];
+                curr = curr / 3;
+            }
+
+            if (count >= nums.size()) continue;
+
+            for (int slot = 0; slot < slots; slot++)
+            {
+                if (occSlot[slot] < 2)
+                {
+                    int nextState = state + powers[slot];
+                    states[nextState] = max(states[nextState], states[state] + (nums[count] & (slot + 1)));
+                }
+            }
+        }
+
+        return *max_element(states.begin(), states.end());
+    }
+};
