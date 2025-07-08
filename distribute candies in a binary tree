@@ -1,0 +1,37 @@
+/*
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int x) {
+        data = x;
+        left = right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    int postOrder(Node* root, int &ans)
+    {
+        if (!root) return 0;
+        
+        int left = postOrder(root->left, ans);
+        int right = postOrder(root->right, ans);
+        
+        int excess = root->data + left + right - 1;
+        ans += abs(excess);
+        
+        return excess;
+    }
+  
+    int distributeCandy(Node* root) {
+        // your code here
+        int ans = 0;
+        postOrder(root, ans);
+        
+        return ans;
+    }
+};
