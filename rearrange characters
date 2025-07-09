@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    string rearrangeString(string s) {
+        // code here
+        int mapp[26] = {0};
+        for (char x : s) mapp[x - 'a']++;
+        
+        priority_queue<array<int, 2> > pq;
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i]) pq.push({mapp[i], i});
+        }
+        
+        int last = -1;
+        string ans = "";
+        
+        while (!pq.empty())
+        {
+            array<int, 2> curr = pq.top();
+            pq.pop();
+            
+            if (last == curr[1])
+            {
+                if (pq.empty()) break;
+                
+                array<int, 2> temp = pq.top();
+                pq.pop();
+                
+                pq.push(curr);
+                
+                last = temp[1];
+                if (temp[0] > 1) pq.push({temp[0] - 1, temp[1]});
+            }
+            else
+            {
+                last = curr[1];
+                if (curr[0] > 1) pq.push({curr[0] - 1, curr[1]});
+            }
+            
+            ans.push_back(last + 'a');
+        }
+        
+        if (s.size() == ans.size()) return ans;
+        return "";
+    }
+};
