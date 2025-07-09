@@ -1,0 +1,50 @@
+class Solution {
+public:
+    void getCount(int &e1, int &c1, int &e2, int &c2, int n, int f, vector<int>& arr)
+    {
+        int mapp[100001] = {0};
+
+        for (int i = f; i < n; i += 2)
+        {
+            int c = ++mapp[arr[i]];
+
+            if (c > c1)
+            {
+                if (arr[i] != e1)
+                {
+                    c2 = c1;
+                    e2 = e1;
+                }
+
+                c1 = c;
+                e1 = arr[i];
+            }
+            else if (c > c2)
+            {
+                c2 = c;
+                e2 = arr[i];
+            }
+        }
+    }
+
+    int minimumOperations(vector<int>& arr) {
+        int n = arr.size();
+
+        int even1 = -1;
+        int cven1 = 0;
+        int even2 = -1;
+        int cven2 = 0;
+        
+        int odd1 = -1;
+        int codd1 = 0;
+        int odd2 = -1;
+        int codd2 = 0;
+
+        getCount(even1, cven1, even2, cven2, n, 0, arr);
+        getCount(odd1, codd1, odd2, codd2, n, 1, arr);
+
+        if (even1 != odd1) return n - cven1 - codd1;
+
+        return n - max(cven1 + codd2, cven2 + codd1);
+    }
+};
