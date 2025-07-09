@@ -1,0 +1,25 @@
+class Solution {
+  public:
+    vector<int> topKFrequent(vector<int> &arr, int k) {
+        // Your code here
+        vector<pair<int, int> > es;
+        unordered_map<int, int> mapp;
+        
+        for (int x : arr) mapp[x]++;
+        
+        for (auto &it : mapp)
+        {
+            es.push_back({it.first, it.second});
+        }
+        
+        sort(es.begin(), es.end(), [](auto &a, auto &b) {
+            if (a.second == b.second) return (a.first > b.first);
+            return (a.second > b.second);
+        });
+        
+        vector<int> ans;
+        for (int i = 0; i < k; i++) ans.push_back(es[i].first);
+        
+        return ans;
+    }
+};
