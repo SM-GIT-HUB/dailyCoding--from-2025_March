@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+int minimumCostTreeFromLeafNodes(vector<int> &arr){
+	// Write your code here.
+	vector<int> stack;
+	stack.push_back(INT_MAX);
+
+	int ans = 0;
+
+	for (int x : arr)
+	{
+		while (x >= stack.back())
+		{
+			int temp = stack.back();
+			stack.pop_back();
+
+			ans += temp * min(stack.back(), x);
+		}
+
+		stack.push_back(x);
+	}
+
+	while (stack.size() > 2)
+	{
+		int temp = stack.back();
+		stack.pop_back();
+
+		ans += temp * stack.back();
+	}
+
+	return ans;
+}
