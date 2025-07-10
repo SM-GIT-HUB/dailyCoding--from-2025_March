@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    int sumOfMax(vector<int> &arr) {
+        // code here
+        vector<int> stack;
+        int n = arr.size();
+        
+        int ans = 0;
+        stack.push_back(-1);
+        
+        for (int i = 0; i < n + 1; i++)
+        {
+            while (stack.back() != -1 && (i == n || arr[stack.back()] < arr[i]))
+            {
+                int idx = stack.back();
+                stack.pop_back();
+                
+                int count = (idx - stack.back()) * (i - idx);
+                ans += count * arr[idx];
+            }
+            
+            stack.push_back(i);
+        }
+        
+        return ans;
+    }
+};
