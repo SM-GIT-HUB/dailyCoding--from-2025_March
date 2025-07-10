@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    int kBitFlips(vector<int>& arr, int k) {
+        // code here
+        int count = 0;
+        deque<int> dq;
+        int n = arr.size();
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (!dq.empty() && dq.front() + k <= i) dq.pop_front();
+            
+            int flipped = (dq.size() & 1);
+            
+            if ((arr[i] ^ flipped) == 0)
+            {
+                if (i + k - 1 >= n) return -1;
+                
+                count++;
+                dq.push_back(i);
+            }
+        }
+        
+        return count;
+    }
+};
