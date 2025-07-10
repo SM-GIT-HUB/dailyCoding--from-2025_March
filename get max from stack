@@ -1,0 +1,68 @@
+class Solution {
+  public:
+    int maxi;
+    stack<int> st;
+  
+    Solution() {
+        // code here
+        maxi = -1;
+    }
+
+    // Add an element to the top of Stack
+    void push(int x) {
+        // code here
+        if (st.empty())
+        {
+            maxi = x;
+            st.push(x);
+        }
+        else
+        {
+            if (maxi >= x) {
+                st.push(x);
+            }
+            else
+            {
+                int newElem = 2 * x - maxi;
+                maxi = x;
+                st.push(newElem);
+            }
+        }
+    }
+
+    // Remove the top element from the Stack
+
+        
+    void pop() {
+        // code here
+        if (st.empty()) return;
+        
+        if (st.top() <= maxi)
+        {
+            st.pop();
+            return;
+        }
+        
+        int curr = 2 * maxi - st.top();
+        maxi = curr;
+        st.pop();
+    }
+
+        
+    // Returns top element of the Stack
+    int peek() {
+        // code here
+        if (st.empty()) return -1;
+        if (st.top() <= maxi) return st.top();
+        
+        return maxi;
+    }
+        
+
+    // Finds maximum element of Stack
+    int getMax() {
+        // code here
+        if (st.empty()) return -1;
+        return maxi;
+    }
+};
