@@ -1,0 +1,93 @@
+class Solution {
+public:
+    class SegTree {
+    private:
+        int size;
+        vector<int> tree;
+
+        void pointUpdate(int idx, int start, int end, int index)
+        {
+            if (start == end)
+            {
+                tree[idx] = 1;
+                return;
+            }
+
+            int left = 2 * idx + 1;
+            int right = left + 1;
+            int mid = start + ((end - start) >> 1);
+
+            if (index <= mid) {
+                pointUpdate(left, start, mid, index);
+            }
+            else
+                pointUpdate(right, mid + 1, end, index);
+            
+            tree[idx] = tree[left] + tree[right];
+        }
+
+        int rangeQuery(int idx, int start, int end, int qStart, int qEnd)
+        {
+            if (end < qStart || start > qEnd) return 0;
+            if (qStart <= start && end <= qEnd) return tree[idx];
+
+            int left = 2 * idx + 1;
+            int right = left + 1;
+            int mid = start + ((end - start) >> 1);
+
+            return rangeQuery(left, start, mid, qStart, qEnd) + rangeQuery(right, mid + 1, end, qStart, qEnd);
+        }
+
+    public:
+        SegTree(int n): size(n)
+        {
+            tree.resize(4 * n);
+        }
+
+        void clear()
+        {
+            fill(tree.begin(), tree.end(), 0);
+        }
+
+        void updatePoint(int index)
+        {
+            pointUpdate(0, 0, size - 1, index);
+        }
+
+        long long queryRange(int qStart, int qEnd)
+        {
+            return rangeQuery(0, 0, size - 1, qStart, qEnd);
+        }
+    };
+
+    long long goodTriplets(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        vector<int> mapp(n);
+
+        {
+            vector<int> mapp2(n);
+            for (int i = 0; i < n; i++) mapp2[nums2[i]] = i;
+            for (int i = 0; i < n; i++) mapp[i] = mapp2[nums1[i]];
+        }
+        
+        SegTree st(n);
+        vector<int> left(n);
+
+        for (int i = 0; i < n; i++)
+        {
+            left[i] = st.queryRange(0, mapp[i] - 1);
+            st.updatePoint(mapp[i]);
+        }
+
+        st.clear();
+        long long ans = 0;
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            ans = ans + st.queryRange(mapp[i] + 1, n - 1) * left[i];
+            st.updatePoint(mapp[i]);
+        }
+
+        return ans;
+    }
+};
