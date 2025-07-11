@@ -1,0 +1,45 @@
+// User function Template for C++
+class Solution {
+  public:
+    vector<string> memoization(int idx, int n, string &s, unordered_set<string>& sett, vector<vector<string> >& dp)
+    {
+        if (idx == n) return {};
+        if (dp[idx].size()) return dp[idx];
+        
+        string curr = "";
+        vector<string> ans;
+        
+        for (int i = idx; i < n; i++)
+        {
+            curr.push_back(s[i]);
+            
+            if (sett.count(curr))
+            {
+                vector<string> next = memoization(i + 1, n, s, sett, dp);
+                
+                if (next.size() || i == n - 1)
+                {
+                    for (string &x : next)
+                    {
+                        ans.push_back(curr + " " + x);
+                    }
+                    
+                    if (next.size() == 0) ans.push_back(curr);
+                }
+            }
+        }
+        
+        return dp[idx] = ans;
+    }
+  
+    vector<string> wordBreak(vector<string>& dict, string& s) {
+        // code here
+        unordered_set<string> sett;
+        for (string &w : dict) sett.insert(w);
+        
+        vector<vector<string> > dp(s.size());
+        
+        vector<string> ans = memoization(0, s.size(), s, sett, dp);
+        return ans;
+    }
+};
