@@ -1,0 +1,75 @@
+class Solution {
+  public:
+    int memoization(int i, int j, int m, int n, int mn, string &s1, string &s2, string &s3, vector<vector<int> >& dp)
+    {
+        int k = i + j;
+        
+        if (k == mn) return 1;
+        if (i == m && j == n) return 0;
+        
+        if (dp[i][j] != -1) return dp[i][j];
+        
+        int flag = 0;
+        
+        if (i < m && s1[i] == s3[k] && memoization(i + 1, j, m, n, mn, s1, s2, s3, dp)) {
+            flag = 1;
+        }
+        
+        if (!flag && j < n && s2[j] == s3[k] && memoization(i, j + 1, m, n, mn, s1, s2, s3, dp)) {
+            flag = 1;
+        }
+        
+        return dp[i][j] = flag;
+    }
+    
+    int tabulation(int m, int n, int mn, string &s1, string &s2, string &s3)
+    {
+        vector<int> next(n + 1, 0);
+        vector<int> curr(n + 1, 0);
+        next[n] = 1;
+        
+        for (int i = m; i >= 0; i--)
+        {
+            for (int j = n; j >= 0; j--)
+            {
+                int k = i + j;
+                
+                if (k == mn)
+                {
+                    curr[j] = 1;
+                    continue;
+                }
+                
+                int flag = 0;
+                
+                if (i < m && s1[i] == s3[k] && next[j]) {
+                    flag = 1;
+                }
+                
+                if (!flag && j < n && s2[j] == s3[k] && curr[j + 1]) {
+                    flag = 1;
+                }
+                
+                curr[j] = flag;
+            }
+            
+            next = curr;
+        }
+        
+        return next[0];
+    }
+  
+    bool isInterleave(string& s1, string& s2, string& s3) {
+        // code here
+        int m = s1.size();
+        int n = s2.size();
+        int mn = s3.size();
+        
+        if (m + n != mn) return 0;
+        
+        // vector<vector<int> > dp(m + 1, vector<int>(n + 1, -1));
+        // return memoization(0, 0, m, n, mn, s1, s2, s3, dp);
+        
+        return tabulation(m, n, mn, s1, s2, s3);
+    }
+};
