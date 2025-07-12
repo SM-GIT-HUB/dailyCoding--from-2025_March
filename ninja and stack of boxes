@@ -1,0 +1,38 @@
+#include <bits/stdc++.h> 
+
+int memoization(int prev, int idx, int n, vector<vector<int> >& boxes, vector<vector<int> >& dp)
+{
+	if (idx == n) return 0;
+
+	if (dp[idx][prev + 1] != -1) return dp[idx][prev + 1];
+
+	int include = 0;
+	int exclude = memoization(prev, idx + 1, n, boxes, dp);
+
+	if (prev == -1 || (boxes[idx][0] > boxes[prev][0] && boxes[idx][1] > boxes[prev][1]))
+	{
+		include = boxes[idx][2] + memoization(idx, idx + 1, n, boxes, dp);
+	}
+
+	return dp[idx][prev + 1] = max(include, exclude);
+}
+
+int ninjaAndBoxStack(vector<int>& length, vector<int>& breadth, vector<int>& height, int n) 
+{
+	// Write your code here.
+	vector<vector<int> > boxes;
+
+	for (int i = 0; i < n; i++)
+	{
+		boxes.push_back({min(length[i], breadth[i]), max(length[i], breadth[i]), height[i]});
+		boxes.push_back({min(breadth[i], height[i]), max(breadth[i], height[i]), length[i]});
+		boxes.push_back({min(height[i], length[i]), max(height[i], length[i]), breadth[i]});
+	}
+
+	sort(boxes.begin(), boxes.end());
+
+	vector<vector<int> > dp(3 * n, vector<int>(3 * n + 1, -1));
+
+	int ans = memoization(-1, 0, 3 * n, boxes, dp);
+	return ans;
+}
