@@ -1,0 +1,25 @@
+
+class Solution {
+  public:
+    int uglyNumber(int n) {
+        // code here
+        vector<int> arr = {1};
+        int i2 = 0, i3 = 0, i5 = 0;
+        
+        while (arr.size() < n)
+        {
+            int e2 = arr[i2] * 2;
+            int e3 = arr[i3] * 3;
+            int e5 = arr[i5] * 5;
+            
+            int mini = min(e2, min(e3, e5));
+            arr.push_back(mini);
+            
+            if (e2 == mini) i2++;
+            if (e3 == mini) i3++;
+            if (e5 == mini) i5++;
+        }
+        
+        return arr.back();
+    }
+};
