@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<long long> maximumEvenSplit(long long sum) {
+        if (sum & 1) return {};
+
+        vector<long long> ans;
+
+        for (long long i = 2; sum > 0; i += 2)
+        {
+            if (sum - i < 0) break;
+            sum -= i;
+            ans.push_back(i);
+        }
+
+        if (sum > 0) ans.back() = ans.back() + sum;
+
+        return ans;
+    }
+};
