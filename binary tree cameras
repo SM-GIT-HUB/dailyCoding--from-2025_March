@@ -1,0 +1,52 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+int dfs(TreeNode<int>* r, TreeNode<int>* root, int &camera)
+{
+	if (!root) return 1;
+	if (!root->left && !root->right) return 0;
+
+	int left = dfs(r, root->left, camera);
+	int right = dfs(r, root->right, camera);
+
+	if (!left || !right)
+	{
+		camera++;
+		return 2;
+	}
+	
+	if (left == 1 && right == 1)
+    {
+        if (r == root) camera++;
+        return 0;
+    }
+
+	return 1;
+}
+
+int getMinCamera(TreeNode<int> *root)
+{
+    // Write your code here.
+	int camera = 0;
+	dfs(root, root, camera);
+
+	return camera? camera : 1;
+}
