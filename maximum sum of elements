@@ -1,0 +1,38 @@
+class Solution {
+  public:
+    int nonLisMaxSum(vector<int>& arr) {
+        // code here
+        int n = arr.size();
+        
+        vector<int> dp(n, 1);
+        vector<int> prev(n, -1);
+        
+        int maxi = 0;
+        int sum = arr[0];
+        
+        for (int i = 1; i < n; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (arr[j] < arr[i])
+                {
+                    if (dp[j] + 1 >= dp[i])
+                    {
+                        prev[i] = j;
+                        dp[i] = dp[j] + 1;
+                    }
+                }
+            }
+            
+            sum += arr[i];
+            maxi = (dp[i] >= dp[maxi])? i : maxi;
+        }
+        
+        for (int i = maxi; i != -1; i = prev[i])
+        {
+            sum -= arr[i];
+        }
+        
+        return sum;
+    }
+};
