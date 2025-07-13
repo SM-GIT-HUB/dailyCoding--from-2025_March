@@ -1,0 +1,41 @@
+#include <bits/stdc++.h> 
+
+/****************************************************************
+    Following is the class structure of the TreeNode class:
+        class TreeNode
+        {
+          public:
+	      T data;
+	      TreeNode<T> *left;
+	      TreeNode<T> *right;
+
+	      TreeNode(T data)
+	      {
+		    this->data = data;
+		    left = NULL;
+		    right = NULL;
+	      }
+        };
+*****************************************************************/
+
+void inOrder(int &prev, int &ans, TreeNode<int>* root)
+{
+	if (!root) return;
+
+	inOrder(prev, ans, root->left);
+
+	if (prev != -1) ans = min(ans, abs(root->data - prev));
+	prev = root->data;
+
+	inOrder(prev, ans, root->right);
+}
+
+int ninjaGf(TreeNode<int> *root)
+{
+	//    Write your code here
+	int ans = 1e9;
+	int prev = -1;
+	inOrder(prev, ans, root);
+
+	return ans;
+}
