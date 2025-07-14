@@ -15,7 +15,7 @@ public:
         
         while (head)
         {
-            ans = 2 * ans + head->val;
+            ans = (ans << 1) + head->val;
             head = head->next;
         }
 
