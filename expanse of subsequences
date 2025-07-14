@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+
+const int mod = 1e9 + 7;
+
+int expanseOfSubsequences(vector<int> &arr) {
+    //  Write your code here.
+    long long ans = 0;
+    
+    int n = arr.size();
+    sort(arr.begin(), arr.end());
+
+    vector<long long> pow2(n, 1);
+    for (int i = 1; i < n; i++) pow2[i] = (pow2[i - 1] << 1) % mod;
+
+    for (int i = 0; i < n; i++)
+    {
+        long long maxi = (pow2[i] * arr[i]) % mod;
+        long long mini = (pow2[n - i - 1] * arr[i]) % mod;
+        ans = (ans + maxi - mini + mod) % mod;
+    }
+
+    return ans;
+}
