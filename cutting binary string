@@ -1,0 +1,39 @@
+class Solution {
+  public:
+    int recur(int idx, int n, int val, string &s, unordered_set<int>& sett)
+    {
+        if (idx == n) {
+            return sett.count(val)? 1 : 50;
+        }
+        
+        if (val == 0 && s[idx] == '0') return 50;
+        
+        int cutHere = 50;
+        int noCut = recur(idx + 1, n, (val << 1) + (s[idx] - '0'), s, sett);
+        
+        if (sett.count(val) && s[idx] != '0') {
+            cutHere = 1 + recur(idx + 1, n, (s[idx] - '0'), s, sett);
+        }
+        
+        return min(cutHere, noCut);
+    }
+  
+    int cuts(string s) {
+        // code here
+        if (s[0] == 0) return -1;
+        
+        long long p = 1;
+        int n = s.size();
+        unordered_set<int> sett;
+        
+        while (p < (1 << n))
+        {
+            sett.insert(p);
+            p = p * 5;
+        }
+        
+        int ans = recur(0, n, 0, s, sett);
+        
+        return (ans > n)? -1 : ans;
+    }
+};
