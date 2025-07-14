@@ -1,0 +1,48 @@
+#include <bits/stdc++.h> 
+
+void reverse(int start, int end, vector<int>& arr)
+{
+    while (start < end) swap(arr[start++], arr[end--]);
+}
+
+void rotateLeft(int n, vector<int>& arr, int times)
+{
+    times = times % n;
+    if (times == 0) return;
+
+    reverse(0, times - 1, arr);
+    reverse(times, n - 1, arr);
+    reverse(0, n - 1, arr);
+}
+
+void rotateRight(int n, vector<int>& arr, int times)
+{
+    times = times % n;
+    if (times == 0) return;
+
+    times = n - times;
+    
+    reverse(0, times - 1, arr);
+    reverse(times, n - 1, arr);
+    reverse(0, n - 1, arr);
+}
+
+vector<vector<int>> leftRotationsOfArray(vector<int> arr, vector<int> queries) {
+    // Write your code here.
+    vector<vector<int> > ans;
+
+    int last = 0;
+
+    for (auto &q : queries)
+    {
+        int need = q - last;
+
+        if (need > 0) rotateLeft(arr.size(), arr, need);
+        else if (need < 0) rotateRight(arr.size(), arr, abs(need));
+        
+        ans.push_back(arr);
+        last = q;
+    }
+
+    return ans;
+}
