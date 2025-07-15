@@ -1,0 +1,62 @@
+class Solution {
+public:
+    string repeatLimitedString(string s, int limit) {
+        int mapp[26] = {0};
+        for (char x : s) mapp[x - 'a']++;
+
+        string ans;
+        int idx = 25;
+
+        int last = -1;
+        int count = 0;
+
+        while (idx >= 0)
+        {
+            if (mapp[idx] == 0)
+            {
+                idx--;
+                last = -1;
+                count = 0;
+                continue;
+            }
+
+            if (last == idx)
+            {
+                if (count == limit)
+                {
+                    int i;
+                    for (i = idx - 1; i >= 0 && !mapp[i]; i--);
+
+                    if (i < 0) break;
+
+                    mapp[i]--;
+                    last = -1;
+                    count = 0;
+                    ans.push_back(i + 'a');
+                }
+                else
+                {
+                    while (count < limit && mapp[idx])
+                    {
+                        count++;
+                        mapp[idx]--;
+                        ans.push_back(idx + 'a');
+                    }
+                }
+            }
+            else
+            {
+                last = idx;
+
+                while (count < limit && mapp[idx])
+                {
+                    count++;
+                    mapp[idx]--;
+                    ans.push_back(idx + 'a');
+                }
+            }
+        }
+
+        return ans;
+    }
+};
