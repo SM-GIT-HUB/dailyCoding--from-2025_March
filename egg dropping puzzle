@@ -1,0 +1,37 @@
+class Solution {
+  public:
+
+    // Function to find minimum number of attempts needed in
+    // order to find the critical floor.
+    
+    int memoization(int eggs, int floors, vector<vector<int> >& dp)
+    {
+        if (floors <= 1 || eggs == 1) return floors;
+        if (dp[eggs][floors] != -1) return dp[eggs][floors];
+        
+        int ans = 1e4;
+        
+        int start = 1, end = floors;
+        
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            int broken = 1 + memoization(eggs - 1, mid - 1, dp);
+            int notBroken = 1 + memoization(eggs, floors - mid, dp);
+            
+            ans = min(ans, max(broken, notBroken));
+            
+            if (broken > notBroken) end = mid - 1;
+            else start = mid + 1;
+        }
+        
+        return dp[eggs][floors] = ans;
+    }
+    
+    int eggDrop(int n, int k) {
+        // code here
+        vector<vector<int> > dp(n + 1, vector<int>(k + 1, -1));
+        return memoization(n, k, dp);
+    }
+};
