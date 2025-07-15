@@ -1,0 +1,66 @@
+class Solution {
+public:
+    array<int, 2> memoization(int n, int f, int s, int round, int minimum[29][29][29], int maximum[29][29][29])
+    {
+        if (f + s == n + 1) return {round, round};
+
+        if (f + s > n + 1)
+        {
+            int temp = n - f + 1;
+            f = n - s + 1;
+            s = temp;
+        }
+
+        if (minimum[f][s][n] != 0) return {minimum[f][s][n], maximum[f][s][n]};
+
+        int mid = (n + 1) >> 1;
+        int mini = 30;
+        int maxi = 0;
+
+        if (s <= mid)
+        {
+            int fLeft = f - 1;
+            int sLeft = s - f - 1;
+
+            for (int i = 0; i <= fLeft; i++)
+            {
+                for (int j = 0; j <= sLeft; j++)
+                {
+                    array<int, 2> curr = memoization((n + 1) >> 1, i + 1, i + j + 2, round + 1, minimum, maximum);
+                    mini = min(mini, curr[0]);
+                    maxi = max(curr[1], maxi);
+                }
+            }
+        }
+        else
+        {
+            int p = n - s + 1;
+            int extra = (s - p) >> 1;
+            int fLeft = f - 1;
+            int sLeft = p - f - 1;
+
+            for (int i = 0; i <= fLeft; i++)
+            {
+                for (int j = 0; j <= sLeft; j++)
+                {
+                    array<int, 2> curr = memoization((n + 1) >> 1, i + 1, i + j + extra + 2, round + 1, minimum, maximum);
+                    mini = min(mini, curr[0]);
+                    maxi = max(curr[1], maxi);
+                }
+            }
+        }
+
+        minimum[f][s][n] = mini;
+        maximum[f][s][n] = maxi;
+
+        return {mini, maxi};
+    }
+
+    vector<int> earliestAndLatest(int n, int f, int s) {
+        int minimum[29][29][29] = {0};
+        int maximum[29][29][29] = {0};
+
+        array<int, 2> ans = memoization(n, f, s, 1, minimum, maximum);
+        return {ans[0], ans[1]};
+    }
+};
