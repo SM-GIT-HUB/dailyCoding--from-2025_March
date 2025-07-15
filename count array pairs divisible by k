@@ -1,0 +1,21 @@
+class Solution {
+public:
+    long long countPairs(vector<int>& nums, int k) {
+        long long ans = 0;
+        unordered_map<int, int> mapp;
+
+        for (int x : nums)
+        {
+            long long curr = __gcd(x, k);
+
+            for (auto &it : mapp)
+            {
+                if ((curr * it.first) % k == 0) ans += it.second;
+            }
+
+            mapp[curr]++;
+        }
+
+        return ans;
+    }
+};
