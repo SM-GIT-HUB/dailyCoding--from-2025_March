@@ -1,0 +1,54 @@
+class Solution {
+  public:
+    int memoization(int start, int end, vector<int>& arr, vector<vector<int> >& dp)
+    {
+        if (start + 1 == end) return 0;
+        if (dp[start][end] != -1) return dp[start][end];
+        
+        int ans = 0;
+        
+        for (int i = start + 1; i < end; i++)
+        {
+            int curr = arr[start] * arr[i] * arr[end] + memoization(start, i, arr, dp) + memoization(i, end, arr, dp);
+            ans = max(curr, ans);
+        }
+        
+        return dp[start][end] = ans;
+    }
+    
+    int tabulation(int n, vector<int>& arr)
+    {
+        vector<vector<int> > dp(n, vector<int>(n, 0));
+        
+        for (int start = n - 3; start >= 0; start--)
+        {
+            for (int end = start + 2; end < n; end++)
+            {
+                int ans = 0;
+                
+                for (int i = start + 1; i < end; i++)
+                {
+                    int curr = arr[start] * arr[i] * arr[end] + dp[start][i] + dp[i][end];
+                    ans = max(curr, ans);
+                }
+                
+                dp[start][end] = ans;
+            }
+        }
+        
+        return dp[0][n - 1];
+    }
+  
+    int maxSkill(vector<int> &arr) {
+        // code here
+        int n = arr.size() + 2;
+        
+        arr.insert(arr.begin(), 1);
+        arr.push_back(1);
+        
+        // vector<vector<int> > dp(n, vector<int>(n, -1));
+        // return memoization(0, n - 1, arr, dp);
+        
+        return tabulation(n, arr);
+    }
+};
