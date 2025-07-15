@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    int memoization(int idx, int n, int canBuy, int fee, vector<int>& arr, vector<array<int, 2> >& dp)
+    {
+        if (idx == n) return 0;
+        if (dp[idx][canBuy] != -1) return dp[idx][canBuy];
+        
+        int ans = 0;
+        
+        if (canBuy)
+        {
+            int buy = -arr[idx] + memoization(idx + 1, n, 0, fee, arr, dp);
+            int notBuy = memoization(idx + 1, n, canBuy, fee, arr, dp);
+            
+            ans = max(buy, notBuy);
+        }
+        else
+        {
+            int sell = arr[idx] - fee + memoization(idx + 1, n, 1, fee, arr, dp);
+            int notSell = memoization(idx + 1, n, canBuy, fee, arr, dp);
+            
+            ans = max(sell, notSell);
+        }
+        
+        return dp[idx][canBuy] = ans;
+    }
+  
+    int maxProfit(vector<int>& arr, int k) {
+        // Code here
+        int n = arr.size();
+        
+        vector<array<int, 2> > dp(n, {-1, -1});
+        return memoization(0, n, 1, k, arr, dp);
+    }
+};
