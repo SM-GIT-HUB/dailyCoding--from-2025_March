@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maximumLength(vector<int>& nums) {
+        int allOdd = 0;
+        int oddFirst = 0;
+        int evenFirst = 0;
+
+        for (int x : nums)
+        {
+            if (x & 1) allOdd++;
+            
+            if ((x & 1) && !(oddFirst & 1)) oddFirst++;
+            else if (!(x & 1) && (oddFirst & 1)) oddFirst++;
+            
+            if (!(x & 1) && !(evenFirst & 1)) evenFirst++;
+            else if ((x & 1) && (evenFirst & 1)) evenFirst++;
+        }
+
+        return max({allOdd, (int)nums.size() - allOdd, oddFirst, evenFirst});
+    }
+};
