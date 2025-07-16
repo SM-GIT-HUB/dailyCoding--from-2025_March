@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int isPos(long long &available, vector<int>& time, int &total)
+    {
+        long long curr = 0;
+
+        for (int x : time)
+        {
+            curr += available / x;
+            if (curr >= total) break;
+        }
+
+        return (curr >= total);
+    }
+
+    long long minimumTime(vector<int>& time, int totalTrips) {
+        long long start = 1, end = 1e14;
+        long long ans = end;
+
+        while (start <= end)
+        {
+            long long mid = start + ((end - start) >> 1);
+
+            if (isPos(mid, time, totalTrips))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+
+        return ans;
+    }
+};
