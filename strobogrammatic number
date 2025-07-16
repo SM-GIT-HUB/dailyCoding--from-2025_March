@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+bool isStrobogrammatic(string &str)
+{
+    // Write your code here.
+    int start = 0, end = str.size() - 1;
+    array<string, 5> pairs = {"11", "00", "96", "69", "88"};
+
+    auto check = [&](char x, char y) {
+        for (string &s : pairs)
+        {
+            if (x == s[0] && y == s[1]) return 1;
+        }
+
+        return 0;
+    };
+
+    while (start <= end)
+    {
+        if (!check(str[start++], str[end--])) return false;
+    }
+
+    return true;
+}
