@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+vector<string> fittestTrainee(vector<vector<int>> &oxygen) {
+  // Write your code here.
+  int levels[3] = {0};
+
+  for (int i = 0; i < 3; i++)
+  {
+    int sum = 0;
+
+    for (int x : oxygen[i])
+    {
+      sum += (x <= 0 || x > 100)? 0 : x;
+    }
+
+    levels[i] = sum / 3;
+  }
+
+  int maxi = max(levels[0], max(levels[1], levels[2]));
+  if (maxi < 70) return {"Unfit", "Unfit", "Unfit"};
+
+  vector<string> ans;
+
+  if (levels[0] == maxi) ans.push_back("Trainee1");
+  else if (levels[0] < 70) ans.push_back("Unfit");
+
+  if (levels[1] == maxi) ans.push_back("Trainee2");
+  else if (levels[1] < 70) ans.push_back("Unfit");
+
+  if (levels[2] == maxi) ans.push_back("Trainee3");
+  else if (levels[2] < 70) ans.push_back("Unfit");
+
+  return ans;
+}
