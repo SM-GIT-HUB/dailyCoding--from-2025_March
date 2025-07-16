@@ -1,0 +1,58 @@
+class Solution {
+  public:
+    void getPrimes(vector<long long>& primes)
+    {
+        int n = 32000;
+        primes.push_back(2);
+        
+        bitset<16001> bits;
+        bits.set();
+        
+        for (int i = 1; i < 16001; i++)
+        {
+            if (bits[i])
+            {
+                int p = 2 * i + 1;
+                primes.push_back(p);
+                
+                for (int idx = i + p; idx < 16001; idx += p)
+                {
+                    bits[idx] = 0;
+                }
+            }
+        }
+    }
+  
+    int countNumbers(int n) {
+        // Code Here
+        vector<long long> primes;
+        getPrimes(primes);
+        
+        unordered_set<int> sett;
+        
+        for (long long p : primes)
+        {
+            long long p8 = pow(p, 8);
+            if (p8 > n) break;
+            
+            sett.insert(p8);
+        }
+        
+        for (int i = 0; i < primes.size(); i++)
+        {
+            long long p2 = primes[i] * primes[i];
+            
+            if (p2 > n) break;
+            
+            for (int j = i + 1; j < primes.size(); j++)
+            {
+                long long q2 = primes[j] * primes[j];
+                
+                if (p2 * q2 > n) break;
+                sett.insert(p2 * q2);
+            }
+        }
+        
+        return sett.size();
+    }
+};
