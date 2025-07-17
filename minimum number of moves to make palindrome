@@ -1,0 +1,49 @@
+class Solution {
+public:
+    bool isPalin();
+
+    int minMovesToMakePalindrome(string s) {
+        int swaps = 0;
+        int start = 0, end = s.size() - 1;
+
+        while (start <= end)
+        {
+            if (s[start] == s[end])
+            {
+                start++;
+                end--;
+            }
+            else
+            {
+                int i;
+                char x = s[start];
+                
+                for (i = end - 1; i > start; i--)
+                {
+                    if (s[i] == x) break;
+                }
+
+                if (i > start)
+                {
+                    for (int j = i; j < end; j++)
+                    {
+                        s[j] = s[j + 1];
+                    }
+
+                    s[end] = x;
+                    swaps += end - i;
+
+                    start++;
+                    end--;
+                }
+                else
+                {
+                    swap(s[start], s[start + 1]);
+                    swaps++;
+                }
+            }
+        }
+
+        return swaps;
+    }
+};
