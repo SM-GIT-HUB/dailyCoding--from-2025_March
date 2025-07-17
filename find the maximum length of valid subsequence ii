@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maximumLength(vector<int>& nums, int k) {
+        int maxi = 2;
+        vector<int> dp(k);
+
+        for (int val = 0; val < k; val++)
+        {
+            fill(dp.begin(), dp.end(), 0);
+            int currMod, prevMod;
+
+            for (int y : nums)
+            {
+                currMod = y % k;
+                prevMod = (val - currMod + k) % k;
+                
+                dp[currMod] = max(dp[currMod], dp[prevMod] + 1);
+                if (dp[currMod] > maxi) maxi = dp[currMod];
+            }
+        }
+
+        return maxi;
+    }
+};
