@@ -1,0 +1,76 @@
+class Solution {
+  public:
+    void getPrimes(int limit, vector<int>& primes)
+    {
+        bitset<100001> bits;
+        primes.push_back(2);
+        
+        bits.set();
+        int maxi = limit / 2 + 1;
+        
+        for (int i = 1; i <= maxi; i++)
+        {
+            if (bits[i])
+            {
+                int p = 2 * i + 1;
+                primes.push_back(p);
+                
+                for (int j = i + p; j <= maxi; j += p)
+                {
+                    bits[j] = 0;
+                }
+            }
+        }
+    }
+    
+    void getPrimeFactors(int k, unordered_map<int, int>& mapp, vector<int>& primes)
+    {
+        for (int p : primes)
+        {
+            if (p * p > k) break;
+            
+            while (k % p == 0)
+            {
+                mapp[p]++;
+                k = k / p;
+            }
+        }
+        
+        if (k > 1) mapp[k]++;
+    }
+    
+    int getCount(int n, int p)
+    {
+        int count = 0;
+        long long power = p;
+        
+        while (power <= n)
+        {
+            count += n / power;
+            power = power * p;
+        }
+        
+        return count;
+    }
+  
+    int maxKPower(int n, int k) {
+        // code here
+        vector<int> primes;
+        int limit = sqrt(k) + 1;
+        
+        getPrimes(limit, primes);
+        
+        unordered_map<int, int> mapp;
+        getPrimeFactors(k, mapp, primes);
+        
+        int ans = INT_MAX;
+        
+        for (auto &it : mapp)
+        {
+            int count = getCount(n, it.first);
+            ans = min(ans, count / it.second);
+        }
+        
+        return ans;
+    }
+};
