@@ -1,0 +1,43 @@
+
+int dfs(int node, bitset<201>& visited, vector<int>& assets, vector<int>& subTree, vector<vector<int> >& adj)
+{
+    visited[node] = 1;
+    int value = assets[node];
+
+    for (int adjNode : adj[node])
+    {
+        if (!visited[adjNode]) value += dfs(adjNode, visited, assets, subTree, adj);
+    }
+
+    return subTree[node] = value;
+}
+
+int perfectPartition(int n, vector<int> assets, vector<vector<int>> edges) {
+    // Write your code here
+    vector<vector<int> > adj(n);
+
+    for (auto &e : edges)
+    {
+        adj[e[0]].push_back(e[1]);
+        adj[e[1]].push_back(e[0]);
+    }
+
+    bitset<201> visited;
+
+    vector<int> subTree(n, 0);
+    int totalSum = dfs(0, visited, assets, subTree, adj);
+
+    int ans = INT_MAX;
+    
+    for (auto &e : edges)
+    {
+        int u = e[0];
+        int v = e[1];
+
+        int childSum = min(subTree[u], subTree[v]);
+
+        ans = min(ans, abs(totalSum - 2 * childSum));
+    }
+
+    return ans;
+}
