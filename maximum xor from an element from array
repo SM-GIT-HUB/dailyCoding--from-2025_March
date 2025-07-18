@@ -1,0 +1,95 @@
+class Solution {
+  public:
+    struct Node {
+        Node* bits[2];
+        
+        Node()
+        {
+            bits[0] = nullptr;
+            bits[1] = nullptr;
+        }
+    };
+    
+    class Trie {
+        Node* root;
+    public:
+        Trie()
+        {
+            root = new Node();
+        }
+        
+        void insert(int num)
+        {
+            Node* curr = root;
+            
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = ((num >> i) & 1);
+                
+                if (!curr->bits[bit]) {
+                    curr->bits[bit] = new Node();
+                }
+                
+                curr = curr->bits[bit];
+            }
+        }
+        
+        int getXor(int x)
+        {
+            int maxi = 0;
+            Node* curr = root;
+            
+            for (int i = 31; i >= 0; i--)
+            {
+                int bit = ((x >> i) & 1);
+                
+                if (curr->bits[!bit])
+                {
+                    maxi = (maxi << 1) + 1;
+                    curr = curr->bits[!bit];
+                }
+                else
+                {
+                    maxi = (maxi << 1);
+                    curr = curr->bits[bit];
+                }
+            }
+            
+            return maxi;
+        }
+    };
+  
+    vector<int> maxXor(vector<int> &arr, vector<vector<int>> &qs) {
+        // code here
+        int m = qs.size();
+        int n = arr.size();
+        
+        Trie tr;
+        vector<int> ans(m, -1);
+        
+        vector<int> idxs(m);
+        for (int i = 0; i < m; i++) idxs[i] = i;
+        
+        sort(arr.begin(), arr.end());
+        
+        sort(idxs.begin(), idxs.end(), [&](int i, int j) {
+            return (qs[i][1] < qs[j][1]);
+        });
+        
+        int index = 0;
+        
+        for (int i : idxs)
+        {
+            int mi = qs[i][1];
+            
+            while (index < n && arr[index] <= mi)
+            {
+                tr.insert(arr[index++]);
+            }
+            
+            if (index > 0) ans[i] = tr.getXor(qs[i][0]);
+        }
+        
+        return ans;
+    }
+};
