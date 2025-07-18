@@ -1,0 +1,39 @@
+
+class Solution {
+  public:
+    void dfs(int node, bitset<100001>& visited, vector<vector<int> >& adj, vector<vector<int> >& ans)
+    {
+        visited[node] = 1;
+        ans.back().push_back(node);
+        
+        for (int adjNode : adj[node])
+        {
+            if (!visited[adjNode]) dfs(adjNode, visited, adj, ans);
+        }
+    }
+  
+    vector<vector<int>> getComponents(int V, vector<vector<int>>& edges) {
+        // code here
+        vector<vector<int> > adj(V);
+        
+        for (auto &e : edges)
+        {
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        
+        bitset<100001> visited;
+        vector<vector<int> > ans;
+        
+        for (int node = 0; node < V; node++)
+        {
+            if (!visited[node])
+            {
+                ans.push_back({});
+                dfs(node, visited, adj, ans);
+            }
+        }
+        
+        return ans;
+    }
+};
