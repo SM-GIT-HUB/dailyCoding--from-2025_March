@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void dfs(int &mainNode, int node, bitset<1001>& visited, vector<vector<int> >& adj, vector<vector<int> >& ans)
+    {
+        visited[node] = 1;
+        if (node != mainNode) ans[mainNode].push_back(node);
+
+        for (int adjNode : adj[node])
+        {
+            if (!visited[adjNode]) dfs(mainNode, adjNode, visited, adj, ans);
+        }
+    }
+
+    vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
+        vector<vector<int> > ans(n);
+        vector<vector<int> > adj(n);
+
+        for (auto &e : edges)
+        {
+            adj[e[1]].push_back(e[0]);
+        }
+
+        bitset<1001> visited;
+
+        for (int node = 0; node < n; node++)
+        {
+            visited.reset();
+            dfs(node, node, visited, adj, ans);
+        }
+
+        for (auto &v : ans) sort(v.begin(), v.end());
+
+        return ans;
+    }
+};
