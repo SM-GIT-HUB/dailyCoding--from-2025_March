@@ -1,0 +1,18 @@
+// User function template for C++
+class Solution {
+  public:
+    int totHammingDist(vector<int>& arr) {
+        // code here
+        int ans = 0;
+        
+        for (int i = 31; i >= 0; i--)
+        {
+            int count = 0;
+            for (int x : arr) count += ((x >> i) & 1);
+            
+            ans += count * (arr.size() - count);
+        }
+        
+        return ans;
+    }
+};
