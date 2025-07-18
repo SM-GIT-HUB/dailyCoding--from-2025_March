@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int mappedVal(int x, vector<int>& mapping)
+    {
+        if (x == 0) return mapping[x];
+
+        int ten = 1;
+        int newX = 0;
+
+        while (x != 0)
+        {
+            newX = newX + ten * mapping[(x % 10)];
+            ten = ten * 10;
+            x = x / 10;
+        }
+
+        return newX;
+    }
+
+    vector<int> sortJumbled(vector<int>& mapping, vector<int>& nums) {
+        vector<pair<int, int> > pairs(nums.size());
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            pairs[i] = {mappedVal(nums[i], mapping), i};
+        }
+
+        vector<int> ans;
+        ans.reserve(nums.size());
+        sort(pairs.begin(), pairs.end());
+        
+        for (auto &p : pairs)
+        {
+            ans.push_back(nums[p.second]);
+        }
+
+        return ans;
+    }
+};
