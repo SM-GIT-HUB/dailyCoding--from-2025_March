@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string s)
+{
+    //Write your code here
+    int mapp[26] = {0};
+    int n = s.size();
+
+    int ans = 1;
+    int start = 0, end = 0;
+
+    while (end < n)
+    {
+        mapp[s[end] - 'a']++;
+
+        while (mapp[s[end] - 'a'] > 1)
+        {
+            mapp[s[start++] - 'a']--;
+        }
+
+        ans = max(end - start + 1, ans);
+        end++;
+    }
+
+    return ans;
+}
