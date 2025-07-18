@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int mostFrequent(vector<int>& arr, int key) {
+        int maxi = 0;
+        int target = 0;
+        int mapp[1001] = {0};
+
+        for (int i = 0; i < arr.size() - 1; i++)
+        {
+            if (arr[i] == key)
+            {
+                if (++mapp[arr[i + 1]] > maxi)
+                {
+                    target = arr[i + 1];
+                    maxi = mapp[arr[i + 1]];
+                }
+            }
+        }
+
+        return target;
+    }
+};
