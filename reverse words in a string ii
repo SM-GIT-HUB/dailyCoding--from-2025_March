@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+
+string reverseOrderWords(string str) {
+    // Write your code here
+    string ans = "";
+    int n = str.size();
+
+    int idx = 0;
+
+    while (idx < n)
+    {
+        if (str[idx] == ' ')
+        {
+            ans.push_back(' ');
+            idx++;
+            continue;
+        }
+
+        int i = idx;
+
+        while (i < n && str[i] != ' ') i++;
+
+        for (int j = i - 1; j >= idx; j--)
+        {
+            ans.push_back(str[j]);
+        }
+
+        idx = i;
+    }
+
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
