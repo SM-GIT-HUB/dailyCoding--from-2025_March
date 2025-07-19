@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<string> removeSubfolders(vector<string>& folder) {
+        vector<string> ans;
+        unordered_set<string_view> sett(folder.begin(), folder.end());
+
+        for (string &f : folder)
+        {
+            int flag = 1;
+
+            for (int i = 2; i < f.size(); i++)
+            {
+                if (f[i] == '/' && sett.count(string_view(f.data(), i)))
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+
+            if (flag) ans.emplace_back(f);
+        }
+
+        return ans;
+    }
+};
