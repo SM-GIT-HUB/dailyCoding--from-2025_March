@@ -1,0 +1,31 @@
+class Solution {
+  public:
+    int vowelCount(string& s) {
+        // code here
+        int mapp[26] = {0};
+        int vowels = 0;
+        
+        string allVowels = "aeiou";
+        
+        for (char x : s)
+        {
+            if (allVowels.find(x) != string::npos && ++mapp[x - 'a'] == 1) vowels++;
+        }
+        
+        if (!vowels) return 0;
+        
+        int ans = 1;
+        
+        for (int i = 1; i <= vowels; i++)
+        {
+            ans = ans * i;
+        }
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i]) ans = ans * mapp[i];
+        }
+        
+        return ans;
+    }
+};
