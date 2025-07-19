@@ -1,0 +1,44 @@
+#include <bits/stdc++.h> 
+
+int memoization(int n, int k, int mask, vector<string>& arr, vector<int>& dp)
+{
+    if (!(mask & (mask - 1))) return 0;
+    if (dp[mask] != -1) return dp[mask];
+
+    int ans = 1e9;
+
+    for (int pos = 0; pos < k; pos++)
+    {
+        int mask0 = 0;
+        int mask1 = 0;
+        int touch = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            if ((mask >> i) & 1)
+            {
+                touch++;
+
+                if (arr[i][pos] == '0') mask0 = mask0 | (1 << i);
+                else mask1 = mask1 | (1 << i);
+            }
+        }
+
+        if (mask0 && mask1)
+        {
+            int a = memoization(n, k, mask0, arr, dp);
+            int b = memoization(n, k, mask1, arr, dp);
+
+            ans = min(ans, touch + a + b);
+        }
+    }
+
+    return dp[mask] = ans;
+}
+
+int minimumTouchesRequired(int n, vector<string> arr)
+{
+	// Wirte your code here.
+    vector<int> dp(1 << n, -1);
+    return memoization(n, arr[0].size(), (1 << n) - 1, arr, dp);
+}
