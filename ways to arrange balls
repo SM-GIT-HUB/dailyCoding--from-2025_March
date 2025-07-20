@@ -1,6 +1,11 @@
 #include <bits/stdc++.h>
 
-long long dp[16][16][16][3];
+long long dp[1 << 14];
+
+int encode(int a, int b, int c, int p)
+{
+	return (a << 10) | (b << 6) | (c << 2) | p;
+}
 
 long long memoization(int p, int a, int b, int c)
 {
@@ -10,7 +15,8 @@ long long memoization(int p, int a, int b, int c)
 
 	if (!a && !b && !c) return 1;
 
-	if (dp[a][b][c][p] != -1) return dp[a][b][c][p];
+	int mask = encode(a, b, c, p);
+	if (dp[mask] != -1) return dp[mask];
 
 	long long ans = 0;
 
@@ -30,7 +36,7 @@ long long memoization(int p, int a, int b, int c)
 		if (b) ans += memoization(1, a, b - 1, c);
 	}
 
-	return dp[a][b][c][p] = ans;
+	return dp[mask] = ans;
 }
 
 long long int totalWays(int a, int b, int c)
