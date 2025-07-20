@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> replaceNonCoprimes(vector<int>& nums) {
+        vector<int> stack;
+
+        for (int x : nums)
+        {
+            while (!stack.empty())
+            {
+                int gcd = __gcd(x, stack.back());
+
+                if (gcd > 1)
+                {
+                    int lcm = (1LL * x * stack.back()) / gcd;
+                    stack.pop_back();
+                    x = lcm;
+                }
+                else
+                    break;
+            }
+
+            stack.push_back(x);
+        }
+
+        return stack;
+    }
+};
