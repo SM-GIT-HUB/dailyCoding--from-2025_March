@@ -1,0 +1,109 @@
+class Solution {
+public:
+    struct Node {
+        string data;
+        unordered_map<string, Node*> children;
+
+        Node(string d): data(d) {}
+    };
+
+    class Trie {
+    public:
+        Node* root;
+
+        Trie()
+        {
+            root = new Node("/");
+        }
+
+        void insert(int idx, vector<string>& path)
+        {
+            Node* curr = root;
+
+            for (string &word : path)
+            {
+                if (!curr->children[word]) {
+                    curr->children[word] = new Node(word);
+                }
+
+                curr = curr->children[word];
+            }
+        }
+
+        string dfs(Node* curr, unordered_set<Node*>& mark, unordered_map<string, Node*>& mapp)
+        {
+            string key = "";
+            vector<string> nextKeys;
+
+            for (auto &c : curr->children)
+            {
+                string cKey = dfs(c.second, mark, mapp);
+                nextKeys.push_back(cKey);
+            }
+
+            sort(nextKeys.begin(), nextKeys.end());
+
+            for (string &cKey : nextKeys)
+            {
+                key += "(" + cKey + ")";
+            }
+
+            if (mapp.count(key))
+            {
+                mark.insert(curr);
+                mark.insert(mapp[key]);
+            }
+            else if (key.size())
+                mapp[key] = curr;
+
+            return curr->data + key;
+        }
+
+        void search(unordered_set<Node*>& mark, unordered_map<string, Node*>& mapp)
+        {
+            for (auto &c : root->children)
+            {
+                dfs(c.second, mark, mapp);
+            }
+        }
+
+        void findDfs(Node* curr, vector<string>& temp, vector<vector<string> >& ans, unordered_set<Node*>& mark)
+        {
+            if (mark.count(curr)) return;
+            ans.push_back(temp);
+
+            for (auto &c : curr->children)
+            {
+                temp.push_back(c.second->data);
+                findDfs(c.second, temp, ans, mark);
+                temp.pop_back();
+            }
+        }
+
+        void findPaths(vector<vector<string> >& ans, unordered_set<Node*>& mark)
+        {
+            Node* curr = root;
+            
+            for (auto &c : curr->children)
+            {
+                vector<string> temp = {c.second->data};
+                findDfs(c.second, temp, ans, mark);
+            }
+        }
+    };
+
+    vector<vector<string>> deleteDuplicateFolder(vector<vector<string>>& paths) {
+        unordered_set<Node*> mark;
+        unordered_map<string, Node*> mapp;
+
+        Trie tr;
+        for (int i = 0; i < paths.size(); i++) tr.insert(i, paths[i]);
+
+        vector<vector<string> > ans;
+
+        tr.search(mark, mapp);
+        tr.findPaths(ans, mark);
+
+        return ans;
+    }
+};
