@@ -1,0 +1,28 @@
+class Solution {
+public:
+    long long minimalKSum(vector<int>& nums, long long k) {
+        sort(nums.begin(), nums.end());
+
+        long long last = k;
+        long long currSum = (k * (k + 1)) >> 1;
+
+        if (nums[0] <= k)
+        {
+            last++;
+            currSum += last;
+            currSum -= nums[0];
+        }
+        
+        for (int i = 1; i < nums.size(); i++)
+        {
+            if (nums[i] != nums[i - 1] && nums[i] <= last)
+            {
+                last++;
+                currSum += last;
+                currSum -= nums[i];
+            }
+        }
+
+        return currSum;
+    }
+};
