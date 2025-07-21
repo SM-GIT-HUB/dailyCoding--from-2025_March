@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int, pair<TreeNode*, int> > mapp;
+
+        for (vector<int>& vec : descriptions)
+        {
+            TreeNode* curr = nullptr;
+            TreeNode* child = nullptr;
+
+            if (mapp.count(vec[0])) {
+                curr = mapp[vec[0]].first;
+            }
+            else
+            {
+                curr = new TreeNode(vec[0]);
+                mapp[vec[0]] = {curr, 0};
+            }
+
+            if (mapp.count(vec[1]))
+            {
+                child = mapp[vec[1]].first;
+                mapp[vec[1]].second = 1;
+            }
+            else
+            {
+                child = new TreeNode(vec[1]);
+                mapp[vec[1]] = {child, 1};
+            }
+
+            if (vec[2] == 1) curr->left = child;
+            else curr->right = child;
+        }
+
+        TreeNode* ans = nullptr;
+
+        for (auto &it : mapp)
+        {
+            if (it.second.second == 0)
+            {
+                ans = it.second.first;
+                break;
+            }
+        }
+
+        return ans;
+    }
+};
