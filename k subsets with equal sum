@@ -1,0 +1,38 @@
+#include <bits/stdc++.h> 
+
+int recur(int idx, int n, int curr, int sum, int c, int k, vector<int>& arr, string &mask)
+{
+    if (c == k) {
+        return (mask.find('0') == string::npos);
+    }
+    
+    if (curr == sum) {
+        return recur(0, n, 0, sum, c + 1, k, arr, mask);
+    }
+    
+    if (curr > sum || idx == n) return 0;
+
+    if (mask[idx] == '0')
+    {
+        mask[idx] = '1';
+        if (recur(idx + 1, n, curr + arr[idx], sum, c, k, arr, mask)) return 1;
+        mask[idx] = '0';
+    }
+
+    return recur(idx + 1, n, curr, sum, c, k, arr, mask);
+}
+
+bool splitArray(vector<int> &arr, int k) {
+    // Write your code here
+    int n = arr.size();
+    
+    int sum = 0;
+    for (int x : arr) sum += x;
+
+    if (sum % k) return 0;
+    
+    sum = sum / k;
+    string mask = string(n, '0');
+    
+    return recur(0, n, 0, sum, 0, k, arr, mask);
+}
