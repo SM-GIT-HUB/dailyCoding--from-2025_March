@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<string> cellsInRange(string s) {
+        vector<string> ans;
+
+        for (char x = s[0]; x <= s[3]; x++)
+        {
+            for (char i = s[1]; i <= s[4]; i++)
+            {
+                ans.emplace_back(string(1, x) + string(1, i));
+            }
+        }
+
+        return ans;
+    }
+};
