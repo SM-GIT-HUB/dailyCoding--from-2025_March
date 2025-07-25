@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+
+const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+
+int get(char ch)
+{
+	if (ch == 'U') return 0;
+	if (ch == 'D') return 1;
+	if (ch == 'R') return 2;
+	return 3;
+}
+
+int minChanges(int m, int n, vector<vector<char> > &mat) {
+	// Write your code here.
+	vector<vector<int> > dist(m, vector<int>(n, 1e9));
+	deque<pair<int, int> > dq;
+
+	dist[0][0] = 0;
+	dq.push_front({0, 0});
+
+	auto check = [&](int x, int y) {
+		return (x >= 0 && x < m && y >= 0 && y < n);
+	};
+
+	while (!dq.empty())
+	{
+		int x = dq.front().first;
+		int y = dq.front().second;
+		dq.pop_front();
+
+		int dir = get(mat[x][y]);
+
+		for (int i = 0; i < 4; i++)
+		{
+			int newX = x + dirs[i][0];
+			int newY = y + dirs[i][1];
+
+			if (!check(newX, newY)) continue;
+
+			int cost = (i != dir);
+
+			if (dist[x][y] + cost < dist[newX][newY])
+			{
+				dist[newX][newY] = dist[x][y] + cost;
+
+				if (cost == 0) {
+					dq.push_front({newX, newY});
+				}
+				else
+					dq.push_back({newX, newY});
+			}
+		}
+	}
+
+	return dist[m - 1][n - 1];
+}
