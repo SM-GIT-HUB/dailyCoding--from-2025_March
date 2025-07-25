@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+const int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+vector<vector<int>> spiralMatrix(int m, int n, int r, int c)
+{
+	// Write your Code here.
+	vector<vector<int> > ans = {{r, c}};
+
+	int i = 0;
+	int count = m * n;
+
+	set<pair<int, int> > sett;
+	sett.insert({r, c});
+
+	r = r + dirs[i][0];
+	c = c + dirs[i][1];
+
+	sett.insert({r, c});
+
+	while (ans.size() < count)
+	{
+		if (r >= 0 && r < m && c >= 0 && c < n) {
+			ans.push_back({r, c});
+		}
+		
+		int newR = r + dirs[(i + 1) % 4][0];
+		int newC = c + dirs[(i + 1) % 4][1];
+
+		if (!sett.count({newR, newC}))
+		{
+			r = newR;
+			c = newC;
+			sett.insert({r, c});
+			i = (i + 1) % 4;
+		}
+		else
+		{
+			r = r + dirs[i][0];
+			c = c + dirs[i][1];
+			sett.insert({r, c});
+		}
+	}
+
+	return ans;
+}
