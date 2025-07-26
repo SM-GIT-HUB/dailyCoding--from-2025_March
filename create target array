@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+int createTarget(vector<int> &target)
+{
+    // Write your code here
+    long long sum = 0;
+    priority_queue<long long> pq;
+
+    for (int x : target)
+    {
+        sum += x;
+        pq.push(x);
+    }
+
+    while (pq.top() > 1)
+    {
+        long long curr = pq.top();
+        pq.pop();
+
+        long long rest = sum - curr;
+
+        if (rest == 0 || curr <= rest) return 0;
+
+        long long prev = curr % rest;
+        if (prev == 0 && rest != 1) return 0;
+
+        sum = rest + (prev == 0? rest : prev);
+        pq.push(prev == 0? rest : prev);
+    }
+
+    return 1;
+}
