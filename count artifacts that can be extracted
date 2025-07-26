@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int digArtifacts(int n, vector<vector<int>>& artifacts, vector<vector<int>>& dig) {
+        bitset<1001> sett[1001];
+        for (auto &v : dig) sett[v[0]][v[1]] = 1;
+
+        int ans = 0;
+
+        for (auto &v : artifacts)
+        {
+            int r1 = v[0], c1 = v[1];
+            int r2 = v[2], c2 = v[3];
+
+            int flag = 1;
+
+            for (int i = r1; i <= r2 && flag; i++)
+            {
+                for (int j = c1; j <= c2 && flag; j++)
+                {
+                    if (!sett[i][j]) flag = 0;
+                }
+            }
+
+            if (flag) ans++;
+        }
+
+        return ans;
+    }
+};
