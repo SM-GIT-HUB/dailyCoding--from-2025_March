@@ -1,0 +1,48 @@
+class Solution {
+  public:
+    vector<int> findMajority(vector<int>& arr) {
+        // Code here
+        int elem1 = -1, count1 = 0;
+        int elem2 = -1, count2 = 0;
+        
+        for (int x : arr)
+        {
+            if (elem1 == x) {
+                count1++;
+            }
+            else if (elem2 == x) {
+                count2++;
+            }
+            else if (count1 == 0)
+            {
+                elem1 = x;
+                count1++;
+            }
+            else if (count2 == 0)
+            {
+                elem2 = x;
+                count2++;
+            }
+            else
+            {
+                count1--;
+                count2--;
+            }
+        }
+        
+        vector<int> ans;
+        count1 = count2 = 0;
+        
+        for (int x : arr)
+        {
+            if (x == elem1) count1++;
+            else if (x == elem2) count2++;
+        }
+        
+        if (count1 > arr.size() / 3) ans.push_back(elem1);
+        if (count2 > arr.size() / 3) ans.push_back(elem2);
+        
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
