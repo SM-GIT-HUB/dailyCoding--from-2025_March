@@ -1,0 +1,64 @@
+class Solution {
+    int dp[1001][1001];
+public:
+    int memoization(int idx, int n, string &floor, int carpets, int len)
+    {
+        if (idx == n) return 0;
+
+        if (dp[idx][carpets] != -1) return dp[idx][carpets];
+        
+        int ans = 1e5;
+
+        if (floor[idx] == '1')
+        {
+            ans = min(ans, 1 + memoization(idx + 1, n, floor, carpets, len));
+
+            if (carpets) {
+                ans = min(ans, memoization(min(idx + len, n), n, floor, carpets - 1, len));
+            }
+        }
+        else
+            ans = memoization(idx + 1, n, floor, carpets, len);
+        
+        return dp[idx][carpets] = ans;
+    }
+
+    int tabulation(int n, string &floor, int carpets, int len)
+    {
+        memset(dp, 0, sizeof(dp));
+
+        for (int idx = n - 1; idx >= 0; idx--)
+        {
+            for (int c = 0; c <= carpets; c++)
+            {
+                int ans = 1e5;
+
+                if (floor[idx] == '1')
+                {
+                    ans = min(ans, 1 + dp[idx + 1][c]);
+
+                    if (c) {
+                        ans = min(ans, dp[min(idx + len, n)][c - 1]);
+                    }
+                }
+                else
+                    ans = dp[idx + 1][c];
+                
+                dp[idx][c] = ans;
+            }
+        }
+
+        return dp[0][carpets];
+    }
+
+    int minimumWhiteTiles(string floor, int carpets, int len) {
+        int n = floor.size();
+
+        // memset(dp, -1, sizeof(dp));
+        // int ans = memoization(0, n, floor, carpets, len);
+
+        int ans = tabulation(n, floor, carpets, len);
+
+        return ans;
+    }
+};
