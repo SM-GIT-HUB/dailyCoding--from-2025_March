@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+#include<string> 
+
+string findShortestPalindrome(string &str)
+{
+    // Write your code here.
+    string rev = str;
+    reverse(rev.begin(), rev.end());
+
+    string com = str + "#" + rev;
+    int n = com.size();
+
+    int len = 0, idx = 1;
+    vector<int> lps(n, 0);
+
+    while (idx < n)
+    {
+        if (com[len] == com[idx]) {
+            lps[idx++] = ++len;
+        }
+        else if (len == 0) {
+            lps[idx++] = len;
+        }
+        else
+            len = lps[len - 1];
+    }
+
+    string suffix = str.substr(lps[n - 1]);
+    reverse(suffix.begin(), suffix.end());
+    return suffix + str;
+}
