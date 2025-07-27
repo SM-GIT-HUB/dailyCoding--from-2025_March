@@ -1,0 +1,33 @@
+class Solution {
+public:
+    long long maximumSubsequenceCount(string txt, string pat) {
+        if (pat[0] == pat[1])
+        {
+            long long count = 0;
+
+            for (char &x : txt)
+            {
+                if (x == pat[0]) count++;
+            }
+
+            return (count * (count + 1) >> 1);
+        }
+
+        int a = 0, b = 0;
+        long long count = 0;
+
+        for (char &x : txt)
+        {
+            if (x == pat[0]) {
+                a++;
+            }
+            else if (x == pat[1])
+            {
+                count += a;
+                b++;
+            }
+        }
+
+        return count + ((a > b)? a : b);
+    }
+};
