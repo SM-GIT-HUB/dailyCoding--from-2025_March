@@ -1,0 +1,19 @@
+
+void track(long long num, long long n, vector<long long>& ans)
+{
+    if (num > n) return;
+    if (num != 0) ans.push_back(num);
+
+    track(num * 10 + 2, n, ans);
+    track(num * 10 + 5, n, ans);
+}
+
+vector<long long> createSequence(long long n){
+    // Write your code here.
+    vector<long long> ans;
+
+    track(0, n, ans);
+    sort(ans.begin(), ans.end());
+
+    return ans;
+}
