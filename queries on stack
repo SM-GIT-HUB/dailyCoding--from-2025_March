@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+/*
+
+    Here, queries[i] is a vector of integer representing the ith query, 
+    in which for different type of queries i.e -:
+    1. PUSH 'X' -: queries[i][0] = 1, and queries[i][1] = 'X';
+    2. POP -: queries[i][0] = 2;
+    3. INC 'K', 'Y' -: queries[i][0] = 3, queries[i][1] = 'K' and queries[i][2] = 'Y';
+    
+*/
+
+vector<int> answerQueries(vector<vector<int>> &queries, int limit) {
+    // Write your code here.
+    vector<int> lazy = {0};
+    vector<int> stack;
+
+    int size = 0;
+    int lzsize = 0;
+
+    vector<int> ans;
+
+    for (auto &q : queries)
+    {
+        if (q[0] == 1)
+        {
+            if (size == limit) continue;
+
+            size++;
+            stack.push_back(q[1]);
+            if (lzsize < size) lazy.push_back(0);
+        }
+        else if (q[0] == 2)
+        {
+            if (size == 0)
+            {
+                ans.push_back(-1);
+                continue;
+            }
+
+            int top = stack.back() + lazy[size];
+
+            if (size > 1) lazy[size - 1] += lazy[size];
+            lazy[size--] = 0;
+
+            stack.pop_back();
+            ans.push_back(top);
+        }
+        else
+        {
+            if (size >= q[1]) lazy[q[1]] += q[2];
+            else lazy[size] += q[2];
+        }
+    }
+
+    return ans;
+}
