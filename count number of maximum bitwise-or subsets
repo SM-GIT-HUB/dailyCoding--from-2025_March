@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int track(int idx, int n, vector<int>& arr, int orr, int &maxi)
+    {
+        if (idx == n) return (orr == maxi);
+
+        if (orr == maxi) return 1 << (n - idx);
+
+        int include = track(idx + 1, n, arr, orr | arr[idx], maxi);
+        int exclude = track(idx + 1, n, arr, orr, maxi);
+
+        return (include + exclude);
+    }
+
+    int countMaxOrSubsets(vector<int>& arr) {
+        int maxi = 0;
+        int n = arr.size();
+
+        for (int x : arr) maxi = maxi | x;
+
+        int ans = track(0, n, arr, 0, maxi);
+        return ans;
+    }
+};
