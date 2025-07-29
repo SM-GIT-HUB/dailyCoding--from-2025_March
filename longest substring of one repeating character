@@ -1,0 +1,116 @@
+class Solution {
+public:
+    struct Node {
+        char leftChar;
+        char rightChar;
+        int leftCount;
+        int rightCount;
+        int maxLen;
+    };
+
+    class SegTree {
+    public:
+        int size;
+        vector<Node> tree;
+
+        void buildTree(int idx, int start, int end, string &str)
+        {
+            if (start == end)
+            {
+                tree[idx] = {str[start], str[start], 1, 1, 1};
+                return;
+            }
+
+            int left = 2 * idx + 1;
+            int right = left + 1;
+            int mid = (start + end) >> 1;
+
+            buildTree(left, start, mid, str);
+            buildTree(right, mid + 1, end, str);
+
+            Node &L = tree[left];
+            Node &R = tree[right];
+
+            Node curr = {L.leftChar, R.rightChar, L.leftCount, R.rightCount, max(L.maxLen, R.maxLen)};
+
+            if (L.leftCount == (mid - start + 1) && L.rightChar == R.leftChar) {
+                curr.leftCount += R.leftCount;
+            }
+
+            if (R.rightCount == (end - mid) && L.rightChar == R.leftChar) {
+                curr.rightCount += L.rightCount;
+            }
+
+            if (L.rightChar == R.leftChar) {
+                curr.maxLen = max(curr.maxLen, L.rightCount + R.leftCount);
+            }
+
+            tree[idx] = curr;
+        }
+
+        void pointUpdate(int idx, int start, int end, int index, char x)
+        {
+            if (start == end)
+            {
+                tree[idx].leftChar = tree[idx].rightChar = x;
+                return;
+            }
+
+            int left = 2 * idx + 1;
+            int right = left + 1;
+            int mid = (start + end) >> 1;
+
+            if (index <= mid) {
+                pointUpdate(left, start, mid, index, x);
+            }
+            else
+                pointUpdate(right, mid + 1, end, index, x);
+            
+            Node &L = tree[left];
+            Node &R = tree[right];
+
+            Node curr = {L.leftChar, R.rightChar, L.leftCount, R.rightCount, max(L.maxLen, R.maxLen)};
+
+            if (L.leftCount == (mid - start + 1) && L.rightChar == R.leftChar) {
+                curr.leftCount += R.leftCount;
+            }
+
+            if (R.rightCount == (end - mid) && L.rightChar == R.leftChar) {
+                curr.rightCount += L.rightCount;
+            }
+
+            if (L.rightChar == R.leftChar) {
+                curr.maxLen = max(curr.maxLen, L.rightCount + R.leftCount);
+            }
+
+            tree[idx] = curr;
+        }
+
+        void updatePoint(int index, char x)
+        {
+            pointUpdate(0, 0, size - 1, index, x);
+        }
+
+        SegTree(int n, string s)
+        {
+            size = n;
+            tree.resize(4 * n);
+            buildTree(0, 0, size - 1, s);
+        }
+    };
+
+    vector<int> longestRepeating(string s, string queryCharacters, vector<int>& queryIndices) {
+        SegTree st(s.size(), s);
+
+        vector<int> ans;
+        ans.reserve(queryIndices.size());
+
+        for (int i = 0; i < queryIndices.size(); i++)
+        {
+            st.updatePoint(queryIndices[i], queryCharacters[i]);
+            ans.push_back(st.tree[0].maxLen);
+        }
+
+        return ans;
+    }
+};
