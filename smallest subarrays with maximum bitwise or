@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> smallestSubarrays(vector<int>& arr) {
+        vector<int> ans(arr.size());
+
+        for (int i = 0; i < arr.size(); i++)
+        {
+            ans[i] = 1;
+            
+            for (int j = i - 1; j >= 0 && arr[j] != (arr[j] | arr[i]); j--)
+            {
+                arr[j] = arr[j] | arr[i];
+                ans[j] = i - j + 1;
+            }
+        }
+
+        return ans;
+    }
+};
