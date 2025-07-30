@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    vector<int> asciirange(string& s) {
+        // code here
+        int sum[26] = {0};
+        int last[26] = {0};
+        
+        int curr = 0;
+        
+        for (char x : s)
+        {
+            if (last[x - 'a']) {
+                sum[x - 'a'] = curr - last[x - 'a'];
+            }
+            else
+                last[x - 'a'] = curr + x;
+            
+            curr += x;
+        }
+        
+        vector<int> ans;
+        
+        for (int x : sum)
+        {
+            if (x) ans.push_back(x);
+        }
+        
+        return ans;
+    }
+};
