@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+bool duplicateParanthesis(string &expr)
+{
+    // Write your code here
+    vector<char> stack;
+
+    for (char x : expr)
+    {
+        if (x != ')') {
+            stack.push_back(x);
+        }
+        else
+        {
+            if (stack.back() == '(') return 1;
+
+            while (stack.back() != '(')
+            {
+                stack.pop_back();
+            }
+
+            stack.pop_back();
+        }
+    }
+
+    return 0;
+}
