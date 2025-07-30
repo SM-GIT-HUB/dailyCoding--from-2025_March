@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+int numberofSubarrays(vector<int> & arr, int n){
+    // Write your code here.
+    int idx = 0;
+    int count = 0;
+
+    while (idx < n)
+    {
+        int i = idx;
+
+        while (i < n && arr[i] == arr[idx])
+        {
+            i++;
+        }
+
+        int len = i - idx;
+        count += len * (len + 1) >> 1;
+
+        idx = i;
+    }
+
+    return count;
+}
