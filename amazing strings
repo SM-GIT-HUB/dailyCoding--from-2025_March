@@ -1,0 +1,25 @@
+string amazingStrings(string first, string second,string third) {
+    // Write your code here.
+    int mapp[26] = {0};
+
+    for (char x : third) mapp[x - 'A']++;
+
+    for (char x : first)
+    {
+        if (!mapp[x - 'A']) return "NO";
+        mapp[x - 'A']--;
+    }
+
+    for (char x : second)
+    {
+        if (!mapp[x - 'A']) return "NO";
+        mapp[x - 'A']--;
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (mapp[i]) return "NO";
+    }
+
+    return "YES";
+}
