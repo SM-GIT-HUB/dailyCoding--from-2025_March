@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int powerfulInteger(vector<vector<int>>& intervals, int k) {
+        // code here
+        map<int, int> mapp;
+        
+        for (auto &in : intervals)
+        {
+            mapp[in[0]]++;
+            mapp[in[1] + 1]--;
+        }
+        
+        int ans = -1;
+        int count = 0;
+        
+        for (auto &[pos, c] : mapp)
+        {
+            if (count >= k) {
+                ans = max(ans, pos - 1);
+            }
+            
+            count += c;
+            
+            if (count >= k) ans = pos;
+        }
+        
+        return ans;
+    }
+};
