@@ -1,0 +1,25 @@
+
+void track(int idx, int n, string &temp, vector<string>& ans)
+{
+    if (idx >= n)
+    {
+        ans.push_back(temp);
+        return;
+    }
+
+    track(idx + 1, n, temp, ans);
+
+    temp[idx] = '1';
+    track(idx + 2, n, temp, ans);
+    temp[idx] = '0';
+}
+
+vector<string> generateString(int N) {
+    // Write your code here.
+    vector<string> ans;
+    string temp = string(N, '0');
+
+    track(0, N, temp, ans);
+
+    return ans;
+}
