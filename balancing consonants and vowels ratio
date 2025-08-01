@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    int countBalanced(vector<string>& arr) {
+        // code here
+        string vowels = "aeiou";
+        unordered_map<int, int> mapp;
+        
+        int ans = 0;
+        int vowel = 0;
+        int conso = 0;
+        
+        mapp[0] = 1;
+        
+        for (string &str : arr)
+        {
+            for (char x : str)
+            {
+                if (vowels.find(x) != string::npos) vowel++;
+                else conso++;
+            }
+            
+            int diff = vowel - conso;
+            ans += mapp[diff];
+            
+            mapp[diff]++;
+        }
+        
+        return ans;
+    }
+};
