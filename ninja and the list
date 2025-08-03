@@ -1,0 +1,55 @@
+#include <bits/stdc++.h> 
+/*
+These are pre-implemented class methods. You just need to implement the below empty class.
+
+class NestedInteger {
+    public:
+
+    // Return true if this NestedInteger holds a single integer, rather than a nested list.
+
+    bool isInteger() const;
+
+    // Return the single integer that this NestedInteger holds if it holds a single integer.
+    // The result is '-1' if this NestedInteger holds a nested list.
+
+    int getInteger() const;
+
+    // Return the nested list that this NestedInteger holds if it holds a nested list.
+    // The result is '[]' if this NestedInteger holds a single integer.
+
+    NestedInteger getList() const;
+};
+*/
+
+class NestedIterator {
+    public:
+    int idx = 0;
+    vector<int> arr;
+
+    void doFlat(vector<NestedInteger>& nList)
+    {
+        for (NestedInteger &x : nList)
+        {
+            if (x.isInteger()) {
+                arr.push_back(x.getInteger());
+            }
+            else
+                doFlat(x.getList());
+        }
+    }
+
+    NestedIterator(vector<NestedInteger>& nestedList) {
+        // Write your code here.
+        doFlat(nestedList);
+    }
+
+    int next() {
+        // Write your code here.
+        return arr[idx++];
+    }
+
+    bool hasNext() {
+        // Write your code here.
+        return (idx < arr.size());
+    }
+};
