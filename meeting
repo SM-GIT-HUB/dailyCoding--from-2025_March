@@ -1,0 +1,38 @@
+#include <bits/stdc++.h> 
+/*************************************************************************
+		't' is the time at which the meeting ends.
+		'start' is a vector denoting the start time of the ith presentation.
+		'end' is a vector denoting the end time of the ith presentation.
+		'k' is the maximum number of presentations that can be rescheduled.
+*************************************************************************/
+
+int maxInterval(int t, vector<int> &start, vector<int> &end, int k) {
+	// Write your code here.
+	int ans = 0;
+	int total = 0;
+
+	vector<int> gaps;
+	gaps.push_back(start[0] - 0);
+
+	for (int i = 1; i < start.size(); i++)
+	{
+		gaps.push_back(start[i] - end[i - 1]);
+	}
+
+	k++;
+	gaps.push_back(t - end.back());
+
+	for (int i = 0; i < min((int)gaps.size(), k); i++) total += gaps[i];
+
+	ans = max(total, ans);
+
+	for (int i = 1; i + k - 1 < gaps.size(); i++)
+	{
+		total -= gaps[i - 1];
+		total += gaps[i + k - 1];
+
+		ans = max(total, ans);
+	}
+
+	return ans;
+}
