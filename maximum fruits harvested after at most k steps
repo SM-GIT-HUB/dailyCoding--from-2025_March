@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int maxTotalFruits(vector<vector<int>>& fruits, int startPos, int k) {
+        int n = max(fruits.back()[0], startPos);
+        vector<int> prefix(n + 1);
+
+        for (auto &f : fruits) prefix[f[0]] = f[1];
+        for (int i = 1; i <= n; i++) prefix[i] += prefix[i - 1];
+
+        int ans = 0;
+        int leftMost = min(startPos, k);
+
+        for (int x = leftMost; x >= 0; x--)
+        {
+            int left = startPos - x;
+            int right = max(left + k - x, startPos);
+
+            int total = prefix[min(right, n)];
+            if (left > 0) total -= prefix[left - 1];
+
+            ans = max(total, ans);
+        }
+
+        int rightMost = min(n - startPos, k);
+
+        for (int x = rightMost; x >= 0; x--)
+        {
+            int right = startPos + x;
+            int left = min(startPos, right - k + x);
+
+            int total = prefix[right];
+            if (left > 0) total -= prefix[left - 1];
+
+            ans = max(total, ans);
+        }
+
+        return ans;
+    }
+};
