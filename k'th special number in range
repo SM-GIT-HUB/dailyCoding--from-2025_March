@@ -1,0 +1,19 @@
+
+int contains101(int num)
+{
+    string binary = bitset<16>(num).to_string();
+    return (binary.find("101") != string::npos);
+}
+
+int kthSpecialNumber(int l, int r, int k) {
+    // Write your code here.
+    int count = 0;
+
+    for (int num = l; num <= r; num++)
+    {
+        if (contains101(num)) count++;
+        if (count == k) return num;
+    }
+
+    return -1;
+}
