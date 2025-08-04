@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    int maxRectSum(vector<vector<int>> &mat) {
+        // code here
+        int ans = INT_MIN;
+        
+        int m = mat.size();
+        int n = mat[0].size();
+        
+        for (int r = 0; r < m; r++)
+        {
+            vector<int> prefix(n);
+            
+            for (int curr = r; curr < m; curr++)
+            {
+                for (int j = 0; j < n; j++) prefix[j] += mat[curr][j];
+                
+                int sum = 0;
+                
+                for (int x : prefix)
+                {
+                    sum += x;
+                    ans = max(sum, ans);
+                    
+                    if (sum < 0) sum = 0;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
