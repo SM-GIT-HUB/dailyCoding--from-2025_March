@@ -1,0 +1,26 @@
+class Solution {
+    int mapp[100001];
+public:
+    int totalFruit(vector<int>& arr) {
+        int ans = 0;
+        int unique = 0;
+        memset(mapp, 0, sizeof(mapp));
+
+        int start = 0, end = 0;
+        
+        while (end < arr.size())
+        {
+            if (++mapp[arr[end]] == 1) unique++;
+
+            while (unique > 2)
+            {
+                if (--mapp[arr[start++]] == 0) unique--;
+            }
+
+            ans = max(end - start + 1, ans);
+            end++;
+        }
+
+        return ans;
+    }
+};
