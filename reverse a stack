@@ -1,0 +1,29 @@
+
+class Solution {
+  public:
+    void pushAtEnd(int x, stack<int>& st)
+    {
+        if (st.empty())
+        {
+            st.push(x);
+            return;
+        }
+        
+        int curr = st.top();
+        st.pop();
+        
+        pushAtEnd(x, st);
+        st.push(curr);
+    }
+  
+    void reverse(stack<int> &st) {
+        // code here
+        if (st.empty()) return;
+        
+        int x = st.top();
+        st.pop();
+        
+        reverse(st);
+        pushAtEnd(x, st);
+    }
+};
