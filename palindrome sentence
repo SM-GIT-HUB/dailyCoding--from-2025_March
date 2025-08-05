@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    bool isPalinSent(string &s) {
+        // code here
+        int start = 0, end = s.size();
+        
+        while (start < end)
+        {
+            if (!isalnum(s[start]))
+            {
+                start++;
+                continue;
+            }
+            
+            if (!isalnum(s[end]))
+            {
+                end--;
+                continue;
+            }
+            
+            char x = s[start];
+            char y = s[end];
+            
+            if (isalpha(x)) x = tolower(x);
+            if (isalpha(y)) y = tolower(y);
+            
+            if (x != y) return 0;
+            
+            start++;
+            end--;
+        }
+        
+        return 1;
+    }
+};
