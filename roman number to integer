@@ -1,0 +1,30 @@
+class Solution {
+        unordered_map<char, int> mapp = {
+            {'I', 1},
+            {'V', 5},
+            {'X', 10},
+            {'L', 50},
+            {'C', 100},
+            {'D', 500},
+            {'M', 1000}
+        };
+        
+  public:
+    int romanToDecimal(string &s) {
+        // code here
+        int sum = 0;
+        int prev = -1;
+        
+        for (int i = s.size() - 1; i >= 0; i--)
+        {
+            int curr = mapp[s[i]];
+            
+            if (curr < prev) sum -= curr;
+            else sum += curr;
+            
+            prev = curr;
+        }
+        
+        return sum;
+    }
+};
