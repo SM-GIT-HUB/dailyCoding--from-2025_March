@@ -1,0 +1,40 @@
+#include <bits/stdc++.h> 
+
+int dp[51];
+
+int memoization(int idx, int n, string &s, unordered_set<string>& sett)
+{
+    if (idx == n) return 0;
+    if (dp[idx] != -1) return dp[idx];
+
+    int count = 1e5;
+
+    string curr = "";
+
+    for (int i = idx; i < n; i++)
+    {
+        curr.push_back(s[i]);
+
+        if (sett.count(curr)) {
+            count = min(count, 1 + memoization(i + 1, n, s, sett));
+        }
+    }
+
+    return dp[idx] = count;
+}
+
+int stringBreaker(string s, int n, vector<string> dictionary) 
+{
+    // Write your code here.
+    unordered_set<string> sett(dictionary.begin(), dictionary.end());
+
+    if (sett.count(s)) return 0;
+
+    memset(dp, -1, sizeof(dp));
+
+    int ans = memoization(0, s.size(), s, sett);
+
+    if (ans >= 1e5) return -1;
+
+    return (ans - 1);
+}
