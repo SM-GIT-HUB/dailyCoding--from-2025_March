@@ -1,0 +1,67 @@
+#include <bits/stdc++.h> 
+
+void track(int idx, int n, int leftCount, int rightCount, int extraLeft, int extraRight, string &temp, string &str, unordered_set<string>& sett)
+{
+    if (idx == n)
+    {
+        if (!extraLeft && !extraRight) {
+            sett.insert(temp);
+        }
+
+        return;
+    }
+
+    char x = str[idx];
+
+    if (x == '(' && extraLeft) {
+        track(idx + 1, n, leftCount, rightCount, extraLeft - 1, extraRight, temp, str, sett);
+    }
+
+    if (x == ')' && extraRight) {
+        track(idx + 1, n, leftCount, rightCount, extraLeft, extraRight - 1, temp, str, sett);
+    }
+
+    temp.push_back(x);
+
+    if (isalpha(x)) {
+        track(idx + 1, n, leftCount, rightCount, extraLeft, extraRight, temp, str, sett);
+    }
+    else if (x == '(') {
+        track(idx + 1, n, leftCount + 1, rightCount, extraLeft, extraRight, temp, str, sett);
+    }
+    else if (x == ')' && rightCount < leftCount) {
+        track(idx + 1, n, leftCount, rightCount + 1, extraLeft, extraRight, temp, str, sett);
+    }
+
+    temp.pop_back();
+}
+
+vector<string> removeInvalidParentheses(string &str)
+{
+    // Write your code here.
+    int extraLeft = 0;
+    int extraRight = 0;
+
+    for (char x : str)
+    {
+        if (x == '(') {
+            extraLeft++;
+        }
+        else if (x == ')')
+        {
+            if (extraLeft) extraLeft--;
+            else extraRight++;
+        }
+    }
+
+    if (!extraLeft && !extraRight) return {str};
+
+    string temp = "";
+    unordered_set<string> sett;
+
+    track(0, str.size(), 0, 0, extraLeft, extraRight, temp, str, sett);
+
+    vector<string> ans(sett.begin(), sett.end());
+
+    return ans;
+}
