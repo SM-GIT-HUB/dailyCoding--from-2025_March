@@ -1,0 +1,48 @@
+class Solution {
+    bitset<86401> visited;
+  public:
+    int seconds(string &str)
+    {
+        int h = stoi(str.substr(0, 2));
+        int m = stoi(str.substr(3, 2));
+        int s = stoi(str.substr(6, 2));
+        
+        return (h * 3600 + m * 60 + s);
+    }
+  
+    int minDifference(vector<string> &arr) {
+        // code here
+        visited.reset();
+        
+        for (string &str : arr)
+        {
+            int sec = seconds(str);
+            if (visited[sec]) return 0;
+            
+            visited[sec] = 1;
+        }
+        
+        int first = -1;
+        int prev = -1;
+        int last = -1;
+        int ans = 1e9;
+        
+        for (int sec = 0; sec <= 86400; sec++)
+        {
+            if (!visited[sec]) continue;
+            
+            if (prev != -1) {
+                ans = min(sec - prev, ans);
+            }
+            else
+                first = sec;
+            
+            prev = sec;
+            last = sec;
+        }
+        
+        ans = min(86400 - last + first, ans);
+        
+        return ans;
+    }
+};
