@@ -1,0 +1,39 @@
+#include <bits/stdc++.h> 
+vector<int> ninjaHeadquarters(int n, int range, vector<int> &xs, vector<int> &ys, vector<int> &val) {
+	// Write your code here
+	int maxi = -1;
+	vector<int> ans(2);
+
+	int maxX = 0, maxY = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		maxX = max(xs[i], maxX);
+		maxY = max(ys[i], maxY);
+	}
+
+	for (int x = 0; x <= maxX; x++)
+	{
+		for (int y = 0; y <= maxY; y++)
+		{
+			int sum = 0;
+
+			for (int i = 0; i < n; i++)
+			{
+				double dist = sqrt((x - xs[i]) * (x - xs[i]) + (y - ys[i]) * (y - ys[i]));
+
+				if (dist <= range) {
+					sum = sum + floor(val[i] / (1 + dist));
+				}
+			}
+
+			if (sum > maxi)
+			{
+				maxi = sum;
+				ans = {x, y};
+			}
+		}
+	}
+
+	return ans;
+}
