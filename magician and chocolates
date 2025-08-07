@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+
+const int mod = 1e9 + 7;
+
+int maximumChocolates(vector<int> &arr, int k){
+    // Write your code here.
+    priority_queue<int> pq;
+    for (int x : arr) pq.push(x);
+
+    long long ans = 0;
+
+    while (k--)
+    {
+        int curr = pq.top();
+        pq.pop();
+
+        ans = (ans + curr) % mod;
+        pq.push(curr >> 1);
+    }
+
+    return ans;
+}
