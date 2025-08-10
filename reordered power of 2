@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int flag = 0;
+    set<string> sett;
+
+    void getSet()
+    {
+        int power = 1;
+        string curr = "";
+
+        for (int i = 0; i < 30; i++)
+        {
+            curr = to_string(power << i);
+            sort(curr.begin(), curr.end());
+            sett.insert(curr);
+        }
+    }
+
+    bool reorderedPowerOf2(int n) {
+        if (!flag)
+        {
+            getSet();
+            flag = 1;
+        }
+
+        string curr = to_string(n);
+        sort(curr.begin(), curr.end());
+        
+        return sett.count(curr);
+    }
+};
