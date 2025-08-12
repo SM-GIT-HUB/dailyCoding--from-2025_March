@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int mod = 1e9 + 7;
+
+    array<int, 302> nextRow;
+    array<int, 302> currRow;
+
+    void getPows(int n, int x, vector<int>& pows)
+    {
+        for (int i = 1; ; i++)
+        {
+            int curr = pow(i, x);
+            if (curr > n) break;
+
+            pows.push_back(curr);
+        }
+    }
+    
+    int tabulation(int n, int &sum, vector<int>& pows)
+    {
+        for (int i = 0; i < 302; i++) nextRow[i] = 0;
+        nextRow[sum] = 1;
+
+        for (int idx = n - 1; idx >= 0; idx--)
+        {
+            for (int curr = sum; curr >= 0; curr--)
+            {
+                int ans = 0;
+                if (pows[idx] + curr <= sum) ans = nextRow[curr + pows[idx]];
+                
+                ans += nextRow[curr];
+
+                currRow[curr] = ans % mod;
+            }
+
+            nextRow = currRow;
+        }
+
+        return nextRow[0];
+    }
+
+    int numberOfWays(int n, int x) {
+        vector<int> pows;
+        getPows(n, x, pows);
+
+        return tabulation(pows.size(), n, pows);
+    }
+};
