@@ -1,0 +1,63 @@
+class Solution {
+    vector<int> merged;
+public:
+    int merge(int start, int mid, int end, vector<int>& arr)
+    {
+        int count = 0;
+        int j = mid + 1;
+        
+        for (int i = start; i <= mid; i++)
+        {
+            while (j <= end && arr[i] > 2LL * arr[j])
+            {
+                j++;
+            }
+
+            count += j - mid - 1;
+        }
+
+        int i = start;
+        j = mid + 1;
+        int idx = start;
+
+        while (i <= mid && j <= end)
+        {
+            if (arr[i] <= arr[j]) merged[idx++] = arr[i++];
+            else merged[idx++] = arr[j++];
+        }
+
+        while (i <= mid)
+        {
+            merged[idx++] = arr[i++];
+        }
+
+        while (j <= end)
+        {
+            merged[idx++] = arr[j++];
+        }
+
+        for (int idx = start; idx <= end; idx++) arr[idx] = merged[idx];
+
+        return count;
+    }
+
+    int mergeSort(int start, int end, vector<int>& arr)
+    {
+        if (start >= end) return 0;
+
+        int count = 0;
+        int mid = start + ((end - start) >> 1);
+
+        count += mergeSort(start, mid, arr);
+        count += mergeSort(mid + 1, end, arr);
+        count += merge(start, mid, end, arr);
+
+        return count;
+    }
+
+    int reversePairs(vector<int>& arr) {
+        merged.resize(arr.size());
+        int ans = mergeSort(0, arr.size() - 1, arr);
+        return ans;
+    }
+};
