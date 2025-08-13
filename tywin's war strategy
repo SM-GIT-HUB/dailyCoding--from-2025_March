@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    int minSoldiers(vector<int>& arr, int k) {
+        // code here
+        int count = 0;
+        vector<int> notDiv;
+        
+        for (int x : arr)
+        {
+            if (x % k == 0) count++;
+            else notDiv.push_back((x / k + 1) * k - x);
+        }
+        
+        int ans = 0;
+        sort(notDiv.begin(), notDiv.end());
+        
+        for (int x : notDiv)
+        {
+            if (count >= (arr.size() + 1) / 2) break;
+            ans += x;
+            count++;
+        }
+        
+        return ans;
+    }
+};
