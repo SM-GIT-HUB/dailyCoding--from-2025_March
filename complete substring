@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+
+int check(int *mapp1, int *mapp2)
+{
+	for (int i = 0; i < 26; i++)
+	{
+		if (mapp1[i] > mapp2[i]) return 0;
+	}
+
+	return 1;
+}
+
+string findSubString(string s1, string s2){
+    // Write your code here.
+	int n = s1.size();
+	array<int, 2> ins = {0, n};
+
+	int len = s1.size() + 1;
+	int start = 0, end = 0;
+	
+	int mapp1[26] = {0};
+	int mapp2[26] = {0};
+	for (char x : s2) mapp1[x - 'A']++;
+
+	while (end < n)
+	{
+		mapp2[s1[end] - 'A']++;
+
+		while (check(mapp1, mapp2))
+		{
+			int currLen = end - start + 1;
+			if (currLen < len)
+			{
+				len = currLen;
+				ins = {start, end};
+			}
+
+			mapp2[s1[start++] - 'A']--;
+		}
+
+		end++;
+	}
+
+	if (len > n) return "";
+
+	return s1.substr(ins[0], len);
+}
