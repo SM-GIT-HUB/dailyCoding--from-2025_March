@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string largestGoodInteger(string num) {
+        int unique = 0;
+        int mapp[10] = {0};
+
+        int start = 0, end = 0;
+        string ans = "0";
+
+        while (end < num.size())
+        {
+            if (++mapp[num[end] - '0'] == 1) unique++;
+
+            while (unique > 1 || end - start + 1 > 3)
+            {
+                if (--mapp[num[start++] - '0'] == 0) unique--;
+            }
+
+            if (end - start + 1 == 3)
+            {
+                int p = stoi(ans);
+                int curr = stoi(num.substr(start, 3));
+
+                if (curr >= p) ans = num.substr(start, 3);
+            }
+
+            end++;
+        }
+
+        return (ans.size() == 3)? ans : "";
+    }
+};
