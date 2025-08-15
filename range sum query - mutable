@@ -1,0 +1,102 @@
+#include <bits/stdc++.h> 
+
+class SegTree {
+public:
+    int size;
+    vector<int> tree;
+
+    void build(int idx, int start, int end, vector<int>& arr)
+    {
+        if (start == end)
+        {
+            tree[idx] = arr[start];
+            return;
+        }
+
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        build(left, start, mid, arr);
+        build(right, mid + 1, end, arr);
+
+        tree[idx] = tree[left] + tree[right];
+    }
+
+    int rangeSum(int idx, int start, int end, int qStart, int qEnd)
+    {
+        if (end < qStart || qEnd < start) return 0;
+        if (qStart <= start && end <= qEnd) return tree[idx];
+
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        int leftAns = rangeSum(left, start, mid, qStart, qEnd);
+        int rightAns = rangeSum(right, mid + 1, end, qStart, qEnd);
+
+        return (leftAns + rightAns);
+    }
+
+    void updatePoint(int idx, int updateIdx, int val, int start, int end)
+    {
+        if (start == end)
+        {
+            tree[idx] = val;
+            return;
+        }
+
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        if (updateIdx <= mid) {
+            updatePoint(left, updateIdx, val, start, mid);
+        }
+        else
+            updatePoint(right, updateIdx, val, mid + 1, end);
+
+        tree[idx] = tree[left] + tree[right];
+    }
+
+    SegTree(int n, vector<int>& arr)
+    {
+        size = n;
+        tree.resize(4 * n);
+        build(0, 0, size - 1, arr);
+    }
+
+    int getSum(int qStart, int qEnd)
+    {
+        return rangeSum(0, 0, size - 1, qStart, qEnd);
+    }
+
+    void pointUpdate(int idx, int val)
+    {
+        updatePoint(0, idx, val, 0, size - 1);
+    }
+};
+
+class RangeSumQuery
+{
+public:
+    SegTree *st;
+
+    RangeSumQuery(vector<int> &arr)
+    {
+        // Constructor.
+        st = new SegTree(arr.size(), arr);
+    }
+
+    void update(int ind, int val)
+    {
+        // Update operation.
+        st->pointUpdate(ind, val);
+    }
+
+    int sumOfRange(int l, int r)
+    {
+        // Find the sum of range [l,r].
+        return st->getSum(l, r);
+    }
+};
