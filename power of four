@@ -1,0 +1,9 @@
+class Solution {
+public:
+    bool isPowerOfFour(int n) {
+        if (n <= 0) return 0;
+
+        int logg = log2(n);
+        return (1073741824 % n == 0 && !(logg & 1));
+    }
+};
