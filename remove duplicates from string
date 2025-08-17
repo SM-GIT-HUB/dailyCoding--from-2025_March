@@ -1,0 +1,16 @@
+string removeDuplicates(string str, int n)
+{
+    //Write your code here.
+    int mapp[26] = {0};
+    
+    string ans = "";
+
+    for (char x : str)
+    {
+        if (mapp[x - 'a']) continue;
+        ans.push_back(x);
+        mapp[x - 'a']++;
+    }
+
+    return ans;
+}
