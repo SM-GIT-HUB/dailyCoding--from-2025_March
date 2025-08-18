@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+
+class InfiniteArray
+{
+    public:
+
+    int def;
+    unordered_set<int> sett;
+
+    InfiniteArray()
+    {
+        def = 0;
+    }
+        
+    void setAllTrue()
+    {
+        // Implement the function here
+        def = 1;
+        sett.clear();
+    }
+
+    void setAllFalse()
+    {
+        // Implement the function here
+        def = 0;
+        sett.clear();
+    }
+
+    void setIndexTrue(int index) 
+    {
+        // Implement the function here
+        sett.insert(index);
+    }
+
+    void setIndexFalse(int index)
+    {
+        // Implement the function here
+        sett.erase(index);
+    }
+
+    bool getIndex(int index)
+    {
+        // Implement the function here
+        if (sett.count(index) || def) return 1;
+        if (!sett.count(index) || !def) return 0;
+        return 0;
+    }
+};
+
+
