@@ -1,0 +1,23 @@
+class Solution {
+    int mapp[5002];
+public:
+    int hIndex(vector<int>& arr) {
+        for (int i = 0; i <= arr.size(); i++) mapp[i] = 0;
+
+        for (int x : arr)
+        {
+            if (x >= arr.size()) mapp[arr.size()]++;
+            else mapp[x]++;
+        }
+
+        int count = 0;
+
+        for (int h = arr.size(); h >= 0; h--)
+        {
+            count += mapp[h];
+            if (count >= h) return h;
+        }
+
+        return 0;
+    }
+};
