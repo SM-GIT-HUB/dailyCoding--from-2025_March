@@ -1,0 +1,38 @@
+class Solution {
+  public:
+    int binSearch(int start, int end, int val, vector<int>& arr)
+    {
+        int elem = -1;
+        
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+            
+            if (arr[mid] < val)
+            {
+                elem = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        
+        return elem;
+    }
+  
+    vector<int> farMin(vector<int>& arr) {
+        // code here
+        int n = arr.size();
+        
+        vector<int> ans(n, -1);
+        vector<int> minArr(n + 1, 1e7);
+        
+        for (int i = arr.size() - 1; i >= 0; i--)
+        {
+            minArr[i] = min(arr[i], minArr[i + 1]);
+            ans[i] = binSearch(i + 1, arr.size() - 1, arr[i], minArr);
+        }
+        
+        return ans;
+    }
+};
