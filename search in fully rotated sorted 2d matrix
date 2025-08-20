@@ -1,0 +1,42 @@
+class Solution {
+  public:
+    int getRotation(vector<int>& arr)
+    {
+        int start = 0, end = arr.size() - 1;
+        
+        while (start < end)
+        {
+            int mid = (start + end) >> 1;
+            
+            if (arr[mid] < arr[0]) {
+                end = mid;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return start;
+    }
+  
+    bool searchMatrix(vector<vector<int>> &mat, int x) {
+        // code here
+        for (auto &arr : mat)
+        {
+            if (arr[0] <= arr.back())
+            {
+                auto it = lower_bound(arr.begin(), arr.end(), x);
+                if (it != arr.end() && *it == x) return 1;
+            }
+            
+            int p = getRotation(arr);
+            
+            auto it = lower_bound(arr.begin(), arr.begin() + p, x);
+            if (it != arr.end() && *it == x) return 1;
+            
+            it = lower_bound(arr.begin() + p, arr.end(), x);
+            if (it != arr.end() && *it == x) return 1;
+        }
+        
+        return 0;
+    }
+};
