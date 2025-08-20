@@ -1,0 +1,19 @@
+int findAllSubarraysWithGivenSum(vector < int > & arr, int k) {
+    // Write Your Code Here
+    int ans = 0;
+    long long sum = 0;
+    unordered_map<long long, int> mapp;
+    mapp[0] = 1;
+
+    for (int x : arr)
+    {
+        sum += x;
+
+        long long req = sum - k;
+        ans += mapp[req];
+
+        mapp[sum]++;
+    }
+
+    return ans;
+}
