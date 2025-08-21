@@ -1,0 +1,12 @@
+#include <bits/stdc++.h> 
+int hotelBookings(vector<string> queries) {
+    // Write your codes here.
+    int ans = 0;
+
+    for (string &q : queries)
+    {
+        if (q[0] == '+') ans++;
+    }
+
+    return ans;
+}
