@@ -1,0 +1,51 @@
+class Solution {
+  public:
+    int isPos(int x, int k, int n, vector<int>& arr)
+    {
+        int p = 0;
+        int last = -1;
+        
+        for (int i = 0; p < k && i < n; i++)
+        {
+            if (last == -1)
+            {
+                p++;
+                last = i;
+            }
+            else
+            {
+                if (arr[i] - arr[last] >= x)
+                {
+                    p++;
+                    last = i;
+                }
+            }
+        }
+        
+        return (p >= k);
+    }
+  
+    int maxMinDiff(vector<int>& arr, int k) {
+        // code here
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        
+        int ans = -1;
+        int start = 0, end = arr.back() - arr[0];
+        
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+
+            if (isPos(mid, k, n, arr))
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        
+        return ans;
+    }
+};
