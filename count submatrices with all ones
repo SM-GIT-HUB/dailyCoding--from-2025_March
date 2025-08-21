@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int getCount(vector<int>& arr)
+    {
+        int idx = 0;
+        int mini = 0;
+        int count = 0;
+        
+        for (int i = 0; i < arr.size(); i++)
+        {
+            if (arr[i] == 0) continue;
+
+            idx = i;
+            mini = arr[i];
+            
+            while (idx < arr.size() && arr[idx] > 0)
+            {
+                if (arr[idx] < mini) mini = arr[idx];
+                count += mini;
+                idx++;
+            }
+        }
+
+        return count;
+    }
+
+    int numSubmat(vector<vector<int> >& mat) {
+        int count = getCount(mat[0]);
+
+        for (int i = 1; i < mat.size(); i++)
+        {
+            for (int j = 0; j < mat[0].size(); j++)
+            {
+                mat[i][j] = (mat[i][j] == 0)? 0 : mat[i][j] + mat[i - 1][j];
+            }
+
+            count += getCount(mat[i]);
+        }
+
+        return count;
+    }
+};
