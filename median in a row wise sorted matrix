@@ -1,0 +1,33 @@
+class Solution {
+  public:
+    int getCount(int x, vector<vector<int> >& mat)
+    {
+        int count = 0;
+        
+        for (auto &v : mat)
+        {
+            count += upper_bound(v.begin(), v.end(), x) - v.begin();
+        }
+        
+        return count;
+    }
+    
+    int median(vector<vector<int> >& mat) {
+        // code here
+        int start = 1, end = 2000;
+        int total = mat.size() * mat[0].size();
+        
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+            
+            if (getCount(mid, mat) <= (total >> 1)) {
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        
+        return start;
+    }
+};
