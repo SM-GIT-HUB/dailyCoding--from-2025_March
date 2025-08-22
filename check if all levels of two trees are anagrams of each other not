@@ -1,0 +1,64 @@
+#include <bits/stdc++.h> 
+/**********************************************************
+    Following is the Binary Tree Node class structure
+
+    template <typename T>
+    class TreeNode {
+    public :
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this -> val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+***********************************************************/
+
+bitset<101> bit1;
+bitset<101> bit2;
+
+void pushInQ(int size, queue<TreeNode<int>*>& q, bitset<101>& bit)
+{
+    while (size--)
+    {
+        TreeNode<int>* curr = q.front();
+        q.pop();
+
+        bit[curr->val] = 1;
+
+        if (curr->left) q.push(curr->left);
+        if (curr->right) q.push(curr->right);
+    }
+}
+
+bool anagram(TreeNode<int>*root1, int n, TreeNode<int>*root2, int m)
+{
+	// Write your code here
+    queue<TreeNode<int>*> q1;
+    queue<TreeNode<int>*> q2;
+
+    q1.push(root1);
+    q2.push(root2);
+
+    while (q1.size() && q2.size())
+    {
+        int size1 = q1.size();
+        int size2 = q2.size();
+
+        bit1.reset();
+        bit2.reset();
+
+        pushInQ(size1, q1, bit1);
+        pushInQ(size2, q2, bit2);
+
+        if (bit1 != bit2) return 0;
+    }
+
+    if (q1.size() || q2.size()) return 0;
+
+    return 1;
+}
