@@ -1,0 +1,48 @@
+class Solution {
+  public:
+    int isPos(int maxi, int k, vector<int>& arr)
+    {
+        int s = 0;
+        int pages = 0;
+        
+        for (int x : arr)
+        {
+            if (pages + x <= maxi) {
+                pages = pages + x;
+            }
+            else
+            {
+                s++;
+                
+                if (s == k || x > maxi) return 0;
+                
+                pages = x;
+            }
+        }
+        
+        return 1;
+    }
+  
+    int findPages(vector<int> &arr, int k) {
+        // code here
+        if (arr.size() < k) return -1;
+        
+        int ans = -1;
+        int start = 1, end = 1e9;
+        
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+            
+            if (isPos(mid, k, arr))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return ans;
+    }
+};
