@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int isPos(int day, int m, int k, vector<int>& arr)
+    {
+        int count = 0;
+        int bouquets = 0;
+
+        for (int &x : arr)
+        {
+            if (x <= day){
+                count++;
+            }
+            else
+            {
+                bouquets += count / k;
+                count = 0;
+            }
+
+            if (bouquets >= m) return 1;
+        }
+
+        bouquets += count / k;
+
+        return (bouquets >= m);
+    }
+
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        if (m > bloomDay.size() / k) return -1;
+
+        int ans = -1;
+        int start = 1e9, end = 1;
+
+        for (int &x : bloomDay)
+        {
+            start = min(start, x);
+            end = max(x, end);
+        }
+
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+
+            if (isPos(mid, m, k, bloomDay))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+
+        return ans;
+    }
+};
