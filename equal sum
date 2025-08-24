@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+int equalSum(vector<int> token)
+{
+    // Write your code here
+    if (token.size() == 1) return 0;
+
+    int sum1 = 0;
+    int sum2 = -token[0];
+
+    for (int x : token) sum2 += x;
+
+    if (sum1 == sum2) return 0;
+
+    for (int i = 1; i < token.size(); i++)
+    {
+        sum1 += token[i - 1];
+        sum2 -= token[i];
+
+        if (sum1 == sum2) return i;
+    }
+
+    return -1;
+}
