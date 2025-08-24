@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+/*
+ struct Query{
+
+	int type;	// Type of query
+	int l, r;	// Range for query of type-1
+	int idx;	// Index to change for query of type-2
+
+};
+*/
+
+int getNum(int l, int r, string &s)
+{
+    int num = 0;
+
+    for (int i = l; i <= r; i++)
+    {
+        num = (num * 2) % 3;
+        if (s[i] == '1') num = (num + 1) % 3;
+    }
+
+    return num;
+}
+
+vector<int> binaryFlip(int n, string &s, int q, vector<Query> &queries) {
+	// Write your code here
+    vector<int> ans;
+
+    for (auto &q : queries)
+    {
+        if (q.type == 1) ans.push_back(getNum(q.l, q.r, s));
+        else s[q.idx] = '1' - s[q.idx] + '0';
+    }
+
+    return ans;
+}
