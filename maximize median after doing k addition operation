@@ -1,0 +1,54 @@
+class Solution {
+  public:
+    int isPos(long long x, long long k, vector<int>& arr)
+    {
+        int n = arr.size();
+        
+        if (n & 1)
+        {
+            for (int i = n / 2; i < n; i++)
+            {
+                if (arr[i] < x) k -= (x - arr[i]);
+            }
+        }
+        else
+        {
+            long long m = (arr[n / 2] + arr[n / 2 - 1]) / 2;
+            if (m < x)  k -= 2 * x - arr[n / 2] - arr[n / 2 - 1];
+            
+            for (int i = n / 2 + 1; i < n; i++)
+            {
+                if (arr[i] < x) k -= (x - arr[i]);
+            }
+        }
+        
+        return (k >= 0);
+    }
+  
+    int maximizeMedian(vector<int>& arr, int k) {
+        // code here
+        int n = arr.size();
+        sort(arr.begin(), arr.end());
+        
+        long long median = arr[n / 2];
+        
+        if (!(n & 1)) median = (median + arr[n / 2 - 1]) >> 1;
+        
+        long long start = median, end = median + k;
+        
+        while (start <= end)
+        {
+            long long x = (start + end) >> 1;
+
+            if (isPos(x, k, arr))
+            {
+                median = x;
+                start = x + 1;
+            }
+            else
+                end = x - 1;
+        }
+        
+        return median;
+    }
+};
