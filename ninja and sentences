@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+
+void dfs(int row, int m, vector<vector<string> >& arr, vector<string>& temp, vector<vector<string> >& ans)
+{
+    if (row == m)
+    {
+        ans.push_back(temp);
+        return;
+    }
+
+    for (int i = 0; i < arr[row].size(); i++)
+    {
+        temp.push_back(arr[row][i]);
+        dfs(row + 1, m, arr, temp, ans);
+        temp.pop_back();
+    }
+}
+
+void createSentences(vector < vector < string > > & arr, vector < vector < string > > & ans) {
+    // Write your code here.
+    int m = arr.size();
+    vector<string> temp;
+
+    dfs(0, m, arr, temp, ans);
+}
