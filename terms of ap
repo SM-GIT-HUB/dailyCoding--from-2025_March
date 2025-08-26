@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+#include <vector>
+
+vector < int > termsOfAP(int x) {
+    // Write your code here.
+    int n = 1;
+    vector<int> ans;
+
+    for (int i = 0; i < x; i++)
+    {
+        int term = (3 * n++ + 2);
+
+        while (term % 4 == 0)
+        {
+            term = (3 * n++ + 2);
+        }
+
+        ans.push_back(term);
+    }
+
+    return ans;
+}
