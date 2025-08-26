@@ -1,0 +1,25 @@
+#include<vector>
+
+int getLongestZeroSumSubarrayLength(vector<int> &arr){
+	// Write your code here.
+	int sum = 0;
+	unordered_map<int, int> mapp;
+
+	int ans = 0;
+
+	for (int i = 0; i < arr.size(); i++)
+	{
+		sum += arr[i];
+
+		if (sum == 0)
+		{
+			ans = (i + 1);
+			continue;
+		}
+
+		if (mapp.count(sum)) ans = max(i - mapp[sum], ans);
+		else mapp[sum] = i;
+	}
+
+	return ans;
+}
