@@ -1,0 +1,70 @@
+#include <bits/stdc++.h> 
+
+int dp[50][50][2 * 50];
+
+int memoizationDfs(int j, int t, int turn, vector<vector<int> >& adj)
+{
+    if (turn >= 2 * adj.size()) return 0;
+
+    if (j == 0) return 1;
+    if (j == t) return 2;
+
+    if (dp[j][t][turn] != -1) return dp[j][t][turn];
+
+    int ans = -1;
+    int jTurn = (turn % 2 == 0);
+
+    if (jTurn)
+    {
+        ans = 2;
+
+        for (int adjNode : adj[j])
+        {
+            int curr = memoizationDfs(adjNode, t, turn + 1, adj);
+
+            if (curr == 1)
+            {
+                ans = 1;
+                break;
+            }
+            else if (curr == 0) {
+                ans = 0;
+            }
+        }
+    }
+    else
+    {
+        ans = 1;
+
+        for (int adjNode : adj[t])
+        {
+            if (adjNode == 0) continue;
+            int curr = memoizationDfs(j, adjNode, turn + 1, adj);
+
+            if (curr == 2)
+            {
+                ans = 2;
+                break;
+            }
+            else if (curr == 0) {
+                ans = 0;
+            }
+        }
+    }
+
+    return dp[j][t][turn] = ans;
+}
+
+int tomAndJerry(vector<vector<int>> &graph, int n, int edges) {
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+    vector<vector<int> > adj(n);
+
+    for (auto &v : graph)
+    {
+        adj[v[0]].push_back(v[1]);
+        adj[v[1]].push_back(v[0]);
+    }
+
+    return memoizationDfs(1, 2, 0, adj);
+}
