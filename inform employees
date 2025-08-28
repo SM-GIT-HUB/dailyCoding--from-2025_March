@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+int informEmployees(vector<int> &manager, vector<int> &timeToInform, int headId){
+    // Write your code here.
+    int n = manager.size();
+    vector<vector<int> > adj(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (manager[i] == -1) continue;
+        adj[manager[i]].push_back(i);
+    }
+
+    int time = 0;
+    queue<pair<int, int> > q;
+
+    q.push({headId, 0});
+
+    while (!q.empty())
+    {
+        int curr = q.front().first;
+        int t = q.front().second;
+        q.pop();
+
+        time = max(t, time);
+
+        for (int adjNode: adj[curr])
+        {
+            q.push({adjNode, t + timeToInform[curr]});
+        }
+    }
+
+    return time;
+}
