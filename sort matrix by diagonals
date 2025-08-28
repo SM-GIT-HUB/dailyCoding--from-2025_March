@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<int>> sortMatrix(vector<vector<int>>& grid) {
+        vector<int> store;
+        int n = grid.size();
+        
+        for (int col = 1; col < n; col++)
+        {
+            store.clear();
+
+            for (int i = 0, j = col; i < n && j < n; i++, j++)
+            {
+                store.push_back(grid[i][j]);
+            }
+
+            int idx = 0;
+            sort(store.begin(), store.end());
+
+            for (int i = 0, j = col; i < n && j < n; i++, j++)
+            {
+                grid[i][j] = store[idx++];
+            }
+        }
+
+        for (int row = 0; row < n; row++)
+        {
+            store.clear();
+
+            for (int i = row, j = 0; i < n && j < n; i++, j++)
+            {
+                store.push_back(grid[i][j]);
+            }
+
+            int idx = 0;
+            sort(store.rbegin(), store.rend());
+
+            for (int i = row, j = 0; i < n && j < n; i++, j++)
+            {
+                grid[i][j] = store[idx++];
+            }
+        }
+
+        return grid;
+    }
+};
