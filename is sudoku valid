@@ -1,0 +1,34 @@
+class Solution {
+  public:
+    bool isValid(vector<vector<int> >& mat) {
+        // code here
+        int rows[9] = {0};
+        int cols[9] = {0};
+        
+        int boxes[9] = {0};
+        
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (mat[i][j])
+                {
+                    int val = mat[i][j];
+                    int box = (i / 3) * 3 + (j / 3);
+                    
+                    int rowCheck = (rows[i] & (1 << val));
+                    int colCheck = (cols[j] & (1 << val));
+                    int boxCheck = (boxes[box] & (1 << val));
+                    
+                    if (rowCheck || colCheck || boxCheck) return 0;
+                    
+                    rows[i] = rows[i] | (1 << val);
+                    cols[j] = cols[j] | (1 << val);
+                    boxes[box] = boxes[box] | (1 << val);
+                }
+            }
+        }
+        
+        return 1;
+    }
+};
