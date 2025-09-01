@@ -1,0 +1,37 @@
+class Solution {
+public:
+    using dle = double;
+
+    double maxAverageRatio(vector<vector<int>>& classes, int extra) {
+        priority_queue<pair<dle, int> > pq;
+
+        auto calc = [](dle a, dle b) {
+            return (a + 1) / (b + 1) - a / b;
+        };
+
+        for (int i = 0; i < classes.size(); i++)
+        {
+            pq.push({calc(classes[i][0], classes[i][1]), i});
+        }
+
+        while (extra--)
+        {
+            int idx = pq.top().second;
+            pq.pop();
+
+            classes[idx][0]++;
+            classes[idx][1]++;
+
+            pq.push({calc(classes[idx][0], classes[idx][1]), idx});
+        }
+
+        dle ans = 0;
+
+        for (auto &v : classes)
+        {
+            ans += (dle)v[0] / v[1];
+        }
+
+        return (ans / classes.size());
+    }
+};
