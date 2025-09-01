@@ -1,0 +1,57 @@
+class Solution {
+  public:
+    struct obj {
+        int elem;
+        int freq;
+    };
+  
+    int sumOfModes(vector<int>& arr, int k) {
+        // code here
+        int n = arr.size();
+        unordered_map<int, int> mapp;
+        
+        auto comp = [](const obj &a, const obj &b) {
+            if (a.freq != b.freq) return (a.freq < b.freq);
+            return (a.elem > b.elem);
+        };
+        
+        priority_queue<obj, vector<obj>, decltype(comp)> pq(comp);
+        
+        for (int i = 0; i < k; i++)
+        {
+            mapp[arr[i]]++;
+        }
+        
+        for (auto &it : mapp)
+        {
+            pq.push({it.first, it.second});
+        }
+        
+        int ans = pq.top().elem;
+        
+        for (int i = 1; i + k - 1 < n; i++)
+        {
+            int f1 = --mapp[arr[i - 1]];
+            int f2 = ++mapp[arr[i + k - 1]];
+            
+            while (!pq.empty())
+            {
+                int elem = pq.top().elem;
+                int freq = pq.top().freq;
+                
+                if (mapp[elem] != freq)
+                {
+                     pq.pop();
+                     pq.push({elem, mapp[elem]});
+                }
+                else break;
+            }
+            
+            pq.push({arr[i + k - 1], f2});
+            
+            ans += pq.top().elem;
+        }
+        
+        return ans;
+    }
+};
