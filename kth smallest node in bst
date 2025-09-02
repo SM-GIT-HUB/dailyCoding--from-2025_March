@@ -1,0 +1,38 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode
+    {
+    public:
+        T data;
+        TreeNode<T> *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(T x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(T x, TreeNode<T> *left, TreeNode<T> *right) : data(x), left(left), right(right) {}
+    };
+
+************************************************************/
+
+int nodes[10001];
+
+void dfs(TreeNode<int>* root, int &idx)
+{
+    if (!root) return;
+
+    dfs(root->left, idx);
+
+    nodes[idx++] = root->data;
+
+    dfs(root->right, idx);
+}
+
+int kthSmallest(TreeNode<int> *root, int k)
+{
+    //  Write the code here.
+    int idx = 0;
+    dfs(root, idx);
+
+    return nodes[k - 1];
+}
