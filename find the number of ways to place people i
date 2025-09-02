@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numberOfPairs(vector<vector<int>>& ps) {
+        int ans = 0;
+
+        sort(ps.begin(), ps.end(), [](auto &a, auto &b) {
+            return (a[0] == b[0])? (a[1] > b[1]) : (a[0] < b[0]);
+        });
+
+        for (int i = 0; i < ps.size(); i++)
+        {
+            int last = -1;
+            int y1 = ps[i][1];
+
+            for (int j = i + 1; j < ps.size(); j++)
+            {
+                int y2 = ps[j][1];
+
+                if (y2 <= y1 && y2 > last)
+                {
+                    ans++;
+                    last = y2;
+                }
+            }
+        }
+
+        return ans;
+    }
+};
