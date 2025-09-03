@@ -1,0 +1,32 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+            int data;
+            Node *next;
+            Node(int data)
+            {
+                this->data = data;
+                this->next = NULL;
+            }
+        };
+
+*****************************************************************/
+
+Node* pairsSwap(Node *head)
+{
+    //  Write your code here.
+    Node* temp = head;
+
+    while (temp && temp->next)
+    {
+        swap(temp->data, temp->next->data);
+        temp = temp->next->next;
+    }
+
+    return head;
+}
