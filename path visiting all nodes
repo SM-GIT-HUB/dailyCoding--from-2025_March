@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+
+int visited[10][1 << 10];
+
+int pathVisitingAllNodes(int n, vector<vector<int>> &edgeList) {
+    // Write your code here
+    vector<vector<int> > adj(n);
+    memset(visited, 0, sizeof(visited));
+
+    for (auto &e : edgeList)
+    {
+        adj[e[0]].push_back(e[1]);
+        adj[e[1]].push_back(e[0]);
+    }
+
+    int steps = 0;
+    int finalState = (1 << n) - 1;
+    queue<pair<int, int> > q;
+
+    for (int node = 0; node < n; node++)
+    {
+        q.push({node, 1 << node});
+        visited[node][1 << node] = 1;
+    }
+
+    while (!q.empty())
+    {
+        int size = q.size();
+
+        while (size--)
+        {
+            int node = q.front().first;
+            int mask = q.front().second;
+            q.pop();
+
+            if (mask == finalState) return steps;
+
+            for (int adjNode : adj[node])
+            {
+                int newMask = mask | (1 << adjNode);
+
+                if (!visited[adjNode][newMask])
+                {
+                    q.push({adjNode, newMask});
+                    visited[adjNode][newMask] = 1;
+                }
+            }
+        }
+
+        steps++;
+    }
+
+    return -1;
+}
