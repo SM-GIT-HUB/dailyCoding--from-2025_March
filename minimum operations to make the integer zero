@@ -2,17 +2,14 @@ class Solution {
 public:
     int makeTheIntegerZero(int num1, int num2) {
         if (num2 > num1) return -1;
-
-        int k = 1;
         long long curr = 1LL * num1 - num2;
 
-        while (curr >= 0 && k <= 60)
+        for (int k = 1; k <= 60; k++)
         {
             if (__builtin_popcountll(curr) <= k && k <= curr) return k;
-            k++;
             curr = curr - num2;
         }
-
+        
         return -1;
     }
 };
