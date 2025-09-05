@@ -1,0 +1,44 @@
+#include <bits/stdc++.h> 
+string reformDate(string& s) 
+{
+	// Write your code here
+	unordered_map<string, string> mapp = {
+		{"Jan", "01"},
+		{"Feb", "02"},
+		{"Mar", "03"},
+		{"Apr", "04"},
+		{"May", "05"},
+		{"Jun", "06"},
+		{"Jul", "07"},
+		{"Aug", "08"},
+		{"Sep", "09"},
+		{"Oct", "10"},
+		{"Nov", "11"},
+		{"Dec", "12"}
+	};
+
+	string date = "";
+	string month = "";
+	string temp = "";
+
+	for (char x : s)
+	{
+		if (x == ' ')
+		{
+			if (date.size() == 0)
+			{
+				if (!isalpha(temp[1])) date = string(1, temp[0]) + string(1, temp[1]);
+				else date = "0" + string(1, temp[0]);
+			}
+			else
+				month = temp;
+			
+			temp = "";
+			continue;
+		}
+
+		temp += x;
+	}
+
+	return temp + "-" + mapp[month] + "-" + date;
+}
