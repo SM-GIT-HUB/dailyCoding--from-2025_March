@@ -1,0 +1,60 @@
+#include <bits/stdc++.h> 
+vector<double> sampleStats(vector<int> &count)
+{
+    // Write your code here.
+    double mini = 260;
+    double maxi = 0;
+
+    double total = 0, sum = 0, mode = 0;
+
+    for (int i = 0; i < 256; i++)
+    {
+        if (!count[i]) continue;
+
+        mini = min((double)i, mini);
+        maxi = max((double)i, maxi);
+        mode = (count[mode] < count[i])? i : mode;
+
+        total += count[i];
+        sum = sum + i * count[i];
+    }
+
+    double mean = sum / (double)total;
+
+    double curr = 0, median = 0;
+
+    for (int i = 0; i < 256; i++)
+    {
+        if (!count[i]) continue;
+
+        curr += count[i];
+        if (curr < total / 2) continue;
+
+        if ((int)total & 1)
+        {
+            median = i;
+            break;
+        }
+        else
+        {
+            if (median == 0)
+            {
+                if (2 * curr > total)
+                {
+                    median = i;
+                    break;
+                }
+                else
+                    median = i;
+            }
+            else
+            {
+                median += i;
+                median = median / 2.0;
+                break;
+            }
+        }
+    }
+
+    return {mini, maxi, mean, median, mode};
+}
