@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+int find(int n, vector<int> &position, vector<int> &speed, double d){
+    //Write your code here.
+    vector<pair<int, int> > cars(n);
+    for (int i = 0; i < n; i++) cars[i] = {position[i], speed[i]};
+
+    sort(cars.rbegin(), cars.rend());
+
+    int ans = 0;
+    double maxi = 0.0;
+
+    for (int i = 0; i < n; i++)
+    {
+        double time = (d - cars[i].first) / cars[i].second;
+
+        if (time > maxi)
+        {
+            ans++;
+            maxi = time;
+        }
+    }
+
+    return ans;
+}
