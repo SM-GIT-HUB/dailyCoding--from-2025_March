@@ -1,0 +1,41 @@
+class Solution {
+public:
+    pair<long long, long long> arr[16];
+    long long sum[16];
+
+    void makeArray()
+    {
+        long long one = 1;
+        long long two = 4;
+
+        for (int i = 0; i < 16; i++)
+        {
+            arr[i] = {one, two - 1};
+            sum[i] = (i > 0)? (two - one) * (i + 1) + sum[i - 1] : (two - one) * (i + 1);
+            
+            one = one * 4;
+            two = two * 4;
+        }
+    }
+
+    Solution()
+    {
+        makeArray();
+    }
+
+    long long minOperations(vector<vector<int>>& queries) {
+        long long ans = 0;
+
+        for (auto &q : queries)
+        {
+            int s1 = log2(q[0]) / 2;
+            int s2 = log2(q[1]) / 2;
+
+            long long curr = sum[s2] + 1 - ((s1 > 0)? sum[s1 - 1] : 0) - (-arr[s1].first + q[0]) * (s1 + 1) - (arr[s2].second - q[1]) * (s2 + 1);
+
+            ans += (curr >> 1);
+        }
+
+        return ans;
+    }
+};
