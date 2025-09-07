@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+
+int bits[31];
+
+int swapAdjacentBits(int n)
+{ 
+    // Write your code here
+    for (int i = 30; i >= 0; i--) bits[30 - i] = ((n >> i) & 1);
+    for (int i = 30; i > 0; i -= 2) swap(bits[i - 1], bits[i]);
+
+    int m = 0;
+
+    for (int i = 0; i < 31; i++) m = (m << 1) + bits[i];
+
+    return m;
+}
