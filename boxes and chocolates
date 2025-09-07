@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+
+long long dp[101][3];
+int mod = 1e9 + 7;
+
+int memoization(int idx, int n, int rem, vector<int>& arr)
+{
+    if (idx == n) return (rem == 0);
+    if (dp[idx][rem] != -1) return dp[idx][rem] % mod;
+
+    long long include = memoization(idx + 1, n, (rem + arr[idx]) % 3, arr) % mod;
+    long long exclude = memoization(idx + 1, n, rem, arr) % mod;
+
+    return dp[idx][rem] = (include + exclude) % mod;
+}
+
+int itr(vector<int>& arr)
+{
+    long long sum = 0;
+    long long count = 0;
+
+    unordered_map<int, long long> mapp;
+    mapp[0] = 1;
+
+    for (int x : arr)
+    {
+        sum += x;
+        int rem = sum % 3;
+
+        count += mapp[rem];
+        mapp[rem]++;
+    }
+
+    return (count % mod);
+}
+
+vector<vector<int> > maxNumberOfWays(vector<int> &arr, int n, int q, vector<vector<int>> &queries){
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+    vector<vector<int> > ans(3);
+
+    ans[0] = {memoization(0, n, 0, arr) - 1};
+    ans[1] = {itr(arr)};
+
+    for (auto &q : queries)
+    {
+        if (q[0] == 0) {
+            arr[q[1] - 1] = q[2];
+        }
+        else
+        {
+            memset(dp, -1, sizeof(dp));
+            int curr = memoization(q[1] - 1, q[2], 0, arr);
+            ans[2].push_back(curr - 1);
+        }
+    }
+
+    return ans;
+}
