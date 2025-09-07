@@ -1,0 +1,92 @@
+#include <bits/stdc++.h> 
+/*
+class Node {
+   public:
+    int value;
+    Node* prev;
+    Node* next;
+
+    Node(int val) {
+        value = val;
+        prev = next = NULL;
+    }
+};
+
+*/
+
+Node* getMid(Node* root)
+{
+    Node* slow = root;
+    Node* fast = root->next;
+
+    while (fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+Node* merge(Node* one, Node* two)
+{
+    Node* root = new Node(-1);
+    Node* temp = root;
+
+    while (one && two)
+    {
+        if (one->value <= two->value)
+        {
+            temp->next = one;
+            one->prev = temp;
+            one = one->next;
+        }
+        else
+        {
+            temp->next = two;
+            two->prev = temp;
+            two = two->next;
+        }
+
+        temp = temp->next;
+    }
+
+    if (one)
+    {
+        temp->next = one;
+        one->prev = temp;
+    }
+
+    if (two)
+    {
+        temp->next = two;
+        two->prev = temp;
+    }
+
+    root = root->next;
+    root->prev = nullptr;
+
+    return root;
+}
+
+Node* mergeSort(Node* root)
+{
+    if (!root || !root->next) return root;
+
+    Node* mid = getMid(root);
+
+    Node* one = root;
+    Node* two = mid->next;
+    mid->next = nullptr;
+    two->prev = nullptr;
+
+    one = mergeSort(one);
+    two = mergeSort(two);
+
+    return merge(one, two);
+}
+
+Node* quickSort(Node* head) {
+    // Write your code here.
+    return mergeSort(head);
+}
