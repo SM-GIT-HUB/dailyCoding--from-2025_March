@@ -1,0 +1,45 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure:
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+string dfs(TreeNode<int>* root, unordered_map<string, int>& mapp, vector<int>& ans)
+{
+    if (!root) return "N";
+
+    string left = dfs(root->left, mapp, ans);
+    string right = dfs(root->right, mapp, ans);
+
+    string key = to_string(root->data) + "|" + left + "|" + right;
+
+    if (++mapp[key] == 2) ans.push_back(root->data);
+
+    return key;
+}
+
+vector<int> duplicateSubtrees(TreeNode<int>* root){
+    // Write your code here.
+    vector<int> ans;
+    unordered_map<string, int> mapp;
+
+    dfs(root, mapp, ans);
+
+    if (ans.size()) return ans;
+    return {-1};
+}
