@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+int minChocolatePiece(vector<int> &x, vector<int> &y,int m,int n)
+{
+	//write your code here
+	sort(x.rbegin(), x.rend());
+	sort(y.rbegin(), y.rend());
+
+	m--, n--;
+	int i = 0;
+	int j = 0;
+
+	int h = 1;
+	int v = 1;
+	int ans = 0;
+
+	while (i < m && j < n)
+	{
+		if (x[i] >= y[j])
+		{
+			ans += x[i++] * v;
+			h++;
+		}
+		else
+		{
+			ans += y[j++] * h;
+			v++;
+		}
+	}
+
+	while (i < m)
+	{
+		ans += x[i++] * v;
+		h++;
+	}
+	
+	while (j < n)
+	{
+		ans += y[j++] * h;
+		v++;
+	}
+
+	return ans;
+}
