@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> getNoZeroIntegers(int n) {
+        int curr = n - 1;
+
+        auto check = [](int m) {
+            while (m != 0)
+            {
+                if (m % 10 == 0) return 1;
+                m = m / 10;
+            }
+
+            return 0;
+        };
+
+        while (check(curr) || check(n - curr))
+        {
+            curr--;
+        }
+
+        return {curr, n - curr};
+    }
+};
