@@ -1,18 +1,111 @@
 #include <bits/stdc++.h>
 
-long long dp[101][3];
 int mod = 1e9 + 7;
 
-int memoization(int idx, int n, int rem, vector<int>& arr)
-{
-    if (idx == n) return (rem == 0);
-    if (dp[idx][rem] != -1) return dp[idx][rem] % mod;
+class SegTree {
+public:
+    int size;
+    vector<array<long long, 3> > tree;
 
-    long long include = memoization(idx + 1, n, (rem + arr[idx]) % 3, arr) % mod;
-    long long exclude = memoization(idx + 1, n, rem, arr) % mod;
+    void buildTree(int idx, int start, int end, vector<int>& arr)
+    {
+        if (start == end)
+        {
+            tree[idx] = {1, 0, 0};
+            tree[idx][arr[start] % 3]++;
+            return;
+        }
 
-    return dp[idx][rem] = (include + exclude) % mod;
-}
+        int left = (idx << 1) + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+
+        tree[idx] = {0, 0, 0};
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                tree[idx][(i + j) % 3] += (tree[left][i] * tree[right][j]) % mod;
+            }
+        }
+    }
+
+    void pointUpdate(int idx, int start, int end, int point, int val)
+    {
+        if (start == end)
+        {
+            tree[idx] = {1, 0, 0};
+            tree[idx][val % 3]++;
+            return;
+        }
+
+        int left = (idx << 1) + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        if (point <= mid) {
+            pointUpdate(left, start, mid, point, val);
+        }
+        else
+            pointUpdate(right, mid + 1, end, point, val);
+
+        tree[idx] = {0, 0, 0};
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                tree[idx][(i + j) % 3] += (tree[left][i] * tree[right][j]) % mod;
+            }
+        }
+    }
+
+    array<long long, 3> rangeQuery(int idx, int start, int end, int qStart, int qEnd)
+    {
+        if (end < qStart || qEnd < start) return {1, 0, 0};
+        if (qStart <= start && end <= qEnd) return tree[idx];
+
+        int left = (idx << 1) + 1;
+        int right = left + 1;
+        int mid = (start + end) >> 1;
+
+        array<long long, 3> leftArr = rangeQuery(left, start, mid, qStart, qEnd);
+        array<long long, 3> rightArr = rangeQuery(right, mid + 1, end, qStart, qEnd);
+
+        array<long long, 3> curr = {0, 0, 0};
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                curr[(i + j) % 3] += (leftArr[i] * rightArr[j]) % mod;
+            }
+        }
+
+        return curr;
+    }
+
+    SegTree(vector<int>& arr)
+    {
+        size = arr.size();
+        tree.resize(4 * size);
+        buildTree(0, 0, size - 1, arr);
+    }
+
+    void updatePoint(int point, int val)
+    {
+        pointUpdate(0, 0, size - 1, point, val);
+    }
+
+    int queryRange(int qStart, int qEnd)
+    {
+        return (rangeQuery(0, 0, size - 1, qStart, qEnd)[0] - 1) % mod;
+    }
+};
 
 int itr(vector<int>& arr)
 {
@@ -36,22 +129,22 @@ int itr(vector<int>& arr)
 
 vector<vector<int> > maxNumberOfWays(vector<int> &arr, int n, int q, vector<vector<int>> &queries){
     // Write your code here.
-    memset(dp, -1, sizeof(dp));
     vector<vector<int> > ans(3);
 
-    ans[0] = {memoization(0, n, 0, arr) - 1};
+    SegTree st(arr);
+
+    ans[0] = {st.queryRange(0, n - 1)};
     ans[1] = {itr(arr)};
 
     for (auto &q : queries)
     {
         if (q[0] == 0) {
-            arr[q[1] - 1] = q[2];
+            st.updatePoint(q[1] - 1, q[2]);
         }
         else
         {
-            memset(dp, -1, sizeof(dp));
-            int curr = memoization(q[1] - 1, q[2], 0, arr);
-            ans[2].push_back(curr - 1);
+            int curr = st.queryRange(q[1] - 1, q[2] - 1);
+            ans[2].push_back(curr);
         }
     }
 
