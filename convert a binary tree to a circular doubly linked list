@@ -1,0 +1,47 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+ 
+    Following is the Binary Tree node structure
+
+    class BinaryTreeNode {
+    public : 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+*************************************************************/
+using Node = BinaryTreeNode<int>;
+
+void dfs(Node* root, Node* &temp)
+{
+    if (!root) return;
+
+    dfs(root->left, temp);
+
+    root->left = temp;
+    temp->right = root;
+    temp = temp->right;
+
+    dfs(root->right, temp);
+}
+
+BinaryTreeNode<int>* convertInCircularDLL(BinaryTreeNode<int>* root) {
+    // Write your code here.
+    Node* ans = new Node(-1);
+    Node* temp = ans;
+
+    dfs(root, temp);
+
+    ans = ans->right;
+    ans->left = temp;
+    temp->right = ans;
+
+    return ans;
+}
