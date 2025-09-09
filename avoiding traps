@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+int avoidTraps(vector<int>& obstacles, int n) 
+{
+    // Write your code here.
+    
+    for (int j = 1; j <= 1e6; j++)
+    {
+        int flag = 1;
+
+        for (int x : obstacles)
+        {
+            if (x % j == 0)
+            {
+                flag = 0;
+                break;
+            }
+        }
+
+        if (flag) return j;
+    }
+
+    return -1;
+}
