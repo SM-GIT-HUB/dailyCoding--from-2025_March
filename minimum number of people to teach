@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int lan[501];
+    bitset<501> v;
+
+    int minimumTeachings(int n, vector<vector<int>>& lns, vector<vector<int>>& fr) {
+        int nfr = fr.size();
+        unordered_set<int> sett;
+
+        for (int i = 0; i < nfr; i++)
+        {
+            v.reset();
+            for (int ln : lns[fr[i][0] - 1]) v[ln] = 1;
+
+            int flag = 1;
+
+            for (int ln : lns[fr[i][1] - 1])
+            {
+                if (v[ln])
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+
+            if (flag)
+            {
+                sett.insert(fr[i][0] - 1);
+                sett.insert(fr[i][1] - 1);
+            }
+        }
+
+        if (sett.empty()) return 0;
+
+        memset(lan, 0, sizeof(lan));
+
+        for (int x : sett)
+        {
+            for (int ln : lns[x]) lan[ln]++;
+        }
+
+        int users = sett.size();
+        int ans = users;
+
+        for (int i = 1; i <= n; i++)
+        {
+            ans = min(users - lan[i], ans);
+        }
+
+        return ans;
+    }
+};
