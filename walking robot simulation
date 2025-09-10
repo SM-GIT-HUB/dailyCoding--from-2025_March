@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+int robotSim(vector<int> &commands, vector<vector<int>> &obstacles)
+{
+	// Write your code here.
+	int d = 0;
+	int x = 0, y = 0;
+
+	unordered_set<string> sett;
+
+	for (auto &v : obstacles)
+	{
+		sett.insert(to_string(v[0]) + "|" + to_string(v[1]));
+	}
+
+	int ans = 0;
+
+	for (int c : commands)
+	{
+		if (c == -2) {
+			d = (d - 1 + 4) % 4;
+		}
+		else if (c == -1) {
+			d = (d + 1) % 4;
+		}
+		else
+		{
+			string key = "";
+
+			while (c--)
+			{
+				key = to_string(x + dirs[d][0]) + "|" + to_string(y + dirs[d][1]);
+
+				if (sett.count(key)) break;
+
+				x += dirs[d][0];
+				y += dirs[d][1];
+				ans = max(x * x + y * y, ans);
+			}
+		}
+	}
+
+	return ans;
+}
