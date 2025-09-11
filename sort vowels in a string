@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int mapp[123];
+    string vowels = "aAeEiIoOuU";
+
+    string sortVowels(string s) {
+        for (char x : s)
+        {
+            if (vowels.find(x) != string::npos) mapp[x]++;
+        }
+
+        int idx = 65;
+
+        for (char &x : s)
+        {
+            if (vowels.find(x) != string::npos)
+            {
+                while (!mapp[idx])
+                {
+                    idx++;
+                }
+
+                x = idx;
+                mapp[idx]--;
+            }
+        }
+
+        return s;
+    }
+};
