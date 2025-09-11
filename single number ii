@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ones = 0;
+        int twos = 0;
+
+        for (int x : nums)
+        {
+            for (int bit = 31; bit >= 0; bit--)
+            {
+                if (x & (1LL << bit))
+                {
+                    if (!(ones & (1LL << bit))) {
+                        ones = ones ^ (1LL << bit);
+                    }
+                    else if (!(twos & (1LL << bit))) {
+                        twos = twos ^ (1LL << bit);
+                    }
+                    else
+                    {
+                        ones = ones ^ (1LL << bit);
+                        twos = twos ^ (1LL << bit);
+                    }
+                }
+            }
+        }
+        
+        return ones;
+    }
+};
