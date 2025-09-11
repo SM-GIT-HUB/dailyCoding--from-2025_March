@@ -1,0 +1,43 @@
+
+int isPos(long long maxi, int k, vector<int>& arr)
+{
+	long long sum = 0;
+
+	for (int x : arr)
+	{
+		if (x + sum <= maxi) {
+			sum += x;
+		}
+		else
+		{
+			if (--k == 0 || x > maxi) return 0;
+			sum = x;
+		}
+	}
+
+	return 1;
+}
+
+long long int minimumRequiredTime(vector<int> &subjects, int k)
+{
+	//Write your code here
+	long long start = 1, end = 0;
+	for (int x : subjects) end += x;
+
+	long long ans = -1;
+
+	while (start <= end)
+	{
+		long long mid = (start + end) >> 1;
+
+		if (isPos(mid, k, subjects))
+		{
+			ans = mid;
+			end = mid - 1;
+		}
+		else
+			start = mid + 1;
+	}
+
+	return ans;
+}
