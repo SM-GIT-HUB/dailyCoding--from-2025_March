@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool doesAliceWin(string s) {
+        auto find = [](char x) {
+            return (x == 'a') || (x == 'e') || (x == 'i') || (x == 'o') || (x == 'u');
+        };
+
+        for (char x : s)
+        {
+            if (find(x)) return 1;
+        }
+
+        return 0;
+    }
+};
