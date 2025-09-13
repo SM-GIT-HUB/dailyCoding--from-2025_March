@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        long long xorr = 0;
+        for (int x : nums) xorr = xorr ^ x;
+
+        int one = 0, two = 0;
+        long long mask = xorr & -xorr;
+
+        for (int x : nums)
+        {
+            if (x & mask) one = one ^ x;
+            else two = two ^ x;
+        }
+
+        return {one, two};
+    }
+};
