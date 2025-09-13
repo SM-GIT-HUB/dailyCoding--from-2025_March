@@ -1,0 +1,19 @@
+#include <bits/stdc++.h> 
+vector<vector<char>> interestingPattern(int n)
+{
+    // Write your code here
+    int last = n - 1;
+
+    vector<char> chars;
+    vector<vector<char> > ans;
+
+    for (int i = 0; i < n; i++)
+    {
+        chars.clear();
+        for (int j = last; j < n; j++) chars.push_back(j + 'A');
+        last--;
+        ans.push_back(chars);
+    }
+
+    return ans;
+}
