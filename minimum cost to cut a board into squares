@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    int minCost(int n, int m, vector<int>& x, vector<int>& y) {
+        //  code here
+        int h = 1, v = 1;
+        
+        m = x.size();
+        n = y.size();
+        
+        sort(x.rbegin(), x.rend());
+        sort(y.rbegin(), y.rend());
+        
+        int ans = 0;
+        
+        int i = 0, j = 0;
+        
+        while (i < m && j < n)
+        {
+            if (x[i] >= y[j])
+            {
+                ans += x[i++] * h;
+                v++;
+            }
+            else
+            {
+                ans += y[j++] * v;
+                h++;
+            }
+        }
+        
+        while (i < m)
+        {
+            ans += x[i++] * h;
+        }
+        
+        while (j < n)
+        {
+            ans += y[j++] * v;
+        }
+        
+        return ans;
+    }
+};
