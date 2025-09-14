@@ -1,0 +1,78 @@
+class Solution {
+public:
+    int isVowel(char x)
+    {
+        return (x == 'a' || x == 'e' || x == 'i' || x == 'o' || x == 'u');
+    }
+
+    void getLower(string &curr)
+    {
+        for (char &x : curr)
+        {
+            x = tolower(x);
+        }
+    }
+
+    void getVowelMask(string &word)
+    {
+        for (char &x : word)
+        {
+            if (isVowel(tolower(x))) x = '*';
+            else x = tolower(x);
+        }
+    }
+
+    vector<string> spellchecker(vector<string>& list, vector<string>& queries) {
+        unordered_set<string> exact(list.begin(), list.end());
+        unordered_map<string, int> lowers;
+        unordered_map<string, int> vowelMask;
+
+        for (int i = 0; i < list.size(); i++)
+        {
+            string curr = list[i];
+
+            getLower(curr);
+
+            if (!lowers.count(curr)) {
+                lowers[curr] = i;
+            }
+
+            getVowelMask(curr);
+
+            if (!vowelMask.count(curr)) {
+                vowelMask[curr] = i;
+            }
+        }
+
+        vector<string> ans;
+
+        for (string &curr : queries)
+        {
+            if (exact.count(curr))
+            {
+                ans.push_back(curr);
+                continue;
+            }
+
+            getLower(curr);
+
+            if (lowers.count(curr))
+            {
+                ans.push_back(list[lowers[curr]]);
+                continue;
+            }
+
+            getVowelMask(curr);
+
+            if (vowelMask.count(curr))
+            {
+                ans.push_back(list[vowelMask[curr]]);
+                continue;
+            }
+
+            ans.push_back("");
+        }
+
+        return ans;
+    }
+};
