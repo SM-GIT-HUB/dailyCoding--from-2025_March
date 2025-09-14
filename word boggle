@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+
+bitset<7> visited[7];
+int dirs[8][2] = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
+
+int track(int x, int y, int m, int n, int idx, int last, string &str, vector<vector<char> >& mat)
+{
+	if (idx == last) return 1;
+
+	visited[x][y] = 1;
+
+	auto check = [&](int x, int y) {
+		return (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y] && mat[x][y] == str[idx + 1]);
+	};
+
+	for (int d = 0; d < 8; d++)
+	{
+		int dx = x + dirs[d][0];
+		int dy = y + dirs[d][1];
+
+		if (check(dx, dy) && track(dx, dy, m, n, idx + 1, last, str, mat)) return 1;
+	}
+
+	visited[x][y] = 0;
+	return 0;
+}
+
+vector<string> findPossibleWords(vector<string>& arr, vector<vector<char> >& mat){
+	//Write your code here
+	int m = mat.size();
+	int n = mat[0].size();
+
+	vector<string> ans;
+
+	for (string &str : arr)
+	{
+		int valid = 0;
+
+		for (int i = 0; !valid && i < m; i++)
+		{
+			for (int j = 0; !valid && j < n; j++)
+			{
+				if (mat[i][j] == str[0])
+				{
+					for (int k = 0; k < 7; k++) visited[k].reset();
+					valid = track(i, j, m, n, 0, str.size() - 1, str, mat);
+				}
+			}
+		}
+
+		if (valid) ans.emplace_back(str);
+	}
+
+	sort(ans.begin(), ans.end());
+	return ans;
+}
