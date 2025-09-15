@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+
+vector<int> countSubtreesMaxDistance(int n, vector<vector<int> >& edges){
+	// Write your code here.
+	vector<vector<int> > dist(n, vector<int>(n, 50));
+
+	for (auto &e : edges)
+	{
+		int u = e[0] - 1, v = e[1] - 1;
+		dist[u][v] = dist[v][u] = 1;
+	}
+
+	for (int k = 0; k < n; k++)
+	{
+		for (int u = 0; u < n; u++)
+		{
+			for (int v = 0; v < n; v++)
+			{
+				dist[u][v] = min(dist[u][v], dist[u][k] + dist[k][v]);
+			}
+		}
+	}
+
+	vector<int> ans(n - 1);
+
+	for (int mask = 0; mask < (1 << n); mask++)
+	{
+		int total = __builtin_popcount(mask);
+		if (total < 2) continue;
+
+		int edgeNum = 0;
+		int maxDist = 0;
+
+		for (int u = 0; u < n; u++)
+		{
+			if (mask & (1 << u))
+			{
+				for (int v = u + 1; v < n; v++)
+				{
+					if (mask & (1 << v))
+					{
+						edgeNum += (dist[u][v] == 1);
+						maxDist = max(dist[u][v], maxDist);
+					}
+				}
+			}
+		}
+
+		if (edgeNum != total - 1 || !maxDist) continue;
+		
+		ans[maxDist - 1]++;
+	}
+
+	return ans;
+}
