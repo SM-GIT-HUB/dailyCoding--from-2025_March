@@ -2,18 +2,12 @@ class Solution {
   public:
     bool stringStack(string &pat, string &tar) {
         // code here
-        int i = pat.size() - 1;
         int j = tar.size() - 1;
         
-        while (i >= 0 && j >= 0)
+        for (int i = pat.size() - 1; j >= 0 && i >= 0; i--)
         {
-            if (pat[i] == tar[j])
-            {
-                i--;
-                j--;
-            }
-            else
-                i -= 2;
+            if (pat[i] == tar[j]) j--;
+            else i--;
         }
         
         return (j < 0);
