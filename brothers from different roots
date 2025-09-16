@@ -1,0 +1,87 @@
+/*Structure of the Node of the BST is as
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void getNext1(stack<Node*>& st)
+    {
+        Node* curr = st.top();
+        st.pop();
+        
+        curr = curr->right;
+        
+        while (curr)
+        {
+            st.push(curr);
+            curr = curr->left;
+        }
+    }
+    
+    void getNext2(stack<Node*>& st)
+    {
+        Node* curr = st.top();
+        st.pop();
+        
+        curr = curr->left;
+        
+        while (curr)
+        {
+            st.push(curr);
+            curr = curr->right;
+        }
+    }
+  
+    int countPairs(Node* root1, Node* root2, int x) {
+        stack<Node*> st1;
+        stack<Node*> st2;
+        
+        int count = 0;
+        Node* one = root1;
+        Node* two = root2;
+        
+        while (one)
+        {
+            st1.push(one);
+            one = one->left;
+        }
+        
+        while (two)
+        {
+            st2.push(two);
+            two = two->right;
+        }
+        
+        while (st1.size() && st2.size())
+        {
+            one = st1.top();
+            two = st2.top();
+            
+            int val = one->data + two->data;
+            
+            if (val == x)
+            {
+                count++;
+                getNext1(st1);
+                getNext2(st2);
+            }
+            else if (val > x) {
+                getNext2(st2);
+            }
+            else
+                getNext1(st1);
+        }
+        
+        return count;
+    }
+};
