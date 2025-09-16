@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+
+int flag = 1;
+vector<int> primes;
+int prefix[10001][11];
+
+void getPrimes()
+{
+	bitset<5100> mark;
+	primes.push_back(2);
+
+	for (int i = 1; i < 5001; i++)
+	{
+		if (mark[i]) continue;
+
+		int elem = (i << 1) + 1;
+		primes.push_back(elem);
+
+		for (int j = elem + i; j < 5001; j += elem)
+		{
+			mark[j] = 1;
+		}
+	}
+}
+
+int countFactors(int num)
+{
+	int count = 0;
+
+	for (int x : primes)
+	{
+		if (1LL * x * x > num) break;
+		if (num % x) continue;
+		count++;
+
+		while (num % x == 0)
+		{
+			num = num / x;
+		}
+	}
+
+	if (num > 1) count++;
+	return count;
+}
+
+void calc()
+{
+	getPrimes();
+
+	for (int num = 1; num <= 10000; num++)
+	{
+		int count = countFactors(num);
+
+		for (int j = 1; j < 11; j++)
+		{
+			prefix[num][j] += prefix[num - 1][j];
+		}
+
+		prefix[num][count]++;
+	}
+}
+
+vector<int> getNfactor(vector<vector<int>> &queries)
+{
+	//	Write your code here.
+	if (flag)
+	{
+		memset(prefix, 0, sizeof(prefix));
+		flag = 0;
+		calc();
+	}
+
+	vector<int> ans;
+
+	for (auto &q : queries)
+	{
+		int a = q[0];
+		int b = q[1];
+		int n = q[2];
+
+		ans.push_back(prefix[b][n] - prefix[a - 1][n]);
+	}
+
+	return ans;
+}
