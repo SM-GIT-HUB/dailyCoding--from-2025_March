@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+int oneIteration(vector<int> A)
+{
+    // Write your code here.
+	int one = INT_MIN;
+	int two = INT_MIN;
+
+	for (int x : A)
+	{
+		if (x > one)
+		{
+			two = one;
+			one = x;
+		}
+		else if (x > two) {
+			two = x;
+		}
+	}
+
+	return (one + two);
+}
