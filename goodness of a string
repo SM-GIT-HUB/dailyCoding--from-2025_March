@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+
+int mod = 1e9 + 7;
+
+int goodnessOfString(string &s)
+{
+    //  Write your code here.
+    long long ans = 0;
+    long long dep = 0;
+    long long num = 0;
+
+    for (char x : s)
+    {
+        if (x == '[')
+        {
+            ans = (ans + num * dep) % mod;
+            num = 0;
+            dep++;
+        }
+        else if (x == ']')
+        {
+            ans = (ans + num * dep) % mod;
+            num = 0;
+            dep--;
+        }
+        else if (x == ',')
+        {
+            ans = (ans + num * dep) % mod;
+            num = 0;
+        }
+        else
+            num = num * 10 + (x - '0');
+    }
+
+    return ans;
+}
