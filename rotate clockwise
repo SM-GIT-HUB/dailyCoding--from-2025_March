@@ -1,0 +1,16 @@
+#include <bits/stdc++.h> 
+void rotateClockwise(int n, vector<vector<int> >& nums) {
+    // Write your code here.
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            swap(nums[i][j], nums[j][i]);
+        }
+    }
+
+    for (auto &vec : nums)
+    {
+        reverse(vec.begin(), vec.end());
+    }
+}
