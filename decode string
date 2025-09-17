@@ -1,0 +1,50 @@
+class Solution {
+public:
+    string getAns(int &idx, int n, string &s)
+    {
+        if (idx == n) return "";
+
+        string ans = "";
+        
+        string curr = "";
+        string num = "";
+        
+        while (idx < n)
+        {
+            if (s[idx] == '[')
+            {
+                idx++;
+                int count = stoi(num);
+
+                string next = getAns(idx, n, s);
+                for (int i = 0; i < count; i++) curr += next;
+
+                ans += curr;
+                curr = num = "";
+                continue;
+            }
+            else if (s[idx] == ']')
+            {
+                idx++;
+                return ans + curr;
+            }
+
+            if (isalpha(s[idx])) {
+                curr.push_back(s[idx]);
+            }
+            else
+                num.push_back(s[idx]);
+                
+            idx++;
+        }
+        
+        return ans + curr;
+    }
+
+    string decodeString(string &s) {
+        int idx = 0;
+        int n = s.size();
+
+        return getAns(idx, n, s);
+    }
+};
