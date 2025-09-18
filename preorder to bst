@@ -1,0 +1,55 @@
+// User function template in C++
+
+/*
+
+typedef struct Node
+{
+    int data;
+    struct Node *left, *right;
+} Node;
+
+
+// A utility function to create a new tree node
+Node* newNode( int data )
+{
+    Node* temp = (Node *)malloc( sizeof( Node ) );
+    temp->data = data;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+
+*/
+
+class Solution {
+  public:
+    // Function that constructs BST from its preorder traversal.
+    Node* makeTree(int &idx, int start, int end, int *pre, vector<int>& inn)
+    {
+        if (start > end || idx == inn.size()) return nullptr;
+        if (start == end) return newNode(pre[idx++]);
+        
+        Node* root = newNode(pre[idx]);
+        int i = start;
+        
+        for (; i <= end && pre[idx] != inn[i]; i++);
+        idx++;
+        
+        root->left = makeTree(idx, start, i - 1, pre, inn);
+        root->right = makeTree(idx, i + 1, end, pre, inn);
+        
+        return root;
+    }
+    
+    Node* Bst(int pre[], int n) {
+        // code here
+        vector<int> inn(n);
+        for (int i = 0; i < n; i++) inn[i] = pre[i];
+        
+        int idx = 0;
+        sort(inn.begin(), inn.end());
+        
+        Node* root = makeTree(idx, 0, n - 1, pre, inn);
+        
+        return root;
+    }
+};
