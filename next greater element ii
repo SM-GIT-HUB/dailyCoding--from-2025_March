@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& arr) {
+        vector<int> stack;
+        int n = arr.size();
+
+        for (int i = n - 2; i >= 0; i--) stack.push_back(arr[i]);
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (stack.size() && stack.back() <= arr[i])
+            {
+                stack.pop_back();
+            }
+
+            int val = arr[i];
+            if (stack.size()) arr[i] = stack.back();
+            else arr[i] = -1;
+            
+            stack.push_back(val);
+        }
+
+        return arr;
+    }
+};
