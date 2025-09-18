@@ -1,0 +1,48 @@
+/* Tree node structure  used in the program
+
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};*/
+
+class Solution {
+  public:
+    /*You are required to complete this method */
+    // Return the size of the largest sub-tree which is also a BST
+    struct obj {
+        int size;
+        int isBst;
+        int mini;
+        int maxi;
+    };
+    
+    obj getBst(Node* root)
+    {
+        if (!root) return {0, 1, INT_MAX, INT_MIN};
+        
+        obj left = getBst(root->left);
+        obj right = getBst(root->right);
+        
+        int currBst = (left.isBst && right.isBst && root->data > left.maxi && root->data < right.mini);
+        
+        if (!currBst) return {max(left.size, right.size), 0, 0, 0};
+        
+        int size = 1 + left.size + right.size;
+        int mini = min(root->data, min(left.mini, right.mini));
+        int maxi = max(root->data, max(left.maxi, right.maxi));
+        
+        return {size, 1, mini, maxi};
+    }
+    
+    int largestBst(Node *root) {
+        // Your code here
+        int ans = getBst(root).size;
+        return ans;
+    }
+};
