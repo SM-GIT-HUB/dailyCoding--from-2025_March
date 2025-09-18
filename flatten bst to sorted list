@@ -1,0 +1,43 @@
+// User function Template for C++
+
+/* Node of the binary search tree
+class Node
+{
+public:
+    int data;
+    Node *left;
+    Node *right;
+    Node(int val)
+    {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void makeList(Node* root, Node* &temp)
+    {
+        if (!root) return;
+        
+        makeList(root->left, temp);
+        
+        temp->right = root;
+        temp = temp->right;
+        temp->left = nullptr;
+        
+        makeList(root->right, temp);
+    }
+  
+    Node *flattenBST(Node *root) {
+        // code here
+        Node* ans = new Node(-1);
+        Node* temp = ans;
+        
+        makeList(root, temp);
+        
+        return ans->right;
+    }
+};
