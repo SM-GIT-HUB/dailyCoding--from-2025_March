@@ -1,0 +1,38 @@
+class Solution {
+    vector<int> temp;
+public:
+    void track(int idx, int score, int &maxi, int total, vector<int>& alc, vector<int>& ans)
+    {
+        if (idx == 12)
+        {
+            if (score > maxi)
+            {
+                temp[0] += total;
+                maxi = score;
+                ans = temp;
+                temp[0] -= total;
+            }
+
+            return;
+        }
+
+        track(idx + 1, score, maxi, total, alc, ans);
+
+        if (alc[idx] + 1 <= total)
+        {
+            temp[idx] = alc[idx] + 1;
+            track(idx + 1, score + idx, maxi, total - alc[idx] - 1, alc, ans);
+            temp[idx] = 0;
+        }
+    }
+
+    vector<int> maximumBobPoints(int numArrows, vector<int>& alc) {
+        int maxi = 0;
+        vector<int> ans;
+        temp.assign(12, 0);
+
+        track(0, 0, maxi, numArrows, alc, ans);
+
+        return ans;
+    }
+};
