@@ -1,37 +1,24 @@
 class Solution {
 public:
     int countHillValley(vector<int>& arr) {
-        int ans = 0;
-        int idx = 1;
+        int count = 0;
+        int elem = arr[0];
 
-        while (idx < arr.size())
+        for (int i = 1; i < arr.size() - 1; i++)
         {
-            int j = idx - 1;
-            int k = idx + 1;
-
-            while (j >= 0 && arr[j] == arr[idx])
-            {
-                j--;
-            }
-
-            while (k < arr.size() && arr[idx] == arr[k])
-            {
-                k++;
-            }
-
-            if (j < 0 || k == arr.size())
-            {
-                idx = k;
+            if (elem == arr[i]) {
                 continue;
             }
 
-            if ((arr[j] < arr[idx] && arr[idx] > arr[k]) || (arr[j] > arr[idx] && arr[idx] < arr[k])) {
-                ans++;
+            if (arr[i] == arr[i + 1]) continue;
+
+            if ((elem < arr[i] && arr[i] > arr[i + 1]) || (elem > arr[i] && arr[i] < arr[i + 1])) {
+                count++;
             }
 
-            idx = k;
+            elem = arr[i];
         }
 
-        return ans;
+        return count;
     }
 };
