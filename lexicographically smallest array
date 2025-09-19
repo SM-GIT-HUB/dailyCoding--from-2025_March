@@ -1,0 +1,23 @@
+#include <bits/stdc++.h> 
+vector<int> findSmallestWithKSwaps(vector<int> &arr, int n, int k) 
+{ 
+	// Write your code here
+	for (int idx = 0; idx < n - 1 && k; idx++)
+	{
+		int j = idx + 1;
+		int sm = j;
+
+		while (j < n && j - idx <= k)
+		{
+			sm = (arr[j] < arr[sm])? j : sm;
+			j++;
+		}
+
+		if (arr[idx] <= arr[sm]) continue;
+
+		for (int i = sm; i > idx; i--) swap(arr[i - 1], arr[i]);
+		k -= (sm - idx);
+	}
+
+	return arr;
+}
