@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int countCollisions(string &dirs) {
+        int count = 0;
+
+        int i = 0;
+        for (; i < dirs.size() && dirs[i] == 'L'; i++);
+
+        int j = dirs.size() - 1;
+        for (; j >= 0 && dirs[j] == 'R'; j--);
+
+        for (int idx = i; idx <= j; idx++)
+        {
+            if (dirs[idx] != 'S') count++;
+        }
+
+        return count;
+    }
+};
