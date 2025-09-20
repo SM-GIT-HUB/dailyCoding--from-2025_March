@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int longestSubarray(vector<int>& arr) {
+        // code here
+        stack<int> st;
+        st.push(-1);
+        
+        int n = arr.size();
+        
+        int ans = 0;
+        
+        for (int i = 0; i <= n; i++)
+        {
+            while (st.top() != -1 && (arr[st.top()] < arr[i] || i == n))
+            {
+                int elem = arr[st.top()];
+                st.pop();
+                int left = st.top();
+                
+                int len = i - left - 1;
+                if (len >= elem) ans = max(len, ans);
+            }
+            
+            st.push(i);
+        }
+        
+        return ans;
+    }
+};
