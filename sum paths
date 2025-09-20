@@ -1,0 +1,44 @@
+#include <bits/stdc++.h> 
+/***********************************
+    class BinaryTreeNode {
+        public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+    };
+***********************************/
+using Node = BinaryTreeNode<int>;
+
+void dfs(Node* root, int sum, int &target, int &ans, unordered_map<int, int>& mapp)
+{
+    if (!root) return;
+
+    sum += root->data;
+    ans += mapp[sum - target];
+
+    mapp[sum]++;
+
+    dfs(root->left, sum, target, ans, mapp);
+    dfs(root->right, sum, target, ans, mapp);
+
+    mapp[sum]--;
+}
+
+int findSumPaths(BinaryTreeNode<int> *root, int target) {
+	// Write your code here.
+    unordered_map<int, int> mapp;
+
+    int ans = 0;
+    mapp[0] = 1;
+
+    dfs(root, 0, target, ans, mapp);
+
+    return ans;
+}
