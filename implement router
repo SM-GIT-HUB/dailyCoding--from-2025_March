@@ -1,0 +1,83 @@
+class Router {
+public:
+    struct obj {
+        int s, d, t;
+    };
+
+    struct hashFn {
+        size_t operator()(const array<int, 3>& arr) const {
+            return hash<int>()(arr[0]) ^ (hash<int>()(arr[1]) << 1) ^ (hash<int>()(arr[2]) << 2);
+        }
+    };
+
+    unordered_set<array<int, 3>, hashFn> sett;
+
+    queue<obj> q;
+    unordered_map<int, pair<int, vector<int> > > mapp;
+
+    int size;
+    int capp;
+
+    Router(int memoryLimit) {
+        size = 0;
+        capp = memoryLimit;
+    }
+    
+    bool addPacket(int source, int dest, int time) {
+        array<int, 3> packet = {source, dest, time};
+
+        if (sett.count(packet)) return 0;
+        sett.insert(packet);
+
+        size++;
+
+        if (size > capp) {
+            forwardPacket();
+        }
+
+        q.push({source, dest, time});
+
+        if (mapp.count(dest)) {
+            mapp[dest].second.push_back(time);
+        }
+        else
+            mapp[dest] = {0, {time}};
+
+        return 1;
+    }
+    
+    vector<int> forwardPacket() {
+        if (size == 0) return {};
+
+        obj curr = q.front();
+        q.pop();
+        size--;
+
+        array<int, 3> packet = {curr.s, curr.d, curr.t};
+        sett.erase(packet);
+
+        mapp[curr.d].first++;
+        return {curr.s, curr.d, curr.t};
+    }
+    
+    int getCount(int dest, int st, int et) {
+        auto it = mapp.find(dest);
+        if (it == mapp.end()) return 0;
+
+        int idx = it->second.first;
+        vector<int>& vec = it->second.second;
+
+        auto it1 = lower_bound(vec.begin() + idx, vec.end(), st);
+        auto it2 = upper_bound(vec.begin() + idx, vec.end(), et);
+
+        return (it2 - it1);
+    }
+};
+
+/**
+ * Your Router object will be instantiated and called as such:
+ * Router* obj = new Router(memoryLimit);
+ * bool param_1 = obj->addPacket(source,destination,timestamp);
+ * vector<int> param_2 = obj->forwardPacket();
+ * int param_3 = obj->getCount(destination,startTime,endTime);
+ */
