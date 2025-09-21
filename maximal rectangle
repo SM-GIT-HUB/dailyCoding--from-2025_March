@@ -1,0 +1,55 @@
+class Solution {
+public:
+    vector<int> stack;
+
+    int getArea(vector<int>& arr)
+    {
+        int maxArea = 0;
+        int n = arr.size();
+
+        stack.clear();
+        stack.push_back(-1);
+        
+        for (int i = 0; i <= n; i++)
+        {
+            while (stack.back() != -1 && (i == n || arr[stack.back()] > arr[i]))
+            {
+                int curr = stack.back();
+                stack.pop_back();
+                
+                int left = stack.back();
+                
+                int area = (i - left - 1) * arr[curr];
+                maxArea = max(area, maxArea);
+            }
+            
+            stack.push_back(i);
+        }
+        
+        return maxArea;
+    }
+
+    int maximalRectangle(vector<vector<char> >& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+
+        int ans = 0;
+        vector<int> arr(n);
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (mat[i][j] == '1') {
+                    arr[j]++;
+                }
+                else
+                    arr[j] = 0;
+            }
+            
+            ans = max(getArea(arr), ans);
+        }
+        
+        return ans;
+    }
+};
