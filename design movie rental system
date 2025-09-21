@@ -1,0 +1,64 @@
+class MovieRentingSystem {
+public:
+    set<array<int, 3> > rented;
+    unordered_map<long long, int> price;
+    unordered_map<int, set<pair<int, int> > > mapp;
+
+    MovieRentingSystem(int n, vector<vector<int> >& entries) {
+        for (auto &m : entries)
+        {
+            mapp[m[1]].insert({m[2], m[0]});
+            price[(long long)m[0] * 100000 + m[1]] = m[2];
+        }
+    }
+    
+    vector<int> search(int movie) {
+        auto itt = mapp.find(movie);
+        if (itt == mapp.end()) return {};
+
+        vector<int> ans;
+
+        for (auto it = itt->second.begin(); it != itt->second.end() && ans.size() < 5; ++it)
+        {
+            ans.push_back(it->second);
+        }
+
+        return ans;
+    }
+    
+    void rent(int shop, int movie) {
+        int p = price[(long long)shop * 100000 + movie];
+        auto it = mapp[movie].find({p, shop});
+
+        rented.insert({it->first, it->second, movie});
+        mapp[movie].erase(it);
+    }
+    
+    void drop(int shop, int movie) {
+        int p = price[(long long)shop * 100000 + movie];
+        auto it = rented.find({p, shop, movie});
+
+        mapp[movie].insert({p, shop});
+        rented.erase(it);
+    }
+    
+    vector<vector<int>> report() {
+        vector<vector<int> > ans;
+
+        for (auto it = rented.begin(); it != rented.end() && ans.size() < 5; ++it)
+        {
+            ans.push_back({(*it)[1], (*it)[2]});
+        }
+
+        return ans;
+    }
+};
+
+/**
+ * Your MovieRentingSystem object will be instantiated and called as such:
+ * MovieRentingSystem* obj = new MovieRentingSystem(n, entries);
+ * vector<int> param_1 = obj->search(movie);
+ * obj->rent(shop,movie);
+ * obj->drop(shop,movie);
+ * vector<vector<int>> param_4 = obj->report();
+ */
