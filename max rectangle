@@ -1,0 +1,51 @@
+class Solution {
+  public:
+    int getArea(vector<int>& arr)
+    {
+        int maxArea = 0;
+        int n = arr.size();
+        
+        stack<int> st;
+        st.push(-1);
+        
+        for (int i = 0; i <= n; i++)
+        {
+            while (st.top() != -1 && (i == n || arr[st.top()] > arr[i]))
+            {
+                int curr = st.top();
+                st.pop();
+                
+                int left = st.top();
+                
+                int area = (i - left - 1) * arr[curr];
+                maxArea = max(area, maxArea);
+            }
+            
+            st.push(i);
+        }
+        
+        return maxArea;
+    }
+  
+    int maxArea(vector<vector<int> >& mat) {
+        // code here
+        int m = mat.size();
+        int n = mat[0].size();
+        
+        int ans = getArea(mat[0]);
+        
+        for (int i = 1; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (mat[i][j]) {
+                    mat[i][j] += mat[i - 1][j];
+                }
+            }
+            
+            ans = max(getArea(mat[i]), ans);
+        }
+        
+        return ans;
+    }
+};
