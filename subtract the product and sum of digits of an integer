@@ -1,0 +1,15 @@
+#include <bits/stdc++.h> 
+int findProductSumDifference(int n){
+	// Write your code here
+    long long mul = 1;
+    long long sum = 0;
+
+    while (n)
+    {
+        mul = mul * (n % 10);
+        sum = sum + (n % 10);
+        n = n / 10;
+    }
+
+    return (mul - sum);
+}
