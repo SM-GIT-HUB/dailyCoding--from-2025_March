@@ -1,0 +1,44 @@
+/************************************************************
+
+    Following is the BinaryTreeNode class structure
+
+    template <typename T>
+    class BinaryTreeNode {
+       public:
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+using Node = BinaryTreeNode<int>;
+
+int dfs(Node* root, int &ans)
+{
+    if (!root) return 0;
+
+    int leftSum = dfs(root->left, ans);
+    int rightSum = dfs(root->right, ans);
+
+    int pathSum =  root->data + leftSum + rightSum;
+    int currSum = max(root->data, max(root->data + leftSum, root->data + rightSum));
+
+    ans = max(ans, max(pathSum, currSum));
+
+    return currSum;
+}
+
+int maxPathSum(BinaryTreeNode<int> *root)
+{
+    // Write your code here
+    int ans = INT_MIN;
+    dfs(root, ans);
+
+    return ans;
+}
