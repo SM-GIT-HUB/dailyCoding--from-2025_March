@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    struct obj {
+        int pr;
+        int ded;
+    };
+    
+    class DSU {
+    public:
+        vector<int> parent;
+    
+        DSU(int n)
+        {
+            for (int i = 0; i < n; i++) parent.push_back(i);
+        }
+        
+        int getUltParent(int u)
+        {
+            if (u == parent[u]) return u;
+            return parent[u] = getUltParent(parent[u]);
+        }
+        
+        void unionBy(int v)
+        {
+            int u = v - 1;
+            int uPar = getUltParent(u);
+            
+            parent[v] = uPar;
+        }
+    };
+  
+    vector<int> jobSequencing(vector<int> &deadline, vector<int> &profit) {
+        // code here
+        int n = profit.size();
+        
+        DSU ds(n + 1);
+        vector<obj> jobs(n);
+        
+        for (int i = 0; i < n; i++) jobs[i] = {profit[i], deadline[i]};
+        
+        sort(jobs.begin(), jobs.end(), [](obj &a, obj &b) {
+            return (a.pr > b.pr);
+        });
+        
+        int count = 0;
+        int total = 0;
+        
+        for (int i = 0; i < n; i++)
+        {
+            int ded = jobs[i].ded;
+            int parent = ds.getUltParent(ded);
+            
+            if (parent == 0) continue;
+            
+            count++;
+            total += jobs[i].pr;
+            
+            ds.unionBy(parent);
+        }
+        
+        return {count, total};
+    }
+};
