@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+long long maxSubSumKConcat(vector<int> &arr, int n, int k)
+{
+	// Write your code here.
+	long long ans = LLONG_MIN;
+	long long suffix = LLONG_MIN, prefix = LLONG_MIN, total = 0;
+
+	long long sum = 0;
+	long long curr = 0, maxKadane = LLONG_MIN;
+
+	for (int x : arr)
+	{
+		sum += x;
+		total += x;
+		prefix = max(sum, prefix);
+
+		curr = max(1LL * x, curr + x);
+		maxKadane = max(curr, maxKadane);
+	}
+
+	if (k == 1) return maxKadane;
+
+	sum = 0;
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		sum += arr[i];
+		suffix = max(sum, suffix);
+	}
+
+	ans = max(maxKadane, suffix + prefix);
+	if (total > 0) ans = max(ans, suffix + total * (k - 2) + prefix);
+
+	return ans;
+}
