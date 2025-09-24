@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int getMax(vector<int>& arr, int &maxl)
+    {
+        int ans = 0;
+        int maxi = 0;
+        int start = 0, end = 0;
+
+        while (end < arr.size())
+        {
+            maxi = max(arr[end], maxi);
+
+            if (maxi > maxl)
+            {
+                int len = end - start;
+                ans = ans + (len * (len + 1) >> 1);
+                start = ++end;
+                maxi = 0;
+                continue;
+            }
+
+            end++;
+        }
+
+        int len = end - start;
+        ans = ans + (1LL * len * (len + 1) >> 1);
+
+        return ans;
+    }
+
+    int numSubarrayBoundedMax(vector<int>& arr, int left, int right) {
+        return (getMax(arr, right) - getMax(arr, --left));
+    }
+};
