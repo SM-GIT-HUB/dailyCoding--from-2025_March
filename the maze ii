@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+
+int dist[100][100];
+int dirs[4][2] = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+
+int mazeRunner(int m, int n, vector<vector<int> >& maze, vector<int>& start, vector<int>& end) {
+    // Write your code here.
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++) dist[i][j] = 1e6;
+    }
+
+    dist[start[0]][start[1]] = 0;
+
+    queue<pair<int, int> > q;
+    q.push({start[0], start[1]});
+
+    auto check = [&](int x, int y) {
+        return (x >= 0 && x < m && y >= 0 && y < n && !maze[x][y]);
+    };
+
+    while (!q.empty())
+    {
+        int x = q.front().first, y = q.front().second;
+        q.pop();
+
+        int curr = dist[x][y];
+
+        for (auto &d : dirs)
+        {
+            int newx = x;
+            int newy = y;
+
+            while (check(newx + d[0], newy + d[1]))
+            {
+                newx = newx + d[0];
+                newy = newy + d[1];
+            }
+
+            int ext = abs(x - newx) + abs(y - newy);
+
+            if (curr + ext < dist[newx][newy])
+            {
+                q.push({newx, newy});
+                dist[newx][newy] = curr + ext;
+            }
+        }
+    }
+
+    int ans = dist[end[0]][end[1]];
+    return (ans >= 1e6)? -1 : ans;
+}
