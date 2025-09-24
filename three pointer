@@ -1,0 +1,24 @@
+#include <bits/stdc++.h> 
+
+int threePointer(vector<int>& x, vector<int>& y, vector<int>& z)
+{   
+    // Write your code here.
+    int i = 0, j = 0, k = 0;
+    int a = x.size(), b = y.size(), c = z.size();
+
+    int ans = INT_MAX;
+
+    while (i < a && j < b && k < c)
+    {
+        int val1 = x[i], val2 = y[j], val3 = z[k];
+        int curr = max(abs(val1 - val2), max(abs(val2 - val3), abs(val1 - val3)));
+        
+        ans = min(curr, ans);
+        
+        if (val1 <= val2 && val1 <= val3) i++;
+        else if (val2 <= val1 && val2 <= val3) j++;
+        else k++;
+    }
+
+    return ans;
+}
