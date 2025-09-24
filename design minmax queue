@@ -1,0 +1,60 @@
+class SpecialQueue {
+  public:
+    int idx = 0;
+    int last = 0;
+    queue<pair<int, int> > q;
+    deque<pair<int, int> > maxi;
+    deque<pair<int, int> > mini;
+    
+    void enqueue(int x) {
+        // Insert element into the queue
+        q.push({x, idx});
+        
+        while (maxi.size() && maxi.back().first <= x)
+        {
+            maxi.pop_back();
+        }
+        
+        maxi.push_back({x, idx});
+        
+        while (mini.size() && mini.back().first >= x)
+        {
+            mini.pop_back();
+        }
+        
+        mini.push_back({x, idx});
+        
+        idx++;
+    }
+
+    void dequeue() {
+        // Remove element from the queue
+        last++;
+        q.pop();
+    }
+
+    int getFront() {
+        // Get front element
+        return q.front().first;
+    }
+
+    int getMin() {
+        // Get minimum element
+        while (mini.front().second < last)
+        {
+            mini.pop_front();
+        }
+        
+        return mini.front().first;
+    }
+
+    int getMax() {
+        // Get maximum element
+        while (maxi.front().second < last)
+        {
+            maxi.pop_front();
+        }
+        
+        return maxi.front().first;
+    }
+};
