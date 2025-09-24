@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string fractionToDecimal(long long num, long long den) {
+        if (num == 0) return "0";
+
+        string integer = "";
+        long long rem = abs(num % den);
+
+        if (((num < 0) ^ (den < 0))) integer = "-";
+        integer += to_string(abs(num / den));
+
+        if (rem == 0) return integer;
+
+        den = abs(den);
+        string decimal = "";
+        unordered_map<int, int> mapp;
+        
+        while (!mapp.count(rem) && rem)
+        {
+            mapp[rem] = decimal.size();
+            
+            rem = rem * 10;
+            decimal += to_string(rem / den);
+
+            rem = rem % den;
+        }
+        
+        if (!rem) return (integer + "." + decimal);
+
+        decimal.insert(mapp[rem], 1, '(');
+        decimal.push_back(')');
+
+        return (integer + "." + decimal);
+    }
+};
