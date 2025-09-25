@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+int sr[205];
+int xr[205];
+
+string smallestWindow(string s, string x)
+{
+    // Write your code here.
+    memset(sr, 0, sizeof(sr));
+    memset(xr, 0, sizeof(xr));
+
+    int curr = 0;
+    int total = 0;
+
+    for (char ch : x)
+    {
+        if (++xr[ch] == 1) total++;
+    }
+
+    int start = 0, end = 0;
+    int idx = -1, len = s.size() + 1;
+
+    while (end < s.size())
+    {
+        curr += (++sr[s[end]] == xr[s[end]]);
+
+        while (curr >= total)
+        {
+            int currLen = end - start + 1;
+
+            if (currLen < len)
+            {
+                idx = start;
+                len = currLen;
+            }
+
+            curr -= (--sr[s[start]] < xr[s[start++]]);
+        }
+
+        end++;
+    }
+
+    return s.substr(idx, len);
+}
