@@ -1,23 +1,23 @@
-#include <bits/stdc++.h> 
-vector<string> generateBinaryNumbers(int n)
-{
-    // Write your code here.
-    vector<string> ans;
-
-    for (int i = 1; i <= n; i++)
-    {
-        int num = i;
-        string number;
-
-        while (num != 0)
+class Solution {
+  public:
+    vector<string> generateBinary(int n) {
+        // code here
+        vector<string> ans;
+        ans.push_back("1");
+        
+        int idx = 0;
+        
+        while (ans.size() < n)
         {
-            number.push_back((num & 1) + '0');
-            num = num >> 1;
+            string curr = ans[idx];
+            
+            ans.emplace_back(curr + "0");
+            if (ans.size() == n) break;
+            
+            ans.emplace_back(curr + "1");
+            idx++;
         }
-
-        reverse(number.begin(), number.end());
-        ans.push_back(number);
+        
+        return ans;
     }
-
-    return ans;
-}
+};
