@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    void rotateRight(deque<int>& dq, int k)
+    {
+        while (k--)
+        {
+            dq.push_front(dq.back());
+            dq.pop_back();
+        }
+    }
+    
+    void rotateLeft(deque<int>& dq, int k)
+    {
+        while (k--)
+        {
+            dq.push_back(dq.front());
+            dq.pop_front();
+        }
+    }
+  
+    void rotateDeque(deque<int>& dq, int type, int k) {
+        // code here
+        k = k % dq.size();
+        
+        if (type == 1) rotateRight(dq, k);
+        else rotateLeft(dq, k);
+    }
+};
