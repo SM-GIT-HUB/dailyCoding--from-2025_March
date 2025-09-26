@@ -1,0 +1,39 @@
+class Solution {
+  public:
+    vector<vector<int> > solve(int n, int p, vector<int> a, vector<int> b, vector<int> d) {
+        // code here
+        vector<int> inDegree(n + 1, 0);
+        vector<int> outDegree(n + 1, 0);
+        vector<array<int, 2> > adj(n + 1, {-1, -1});
+        
+        for (int i = 0; i < p; i++)
+        {
+            inDegree[b[i]]++;
+            outDegree[a[i]]++;
+            adj[a[i]] = {b[i], d[i]};
+        }
+        
+        vector<vector<int> > ans;
+        
+        for (int h = 1; h <= n; h++)
+        {
+            if (outDegree[h] == 1 && inDegree[h] == 0)
+            {
+                int tank = h;
+                int d = INT_MAX;
+                
+                int tap = tank;
+                
+                while (adj[tap][0] != -1)
+                {
+                    d = min(adj[tap][1], d);
+                    tap = adj[tap][0];
+                }
+                
+                ans.push_back({tank, tap, d});
+            }
+        }
+        
+        return ans;
+    }
+};
