@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+int slotScore(string &org, string &guess)
+{
+	// Write your code here.
+	int ans = 0;
+	int mapp1[205] = {0};
+	int mapp2[205] = {0};
+
+	for (int i = 0; i < org.size(); i++)
+	{
+		if (org[i] == guess[i]) {
+			ans += 2;
+		}
+		else
+		{
+			if (mapp1[guess[i]])
+			{
+				ans++;
+				mapp1[guess[i]]--;
+				mapp2[guess[i]]--;
+			}
+			
+			if (mapp2[org[i]])
+			{
+				ans++;
+				mapp1[org[i]]--;
+				mapp2[org[i]]--;
+			}
+
+			mapp1[org[i]]++;
+			mapp2[guess[i]]++;
+		}
+	}
+
+	return ans;
+}
