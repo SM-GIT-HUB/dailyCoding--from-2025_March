@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+
+void track(int idx, int n, vector<string>& temp, vector<vector<string> >& ans, unordered_map<string, vector<string> >& mapp)
+{
+    if (idx == n)
+    {
+        ans.push_back(temp);
+        return;
+    }
+
+    string key = "";
+
+    for (string &x : temp)
+    {
+        key.push_back(x[idx]);
+    }
+
+    for (string &x : mapp[key])
+    {
+        temp.push_back(x);
+        track(idx + 1, n, temp, ans, mapp);
+        temp.pop_back();
+    }
+}
+
+vector<vector<string> > wordSquares(vector<string>& arr)
+{
+    // Write your code here.
+    vector<vector<string> > ans;
+    unordered_map<string, vector<string> > mapp;
+
+    for (string &x : arr)
+    {
+        string key = "";
+
+        for (char ch : x)
+        {
+            key.push_back(ch);
+            mapp[key].push_back(x);
+        }
+    }
+
+    for (string &x : arr)
+    {
+        vector<string> temp = {x};
+        track(1, x.size(), temp, ans, mapp);
+    }
+
+    return ans;
+}
