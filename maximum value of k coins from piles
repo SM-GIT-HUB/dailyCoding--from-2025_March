@@ -1,0 +1,94 @@
+class Solution {
+public:
+    int memoization(int p, int n, int taken, int k, vector<vector<int> >& prefix, vector<vector<int> >& dp)
+    {
+        if (taken == k || p == n) return 0;
+        if (dp[p][taken] != -1) return dp[p][taken];
+        
+        int curr = 0;
+        int maxTake = min((int)prefix[p].size() - 1, k - taken);
+
+        for (int take = 0; take <= maxTake; take++)
+        {
+            int next = prefix[p][take] + memoization(p + 1, n, taken + take, k, prefix, dp);
+            curr = max(next, curr);
+        }
+
+        return dp[p][taken] = curr;
+    }
+
+    int tabulation(int n, int k, vector<vector<int> >& prefix)
+    {
+        vector<vector<int> > dp(n + 1, vector<int>(k + 1, 0));
+
+        for (int p = n - 1; p >= 0; p--)
+        {
+            for (int taken = k; taken >= 0; taken--)
+            {
+                int curr = 0;
+                int maxTake = min((int)prefix[p].size() - 1, k - taken);
+
+                for (int take = 0; take <= maxTake; take++)
+                {
+                    int next = prefix[p][take] + dp[p + 1][taken + take];
+                    curr = max(next, curr);
+                }
+
+                dp[p][taken] = curr;
+            }
+        }
+
+        return dp[0][0];
+    }
+
+    int spaceOpt(int n, int k, vector<vector<int> >& prefix)
+    {
+        vector<int> nextRow(k + 1, 0);
+        vector<int> currRow(k + 1, 0);
+
+        for (int p = n - 1; p >= 0; p--)
+        {
+            for (int taken = k; taken >= 0; taken--)
+            {
+                int curr = 0;
+                int maxTake = min((int)prefix[p].size() - 1, k - taken);
+
+                for (int take = 0; take <= maxTake; take++)
+                {
+                    int next = prefix[p][take] + nextRow[taken + take];
+                    curr = max(next, curr);
+                }
+
+                currRow[taken] = curr;
+            }
+
+            swap(nextRow, currRow);
+        }
+
+        return nextRow[0];
+    }
+
+    int maxValueOfCoins(vector<vector<int> >& piles, int k) {
+        int n = piles.size();
+        vector<vector<int> > prefix(n);
+
+        for (int p = 0; p < n; p++)
+        {
+            int sum = 0;
+            prefix[p].push_back(0);
+
+            for (int x : piles[p])
+            {
+                sum += x;
+                prefix[p].push_back(sum);
+            }
+        }
+
+        // vector<vector<int> > dp(n, vector<int>(k, -1));
+        // int ans = memoization(0, n, 0, k, prefix, dp);
+
+        // int ans = tabulation(n, k, prefix);
+        int ans = spaceOpt(n, k, prefix);
+        return ans;
+    }
+};
