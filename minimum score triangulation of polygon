@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int dp[51][51];
+
+    int memoization(int i, int j, vector<int>& values)
+    {
+        if (j - i < 2) return 0;
+        if (j - i == 2) return (values[i] * values[i + 1] * values[j]);
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        int mini = 1e9;
+        int val = values[i] * values[j];
+
+        for (int k = i + 1; k < j; k++)
+        {
+            int curr = val * values[k] + memoization(i, k, values) + memoization(k, j, values);
+            mini = min(curr, mini);
+        }
+
+        return dp[i][j] = mini;
+    }
+
+    int tabulation(int n, vector<int>& values)
+    {
+        memset(dp, 0, sizeof(dp));
+
+        for (int i = n - 3; i >= 0; i--)
+        {
+            for (int j = i + 2; j < n; j++)
+            {
+                int mini = 1e9;
+                int val = values[i] * values[j];
+
+                for (int k = i + 1; k < j; k++)
+                {
+                    int curr = val * values[k] + dp[i][k] + dp[k][j];
+                    mini = min(curr, mini);
+                }
+
+                dp[i][j] = mini;
+            }
+        }
+
+        return dp[0][n - 1];
+    }
+
+    int minScoreTriangulation(vector<int>& values) {
+        int n = values.size();
+
+        // memset(dp, -1, sizeof(dp));
+        // int ans = memoization(0, n - 1, values);
+
+        int ans = tabulation(n, values);
+
+        return ans;
+    }
+};
