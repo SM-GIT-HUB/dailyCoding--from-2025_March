@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    int maxSubarrSum(vector<int>& arr, int a, int b) {
+        // code here
+        deque<int> dq;
+        int n = arr.size();
+        
+        int sum = 0;
+        vector<int> prefix(n + 1);
+        
+        for (int i = 1; i <= n; i++)
+        {
+            sum += arr[i - 1];
+            prefix[i] = sum;
+        }
+        
+        int start = -b + 1;
+        int end = -a + 1;
+        
+        int ans = INT_MIN;
+        if (end == 0) dq.push_back(0);
+        
+        for (int r = 0; r < n; r++)
+        {
+            while (!dq.empty() && dq.front() < start)
+            {
+                dq.pop_front();
+            }
+            
+            if (!dq.empty()) {
+                ans = max(prefix[r + 1] - prefix[dq.front()], ans);
+            }
+            
+            start++;
+            end++;
+            
+            while (end >= 0 && !dq.empty() && prefix[dq.back()] >= prefix[end])
+            {
+                dq.pop_back();
+            }
+            
+            if (end >= 0) dq.push_back(end);
+        }
+        
+        return ans;
+    }
+};
