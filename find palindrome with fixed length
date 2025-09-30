@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<long long> kthPalindrome(vector<int>& queries, int len) {
+        int half = (len + 1) >> 1;
+        long long start = pow(10, half - 1);
+
+        vector<long long> ans;
+        long long total = start * 9;
+
+        for (int &q : queries)
+        {
+            if (q > total)
+            {
+                ans.push_back(-1);
+                continue;
+            }
+
+            string curr = to_string(start + q - 1);
+
+            for (int i = curr.size() - ((len & 1)? 2 : 1); i >= 0; i--)
+            {
+                curr.push_back(curr[i]);
+            }
+            
+            ans.emplace_back(stoll(curr));
+        }
+
+        return ans;
+    }
+};
