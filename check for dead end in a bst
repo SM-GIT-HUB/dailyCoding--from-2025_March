@@ -1,0 +1,48 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the Binary Tree node structure
+    
+    template <typename T>
+    class TreeNode {
+        public :
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~TreeNode() {
+            if(left)
+                delete left;
+            if(right)
+                delete right;
+        }
+    };
+
+************************************************************/
+using Node = TreeNode<int>;
+
+int findDead(Node* root, int mini, int maxi)
+{
+    if (!root) return 0;
+
+    if (!root->left && !root->right)
+    {
+        int val = root->data;
+        if (val - 1 == mini && val + 1 == maxi) return 1;
+        
+        return 0;
+    }
+
+    return findDead(root->left, mini, root->data) || findDead(root->right, root->data, maxi);
+}
+
+bool isDeadEnd(TreeNode<int>* root) {
+    // Write your code here
+    return findDead(root, 0, INT_MAX);
+}
