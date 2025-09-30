@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    void track(int idx, int n, string &temp, vector<string>& ans)
+    {
+        if (idx == n)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        temp[idx] = '0';
+        track(idx + 1, n, temp, ans);
+        
+        temp[idx] = '1';
+        track(idx + 1, n, temp, ans);
+    }
+  
+    vector<string> binstr(int n) {
+        // code here
+        vector<string> ans;
+        string temp = string(n, '0');
+        
+        track(0, n, temp, ans);
+        
+        return ans;
+    }
+};
