@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+string missingNumber(string s) 
+{
+    // Write your code here.
+    for (int len = 1; len < 7; len++)
+    {
+        if (len >= s.size()) break;
+        
+        int prev = stoi(s.substr(0, len));
+        int next = prev + 1;
+
+        int i = len;
+        int num = 0;
+
+        int poten = -1;
+
+        for (i = len; i < s.size(); i++)
+        {
+            num = num * 10 + (s[i] - '0');
+
+            if (next == num)
+            {
+                prev = next;
+                next++;
+                num = 0;
+            }
+            else if (next + 1 == num)
+            {
+                poten = next;
+                prev = num;
+                next = num + 1;
+                num = 0;
+            }
+            else if (num > next) {
+                break;
+            }
+        }
+
+        if (poten != -1 && i == s.size()) return to_string(poten);
+    }
+
+    return "-1";
+}
