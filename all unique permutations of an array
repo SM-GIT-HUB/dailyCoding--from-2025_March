@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    void track(int idx, int n, vector<int>& arr, vector<vector<int> >& ans)
+    {
+        if (idx == n)
+        {
+            ans.push_back(arr);
+            return;
+        }
+        
+        int mask = 0;
+        
+        for (int i = idx; i < n; i++)
+        {
+            if (mask & (1 << arr[i])) continue;
+            
+            mask = mask | (1 << arr[i]);
+            
+            swap(arr[idx], arr[i]);
+            track(idx + 1, n, arr, ans);
+            swap(arr[idx], arr[i]);
+        }
+    }
+  
+    vector<vector<int> > uniquePerms(vector<int>& arr) {
+        // code here
+        vector<vector<int> > ans;
+
+        track(0, arr.size(), arr, ans);
+        
+        sort(ans.begin(), ans.end());
+        
+        return ans;
+    }
+};
