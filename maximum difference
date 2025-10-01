@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+string maximumDifference(int n, vector<int>& arr)
+{
+	// Write your code here.
+	int mini = INT_MAX;
+	int maxi = INT_MIN;
+
+	for (int x : arr)
+	{
+		mini = min(x, mini);
+		maxi = max(x, maxi);
+	}
+
+	int diff = abs(maxi - mini);
+
+	return (diff & 1)? "ODD" : "EVEN";
+}
