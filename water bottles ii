@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxBottlesDrunk(int numBottles, int exc) {
+        int count = numBottles;
+        int empty = count;
+
+        while (empty >= exc)
+        {
+            count += 1;
+            empty = empty - exc + 1;
+            exc++;
+        }
+
+        return count;
+    }
+};
