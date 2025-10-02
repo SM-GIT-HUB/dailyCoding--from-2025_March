@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using ar2 = array<int, 2>;
+
+ar2 dp[101][101];
+
+ar2 mm(int start, int end, vector<string>& arr)
+{
+    if (start == end)
+    {
+        int num = stoi(arr[start]);
+        return {num, num};
+    }
+
+    if (dp[start][end][0] != -1) return dp[start][end];
+
+    auto getVal = [](char x, ar2 &left, ar2 &right) -> ar2 {
+        if (x == '+') {
+            return {left[0] + right[0], left[1] + right[1]};
+        }
+        else
+            return {left[0] * right[0], left[1] * right[1]};
+    };
+
+    int mini = INT_MAX;
+    int maxi = INT_MIN;
+
+    for (int i = start + 1; i < end; i += 2)
+    {
+        ar2 left = mm(start, i - 1, arr);
+        ar2 right = mm(i + 1, end, arr);
+
+        ar2 eval = getVal(arr[i][0], left, right);
+
+        mini = min(eval[0], mini);
+        maxi = max(eval[1], maxi);
+    }
+
+    return dp[start][end] = {mini, maxi};
+}
+
+vector<int> minMaxValue(string &exp){
+    // Write your code here.
+    string temp = "";
+    vector<string> arr;
+
+    for (char x : exp)
+    {
+        if (x == '*' || x == '+')
+        {
+            arr.push_back(temp);
+            arr.push_back(string(1, x));
+            temp = "";
+        }
+        else
+            temp.push_back(x);
+    }
+
+    arr.push_back(temp);
+
+    for (int i = 0; i < arr.size(); i++)
+    {
+        for (int j = 0; j < arr.size(); j++)
+        {
+            dp[i][j] = {-1, -1};
+        }
+    }
+
+    ar2 ans = mm(0, arr.size() - 1, arr);
+    
+    return {ans[0], ans[1]};
+}
