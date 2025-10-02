@@ -1,0 +1,33 @@
+#include <bits/stdc++.h> 
+bool isValidIPv4(string &ip) {
+    // Write your code here.
+    int point = 0;
+    string temp = "";
+
+    auto isNum = [](char x) {
+        return (x >= 0 && x <= '9');
+    };
+
+    for (char x : ip)
+    {
+        if (x == '.')
+        {
+            point++;
+            temp = "";
+        }
+        else if (!isNum(x)) {
+            return 0;
+        }
+        else
+        {
+            if (temp == "0") return 0;
+
+            temp.push_back(x);
+            if (stoi(temp) > 255) return 0;
+        }
+
+        if (point > 3) return 0;
+    }
+
+    return (point == 3);
+}
