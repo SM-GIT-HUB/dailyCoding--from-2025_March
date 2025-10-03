@@ -1,0 +1,29 @@
+class Solution {
+public:
+    long long numberOfWays(string &s) {
+        long long n01 = 0;
+        long long n10 = 0;
+        int n0 = (s[0] == '0');
+        int n1 = (s[0] == '1');
+
+        long long ans = 0;
+
+        for (int i = 1; i < s.size(); i++)
+        {
+            if (s[i] == '0')
+            {
+                ans += n01;
+                n0 = n0 + 1;
+                n10 = n10 + n1;
+            }
+            else
+            {
+                ans += n10;
+                n1 = n1 + 1;
+                n01 = n01 + n0;
+            }
+        }
+
+        return ans;
+    }
+};
