@@ -1,0 +1,7 @@
+class Solution {
+public:
+    int minBitFlips(int start, int goal) {
+        int count = __builtin_popcount(start ^ goal);
+        return count;
+    }
+};
