@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    void makeZ(int n, string &curr, vector<int>& z)
+    {
+        int l = 0, r = 0;
+        
+        for (int i = 1; i < n; i++)
+        {
+            if (i > r)
+            {
+                int j = i;
+                
+                while (j < n && curr[j - i] == curr[j])
+                {
+                    j++;
+                }
+                
+                l = i;
+                r = j - 1;
+                z[i] = j - i;
+            }
+            else
+            {
+                int val = z[i - l];
+                
+                if (i + val - 1 < r) {
+                    z[i] = val;
+                }
+                else
+                {
+                    int j = r + 1;
+                    
+                    while (j < n && curr[j - i] == curr[j])
+                    {
+                        j++;
+                    }
+                    
+                    l = i;
+                    r = j - 1;
+                    z[i] = j - i;
+                }
+            }
+        }
+    }
+  
+    vector<int> search(string &pat, string &txt) {
+        // code here
+        string curr = pat + "$" + txt;
+        
+        int n = curr.size();
+        vector<int> z(n, 0);
+        
+        vector<int> ans;
+        makeZ(n, curr, z);
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (z[i] == pat.size()) ans.push_back(i - pat.size() - 1);
+        }
+        
+        return ans;
+    }
+};
