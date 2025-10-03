@@ -1,36 +1,32 @@
-
 class Solution {
   public:
-    void track(int idx, int n, string &curr, vector<int>& arr, string *letters, vector<string>& ans)
+    string dial[10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    
+    void track(int idx, int n, string &temp, vector<int>& arr, vector<string>& ans)
     {
         if (idx == n)
         {
-            ans.push_back(curr);
+            ans.push_back(temp);
             return;
         }
         
-        if (arr[idx] == 1)
-        {
-            track(idx + 1, n, curr, arr, letters, ans);
-            return;
-        }
+        if (arr[idx] < 2) track(idx + 1, n, temp, arr, ans);
         
-        for (char x : letters[arr[idx]])
+        for (char x : dial[arr[idx]])
         {
-            curr.push_back(x);
-            track(idx + 1, n, curr, arr, letters, ans);
-            curr.pop_back();
+            temp.push_back(x);
+            track(idx + 1, n, temp, arr, ans);
+            temp.pop_back();
         }
     }
-  
+    
     vector<string> possibleWords(vector<int> &arr) {
         // code here
-        string letters[] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-        
+        string temp = "";
         vector<string> ans;
-        string curr = "";
         
-        track(0, arr.size(), curr, arr, letters, ans);
+        track(0, arr.size(), temp, arr, ans);
+        
         return ans;
     }
 };
