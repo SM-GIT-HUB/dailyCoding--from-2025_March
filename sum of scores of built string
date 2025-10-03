@@ -1,0 +1,57 @@
+class Solution {
+public:
+    void getZ(int n, string &s, vector<int>& z)
+    {
+        int l = 0, r = 0;
+
+        for (int i = 1; i < n; i++)
+        {
+            if (i > r)
+            {
+                int idx = 0;
+                int j = i;
+
+                while (j < n && s[idx] == s[j])
+                {
+                    idx++, j++;
+                }
+
+                z[i] = j - i;
+                l = i, r = j - 1;
+            }
+            else
+            {
+                int val = z[i - l];
+
+                if (i + val - 1 < r) {
+                    z[i] = val;
+                }
+                else
+                {
+                    int j = r + 1;
+                    
+                    while (j < n && s[j - i] == s[j])
+                    {
+                        j++;
+                    }
+
+                    l = i;
+                    r = j - 1;
+                    z[i] = j - i;
+                }
+            }
+        }
+    }
+
+    long long sumScores(string &s) {
+        int n = s.size();
+        vector<int> z(n);
+
+        getZ(n, s, z);
+
+        long long ans = n;
+        for (int x : z) ans += x;
+
+        return ans;
+    }
+};
