@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using vc = vector<int>;
+
+vector<vc> vec;
+
+void solve( int q, vector<vector<int>> queries ) {
+	// Write your code here
+	vec.assign(3, vc());
+	
+	for (auto &q : queries)
+	{
+		int id = q[0];
+		int op = q[1];
+
+		if (op == 1) {
+			vec[id].push_back(q[2]);
+		}
+		else
+		{
+			int elem = (vec[id].size())? vec[id].back() : -1;
+			if (vec[id].size()) vec[id].pop_back();
+			cout << elem << endl;
+		}
+	}
+}
+
