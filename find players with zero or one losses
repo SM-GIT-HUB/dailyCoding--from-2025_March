@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int> > findWinners(vector<vector<int> >& matches) {
+        int player[100001] = {0};
+
+        for (auto &vec : matches)
+        {
+            if (!player[vec[0]]) player[vec[0]] = 1;
+            if (!player[vec[1]]) player[vec[1]] = 1;
+            player[vec[1]]++;
+        }
+
+        vector<vector<int> > ans(2);
+
+        for (int i = 0; i < 100001; i++)
+        {
+            if (player[i] == 1) ans[0].push_back(i);
+            else if (player[i] == 2) ans[1].push_back(i);
+        }
+
+        sort(ans[0].begin(), ans[0].end());
+        sort(ans[1].begin(), ans[1].end());
+
+        return ans;
+    }
+};
