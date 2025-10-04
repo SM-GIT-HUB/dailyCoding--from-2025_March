@@ -1,0 +1,43 @@
+class Encrypter {
+public:
+    array<string, 26> keysMap;
+    unordered_map<string, int> mapp;
+
+    Encrypter(vector<char>& keys, vector<string>& values, vector<string>& dictionary) {
+        for (int i = 0; i < keys.size(); i++)
+        {
+            keysMap[keys[i] - 'a'] = values[i];
+        }
+
+        for (string &str : dictionary)
+        {
+            mapp[encrypt(str)]++;
+        }
+    }
+    
+    string encrypt(string word1) {
+        string enc = "";
+
+        for (char ch : word1)
+        {
+            int idx = ch - 'a';
+            if (keysMap[idx] == "") return "";
+
+            enc.push_back(keysMap[idx][0]);
+            enc.push_back(keysMap[idx][1]);
+        }
+
+        return enc;
+    }
+    
+    int decrypt(string word2) {
+        return mapp[word2];
+    }
+};
+
+/**
+ * Your Encrypter object will be instantiated and called as such:
+ * Encrypter* obj = new Encrypter(keys, values, dictionary);
+ * string param_1 = obj->encrypt(word1);
+ * int param_2 = obj->decrypt(word2);
+ */
