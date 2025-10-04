@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+int maximumSwap(int n) {
+	// Write your code here.
+	string str = to_string(n);
+
+	for (int i = 0; i < str.size() - 1; i++)
+	{
+		if (str[i] == '9') continue;
+
+		int maxi = i;
+
+		for (int j = i + 1; j < str.size(); j++)
+		{
+			maxi = (str[maxi] <= str[j])? j : maxi;
+		}
+
+		if (maxi != i && str[maxi] != str[i])
+		{
+			swap(str[i], str[maxi]);
+			break;
+		}
+	}
+
+	return stoi(str);
+}
