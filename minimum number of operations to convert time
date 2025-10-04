@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int convertTime(string current, string correct) {
+        int h1 = stoi(current.substr(0, 2));
+        int min1 = h1 * 60 + stoi(current.substr(3, 2));
+
+        int h2 = stoi(correct.substr(0, 2));
+        int min2 = h2 * 60 + stoi(correct.substr(3, 2));
+
+        int op = 0;
+        int diff = min2 - min1;
+
+        while (diff)
+        {
+            if (diff >= 60)
+            {
+                op += diff / 60;
+                diff = diff % 60;
+            }
+            else if (diff >= 15)
+            {
+                op += diff / 15;
+                diff = diff % 15;
+            }
+            else if (diff >= 5)
+            {
+                op += diff / 5;
+                diff = diff % 5;
+            }
+            else
+            {
+                op += diff;
+                diff = 0;
+            }
+        }
+
+        return op;
+    }
+};
