@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int isPos(int &maxi, vector<int>& candies, long long &k)
+    {
+        long long total = 0;
+
+        for (int &x : candies)
+        {
+            total += (x / maxi);
+            if (total >= k) break;
+        }
+
+        return (total >= k);
+    }
+
+    int maximumCandies(vector<int>& candies, long long k) {
+        int ans = 0;
+        int maxi = -1;
+        long long sum = 0;
+
+        for (int &x : candies)
+        {
+            sum += x;
+            if (x > maxi) maxi = x;
+        }
+
+        if (sum < k) return 0;
+
+        int start = 1, end = min(sum / k, 1LL * maxi);
+
+        while (start <= end)
+        {
+            int mid = (start + end) >> 1;
+
+            if (isPos(mid, candies, k))
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+
+        return ans;
+    }
+};
