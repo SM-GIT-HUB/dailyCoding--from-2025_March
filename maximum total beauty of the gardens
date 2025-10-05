@@ -1,0 +1,66 @@
+class Solution {
+public:
+    long long maximumBeauty(vector<int>& flowers, long long newFlowers, long long target, int full, int partial) {
+        int n = flowers.size();
+
+        vector<long long> prefix(n);
+        sort(flowers.begin(), flowers.end());
+
+        prefix[0] = flowers[0];
+        for (int i = 1; i < n; i++) prefix[i] = prefix[i - 1] + flowers[i];
+
+        int idxFull =  lower_bound(flowers.begin(), flowers.end(), target) - flowers.begin();
+
+        long long complete = n - idxFull;
+        long long ans = full * complete;
+
+        if (complete == n) return ans;
+
+        for (long long k = complete; k <= n; k++)
+        {
+            int moreToCom = k - complete;
+
+            if (moreToCom > idxFull) break;
+
+            int idx = idxFull - moreToCom;
+            long long needed = target * moreToCom - (prefix[idxFull - 1] - ((idx > 0)? prefix[idx - 1] : 0));
+
+            if (needed > newFlowers) break;
+
+            long long restF = newFlowers - needed;
+
+            if (idx == 0)
+            {
+                ans = max(ans, k * full);
+                continue;
+            }
+
+            long long start = flowers[0], end = target - 1;
+            long long maxi = start;
+
+            auto isPos = [&](long long maxi) {
+                long long pos = lower_bound(flowers.begin(), flowers.begin() + idx, maxi) - flowers.begin();
+                long long needed = maxi * pos - (pos > 0 ? prefix[pos - 1] : 0);
+
+                return (needed <= restF);
+            };
+
+            while (start <= end)
+            {
+                long long mid = (start + end) >> 1;
+
+                if (isPos(mid))
+                {
+                    maxi = mid;
+                    start = mid + 1;
+                }
+                else
+                    end = mid - 1;
+            }
+
+            ans = max(ans, k * full + maxi * partial);
+        }
+
+        return ans;
+    }
+};
