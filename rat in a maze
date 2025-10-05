@@ -1,0 +1,51 @@
+class Solution {
+  public:
+    string dirStr = "DLRU";
+    int dirs[4][2] = {{1, 0}, {0, -1}, {0, 1}, {-1, 0}};
+    
+    bitset<6> visited[6];
+    
+    void track(int i, int j, int n, string &curr, vector<string>& ans, vector<vector<int> >& maze)
+    {
+        if (i == n - 1 && j == n - 1)
+        {
+            ans.push_back(curr);
+            return;
+        }
+        
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < n && y >= 0 && y < n && !visited[x][y] && maze[x][y]);
+        };
+        
+        visited[i][j] = 1;
+        
+        for (int d = 0; d < 4; d++)
+        {
+            int x = i + dirs[d][0];
+            int y = j + dirs[d][1];
+            
+            if (check(x, y))
+            {
+                curr.push_back(dirStr[d]);
+                track(x, y, n, curr, ans, maze);
+                curr.pop_back();
+            }
+        }
+        
+        visited[i][j] = 0;
+    }
+  
+    vector<string> ratInMaze(vector<vector<int> >& maze) {
+        // code here
+        if (maze[0][0] == 0 || maze.back().back() == 0) return {};
+        
+        int n = maze.size();
+        
+        string curr = "";
+        vector<string> ans;
+        
+        track(0, 0, n, curr, ans, maze);
+        
+        return ans;
+    }
+};
