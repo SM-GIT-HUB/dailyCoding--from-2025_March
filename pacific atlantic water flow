@@ -1,0 +1,102 @@
+class Solution {
+public:
+    bitset<201> count[201];
+    bitset<201> visited[201];
+
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+    void bfs1(int m, int n, queue<array<int, 2> >& q, vector<vector<int> >& hs)
+    {
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]);
+        };
+
+        while (!q.empty())
+        {
+            array<int, 2> c = q.front();
+            q.pop();
+
+            count[c[0]][c[1]] = 1;
+
+            for (auto &d : dirs)
+            {
+                int x = c[0] + d[0];
+                int y = c[1] + d[1];
+
+                if (check(x, y) && hs[x][y] >= hs[c[0]][c[1]])
+                {
+                    visited[x][y] = 1;
+                    q.push({x, y});
+                }
+            }
+        }
+    }
+
+    void bfs2(int m, int n, queue<array<int, 2> >& q, vector<vector<int> >& hs, vector<vector<int> >& ans)
+    {
+        auto check = [&](int x, int y) {
+            return (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]);
+        };
+
+        while (!q.empty())
+        {
+            array<int, 2> c = q.front();
+            q.pop();
+
+            if (count[c[0]][c[1]]) ans.push_back({c[0], c[1]});
+
+            for (auto &d : dirs)
+            {
+                int x = c[0] + d[0];
+                int y = c[1] + d[1];
+
+                if (check(x, y) && hs[x][y] >= hs[c[0]][c[1]])
+                {
+                    visited[x][y] = 1;
+                    q.push({x, y});
+                }
+            }
+        }
+    }
+
+    vector<vector<int> > pacificAtlantic(vector<vector<int> >& hs) {
+        int m = hs.size();
+        int n = hs[0].size();
+
+        queue<array<int, 2> > q;
+
+        for (int j = 0; j < n; j++)
+        {
+            visited[0][j] = 1;
+            q.push({0, j});
+        }
+
+        for (int i = 1; i < m; i++)
+        {
+            visited[i][0] = 1;
+            q.push({i, 0});
+        }
+
+        bfs1(m, n, q, hs);
+        
+        for (int i = 0; i < m; i++) visited[i].reset();
+
+        vector<vector<int> > ans;
+
+        for (int j = 0; j < n; j++)
+        {
+            visited[m - 1][j] = 1;
+            q.push({m - 1, j});
+        }
+
+        for (int i = 0; i < m - 1; i++)
+        {
+            visited[i][n - 1] = 1;
+            q.push({i, n - 1});
+        }
+
+        bfs2(m, n, q, hs, ans);
+
+        return ans;
+    }
+};
