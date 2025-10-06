@@ -1,0 +1,42 @@
+class Solution {
+  public:
+    int dirs[8][2] = {{-2, 1}, {-2, -1}, {-1, 2}, {1, 2}, {2, -1}, {2, 1}, {-1, -2}, {1, -2}};
+  
+    void track(int x, int y, int n, int mark, int last, int &flag, vector<vector<int> >& ans)
+    {
+        if (flag || x < 0 || x >= n || y < 0 || y >= n) return;
+        
+        ans[x][y] = mark;
+        
+        if (mark == last)
+        {
+            flag = 1;
+            return;
+        }
+        
+        auto check = [&n, &ans](int x, int y) {
+            return (x >= 0 && x < n && y >= 0 && y < n && ans[x][y] == -1);
+        };
+        
+        for (auto &d : dirs)
+        {
+            int dx = x + d[0], dy = y + d[1];
+            if (check(dx, dy)) track(dx, dy, n, mark + 1, last, flag, ans);
+        }
+        
+        if (flag) return;
+        ans[x][y] = -1;
+    }
+  
+    vector<vector<int> > knightTour(int n) {
+        // code here
+        int last = n * n - 1;
+        vector<vector<int> > ans(n, vector<int>(n, -1));
+        
+        int flag = 0;
+        track(0, 0, n, 0, last, flag, ans);
+        
+        if (flag) return ans;
+        return {};
+    }
+};
