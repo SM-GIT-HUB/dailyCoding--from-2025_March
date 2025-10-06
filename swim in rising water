@@ -1,0 +1,44 @@
+class Solution {
+public:
+    using ar3 = array<int, 3>;
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+    int swimInWater(vector<vector<int> >& grid) {
+        int n = grid.size();
+        int dest = grid[n - 1][n - 1];
+
+        vector<int> maxim(n * n + 1, 10000);
+        priority_queue<ar3, vector<ar3>, greater<ar3> > pq;
+        
+        pq.push({grid[0][0], 0, 0});
+        maxim[grid[0][0]] = grid[0][0];
+
+        while (!pq.empty())
+        {
+            auto [maxi, x, y] = pq.top();
+            pq.pop();
+
+            int val = grid[x][y];
+            if (maxim[val] < maxi) continue;
+
+            if (val == dest) break;
+
+            for (auto &d : dirs)
+            {
+                int dx = x + d[0], dy = y + d[1];
+                if (dx < 0 || dx >= n || dy < 0 || dy >= n) continue;
+
+                int currVal = grid[dx][dy];
+                int nextMaxi = max(maxi, currVal);
+
+                if (nextMaxi < maxim[currVal])
+                {
+                    maxim[currVal] = nextMaxi;
+                    pq.push({nextMaxi, dx, dy});
+                }
+            }
+        }
+
+        return maxim[dest];
+    }
+};
