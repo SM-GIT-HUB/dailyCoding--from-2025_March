@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+
+int dfs(string &node, string &dest, unordered_set<string>& visited, unordered_map<string, vector<string> >& adj)
+{
+    if (node == dest) return 1;
+    visited.insert(node);
+
+    for (string &adjNode : adj[node])
+    {
+        if (adjNode == dest) return 1;
+        if (!visited.count(adjNode) && dfs(adjNode, dest, visited, adj)) return 1;
+    }
+
+    return 0;
+}
+
+bool identicalSentences(vector<string>& word1, vector<string>& word2, vector<vector<string> >& pairs, int n, int m, int p) {
+    // Write your code here
+    if (n != m) return 0;
+
+    unordered_map<string, vector<string> > adj;
+
+    for (auto &vec : pairs)
+    {
+        adj[vec[0]].push_back(vec[1]);
+        adj[vec[1]].push_back(vec[0]);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        string &w1 = word1[i];
+        string &w2 = word2[i];
+
+        if (w1 == w2) continue;
+
+        unordered_set<string> visited;
+
+        if (!dfs(w1, w2, visited, adj)) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
