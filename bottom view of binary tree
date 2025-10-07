@@ -1,0 +1,55 @@
+/*
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int x) {
+        data = x;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    using pr2 = pair<Node*, int>;
+  
+    vector<int> bottomView(Node *root) {
+        // code here
+        queue<pr2> q;
+        unordered_map<int, int> mapp;
+        
+        q.push({root, 0});
+        int mini = 0, maxi = 0;
+        
+        while (!q.empty())
+        {
+            pr2 curr = q.front();
+            q.pop();
+            
+            mini = min(curr.second, mini);
+            maxi = max(curr.second, maxi);
+            
+            mapp[curr.second] = curr.first->data;
+            
+            if (curr.first->left) {
+                q.push({curr.first->left, curr.second - 1});
+            }
+            
+            if (curr.first->right) {
+                q.push({curr.first->right, curr.second + 1});
+            }
+        }
+        
+        vector<int> ans;
+        
+        for (int i = mini; i <= maxi; i++)
+        {
+            ans.push_back(mapp[i]);
+        }
+        
+        return ans;
+    }
+};
