@@ -1,0 +1,60 @@
+class Solution {
+public:
+    class DSU {
+    public:
+        vector<int> parent;
+
+        DSU(int n)
+        {
+            parent.resize(n + 1);
+            iota(parent.begin(), parent.end(), 0);
+        }
+
+        int findUltParent(int u)
+        {
+            if (parent[u] == u) return u;
+            return parent[u] = findUltParent(parent[u]);
+        }
+
+        void unionBy(int u)
+        {
+            parent[u] = findUltParent(u + 1);
+        }
+    };
+
+    vector<int> avoidFlood(vector<int>& arr) {
+        int n = arr.size();
+        vector<int> ans(arr.size(), 1);
+
+        DSU ds(arr.size());
+        unordered_map<int, int> mapp;
+
+        for (int i = 0; i < arr.size(); i++)
+        {
+            int &lake = arr[i];
+
+            if (lake)
+            {
+                ans[i] = -1;
+                ds.unionBy(i);
+
+                auto it = mapp.find(lake);
+
+                if (it != mapp.end())
+                {
+                    int day = ds.findUltParent(it->second);
+
+                    if (day > i) return {};
+
+                    ans[day] = lake;
+                    ds.unionBy(day);
+                    it->second = i;
+                }
+                else
+                    mapp[lake] = i;
+            }
+        }
+
+        return ans;
+    }
+};
