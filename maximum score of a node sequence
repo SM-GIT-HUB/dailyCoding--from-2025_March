@@ -1,0 +1,53 @@
+class Solution {
+public:
+    void push(int v, vector<int>& scores, vector<int>& adjU)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (adjU[i] == -1)
+            {
+                adjU[i] = v;
+                return;
+            }
+            else if (scores[v] >= scores[adjU[i]])
+            {
+                for (int j = 2; j > i; j--) adjU[j] = adjU[j - 1];
+                adjU[i] = v;
+                return;
+            }
+        }
+    }
+
+    int maximumScore(vector<int>& scores, vector<vector<int> >& edges) {
+        int n = scores.size();
+        vector<vector<int> > adj(n, {-1, -1, -1});
+
+        for (auto &e : edges)
+        {
+            push(e[1], scores, adj[e[0]]);
+            push(e[0], scores, adj[e[1]]);
+        }
+
+        int ans = -1;
+
+        for (auto &e : edges)
+        {
+            int u = e[0];
+            int v = e[1];
+            int sc = scores[u] + scores[v];
+
+            for (int &adjU : adj[u])
+            {
+                if (adjU == -1) continue;
+                
+                for (int &adjV : adj[v])
+                {
+                    if (adjV == -1 || adjU == adjV || adjU == v || adjV == u) continue;
+                    ans = max(sc + scores[adjU] + scores[adjV], ans);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
