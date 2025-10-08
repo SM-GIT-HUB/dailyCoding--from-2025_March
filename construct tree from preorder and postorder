@@ -1,0 +1,57 @@
+/*
+class Node {
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x) {
+        data = x;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    Node* makeTree(int &idx, int i, int n, vector<int>& pre, vector<int>& post)
+    {
+        if (idx == n) return nullptr;
+        
+        Node* root = new Node(post[idx++]);
+        
+        if (idx == n) return root;
+        
+        for (int j = i; j < n; j++)
+        {
+            if (pre[j] == post[idx])
+            {
+                root->right = makeTree(idx, j, n, pre, post);
+                break;
+            }
+        }
+        
+        for (int j = i; j < n; j++)
+        {
+            if (pre[j] == post[idx])
+            {
+                root->left = makeTree(idx, j, n, pre, post);
+                break;
+            }
+        }
+        
+        return root;
+    }
+  
+    Node *constructTree(vector<int> &pre, vector<int> &post) {
+        // code here
+        int idx = 0;
+        int n = pre.size();
+        
+        reverse(post.begin(), post.end());
+        
+        Node* root = makeTree(idx, 0, n, pre, post);
+        return root;
+    }
+};
