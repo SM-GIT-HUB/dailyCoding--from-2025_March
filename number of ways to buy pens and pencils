@@ -1,0 +1,23 @@
+class Solution {
+public:
+    long long waysToBuyPensPencils(int total, int cost1, int cost2) {
+        if (cost1 == cost2)
+        {
+            int buyUp = total / cost1;
+            return 1LL * (buyUp + 1) * (buyUp + 2) >> 1;
+        }
+                
+        if (cost1 < cost2) {
+            swap(cost1, cost2);
+        }
+
+        long long ans = 0;
+
+        for (int rest = total; rest >= 0; rest -= cost1)
+        {
+            ans += rest / cost2 + 1;
+        }
+
+        return ans;
+    }
+};
