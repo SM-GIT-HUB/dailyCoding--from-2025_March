@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int maximumEnergy(vector<int>& energy, int k) {
+        int maxi = -1e9;
+
+        for (int i = energy.size() - 1; i >= 0; i--)
+        {
+            maxi = max(energy[i], maxi);
+            if (i - k >= 0) energy[i - k] += energy[i];
+        }
+
+        return maxi;
+    }
+};
