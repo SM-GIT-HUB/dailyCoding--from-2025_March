@@ -1,0 +1,51 @@
+/*
+class Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    vector<int> zigZagTraversal(Node* root) {
+        // code here
+        vector<int> ans;
+        
+        deque<Node*> one;
+        deque<Node*> two;
+        
+        one.push_front(root);
+        
+        while (one.size() || two.size())
+        {
+            while (one.size())
+            {
+                Node *curr = one.front();
+                one.pop_front();
+                
+                ans.push_back(curr->data);
+                
+                if (curr->left) two.push_front(curr->left);
+                if (curr->right) two.push_front(curr->right);
+            }
+            
+            while (two.size())
+            {
+                Node *curr = two.front();
+                two.pop_front();
+                
+                ans.push_back(curr->data);
+                
+                if (curr->right) one.push_front(curr->right);
+                if (curr->left) one.push_front(curr->left);
+            }
+        }
+        
+        return ans;
+    }
+};
