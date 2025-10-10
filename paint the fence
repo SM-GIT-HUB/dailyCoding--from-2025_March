@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+int paintTheFence(vector<vector<int> >& ranges, int n, int q)
+{
+    // Write your code here.
+    vector<int> secT(n + 2);
+
+    for (int i = 0; i < q; i++)
+    {
+        vector<int> &curr = ranges[i];
+        secT[curr[0]]++;
+        secT[curr[1] + 1]--;
+    }
+
+    for (int i = 1; i <= n; i++) secT[i] += secT[i - 1];
+
+    int total = 0;
+    vector<int> unique(q);
+    vector<int> twoPrefix(n + 2);
+
+    for (int i = 0; i < q; i++)
+    {
+        int start = ranges[i][0];
+        int end = ranges[i][1];
+
+        for (int j = start; j <= end; j++) unique[i] += (secT[j] == 1);
+    }
+
+    for (int i = 1; i <= n; i++)
+    {
+        if (secT[i] > 0) total++;
+        twoPrefix[i] = twoPrefix[i - 1] + (secT[i] == 2);
+    }
+
+    int minLoss = INT_MAX;
+
+    for (int i = 0; i < q - 1; i++)
+    {
+        for (int j = i + 1; j < q; j++)
+        {
+            int loss = unique[i] + unique[j];
+
+            int L = max(ranges[i][0], ranges[j][0]);
+            int R = min(ranges[i][1], ranges[j][1]);
+
+            if (L <= R)
+            {
+                int overLap = twoPrefix[R] - twoPrefix[L - 1];
+                loss += overLap;
+            }
+
+            minLoss = min(loss, minLoss);
+        }
+    }
+
+    return (total - minLoss);
+}
