@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+int maxBalls(vector<int>& arr)
+{
+    // Write your code here.
+    long long sum = 0;
+    priority_queue<int, vector<int>, greater<int> > pq;
+
+    for (int x : arr)
+    {
+        sum += x;
+        pq.push(x);
+
+        while (!pq.empty() && sum < 0)
+        {
+            sum -= pq.top();
+            pq.pop();
+        }
+    }
+
+    return pq.size();
+}
