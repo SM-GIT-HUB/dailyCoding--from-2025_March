@@ -1,0 +1,55 @@
+class Solution {
+public:
+    long long spaceOpt(int n, vector<array<int, 2> >& arr)
+    {
+        long long i1 = (long long)arr[n - 1][0] * arr[n - 1][1];
+        long long i2 = 0;
+        long long i3 = 0;
+
+        long long include = 0, exclude = 0;
+
+        for (int idx = n - 2; idx >= 0; idx--)
+        {
+            include = (long long)arr[idx][0] * arr[idx][1];
+
+            if (idx + 1 < n && arr[idx + 1][0] > arr[idx][0] + 2) {
+                include += i1;
+            }
+            else if (idx + 2 < n && arr[idx + 2][0] > arr[idx][0] + 2) {
+                include += i2;
+            }
+            else
+                include += i3;
+
+            exclude = i1;
+
+            i3 = i2;
+            i2 = i1;
+            i1 = max(include, exclude);
+        }
+
+        return i1;
+    }
+
+    long long maximumTotalDamage(vector<int>& power) {
+        int last = 0;
+        vector<array<int, 2> > arr;
+
+        sort(power.begin(), power.end());
+        
+        for (int i = 1; i < power.size(); i++)
+        {
+            if (power[i] != power[i - 1])
+            {
+                arr.push_back({power[i - 1], i - last});
+                last = i;
+            }
+        }
+
+        arr.push_back({power.back(), (int)power.size() - last});
+
+        long long ans = spaceOpt(arr.size(), arr);
+
+        return ans;
+    }
+};
