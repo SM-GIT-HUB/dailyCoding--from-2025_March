@@ -1,0 +1,40 @@
+/*
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) {
+        data = val;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+*/
+
+struct obj {
+    int with;
+    int without;
+};
+
+class Solution {
+  public:
+    obj dfs(Node* root)
+    {
+        if (!root) return {0, 0};
+        
+        obj left = dfs(root->left);
+        obj right = dfs(root->right);
+        
+        int with = root->data + left.without + right.without;
+        int without = max(left.with, left.without) + max(right.with, right.without);
+        
+        return {with, without};
+    }
+  
+    int getMaxSum(Node* root) {
+        // code here
+        obj ans = dfs(root);
+        return max(ans.with, ans.without);
+    }
+};
