@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool hasIncreasingSubarrays(vector<int>& arr, int k) {
+        if (k-- == 1) return 1;
+        
+        int n = arr.size();
+        int smaller[100] = {0};
+
+        for (int i = 1; i < n; i++)
+        {
+            if (arr[i - 1] < arr[i]) {
+                smaller[i] = smaller[i - 1] + 1;
+            }
+        }
+
+        int bigger = 0;
+
+        for (int i = n - 2; i > 0; i--)
+        {
+            if (arr[i] < arr[i + 1])
+            {
+                ++bigger;
+                if (bigger >= k && smaller[i - 1] >= k) return 1;
+            }
+            else
+                bigger = 0;
+        }
+
+        return 0;
+    }
+};
