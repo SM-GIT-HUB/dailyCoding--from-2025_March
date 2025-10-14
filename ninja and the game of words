@@ -1,0 +1,30 @@
+#include <bits/stdc++.h> 
+vector<int> getFrequency(string &str, vector<string>& words, int n) {
+	// Write your code here.
+   vector<int> ans;
+   ans.reserve(n);
+
+   string curr;
+   unordered_map<string, int> mapp;
+
+   for (char x : str)
+   {
+      if (isalpha(x)) {
+         curr.push_back(x);
+      }
+      else
+      {
+         if (curr.size()) mapp[curr]++;
+         curr = "";
+      }
+   }
+
+   if (curr.size()) mapp[curr]++;
+
+   for (string &x : words)
+   {
+      ans.push_back(mapp[x]);
+   }
+
+   return ans;
+}
