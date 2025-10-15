@@ -1,26 +1,22 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+
 int digitProduct(int n)
 {
     // Write your code here.
-    if (n < 10) {
-        return n;
-    }
+    int ans = 0;
+    int pow = 1;
 
-    string ans = "";
-
-    for (int i = 9; n != 1 && i >= 2; i--)
+    for (int i = 9; n > 1 && i > 1; i--)
     {
-        while (n % i == 0)
+        while (n > 1 && n % i == 0)
         {
-            ans += to_string(i);
+            ans += i * pow;
+            pow = pow * 10;
+
             n = n / i;
         }
     }
 
-    if (n != 1) {
-        return -1;
-    }
-
-    sort(ans.begin(), ans.end());
-    return stoi(ans);
+    if (n > 1) return -1;
+    return ans;
 }
