@@ -1,0 +1,60 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    Node* getPred(Node* root)
+    {
+        Node* temp = root->left;
+        
+        while (temp->right && temp->right != root)
+        {
+            temp = temp->right;
+        }
+        
+        return temp;
+    }
+  
+    int kthSmallest(Node* root, int k) {
+        // code here
+        while (root)
+        {
+            if (!root->left)
+            {
+                if (--k == 0) return root->data;
+                root = root->right;
+                continue;
+            }
+            else
+            {
+                Node* pred = getPred(root);
+                
+                if (pred->right == root)
+                {
+                    if (--k == 0) return root->data;
+                    
+                    pred->right = nullptr;
+                    root = root->right;
+                }
+                else
+                {
+                    pred->right = root;
+                    root = root->left;
+                }
+            }
+        }
+        
+        return -1;
+    }
+};
