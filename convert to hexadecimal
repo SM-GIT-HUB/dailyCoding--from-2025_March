@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+string toHex(int num) {
+	// Write your code here.
+	string str = "0123456789ABCDEF";
+	
+	string ans;
+	unsigned n = static_cast<unsigned>(num);
+
+	while (n)
+	{
+		ans.push_back(str[n % 16]);
+		n = n / 16;
+	}
+
+	reverse(ans.begin(), ans.end());
+	return ans;
+}
