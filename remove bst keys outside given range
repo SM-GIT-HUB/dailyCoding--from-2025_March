@@ -1,0 +1,40 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    Node* dfs(Node* root, int l, int r)
+    {
+        if (!root) return nullptr;
+        
+        if (root->data < l) {
+            return dfs(root->right, l, r);
+        }
+        else if (root->data > r) {
+            return dfs(root->left, l, r);
+        }
+        else
+        {
+            root->left = dfs(root->left, l, r);
+            root->right = dfs(root->right, l, r);
+            return root;
+        }
+    }
+  
+    Node* removekeys(Node* root, int l, int r) {
+        // code here
+        return dfs(root, l, r);
+    }
+};
