@@ -1,0 +1,90 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    Node* getPred(Node* curr)
+    {
+        Node* temp = curr->left;
+        
+        while (temp->right && temp->right != curr)
+        {
+            temp = temp->right;
+        }
+        
+        return temp;
+    }
+  
+    int findMedian(Node* root) {
+        // Code here
+        int n = 0;
+        Node* temp = root;
+        
+        while (temp)
+        {
+            if (!temp->left)
+            {
+                n++;
+                temp = temp->right;
+            }
+            else
+            {
+                Node* pred = getPred(temp);
+                
+                if (pred->right == temp)
+                {
+                    n++;
+                    pred->right = nullptr;
+                    temp = temp->right;
+                }
+                else
+                {
+                    pred->right = temp;
+                    temp = temp->left;
+                }
+            }
+        }
+        
+        if (n & 1) n = ((n + 1) >> 1);
+        else n = (n >> 1);
+        
+        temp = root;
+        
+        while (temp)
+        {
+            if (!temp->left)
+            {
+                if (--n == 0) return temp->data;
+                temp = temp->right;
+            }
+            else
+            {
+                Node* pred = getPred(temp);
+                
+                if (pred->right == temp)
+                {
+                    if (--n == 0) return temp->data;
+                    pred->right = nullptr;
+                    temp = temp->right;
+                }
+                else
+                {
+                    pred->right = temp;
+                    temp = temp->left;
+                }
+            }
+        }
+        
+        return 0;
+    }
+};
