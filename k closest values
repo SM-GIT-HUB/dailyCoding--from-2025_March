@@ -1,0 +1,45 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void dfs(Node* root, int k, int target, priority_queue<pair<int, int> >& pq)
+    {
+        if (!root) return;
+        
+        pq.push({abs(target - root->data), root->data});
+        if (k < pq.size()) pq.pop();
+        
+        dfs(root->left, k, target, pq);
+        dfs(root->right, k, target, pq);
+    }
+  
+    vector<int> getKClosest(Node* root, int target, int k) {
+        // code here
+        priority_queue<pair<int, int> > pq;
+        
+        dfs(root, k, target, pq);
+        
+        vector<int> ans;
+        
+        while (pq.size())
+        {
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        
+        return ans;
+    }
+};
