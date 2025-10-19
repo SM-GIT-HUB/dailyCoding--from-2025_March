@@ -1,0 +1,26 @@
+bool areIsomorphic(string &str1, string &str2)
+{
+  // Write your code here
+  int n = str1.size();
+  if (n != str2.size()) return 0;
+
+  int mapp1[26];
+  int mapp2[26];
+
+  memset(mapp1, -1, sizeof(mapp1));
+  memset(mapp2, -1, sizeof(mapp2));
+
+  for (int i = 0; i < n; i++)
+  {
+    int di = str1[i] - 'a';
+    int dj = str2[i] - 'a';
+
+    if (mapp1[di] != -1 && mapp1[di] != dj) return 0;
+    if (mapp2[dj] != -1 && mapp2[dj] != di) return 0;
+
+    mapp1[di] = dj;
+    mapp2[dj] = di;
+  }
+
+  return 1;
+}
