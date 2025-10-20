@@ -1,0 +1,45 @@
+class Solution {
+  public:
+    int dp[6][6];
+  
+    int getCount(int start, int end, vector<pair<int, int> >& cs, vector<int>& ans)
+    {
+        if (start >= end) return 1;
+        if (dp[start][end] != -1) return dp[start][end];
+        
+        int count = 0;
+        int diff = ans.size() - (end - start + 1);
+        
+        for (int i = start; i <= end; i++)
+        {
+            int left = getCount(start, i - 1, cs, ans);
+            int right = getCount(i + 1, end, cs, ans);
+            
+            count += left * right;
+            if (!diff) ans[cs[i].second] = left * right;
+        }
+        
+        return dp[start][end] = count;
+    }
+  
+    vector<int> countBSTs(vector<int>& arr) {
+        // Code here
+        int n = arr.size();
+        if (n == 1) return {1};
+        
+        vector<pair<int, int> > cs(n);
+        
+        for (int i = 0; i < n; i++)
+        {
+            cs[i] = {arr[i], i};
+        }
+        
+        sort(cs.begin(), cs.end());
+        memset(dp, -1, sizeof(dp));
+        
+        vector<int> ans(n);
+        getCount(0, n - 1, cs, ans);
+        
+        return ans;
+    }
+};
