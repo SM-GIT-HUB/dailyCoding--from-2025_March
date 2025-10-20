@@ -1,0 +1,51 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+using Node = TreeNode<int>;
+
+void dfs(Node* root, int sum, int k, int &count, unordered_map<int, int>& mapp)
+{
+    if (!root) return;
+
+    sum += root->data;
+    count += mapp[sum - k];
+    mapp[sum]++;
+
+    dfs(root->left, sum, k, count, mapp);
+    dfs(root->right, sum, k, count, mapp);
+
+    mapp[sum]--;
+}
+
+int noWays(TreeNode<int>* root, int k) {
+    // Write your code here.
+    unordered_map<int, int> mapp;
+    
+    mapp[0] = 1;
+    int count = 0;
+
+    dfs(root, 0, k, count, mapp);
+    return count;
+}
+
+
+
+
