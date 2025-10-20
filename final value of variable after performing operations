@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int finalValueAfterOperations(vector<string>& operations) {
+        int x = 0;
+
+        for (string &str : operations)
+        {
+            int min = 0;
+
+            for (char x : str)
+            {
+                if (x == '-')
+                {
+                    min = 1;
+                    break;
+                }
+                else if (x == '+') {
+                    break;
+                }
+            }
+
+            if (min) x--;
+            else x++;
+        }
+
+        return x;
+    }
+};
