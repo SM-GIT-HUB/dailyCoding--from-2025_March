@@ -1,53 +1,17 @@
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
-        int idx = lower_bound(arr.begin(), arr.end(), x) - arr.begin();
+        int len = arr.size();
+        int i = 0, j = arr.size() - 1;
 
-        if (idx == arr.size()) idx--;
-
-        int i = idx - 1;
-        int j = idx + 1;
-        vector<int> ans;
-
-        if (arr[idx] == x) {
-            ans.push_back(arr[idx]);
-        }
-        else
-            j = idx;
-
-        while (ans.size() != k && i >= 0 && j < arr.size())
+        while (len != k)
         {
-            int ab1 = abs(arr[i] - x);
-            int ab2 = abs(arr[j] - x);
+            if (abs(arr[i] - x) > abs(arr[j] - x)) i++;
+            else j--;
 
-            if (ab1 < ab2) {
-                ans.push_back(arr[i--]);
-            }
-            else if (ab1 > ab2) {
-                ans.push_back(arr[j++]);
-            }
-            else
-                ans.push_back(arr[i--]);
+            len--;
         }
 
-        if (i >= 0)
-        {
-            while (ans.size() != k)
-            {
-                ans.push_back(arr[i--]);
-            }
-        }
-
-        if (j < arr.size())
-        {
-            while (ans.size() != k)
-            {
-                ans.push_back(arr[j++]);
-            }
-        }
-
-        sort(ans.begin(), ans.end());
-
-        return ans;
+        return vector<int>(arr.begin() + i, arr.begin() + j + 1);
     }
 };
