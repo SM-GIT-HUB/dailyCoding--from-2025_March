@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int mapp[100002];
+    int freq[100001];
+
+    int maxFrequency(vector<int>& arr, int k, int numOps) {
+        int mini = 1e9, maxi = 0;
+        memset(mapp, 0, sizeof(mapp));
+        memset(freq, 0, sizeof(freq));
+
+        for (int x : arr)
+        {
+            freq[x]++;
+            int left = max(x - k, 1);
+            int right = min(100000, x + k);
+
+            if (left < mini) mini = left;
+            if (right > maxi) maxi = right;
+
+            mapp[left]++;
+            mapp[right + 1]--;
+        }
+
+        int ans = 0;
+        int count = 0;
+
+        for (int i = mini; i <= maxi; i++)
+        {
+            count += mapp[i];
+            ans = max(ans, min(count, freq[i] + numOps));
+        }
+
+        return ans;
+    }
+};
