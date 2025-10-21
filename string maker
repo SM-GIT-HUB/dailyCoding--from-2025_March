@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+
+int mod = 1e9 + 7;
+int dp[101][101][101];
+
+int mm(int i, int m, int j, int n, int k, int p, string &a, string &b, string &c)
+{
+    if (k == p) return 1;
+    if (i == m && j == n) return 0;
+
+    if (dp[i][j][k] != -1) return dp[i][j][k];
+
+    long long count = 0;
+
+    for (int ni = i; ni < m; ni++)
+    {
+        if (a[ni] == c[k]) count += mm(ni + 1, m, j, n, k + 1, p, a, b, c);
+    }
+
+    for (int nj = j; nj < n; nj++)
+    {
+        if (b[nj] == c[k]) count += mm(i, m, nj + 1, n, k + 1, p, a, b, c);
+    }
+
+    return dp[i][j][k] = count % mod;
+}
+
+int countWays(string A, string B, string C) {
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+    int ans = mm(0, A.size(), 0, B.size(), 0, C.size(), A, B, C);
+    return ans;
+}
