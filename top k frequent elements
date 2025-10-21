@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& arr, int k) {
+        int last = 0;
+        sort(arr.begin(), arr.end());
+        
+        priority_queue<array<int, 2>, vector<array<int, 2> >, greater<array<int, 2> > > pq;
+
+        for (int i = 1; i < arr.size(); i++)
+        {
+            if (arr[i] != arr[last])
+            {
+                pq.push({i - last, arr[last]});
+                if (pq.size() > k) pq.pop();
+                
+                last = i;
+            }
+        }
+        
+        pq.push({(int)arr.size() - last, arr.back()});
+        if (pq.size() > k) pq.pop();
+
+        vector<int> ans;
+        
+        while (pq.size())
+        {
+            ans.push_back(pq.top()[1]);
+            pq.pop();
+        }
+        
+        return ans;
+    }
+};
