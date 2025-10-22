@@ -1,0 +1,41 @@
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode
+    {
+    public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val)
+        {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+using Node = TreeNode<int>;
+using ar2 = array<int, 2>;
+
+ar2 dfs(Node* root)
+{
+    if (!root) return {1, 0};
+
+    ar2 left = dfs(root->left);
+    ar2 right = dfs(root->right);
+
+    int h = 1 + max(left[1], right[1]);
+    int balaned = (left[0] && right[0] && abs(left[1] - right[1]) <= 1);
+
+    return {balaned, h};
+}
+
+bool isBalancedBT(TreeNode<int>* root){
+    // Write your code here.
+    return dfs(root)[0];
+}
