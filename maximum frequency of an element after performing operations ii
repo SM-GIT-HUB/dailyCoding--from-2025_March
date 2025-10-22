@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int maxFrequency(vector<int>& arr, int k, int numOps) {
+        sort(arr.begin(), arr.end());
+
+        int count = 0;
+        int start = 0, end = 0;
+
+        int range = 0;
+        int start2 = 0;
+
+        int k2 = 2 * k;
+
+        int ans = 0;
+        int prev = 0;
+
+        for (int x : arr)
+        {
+            if (prev == x) {
+                count++;
+            }
+            else
+            {
+                prev = x;
+                count = 1;
+            }
+
+            while (arr[start] < x - k)
+            {
+                start++;
+            }
+
+            while (end < arr.size() && arr[end] <= x + k)
+            {
+                end++;
+            }
+
+            ans = max(ans, min(end - start, count + numOps));
+
+            range++;
+
+            while (arr[start2] < x - k2)
+            {
+                start2++;
+                range--;
+            }
+
+            ans = max(ans, min(range, numOps));
+        }
+
+        return ans;
+    }
+};
