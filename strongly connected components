@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+
+bitset<201> visited;
+using vv2 = vector<vector<int> >;
+
+void dfs(int node, vector<int>& stack, vv2 &adj)
+{
+    visited[node] = 1;
+
+    for (int v : adj[node])
+    {
+        if (!visited[v]) dfs(v, stack, adj);
+    }
+
+    stack.push_back(node);
+}
+
+void dfs1(int u, vv2 &adjTs, vv2 &ans)
+{
+    visited[u] = 1;
+
+    for (int v : adjTs[u])
+    {
+        if (!visited[v]) dfs1(v, adjTs, ans);
+    }
+
+    ans.back().push_back(u);
+}
+
+vector<vector<int> > stronglyConnectedComponents(int n, vector<vector<int> >& edges)
+{
+    // Write your code here.
+    vv2 adj(n);
+    vv2 adjTs(n);
+
+    for (auto &e : edges)
+    {
+        int u = e[0], v = e[1];
+        adj[u].push_back(v);
+        adjTs[v].push_back(u);
+    }
+
+    visited.reset();
+    vector<int> stack;
+
+    for (int node = 0; node < n; node++)
+    {
+        if (!visited[node]) dfs(node, stack, adj);
+    }
+
+    vv2 ans;
+    visited.reset();
+
+    while (stack.size())
+    {
+        int u = stack.back();
+        stack.pop_back();
+
+        if (!visited[u])
+        {
+            ans.push_back({});
+            dfs1(u, adjTs, ans);
+        }
+    }
+
+    return ans;
+}
