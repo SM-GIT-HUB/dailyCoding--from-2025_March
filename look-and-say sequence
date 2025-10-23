@@ -1,0 +1,36 @@
+
+string getNext(string &curr)
+{
+    string next;
+    int count = 1;
+
+    for (int i = 1; i < curr.size(); i++)
+    {
+        if (curr[i - 1] != curr[i])
+        {
+            for (char x : to_string(count)) next.push_back(x);
+            next.push_back(curr[i - 1]);
+            count = 1;
+        }
+        else
+            count++;
+    }
+
+    for (char x : to_string(count)) next.push_back(x);
+    next.push_back(curr.back());
+
+    return next;
+}
+
+string lookAndSaySequence(int n)
+{
+    // Write your code here.
+    string curr = "1";
+
+    while (--n)
+    {
+        curr = getNext(curr);
+    }
+
+    return curr;
+}
