@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> arr;
+
+    void track(int idx, int n, string &str)
+    {
+        if (idx == n)
+        {
+            arr.push_back(stoi(str));
+            return;
+        }
+
+        int visited = 0;
+
+        for (int i = idx; i < n; i++)
+        {
+            if (!(visited & (1 << (str[i] - '0'))))
+            {
+                visited = visited | (1 << (str[i] - '0'));
+                swap(str[idx], str[i]);
+                track(idx + 1, n, str);
+                swap(str[idx], str[i]);
+            }
+        }
+    }
+
+    int nextBeautifulNumber(int n) {
+        vector<string> nums = {"1", "22", "122", "333", "1333", "4444", "14444", "22333", "55555", "122333", "155555", "224444", "666666"};
+        
+        for (string &x : nums)
+        {
+            if (x.size() > 2) track(0, x.size(), x);
+            else arr.push_back(stoi(x));
+        }
+
+        arr.push_back(1224444);
+        
+        sort(arr.begin(), arr.end());
+        int idx = upper_bound(arr.begin(), arr.end(), n) - arr.begin();
+
+        return arr[idx];
+    }
+};
