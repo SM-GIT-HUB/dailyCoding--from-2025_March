@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int totalMoney(int n) {
+        int full = n / 7;
+        n = n % 7;
+        
+        int sum = 28 * full + (7 * (full - 1) * full >> 1) + (full + 1) * n + ((n - 1) * n >> 1);
+
+        return sum;
+    }
+};
