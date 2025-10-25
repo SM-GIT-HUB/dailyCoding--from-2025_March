@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    int minOperations(vector<int>& arr) {
+        // code here
+        double sum = 0;
+        priority_queue<double> pq;
+        
+        for (int x : arr)
+        {
+            sum += x;
+            pq.push(x);
+        }
+        
+        double half = sum / 2.0;
+        
+        int op = 0;
+        
+        while (sum > half)
+        {
+            double curr = pq.top();
+            pq.pop();
+            
+            op++;
+            sum -= curr / 2.0;
+            pq.push(curr / 2.0);
+        }
+        
+        return op;
+    }
+};
