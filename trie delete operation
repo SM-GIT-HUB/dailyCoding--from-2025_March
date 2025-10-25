@@ -1,0 +1,29 @@
+#include <bits/stdc++.h> 
+
+/*class TrieNode {                        //Definition of TrieNode class
+public:
+    TrieNode * children[26];
+    bool isEnd;
+    TrieNode()
+    {
+        isEnd=false;
+        for(int i=0;i<26;i++)
+            children[i]=NULL;
+    }
+
+};*/
+
+TrieNode* solution::deleteWord(TrieNode* root, string word) {
+  // Write your code here
+  TrieNode* curr = root;
+
+  for (char x : word)
+  {
+    if (!curr->children[x - 'a']) return root;
+    curr = curr->children[x - 'a'];
+  }
+
+  curr->isEnd = false;
+  return root;
+}
+
