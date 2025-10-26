@@ -1,0 +1,9 @@
+#include <bits/stdc++.h> 
+long long int bobsHomework(int n)
+{
+    // Write your code here.
+    string str = to_string(n);
+    if (next_permutation(str.begin(), str.end())) return stoll(str);
+
+    return -1;
+}
