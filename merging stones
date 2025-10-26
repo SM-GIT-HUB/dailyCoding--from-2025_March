@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+
+int memoization(int start, int end, int k, vector<int>& prefix, vector<vector<int> >& dp)
+{
+    if (start >= end) return 0;
+    if (end - start + 1 == k) return (prefix[end + 1] - prefix[start]);
+
+    if (dp[start][end] != -1) return dp[start][end];
+
+    int mini = INT_MAX;
+
+    for (int i = start; i < end; i += k - 1)
+    {
+        int one = memoization(start, i, k, prefix, dp);
+        int two = memoization(i + 1, end, k, prefix, dp);
+        mini = min(mini, one + two);
+    }
+
+    int cost = ((end - start) % (k - 1))? 0 : prefix[end + 1] - prefix[start];
+
+    return dp[start][end] = (mini + cost);
+}
+
+int mergeStones(vector<int>& arr, int k){
+    // Write your code.
+    int n = arr.size();
+    if ((n - 1) % (k - 1)) return -1;
+
+    vector<int> prefix = {0};
+    for (int x : arr) prefix.push_back(prefix.back() + x);
+
+    vector<vector<int> > dp(n, vector<int>(n, -1));
+    return memoization(0, n - 1, k, prefix, dp);
+}
