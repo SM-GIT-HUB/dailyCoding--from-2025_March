@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+
+int maxFriends(int n, vector<int>& s, vector<int>& e) {
+    // Write your code here.
+    sort(s.begin(), s.end());
+    sort(e.begin(), e.end());
+
+    int ans = 0;
+    int count = 0;
+    int i = 0, j = 0;
+
+    while (i < n && j < n)
+    {
+        if (s[i] <= e[j])
+        {
+            i++;
+            ans = max(ans, ++count);
+        }
+        else
+        {
+            j++;
+            --count;
+        }
+    }
+
+    return ans;
+}
