@@ -1,0 +1,69 @@
+#include <bits/stdc++.h> 
+/*
+
+	Following is the node structure
+	class ListNode{
+		public:
+		int data;
+		ListNode* next;
+	};
+
+	ListNode* newListNode(int data){
+		ListNode *temp = new ListNode;
+    		temp->data = data;
+    		temp->next = NULL;
+    		return temp;
+	}
+
+*/
+
+using Node = ListNode;
+
+ListNode *findNode(ListNode *head, int n){
+	// Write your code here.
+    Node* s = head;
+    Node* f = head;
+
+    if (!f->next) return nullptr;
+
+    do {
+        s = s->next;
+        f = f->next->next;
+    } while(f && f->next && s != f);
+
+    if (s != f) return nullptr;
+
+    s = head;
+
+    while (s != f)
+    {
+        s = s->next;
+        f = f->next;
+    }
+
+    Node* start = head;
+    Node* ans = head;
+
+    while (n--)
+    {
+        start = start->next;
+        if (n && start == s) return nullptr;
+    }
+
+    while (start != s)
+    {
+        start = start->next;
+        ans = ans->next;
+    }
+
+    return ans;
+}
+
+
+
+
+
+
+
+
+
