@@ -5,12 +5,9 @@ class Solution {
     int dfs(int node, int &ans, vector<vector<int> >& adj)
     {
         visited[node] = 1;
-        int maxi = 0;
         
-        priority_queue<int, vector<int>, greater<int> > pq;
-        
-        int one = -1;
-        int two = -1;
+        int one = 0;
+        int two = 0;
         
         for (int adjNode : adj[node])
         {
@@ -26,15 +23,12 @@ class Solution {
                 else if (dist > two) {
                     two = dist;
                 }
-                
-                maxi = max(dist, maxi);
             }
         }
         
-        ans = max(ans, maxi);
-        if (one != -1 && two != -1) ans = max(ans, one + two);
+        ans = max(ans, one + two);
         
-        return (maxi + 1);
+        return 1 + max(one, two);
     }
   
     int diameter(int V, vector<vector<int> >& edges) {
