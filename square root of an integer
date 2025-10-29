@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+int squareRoot(int a)
+{
+	// Write your code here.
+	int root = 0;
+	int start = 0, end = a;
+
+	while (start <= end)
+	{
+		int mid = start + ((end - start) >> 1);
+
+		if (mid * mid <= a)
+		{
+			root = mid;
+			start = mid + 1;
+		}
+		else
+			end = mid - 1;
+	}
+
+	return root;
+}
