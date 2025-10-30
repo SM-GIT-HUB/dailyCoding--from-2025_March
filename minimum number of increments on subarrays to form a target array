@@ -1,34 +1,144 @@
-#include <bits/stdc++.h> 
-int getMinOperations(vector<int> &arr)
-{
-	// Write your code here.
-	int ans = 0;
-	int n = arr.size();
+class Solution {
+public:
+    class SegTree {
+    public:
+        int size;
+        vector<int> arr;
+        vector<int> lazy;
+        vector<array<int, 2> > tree;
 
-	for (int i = 0; i < n; )
-	{
-		if (arr[i] == 0)
-		{
-			i++;
-			continue;
-		}
+        void buildTree(int idx, int start, int end)
+        {
+            if (start == end)
+            {
+                tree[idx] = {start, arr[start]};
+                return;
+            }
 
-		int j = i;
-		int mini = arr[i];
+            int mid = start + ((end - start) >> 1);
+            int left = 2 * idx + 1;
+            int right = left + 1;
 
-		while (j < n && arr[j] != 0)
-		{
-			mini = min(mini, arr[j++]);
-		}
+            buildTree(left, start, mid);
+            buildTree(right, mid + 1, end);
 
-		for (int k = i; k < j; k++)
-		{
-			arr[k] -= mini;
-		}
+            tree[idx] = (tree[left][1] <= tree[right][1])? tree[left] : tree[right];
+        }
 
-		ans += mini;
-	}
+        array<int, 2> rangeQuery(int idx, int start, int end, int qStart, int qEnd)
+        {
+            int mid = start + ((end - start) >> 1);
+            int left = 2 * idx + 1;
+            int right = left + 1;
 
-	return ans;
-}
+            if (lazy[idx])
+            {
+                tree[idx][1] -= lazy[idx];
+                
+                if (start != end)
+                {
+                    lazy[left] += lazy[idx];
+                    lazy[right] += lazy[idx];
+                }
 
+                lazy[idx] = 0;
+            }
+
+            if (end < qStart || qEnd < start) return {-1, -1};
+            if (qStart <= start && end <= qEnd) return tree[idx];
+
+            array<int, 2> leftMin = rangeQuery(left, start, mid, qStart, qEnd);
+            array<int, 2> rightMin = rangeQuery(right, mid + 1, end, qStart, qEnd);
+
+            tree[idx] =  (tree[left][1] <= tree[right][1])? tree[left] : tree[right];
+
+            if (leftMin[0] == -1) {
+                return rightMin;
+            }
+            else if (rightMin[0] == -1) {
+                return leftMin;
+            }
+            else
+                return (leftMin[1] <= rightMin[1])? leftMin : rightMin;
+        }
+
+        array<int, 2> queryRange(int qStart, int qEnd)
+        {
+            return rangeQuery(0, 0, size - 1, qStart, qEnd);
+        }
+
+        void rangeUpdate(int idx, int start, int end, int qStart, int qEnd, int val)
+        {
+            int mid = start + ((end - start) >> 1);
+            int left = 2 * idx + 1;
+            int right = left + 1;
+
+            if (lazy[idx])
+            {
+                tree[idx][1] -= lazy[idx];
+
+                if (start != end)
+                {
+                    lazy[left] += lazy[idx];
+                    lazy[right] += lazy[idx];
+                }
+
+                lazy[idx] = 0;
+            }
+
+            if (end < qStart || qEnd < start) return;
+
+            if (qStart <= start && end <= qEnd)
+            {
+                if (start == end) tree[idx][1] -= val;
+                else lazy[idx] += val;
+
+                return;
+            }
+
+            rangeUpdate(left, start, mid, qStart, qEnd, val);
+            rangeUpdate(right, mid + 1, end, qStart, qEnd, val);
+
+            tree[idx] = (tree[left][1] <= tree[right][1])? tree[left] : tree[right];
+        }
+
+        void updateRange(int qStart, int qEnd, int val)
+        {
+            rangeUpdate(0, 0, size - 1, qStart, qEnd, val);
+        }
+
+        void divideAndConquer(int start, int end, int &count)
+        {
+            if (start > end) return;
+
+            array<int, 2> mini = queryRange(start, end);
+
+            if (mini[1] != 0)
+            {
+                count += mini[1];
+                updateRange(start, end, mini[1]);
+            }
+
+            divideAndConquer(start, mini[0] - 1, count);
+            divideAndConquer(mini[0] + 1, end, count);
+        }
+
+        SegTree(vector<int>& target): arr(target)
+        {
+            size = target.size();
+            tree.resize(4 * size);
+            lazy.resize(4 * size, 0);
+
+            buildTree(0, 0, size - 1);
+        }
+    };
+
+    int minNumberOperations(vector<int>& target) {
+        SegTree st(target);
+
+        int count = 0;
+        st.divideAndConquer(0, target.size() - 1, count);
+
+        return count;
+    }
+};
