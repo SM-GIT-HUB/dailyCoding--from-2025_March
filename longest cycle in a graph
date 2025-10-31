@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void dfs(int u, int timer, int &cycle, vector<int>& running, vector<int>& adj)
+    {
+        running[u] = timer;
+        int &v = adj[u];
+
+        if (v != -1)
+        {
+            if (!running[v]) {
+                dfs(v, timer + 1, cycle, running, adj);
+            }
+            else if (running[v] > 1) {
+                cycle = max(cycle, timer - running[v] + 1);
+            }
+        }
+
+        running[u] = 1;
+    }
+
+    int longestCycle(vector<int>& adj) {
+        vector<int> running(adj.size());
+
+        int cycle = 0;
+
+        for (int u = 0; u < adj.size(); u++)
+        {
+            if (!running[u]) dfs(u, 2, cycle, running, adj);
+        }
+
+        return cycle? cycle : -1;
+    }
+};
