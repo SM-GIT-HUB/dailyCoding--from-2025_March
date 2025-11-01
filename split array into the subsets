@@ -1,0 +1,31 @@
+#include <bits/stdc++.h> 
+bool isPossibleToSplit(int n, vector<int>& arr) {
+    // Write your code here.
+    vector<int> vrr;
+    sort(arr.begin(), arr.end());
+    
+    int last = 0;
+    int mini = n;
+
+    for (int i = 1; i < n; i++)
+    {
+        if (arr[i - 1] != arr[i])
+        {
+            mini = min(mini, i - last);
+            vrr.push_back(i - last);
+            last = i;
+        }
+    }
+
+    vrr.push_back(n - last);
+    mini = min(mini, n - last);
+
+    if (mini < 2) return 0;
+
+    for (int cnt : vrr)
+    {
+        if (cnt % mini) return 0;
+    }
+
+    return 1;
+}
