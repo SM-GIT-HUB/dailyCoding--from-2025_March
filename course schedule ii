@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    void dfs(int u, int parent, int &flag, vector<int>& running, vector<int>& stack, vector<vector<int> >& adj)
+    {
+        running[u] = 2;
+        
+        for (int v : adj[u])
+        {
+            if (flag) return;
+            
+            if (!running[v]) {
+                dfs(v, u, flag, running, stack, adj);
+            }
+            else if (v != parent && running[v] == 2)
+            {
+                flag = 1;
+                return;
+            }
+        }
+        
+        running[u] = 1;
+        stack.push_back(u);
+    }
+  
+    vector<int> findOrder(int n, vector<vector<int> >& edges) {
+        // code here
+        vector<vector<int> > adj(n);
+        for (auto &e : edges) adj[e[1]].push_back(e[0]);
+        
+        vector<int> stack;
+        vector<int> running(n);
+        
+        for (int node = 0; node < n; node++)
+        {
+            int flag = 0;
+            if (!running[node]) dfs(node, -1, flag, running, stack, adj);
+            
+            if (flag) break;
+        }
+        
+        if (stack.size() != n) return {};
+        
+        reverse(stack.begin(), stack.end());
+        
+        return stack;
+    }
+};
