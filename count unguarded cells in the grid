@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int countUnguarded(int m, int n, vector<vector<int> >& guards, vector<vector<int> >& walls) {
+        int mat[100001] = {0};
+
+        for (auto &w : walls)
+        {
+            mat[n * w[0] + w[1]] = 2;
+        }
+
+        for (auto &g : guards)
+        {
+            mat[n * g[0] + g[1]] = 3;
+        }
+
+        int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+        for (auto &g : guards)
+        {
+            int &x = g[0];
+            int &y = g[1];
+
+            for (auto &d : dirs)
+            {
+                int dx = x + d[0];
+                int dy = y + d[1];
+                int idx = n * dx + dy;
+
+                while (dx >= 0 && dx < m && dy >= 0 && dy < n && mat[idx] < 2)
+                {
+                    mat[idx] = 1;
+                    dx = dx + d[0];
+                    dy = dy + d[1];
+                    idx = n * dx + dy;
+                }
+            }
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (!mat[n * i + j]) count++;
+            }
+        }
+
+        return count;
+    }
+};
