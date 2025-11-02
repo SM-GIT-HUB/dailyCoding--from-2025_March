@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+int dp[301];
+using ar3 = array<int, 3>;
+
+int mm(int idx, int n, vector<ar3>& arr)
+{
+	if (idx == n) return 0;
+	if (dp[idx] != -1) return dp[idx];
+
+	int total = 0;
+
+	for (int i = idx + 1; i < n; i++)
+	{
+		if (arr[idx][0] < arr[i][0] && arr[idx][1] < arr[i][1]) {
+			total = max(total, mm(i, n, arr));
+		}
+	}
+
+	return dp[idx] = arr[idx][2] + total;
+}
+
+int findMaxHeight(vector<int>& h, vector<int>& w, vector<int>& l, int n) {
+ 	// Write your code here
+	vector<ar3> arr;
+	memset(dp, -1, sizeof(dp));
+
+	for (int i = 0; i < n; i++)
+	{
+		arr.push_back({min(h[i], w[i]), max(h[i], w[i]), l[i]});
+		arr.push_back({min(w[i], l[i]), max(w[i], l[i]), h[i]});
+		arr.push_back({min(h[i], l[i]), max(h[i], l[i]), w[i]});
+	}
+
+	sort(arr.begin(), arr.end());
+	
+	int ans = 0;
+	for (int i = 0; i < arr.size(); i++) ans = max(ans, mm(i, arr.size(), arr));
+
+	return ans;
+}
