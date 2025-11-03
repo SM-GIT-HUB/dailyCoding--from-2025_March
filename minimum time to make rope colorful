@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int minCost(string colors, vector<int>& time) {
+        int ans = 0;
+        int last = 0;
+        int maxi = time[0];
+        int total = maxi;
+
+        for (int i = 1; i < colors.size(); i++)
+        {
+            if (colors[i - 1] != colors[i])
+            {
+                if (i - last > 1) {
+                    ans += total - maxi;
+                }
+
+                last = i;
+                maxi = time[i];
+                total = maxi;
+            }
+            else
+            {
+                total += time[i];
+                maxi = max(maxi, time[i]);
+            }
+        }
+
+        if ((int)colors.size() - last > 1) ans += total - maxi;
+
+        return ans;
+    }
+};
