@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+vector<vector<int>> multiplyMatrices(vector<vector<int>> &mat1, vector<vector<int>> &mat2)
+{
+    // Write your code here.
+    int m = mat1.size();
+    int n = mat1[0].size();
+    int p = mat2[0].size();
+    
+    vector<vector<int> > ans(m, vector<int>(p, 0));
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (mat1[i][j])
+            {
+                for (int k = 0; k < p; k++)
+                {
+                    ans[i][k] += mat1[i][j] * mat2[j][k];
+                }
+            }
+        }
+    }
+
+    return ans;
+}
