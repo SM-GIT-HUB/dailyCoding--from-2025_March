@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int mapp[51];
+    priority_queue<array<int, 2>, vector<array<int, 2> >, greater<array<int, 2> > > pq;
+
+    int getSum(int start, int end, int x, vector<int>& arr)
+    {
+        memset(mapp, 0, sizeof(mapp));
+        
+        for (int i = start; i <= end; i++) mapp[arr[i]]++;
+
+        for (int i = 0; i < 51; i++)
+        {
+            if (mapp[i])
+            {
+                pq.push({mapp[i], i});
+                if (pq.size() > x) pq.pop();
+            }
+        }
+
+        int sum = 0;
+
+        while (pq.size())
+        {
+            sum += pq.top()[0] * pq.top()[1];
+            pq.pop();
+        }
+
+        return sum;
+    }
+
+    vector<int> findXSum(vector<int>& arr, int k, int x) {
+        vector<int> ans;
+        int total = arr.size() - k + 1;
+        
+        ans.reserve(total);
+
+        for (int i = 0; i < total; i++)
+        {
+            ans.push_back(getSum(i, i + k - 1, x, arr));
+        }
+
+        return ans;
+    }
+};
