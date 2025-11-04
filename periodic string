@@ -1,0 +1,9 @@
+#include <bits/stdc++.h> 
+bool isPeriodic(string s) {
+    // Write your code here.
+    int n = s.size();
+
+    string str = (s + s).substr(1, (n << 1) - 2);
+
+    return str.find(s) != string::npos;
+}
