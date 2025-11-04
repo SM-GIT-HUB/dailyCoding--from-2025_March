@@ -1,0 +1,59 @@
+
+class DSU {
+public:
+	int parent[5001];
+
+	DSU(int n)
+	{
+		for (int i = 0; i < n; i++) parent[i] = i;
+	}
+
+	int findParent(int u)
+	{
+		return (parent[u] == u)? u : parent[u] = findParent(parent[u]);
+	}
+
+	void unionBy(int u, int v)
+	{
+		parent[findParent(v)] = parent[findParent(u)];
+	}
+};
+
+vector<vector<string> > accountsMerge(vector<vector<string> >& arr)
+{
+	// Write your code here.
+	int n = arr.size();
+
+	DSU ds(n);
+	unordered_map<string, int> ownedBy;
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 1; j < arr[i].size(); j++)
+		{
+			string &str = arr[i][j];
+
+			if (ownedBy.count(str)) ds.unionBy(ownedBy[str], i);
+			else ownedBy[str] = i;
+		}
+	}
+
+	vector<vector<string> > ans;
+	unordered_map<int, vector<string> > mapp;
+
+	for (auto &it : ownedBy)
+	{
+		mapp[ds.findParent(it.second)].push_back(it.first);
+	}
+
+	for (auto &it : mapp)
+	{
+		ans.push_back({""});
+		for (string &x : it.second) ans.back().push_back(x);
+
+		sort(ans.back().begin(), ans.back().end());
+		ans.back()[0] = arr[it.first][0];
+	}
+
+	return ans;
+}
