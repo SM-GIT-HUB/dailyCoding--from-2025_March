@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int dp[10001];
+  
+    int memoization(int n)
+    {
+        if (n == 0) return 0;
+        
+        if (dp[n] != -1) return dp[n];
+        
+        int count = n;
+        int sqr = sqrt(n);
+        
+        for (int i = sqr; i >= 1; i--)
+        {
+            count = min(count, 1 + memoization(n - i * i));
+        }
+        
+        return dp[n] = count;
+    }
+  
+    int minSquares(int n) {
+        // Code here
+        memset(dp, -1, sizeof(dp));
+        
+        int ans = memoization(n);
+        return ans;
+    }
+};
