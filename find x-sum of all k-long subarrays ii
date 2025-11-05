@@ -1,0 +1,142 @@
+class Solution {
+public:
+    using prl = pair<long long, int>;
+
+    struct comp {
+        bool operator()(const prl& a, const prl& b) const {
+            if (a.first == b.first) return (a.second > b.second);
+            return (a.first > b.first);
+        }
+    };
+
+    void balance(long long &sum, int x, set<prl>& sett1, set<prl, comp>& sett2)
+    {
+        if (sett1.empty())
+        {
+            while (sett2.size() && sett1.size() < x)
+            {
+                auto it = *sett2.begin();
+                sum += it.first * it.second;
+                sett1.insert(*sett2.begin());
+                sett2.erase(sett2.begin());
+            }
+        }
+        else
+        {
+            auto it = *sett1.begin();
+
+            while (sett2.size())
+            {
+                auto it2 = *sett2.begin();
+
+                if (it2.first > it.first || (it2.first == it.first && it2.second > it.second))
+                {
+                    sett1.insert(it2);
+                    sum += it2.first * it2.second;
+                    sett2.erase(sett2.begin());
+                }
+                else
+                    break;
+            }
+
+            while (sett1.size() < x && sett2.size())
+            {
+                auto it = *sett2.begin();
+                sett1.insert(it);
+                sett2.erase(sett2.begin());
+                sum += it.first * it.second;
+            }
+        }
+
+        while (sett1.size() > x)
+        {
+            auto it = *sett1.begin();
+            sum -= it.first * it.second;
+            sett1.erase(sett1.begin());
+            sett2.insert(it);
+        }
+    }
+
+    vector<long long> findXSum(vector<int>& arr, int k, int x) {
+        set<prl> sett1;
+        set<prl, comp> sett2;
+        unordered_map<int, int> mapp;
+
+        for (int i = 0; i < k; i++)
+        {
+            ++mapp[arr[i]];
+        }
+
+        long long sum = 0;
+
+        for (auto &it : mapp)
+        {
+            sett1.insert({it.second, it.first});
+            sum += (long long)it.first * it.second;
+        }
+
+        balance(sum, x, sett1, sett2);
+
+        int total = arr.size() - k + 1;
+
+        vector<long long> ans;
+        ans.reserve(total);
+
+        ans.push_back(sum);
+
+        for (int i = 1; i < total; i++)
+        {
+            if (arr[i - 1] == arr[i + k - 1]) {
+                ans.push_back(sum);
+            }
+            else
+            {
+                int elem = arr[i - 1];
+                prl pr = {mapp[elem], elem};
+
+                if (sett1.count(pr))
+                {
+                    sett1.erase(pr);
+                    sum -= pr.first * pr.second;
+
+                    if (--mapp[elem]) {
+                        sett2.insert({pr.first - 1, elem});
+                    }
+                }
+                else
+                {
+                    sett2.erase(pr);
+
+                    if (--mapp[elem]) {
+                        sett2.insert({pr.first - 1, elem});
+                    }
+                }
+
+                balance(sum, x, sett1, sett2);
+
+                elem = arr[i + k - 1];
+                int c = ++mapp[elem];
+                
+                pr = {c - 1, elem};
+
+                if (c > 1 && sett1.count(pr))
+                {
+                    sett1.erase(pr);
+                    sett1.insert({c, elem});
+                    sum += elem;
+                }
+                else
+                {
+                    if (c > 1) sett2.erase(pr);
+                    sett2.insert({c, elem});
+                }
+
+                balance(sum, x, sett1, sett2);
+
+                ans.push_back(sum);
+            }
+        }
+
+        return ans;
+    }
+};
