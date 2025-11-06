@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+int isPalin(string &str)
+{
+    int start = 0, end = str.size() - 1;
+
+    while (start < end)
+    {
+        if (tolower(str[start++]) != tolower(str[end--])) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+int countNumberOfPalindromeWords(string s)
+{
+	//Your code goes here
+    int count = 0;
+    string temp = "";
+
+    for (char ch : s)
+    {
+        if (ch == ' ')
+        {
+            if (temp.size() && isPalin(temp)) {
+                count++;
+            }
+
+            temp = "";
+        }
+        else
+            temp.push_back(ch);
+    }
+
+    if (temp.size() && isPalin(temp)) {
+        count++;
+    }
+
+    return count;
+}
