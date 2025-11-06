@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+void dfs(int ult, int u, int parent, int &timer, int &count, vector<int>& disc, vector<int>& low, vector<vector<int> >& adj)
+{
+    disc[u] = low[u] = timer++;
+
+    int used = 0;
+    int dfsCalls = 0;
+
+    for (int v : adj[u])
+    {
+        if (!disc[v])
+        {
+            dfsCalls++;
+            dfs(ult, v, u, timer, count, disc, low, adj);
+
+            if (ult != u && !used && low[v] >= disc[u])
+            {
+                used++;
+                count++;
+            }
+
+            low[u] = min(low[u], low[v]);
+        }
+        else if (v != parent) {
+            low[u] = min(low[u], disc[v]);
+        }
+    }
+
+    if (u == ult && dfsCalls > 1) {
+        count++;
+    }
+}
+
+int beautifulVertices(int n, int m, vector<vector<int> >& edges)
+{
+    // Write your code here.
+    vector<int> disc(n + 1);
+    vector<int> low(n + 1);
+
+    vector<vector<int> > adj(n + 1);
+
+    for (auto &e : edges)
+    {
+        adj[e[0]].push_back(e[1]);
+        adj[e[1]].push_back(e[0]);
+    }
+
+    int timer = 1;
+    int count = 0;
+
+    for (int u = 1; u <= n; u++)
+    {
+        if (!disc[u]) {
+            dfs(u, u, -1, timer, count, disc, low, adj);
+        }
+    }
+
+    return count;
+}
