@@ -1,21 +1,19 @@
-#include <bits/stdc++.h> 
-vector<int> harderPuzzle(int n, vector<int> &puzzle)
+#include <bits/stdc++.h>
+
+vector<int> harderPuzzle(int n, vector<int>& arr)
 {
     // Write your code here.
-    vector<int> stack;
-    vector<int> ans(n, 0);
+    vector<int> ans(n);
+    vector<int> stack = {-1};
 
     for (int i = n - 1; i >= 0; i--)
     {
-        while (!stack.empty() && puzzle[stack.back()] <= puzzle[i])
+        while (stack.back() != -1 && arr[stack.back()] <= arr[i])
         {
             stack.pop_back();
         }
 
-        if (!stack.empty()) {
-            ans[i] = stack.back() - i;
-        }
-
+        if (stack.back() != -1) ans[i] = stack.back() - i;
         stack.push_back(i);
     }
 
