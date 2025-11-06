@@ -1,0 +1,74 @@
+class Solution {
+public:
+    int parent[100001];
+    bitset<100001> offline;
+
+    int findParent(int u)
+    {
+        return (parent[u] == u)? u : parent[u] = findParent(parent[u]);
+    }
+
+    void unionBy(int u, int v)
+    {
+        int uPar = findParent(u);
+        int vPar = findParent(v);
+
+        if (uPar < vPar) parent[vPar] = uPar;
+        else if (uPar > vPar) parent[uPar] = vPar;
+    }
+
+    int findStation(int x, unordered_map<int, vector<int> >& mapp)
+    {
+        int par = findParent(x);
+
+        vector<int> &curr = mapp[par];
+        if (curr.empty()) return -1;
+
+        while (curr.size() && offline[curr.back()])
+        {
+            curr.pop_back();
+        }
+
+        return (curr.size())? curr.back() : -1;
+    }
+
+    vector<int> processQueries(int c, vector<vector<int> >& edges, vector<vector<int> >& queries) {
+        for (int i = 1; i <= c; i++) parent[i] = i;
+
+        for (auto &e : edges)
+        {
+            unionBy(e[0], e[1]);
+        }
+
+        unordered_map<int, vector<int> > mapp;
+
+        for (int u = 1; u <= c; u++)
+        {
+            int par = findParent(u);
+            mapp[par].push_back(u);
+        }
+
+        for (auto &it : mapp)
+        {
+            reverse(it.second.begin(), it.second.end());
+        }
+
+        vector<int> ans;
+        ans.reserve(queries.size());
+
+        for (auto &q : queries)
+        {
+            int &x = q[1];
+
+            if (q[0] == 1)
+            {
+                if (!offline[q[1]]) ans.push_back(x);
+                else ans.push_back(findStation(x, mapp));
+            }
+            else
+                offline[x] = 1;
+        }
+
+        return ans;
+    }
+};
