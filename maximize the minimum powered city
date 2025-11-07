@@ -1,0 +1,87 @@
+class Solution {
+public:
+    int isPos(long long x, int k, int r, vector<int>& add, vector<long long>& power)
+    {
+        long long added = 0;
+        int last = power.size() - 1;
+
+        for (int i = 0; i < power.size(); i++)
+        {
+            if (k < 0)
+            {
+                add[i] = 0;
+                continue;
+            }
+
+            long long req = x - (added + power[i]);
+
+            if (req > 0)
+            {
+                if (req > k) {
+                    k = -1;
+                }
+                else
+                {
+                    k -= req;
+                    added += req;
+                    add[min(i + (r << 1), last)] += req;
+                }
+            }
+            
+            added -= add[i];
+            add[i] = 0;
+        }
+
+        return (k >= 0);
+    }
+
+    long long maxPower(vector<int>& arr, int r, int k) {
+        int n = arr.size();
+
+        vector<long long> prefix;
+        prefix.reserve(n + 1);
+
+        prefix.push_back(0);
+
+        for (int x : arr)
+        {
+            prefix.push_back(prefix.back() + x);
+        }
+
+        vector<long long> power(n);
+
+        long long start = 1e18;
+        
+        for (int i = 0; i < n; i++)
+        {
+            int left = max(i - r, 0);
+            int right = min(i + r, n - 1);
+
+            power[i] = prefix[right + 1] - prefix[left];
+
+            if (power[i] < start) {
+                start = power[i];
+            }
+        }
+
+        long long ans = start;
+        long long end = start + k;
+
+        vector<int> add(n);
+
+        while (start <= end)
+        {
+            long long mid = start + ((end - start) >> 1);
+
+            if (isPos(mid, k, r, add, power))
+            {
+                ans = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+
+        return ans;
+    }
+};
