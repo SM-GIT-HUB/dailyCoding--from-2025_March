@@ -1,0 +1,41 @@
+class Solution {
+  public:
+    int tabulation(int m, int n, int k, vector<vector<int> >& mat)
+    {
+        array<array<int, 101>, 101> next{};
+        array<array<int, 101>, 101> curr{};
+        
+        curr[n - 1][k - mat[m - 1][n - 1]] = 1;
+        
+        for (int x = m - 1; x >= 0; x--)
+        {
+            for (int y = n - 1; y >= 0; y--)
+            {
+                if (x == m - 1 && y == n - 1) {
+                    continue;
+                }
+                
+                for (int sum = k; sum >= 0; sum--)
+                {
+                    int count = (sum + mat[x][y] <= k)? next[y][sum + mat[x][y]] : 0;
+                    count += (sum + mat[x][y] <= k)? curr[y + 1][sum + mat[x][y]] : 0;
+                    
+                    curr[y][sum] = count;
+                }
+            }
+            
+            next = curr;
+        }
+        
+        return next[0][0];
+    }
+  
+    int numberOfPath(vector<vector<int> >& mat, int k) {
+        // Code Here
+        if (mat.back().back() > k) {
+            return 0;
+        }
+        
+        return tabulation(mat.size(), mat[0].size(), k, mat);
+    }
+};
