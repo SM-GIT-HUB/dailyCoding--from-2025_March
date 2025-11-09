@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int maxCoins(vector<int>& piles) {
+        int idx = 0;
+        int mapp[10001] = {0};
+
+        for (int x : piles)
+        {
+            ++mapp[x];
+            idx = max(x, idx);
+        }
+        
+        int turn = 0;
+        int count = 0;
+        int rem = piles.size() / 3;
+        
+        while (rem)
+        {
+            if (mapp[idx])
+            {
+                if (turn == 0) {
+                    turn = 1;
+                }
+                else
+                {
+                    count += idx;
+                    turn = 0;
+                    rem--;
+                }
+
+                --mapp[idx];
+            }
+            else
+                idx--;
+        }
+
+        return count;
+    }
+};
