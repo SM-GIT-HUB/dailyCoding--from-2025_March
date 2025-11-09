@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    int dp[50][50][50];
+    int dirs[2][2] = {{1, 0}, {0, 1}};
+  
+    int mm(int x1, int y1, int y2, int n, vector<vector<int> >& mat)
+    {
+        int x2 = x1 + y1 - y2;
+        
+        if (x1 == n - 1 && x2 == n - 1 && y1 == n - 1 && y2 == n - 1) {
+            return mat[x1][y1];
+        }
+        
+        if (dp[x1][y1][y2] != -1) {
+            return dp[x1][y1][y2];
+        }
+        
+        int total = -1e7;
+        int curr = mat[x1][y1] + mat[x2][y2];
+        
+        if (x1 == x2 && y1 == y2) {
+            curr = curr >> 1;
+        }
+        
+        auto check = [&](int x1, int y1, int x2, int y2) {
+            return (x1 >= 0 && x1 < n && y1 >= 0 && y1 < n && x2 >= 0 && x2 < n && y2 >= 0 && y2 < n) &&
+            (mat[x1][y1] != -1 && mat[x2][y2] != -1);
+        };
+        
+        for (auto &d1 : dirs)
+        {
+            int dx1 = x1 + d1[0];
+            int dy1 = y1 + d1[1];
+            
+            for (auto &d2 : dirs)
+            {
+                int dx2 = x2 + d2[0];
+                int dy2 = y2 + d2[1];
+                
+                if (check(dx1, dy1, dx2, dy2)) {
+                    total = max(total, mm(dx1, dy1, dy2, n, mat));
+                }
+            }
+        }
+        
+        return dp[x1][y1][y2] = (total + curr);
+    }
+  
+    int chocolatePickup(vector<vector<int> >& mat) {
+        // code here
+        int n = mat.size();
+        
+        if (mat[0][0] < 0 || mat[n - 1][n - 1] < 0) {
+            return 0;
+        }
+        
+        memset(dp, -1, sizeof(dp));
+        
+        int ans = mm(0, 0, 0, n, mat);
+        
+        return (ans < 0)? 0 : ans;
+    }
+};
