@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int dp[70][70][70];
+
+    int mm(int x, int y1, int y2, int m, int n, vector<vector<int> >& grid)
+    {
+        int total = grid[x][y1] + grid[x][y2];
+
+        if (y1 == y2) {
+            total = total >> 1;
+        }
+
+        if (x == m - 1) {
+            return total;
+        }
+
+        if (dp[x][y1][y2] != -1) {
+            return dp[x][y1][y2];
+        }
+
+        int cherry = 0;
+
+        for (int ny1 = y1 - 1; ny1 <= y1 + 1; ny1++)
+        {
+            if (ny1 < 0 || ny1 >= n) {
+                continue;
+            }
+
+            for (int ny2 = y2 - 1; ny2 <= y2 + 1; ny2++)
+            {
+                if (ny2 < 0 || ny2 >= n) {
+                    continue;
+                }
+
+                cherry = max(cherry, mm(x + 1, ny1, ny2, m, n, grid));
+            }
+        }
+
+        return dp[x][y1][y2] = cherry + total;
+    }
+
+    int cherryPickup(vector<vector<int> >& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        memset(dp, -1, sizeof(dp));
+
+        return mm(0, 0, n - 1, m, n, grid);
+    }
+};
