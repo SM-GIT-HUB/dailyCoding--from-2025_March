@@ -1,0 +1,52 @@
+#include <bits/stdc++.h> 
+int getLongestSubarrayLength(vector<int>& arr, int limit)
+{
+	// Write your code here
+	deque<int> low;
+	deque<int> high;
+
+	auto slide = [&low, &high](int idx) {
+		while (!low.empty() && low.front() < idx)
+		{
+			low.pop_front();
+		}
+
+		while (!high.empty() && high.front() < idx)
+		{
+			high.pop_front();
+		}
+	};
+
+	auto slideBack = [&low, &high, &arr](int val) {
+		while (!low.empty() && arr[low.back()] >= val)
+		{
+			low.pop_back();
+		}
+
+		while (!high.empty() && arr[high.back()] <= val)
+		{
+			high.pop_back();
+		}
+	};
+
+	int ans = 0;
+	int start = 0;
+
+	for (int i = 0; i < arr.size(); i++)
+	{
+		slide;
+		slideBack(arr[i]);
+		low.push_back(i);
+		high.push_back(i);
+
+		while (arr[high.front()] - arr[low.front()] > limit)
+		{
+			start++;
+			slide(start);
+		}
+
+		ans = max(ans, i - start + 1);
+	}
+
+	return ans;
+}
