@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+void track(int len, int n, int d, int num, int k, vector<int>& ans)
+{
+	if (len == n)
+	{
+		ans.push_back(num);
+		return;
+	}
+
+	if (d + k < 10) {
+		track(len + 1, n, d + k, num * 10 + d + k, k, ans);
+	}
+
+	if (d - k >= 0 && k) {
+		track(len + 1, n, d - k, num * 10 + d - k, k, ans);
+	}
+}
+
+vector<int> numberWithSameConsecutiveDifference(int n, int k)
+{
+	// Write your code here
+	vector<int> ans;
+
+	for (int d = 1; d < 10; d++)
+	{
+		track(1, n, d, d, k, ans);
+	}
+
+	return ans;
+}
