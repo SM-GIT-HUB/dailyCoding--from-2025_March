@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minOperations(vector<int>& arr) {
+        int count = 0;
+        vector<int> stack;
+
+        for (int x : arr)
+        {
+            while (!stack.empty() && stack.back() > x)
+            {
+                stack.pop_back();
+            }
+
+            if (x == 0) {
+                continue;
+            }
+
+            if (stack.empty() || x > stack.back())
+            {
+                ++count;
+                stack.push_back(x);
+            }
+        }
+
+        return count;
+    }
+};
