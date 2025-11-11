@@ -1,0 +1,50 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+    class Node {
+      public:
+        T data;
+        Node<T> *next;
+        Node<T> *child;
+
+        Node(T data) {
+            this->data = data;
+            next = NULL;
+            child = NULL;
+        }
+    };
+
+*****************************************************************/
+
+using node = Node<int>;
+
+Node<int> *flattenMultiLinkedList(Node<int> *head) {
+    // Write your code here.
+    node *root = new node(-1);
+    node *temp = root;
+
+    queue<node*> q;
+    q.push(head);
+
+    while (!q.empty())
+    {
+        node* curr = q.front();
+        q.pop();
+
+        while (curr)
+        {
+            temp->next = curr;
+            temp = temp->next;
+
+            if (curr->child) {
+                q.push(curr->child);
+            }
+            
+            curr = curr->next;
+        }
+    }
+
+    return root->next;
+}
