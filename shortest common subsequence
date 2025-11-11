@@ -1,0 +1,44 @@
+class Solution {
+  public:
+    int tabulation(int m, int n, string &s1, string &s2)
+    {
+        array<int, 501> next = {0};
+        array<int, 501> curr = {0};
+        
+        for (int j = 0; j < n; j++) next[j] = n - j;
+        
+        next[n] = 0;
+        
+        for (int i = m - 1; i >= 0; i--)
+        {
+            curr[n] = m - i;
+            
+            for (int j = n - 1; j >= 0; j--)
+            {
+                int len = 1e6;
+        
+                if (s1[i] == s2[j]) {
+                    len = 1 + next[j + 1];
+                }
+                else
+                {
+                    int includeI = next[j];
+                    int includeJ = curr[j + 1];
+                    
+                    len = 1 + min(includeI, includeJ);
+                }
+                
+                curr[j] = len;
+            }
+            
+            next = curr;
+        }
+        
+        return next[0];
+    }
+  
+    int minSuperSeq(string &s1, string &s2) {
+        // code here
+        return tabulation(s1.size(), s2.size(), s1, s2);
+    }
+};
