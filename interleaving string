@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int dp[301][301];
+    
+    int mm(int i, int j, int m, int n, int mn, string &s1, string &s2, string &s3)
+    {
+        int k = i + j;
+        
+        if (k == mn) {
+            return 1;
+        }
+        
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        
+        int mark = (i < m && s1[i] == s3[k] && mm(i + 1, j, m, n, mn, s1, s2, s3));
+        
+        if (!mark) {
+            mark = (j < n && s2[j] == s3[k] && mm(i, j + 1, m, n, mn, s1, s2, s3));
+        }
+        
+        return dp[i][j] = mark;
+    }
+
+    bool isInterleave(string s1, string s2, string s3) {
+        int m = s1.size();
+        int n = s2.size();
+        int mn = s3.size();
+        
+        if (m + n != mn) {
+            return 0;
+        }
+        
+        memset(dp, -1, sizeof(dp));
+        
+        return mm(0, 0, m, n, mn, s1, s2, s3);
+    }
+};
