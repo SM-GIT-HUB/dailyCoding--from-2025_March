@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int dp[30][30];
+  
+    int mm(int start, int end, int k, vector<int>& arr, int *prefix)
+    {
+        if (start >= end) {
+            return 0;
+        }
+        
+        if (end - start + 1 == k) {
+            return prefix[end + 1] - prefix[start];
+        }
+        
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+        
+        int mini = INT_MAX;
+        
+        for (int i = start; i < end; i += k - 1)
+        {
+            int one = mm(start, i, k, arr, prefix);
+            int two = mm(i + 1, end, k, arr, prefix);
+            
+            mini = min(mini, one + two);
+        }
+        
+        int cost = ((end - start) % (k - 1))? 0 : prefix[end + 1] - prefix[start];
+        
+        return dp[start][end] = cost + mini;
+    }
+
+    int mergeStones(vector<int>& arr, int k) {
+        int n = arr.size();
+        
+        if ((n - 1) % (k - 1)) {
+            return -1;
+        }
+        
+        int prefix[31] = {0};
+        
+        for (int i = 0; i < n; i++)
+        {
+            prefix[i + 1] = arr[i] + prefix[i];
+        }
+        
+        memset(dp, -1, sizeof(dp));
+        
+        return mm(0, n - 1, k, arr, prefix);
+    }
+};
