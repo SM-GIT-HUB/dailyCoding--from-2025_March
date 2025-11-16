@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int numSub(string s) {
+        int count = 0;
+        int mod = 1000000000 + 7;
+
+        int ones = 0;
+
+        for (char x : s)
+        {
+            if (x == '0') {
+                ones = 0;
+            }
+            else
+                count = (count + ++ones) % mod;
+        }
+
+        return count;
+    }
+};
