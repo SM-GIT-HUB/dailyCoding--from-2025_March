@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+
+string ones[10] = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+string tens[10] = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+string huns[10] = {"", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+
+string convert(int n)
+{
+  if (n == 0) {
+    return "";
+  }
+
+  if (n < 10) {
+    return ones[n];
+  }
+
+  if (n < 20) {
+    return tens[n - 10];
+  }
+
+  if (n < 100)
+  {
+    string curr = huns[n / 10];
+
+    if (n % 10) {
+      curr += " " + convert(n % 10);
+    }
+
+    return curr;
+  }
+
+  if (n < 1000)
+  {
+    string curr = convert(n / 100) + " hundred";
+
+    if (n % 100) {
+      curr += " and " + convert(n % 100);
+    }
+
+    return curr;
+  }
+
+  if (n < 100000)
+  {
+    string curr = convert(n / 1000) + " thousand";
+
+    if (n % 1000)
+    {
+      curr += ((n % 1000 < 100)? " and " : " ") + convert(n % 1000);
+    }
+
+    return curr;
+  }
+
+  if (n < 10000000)
+  {
+    string curr = convert(n / 100000) + " lakh";
+
+    if (n % 100000)
+    {
+      curr += ((n % 100000 < 100)? " and " : " ") + convert(n % 100000);
+    }
+
+    return curr;
+  }
+
+  string curr = convert(n / 10000000) + " crore";
+
+  if (n % 10000000) {
+    curr += ((n % 10000000 < 100)? " and " : " ") + convert(n % 10000000);
+  }
+
+  return curr;
+}
+
+string handleAll(int n)
+{
+  //Write your code here.
+  return convert(n);
+}
