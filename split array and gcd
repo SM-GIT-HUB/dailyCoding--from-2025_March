@@ -1,0 +1,25 @@
+#include <bits/stdc++.h> 
+int minSubarrays(vector<int> arr) {
+  // Write your code here
+  int count = 0;
+  int end = arr.size() - 1;
+
+  while (end >= 0)
+  {
+    for (int start = 0; start <= end; start++)
+    {
+      if (gcd(arr[start], arr[end]) > 1)
+      {
+        count++;
+        end = start - 1;
+        break;
+      }
+
+      if (start == end) {
+        return -1;
+      }
+    }
+  }
+
+  return count;
+}
