@@ -1,0 +1,68 @@
+class Solution {
+  public:
+    int minCost(string &s, string &t, vector<vector<char> >& transform, vector<int>& cost) {
+        // code here
+        int allmax = 1e9 + 7;
+        
+        array<array<int, 26>, 26> mapp{};
+        
+        for (int i = 0; i < 26; i++)
+        {
+            for (int j = 0; j < 26; j++)
+            {
+                mapp[i][j] = allmax;
+            }
+            
+            mapp[i][i] = 0;
+        }
+        
+        for (int i = 0; i < transform.size(); i++)
+        {
+            int u = transform[i][0] - 'a';
+            int v = transform[i][1] - 'a';
+            
+            mapp[u][v] = min(mapp[u][v], cost[i]);
+        }
+        
+        for (int k = 0; k < 26; k++)
+        {
+            for (int u = 0; u < 26; u++)
+            {
+                for (int v = 0; v < 26; v++)
+                {
+                    if (mapp[u][k] != allmax && mapp[k][v] != allmax) {
+                        mapp[u][v] = min(mapp[u][v], mapp[u][k] + mapp[k][v]);
+                    }
+                }
+            }
+        }
+        
+        int total = 0;
+        
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s[i] == t[i]) {
+                continue;
+            }
+            
+            int mini = allmax;
+            int a = s[i] - 'a';
+            int b = t[i] - 'a';
+            
+            for (int k = 0; k < 26; k++)
+            {
+                if (mapp[a][k] != allmax && mapp[b][k] != allmax) {
+                    mini = min(mapp[a][k] + mapp[b][k], mini);
+                }
+            }
+            
+            if (mini == allmax) {
+                return -1;
+            }
+            
+            total += mini;
+        }
+        
+        return total;
+    }
+};
