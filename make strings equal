@@ -1,11 +1,10 @@
 class Solution {
   public:
-    int minCost(string &s, string &t, vector<vector<char> >& transform, vector<int>& cost) {
-        // code here
-        int allmax = 1e9 + 7;
-        
-        array<array<int, 26>, 26> mapp{};
-        
+    int allmax = 1e9 + 7;
+    array<array<int, 26>, 26> mapp;
+    
+    void floydWarshall(vector<vector<char> >& transform, vector<int>& cost)
+    {
         for (int i = 0; i < 26; i++)
         {
             for (int j = 0; j < 26; j++)
@@ -36,8 +35,12 @@ class Solution {
                 }
             }
         }
-        
+    }
+  
+    int minCost(string &s, string &t, vector<vector<char> >& transform, vector<int>& cost) {
+        // code here
         int total = 0;
+        floydWarshall(transform, cost);
         
         for (int i = 0; i < s.size(); i++)
         {
