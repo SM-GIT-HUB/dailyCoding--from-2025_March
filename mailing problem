@@ -1,0 +1,21 @@
+
+int mapp[200] = {0};
+
+int timeTakenToMail(string keyboard, string s) {
+    // Write your code here
+    for (int i = 0; i < keyboard.size(); i++)
+    {
+        mapp[keyboard[i]] = i;
+    }
+
+    int idx = 0;
+    int total = 0;
+
+    for (char ch : s)
+    {
+        total += abs(idx - mapp[ch]);
+        idx = mapp[ch];
+    }
+
+    return total;
+}
