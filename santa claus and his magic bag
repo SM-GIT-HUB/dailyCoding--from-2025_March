@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+vector<int> giftsLeft(int n, int k, int q, vector<int>& demands) 
+{
+    // Write your code here.
+    int curr = n;
+    vector<int> ans;
+
+    for (int x : demands)
+    {
+        if (x > curr) {
+            ans.push_back(-1);
+        }
+        else
+        {
+            curr -= x;
+
+            if (curr < k) {
+                curr = n;
+            }
+
+            ans.push_back(curr);
+        }
+    }
+    
+    return ans;
+}
