@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int countPalindromicSubsequence(string s) {
+        int next[26];
+        int prev = 0;
+
+        int mapp[26][26] = {0};
+
+        for (int i = 0; i < 26; i++) next[i];
+
+        for (int i = 0; i < s.size(); i++)
+        {
+            next[s[i] - 'a'] = i;
+        }
+
+        for (int i = 0; i < s.size(); i++)
+        {
+            for (int ch = 0; ch < 26; ch++)
+            {
+                if (next[ch] >= 0)
+                {
+                    if ((prev & (1 << ch)) && next[ch] > i) {
+                        mapp[ch][s[i] - 'a'] = 1;
+                    }
+                }
+            }
+
+            prev = prev | (1 << (s[i] - 'a'));
+        }
+
+        int size = 0;
+
+        for (int i = 0; i < 26; i++)
+        {
+            for (int j = 0; j < 26; j++)
+            {
+                if (mapp[i][j]) {
+                    size++;
+                }
+            }
+        }
+
+        return size;
+    }
+};
