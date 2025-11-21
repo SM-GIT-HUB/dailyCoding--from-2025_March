@@ -1,0 +1,66 @@
+class Solution {
+  public:
+    using ar3 = array<int, 3>;
+  
+    int shortestPath(int n, int a, int b, vector<vector<int> >& edges) {
+        // code here
+        vector<vector<ar3> > adj(n);
+        
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            int w1 = e[2], w2 = e[3];
+            
+            adj[u].push_back({v, w1, w2});
+            adj[v].push_back({u, w1, w2});
+        }
+        
+        vector<int> dist0(n, INT_MAX);
+        vector<int> dist1(n, INT_MAX);
+        
+        priority_queue<ar3, vector<ar3>, greater<ar3> > pq;
+        
+        dist0[a] = 0;
+        pq.push({0, a, 0});
+        
+        while (!pq.empty())
+        {
+            auto [wt, u, state] = pq.top();
+            pq.pop();
+            
+            if (state == 0 && dist0[u] < wt || state == 1 && dist1[u] < wt || u == b) {
+                continue;
+            }
+            
+            for (auto [v, w1, w2] : adj[u])
+            {
+                if (state == 0)
+                {
+                    if (wt + w1 < dist0[v])
+                    {
+                        dist0[v] = wt + w1;
+                        pq.push({wt + w1, v, 0});
+                    }
+                    
+                    if (wt + w2 < dist1[v])
+                    {
+                        dist1[v] = wt + w2;
+                        pq.push({wt + w2, v, 1});
+                    }
+                }
+                else
+                {
+                    if (wt + w1 < dist1[v])
+                    {
+                        dist1[v] = wt + w1;
+                        pq.push({wt + w1, v, 1});
+                    }
+                }
+            }
+        }
+        
+        int total = min(dist0[b], dist1[b]);
+        
+        return (total == INT_MAX)? -1 : total;
+    }
+};
