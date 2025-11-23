@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+vector<vector<int>> solve(vector<vector<int> >& arr, int k)
+{
+    // Write your code here.
+    int n = arr.size();
+    k = k % n;
+
+    if (!k) {
+        return arr;
+    }
+
+    k = n - k;
+
+    for (auto &vec : arr)
+    {
+        reverse(vec.begin(), vec.begin() + k);
+        reverse(vec.begin() + k, vec.end());
+        reverse(vec.begin(), vec.end());
+    }
+
+    return arr;
+}
