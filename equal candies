@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> 
+long long int equalCandies (vector<int>& arr, int n)
+{
+	// Write your code here.
+	sort(arr.begin(), arr.end());
+	
+	if (n & 1)
+	{
+		int avg = arr[n >> 1];
+		long long ans = 0;
+
+		for (int x : arr) ans += abs(x - avg);
+
+		return ans;
+	}
+	else
+	{
+		int avg1 = arr[n >> 1];
+		int avg2 = arr[(n >> 1) + 1];
+
+		long long ans1 = 0;
+		long long ans2 = 0;
+
+		for (int x : arr)
+		{
+			ans1 += abs(x - avg1);
+			ans2 += abs(x - avg2);
+		}
+
+		return min(ans1, ans2);
+	}
+}
+
+
+
+// 9 20 27 33 34 35 44 48
