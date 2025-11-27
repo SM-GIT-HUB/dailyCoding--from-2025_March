@@ -1,45 +1,50 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 
-void track(int left, int right, int n, string &output, vector<string>& ans, vector<string>& pairs)
+string singleMatch[3] = {"1", "8", "0"};
+string match[5] = {"96", "69", "11", "88", "00"};
+
+void track(int start, int end, string &temp, vector<string>& ans)
 {
-	if (left >= right)
+	if (start > end)
 	{
-		ans.push_back(output);
+		ans.push_back(temp);
 		return;
 	}
 
-	for (auto &p : pairs)
+	if (start == end)
 	{
-		if (p[0] == '0' && right == n - 1) {
+		for (int i = 0; i < 3; i++)
+		{
+			temp[start] = singleMatch[i][0];
+			track(start + 1, end - 1, temp, ans);
+		}
+		
+		return;
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (start == 0 && match[i][0] == '0') {
 			continue;
 		}
 
-		output[left] = p[0];
-		output[right] = p[1];
-		
-		track(left + 1, right - 1, n, output, ans, pairs);
+		temp[start] = match[i][0];
+		temp[end] = match[i][1];
+
+		track(start + 1, end - 1, temp, ans);
 	}
 }
 
 vector<string> findStrobogrammatic(int n) {
 	// Write your code here.
-	vector<string> pairs = {"00", "11", "88", "69", "96"};
+	if (n == 1) {
+		return {"0", "1", "8"};
+	}
+
 	vector<string> ans;
-	string output = string(n, ' ');
+	string temp = string(n, '0');
 
-	if (n & 1)
-	{
-		string s = "018";
-
-		for (int i = 0; i < 3; i++)
-		{
-			output[n / 2] = s[i];
-			track(0, n - 1, n, output, ans, pairs);
-		}
-	}
-	else {
-		track(0, n - 1, n, output, ans, pairs);
-	}
+	track(0, n - 1, temp, ans);
 
 	return ans;
 }
