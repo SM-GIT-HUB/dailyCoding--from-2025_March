@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int comp;
+
+    int dfs(int u, int par, int k, vector<int>& values, vector<int> adj[])
+    {
+        int val = values[u];
+
+        for (int v : adj[u])
+        {
+            if (par == v) {
+                continue;
+            }
+            
+            val += dfs(v, u, k, values, adj);
+        }
+        
+        comp -= ((val = (val % k)) != 0);
+        
+        return val;
+    }
+
+    int maxKDivisibleComponents(int n, vector<vector<int> >& edges, vector<int>& values, int k) {
+        comp = n;
+        vector<int> adj[n];
+
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        dfs(0, -1, k, values, adj);
+        return comp;
+    }
+};
