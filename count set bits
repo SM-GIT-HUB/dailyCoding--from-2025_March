@@ -1,0 +1,18 @@
+class Solution {
+  public:
+    int countSetBits(int n) {
+        // code here
+        if (n == 0) {
+            return 0;
+        }
+        
+        int x = log2(n);
+        
+        int setBitsUpto2X = x * (1 << x) >> 1;
+        int msbBits = n - (1 << x) + 1;
+        
+        int rest = n - (1 << x);
+        
+        return setBitsUpto2X + msbBits + countSetBits(rest);
+    }
+};
