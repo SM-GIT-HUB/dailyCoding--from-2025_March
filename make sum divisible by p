@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int minSubarray(vector<int>& arr, int p) {
+        int sum = 0;
+
+        for (int x : arr)
+        {
+            sum = (sum + x) % p;
+        }
+
+        if (sum == 0) {
+            return 0;
+        }
+
+        int k = sum % p;
+        int ans = (int)arr.size();
+
+        sum = 0;
+        unordered_map<int, int> mapp;
+        mapp[0] = -1;
+
+        for (int i = 0; i < (int)arr.size(); i++)
+        {
+            sum = (sum + arr[i]) % p;
+
+            if (arr[i] % p == k)
+            {
+                ans = 1;
+                break;
+            }
+
+            int extra = (sum - k + p) % p;
+
+            if (mapp.count(extra)) {
+                ans = min(ans, i - mapp[extra]);
+            }
+
+            mapp[sum] = i;
+        }
+
+        return ans == arr.size()? -1 : ans;
+    }
+};
