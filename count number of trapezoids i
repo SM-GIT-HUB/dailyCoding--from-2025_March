@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int countTrapezoids(vector<vector<int> >& points) {
+        int size = points.size();
+        vector<int> ps(size);
+        
+        for (int i = 0; i < points.size(); i++)
+        {
+            ps[i] = points[i][1];
+        }
+
+        sort(ps.begin(), ps.end());
+        
+        int cnt = 1;
+        
+        long long count = 0;
+        long long totalTillNow = 0;
+
+        for (int i = 1; i < size; i++)
+        {
+            if (ps[i - 1] != ps[i])
+            {
+                int tot = (long long)cnt * (cnt - 1) >> 1;
+                count += totalTillNow * tot;
+
+                totalTillNow += tot;
+                cnt = 1;
+            }
+            else
+                ++cnt;
+        }
+
+        int tot = (long long)cnt * (cnt - 1) >> 1;
+        count += totalTillNow * tot;
+
+        totalTillNow += tot;
+
+        return count % 1000000007;
+    }
+};
