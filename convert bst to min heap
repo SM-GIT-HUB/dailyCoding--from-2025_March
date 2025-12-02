@@ -1,0 +1,57 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+    
+    Following is the Binary Tree node structure:
+
+	class BinaryTreeNode {
+		
+	public :
+		int data;
+		BinaryTreeNode* left;
+		BinaryTreeNode* right;
+
+		BinaryTreeNode(int data) {
+		this -> left = NULL;
+		this -> right = NULL;
+		this -> data = data;
+		}
+	};
+
+*************************************************************/
+
+using Node = BinaryTreeNode;
+
+void dfs(Node* root, vector<int>& arr)
+{
+    if (!root) {
+        return;
+    }
+
+    dfs(root->left, arr);
+    arr.push_back(root->data);
+    dfs(root->right, arr);
+}
+
+void dfs2(Node* root, int &idx, vector<int>& arr)
+{
+    if (!root) {
+        return;
+    }
+
+    root->data = arr[idx++];
+
+    dfs2(root->left, idx, arr);
+    dfs2(root->right, idx, arr);
+}
+
+BinaryTreeNode* convertBST(BinaryTreeNode* root)
+{
+	// Write your code here.
+    int idx = 0;
+    vector<int> arr;
+
+    dfs(root, arr);
+    dfs2(root, idx, arr);
+
+    return root;
+}
