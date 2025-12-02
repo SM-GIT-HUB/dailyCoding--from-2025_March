@@ -1,0 +1,79 @@
+class Solution {
+  public:
+    vector<int> adj[26];
+  
+    int mm(int idx, string &s, vector<int>& prefix, vector<vector<int> >& next, vector<int>& dp)
+    {
+        if (idx >= s.size() - 1) {
+            return 0;
+        }
+        
+        if (dp[idx] != -1) {
+            return dp[idx];
+        }
+        
+        int score = 0;
+        
+        for (int ch : adj[s[idx] - 'a'])
+        {
+            if (next[idx][ch] < 0) {
+                continue;
+            }
+            
+            int nextIdx = next[idx][ch];
+            
+            if (s[idx] == s[nextIdx])
+            {
+                int curr = prefix[nextIdx] - prefix[idx + 1] + mm(nextIdx, s, prefix, next, dp);
+                score = max(curr, score);
+            }
+            else
+            {
+                int curr = prefix[nextIdx] - prefix[idx] + mm(nextIdx, s, prefix, next, dp);
+                score = max(curr, score);
+            }
+        }
+        
+        return dp[idx] = score;
+    }
+  
+    int maxScore(string &s, vector<vector<char> >& jumps) {
+        // code here
+        int n = s.size();
+        
+        vector<int> prefix(n + 1);
+        vector<vector<int> > next(n, vector<int>(26, -1));
+        
+        int nextOcc[26];
+        memset(nextOcc, -1, sizeof(nextOcc));
+        
+        for (int i = n - 1; i >= 0; i--)
+        {
+            for (int ch = 0; ch < 26; ch++)
+            {
+                next[i][ch] = nextOcc[ch];
+            }
+            
+            nextOcc[s[i] - 'a'] = i;
+        }
+        
+        for (auto &j : jumps)
+        {
+            adj[j[0] - 'a'].push_back(j[1] - 'a');
+        }
+        
+        for (int c = 0; c < 26; c++)
+        {
+            adj[c].push_back(c);
+        }
+        
+        for (int i = 0; i < n; i++)
+        {
+            prefix[i + 1] = prefix[i] + s[i];
+        }
+        
+        vector<int> dp(n, -1);
+        
+        return mm(0, s, prefix, next, dp);
+    }
+};
