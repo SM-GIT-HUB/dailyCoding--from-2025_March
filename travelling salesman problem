@@ -1,0 +1,41 @@
+class Solution {
+  public:
+    int mask = 1;
+    
+    int mm(int city, int n, vector<vector<int> >& cost, vector<vector<int> >& dp)
+    {
+        if (__builtin_popcount(mask) == n) {
+            return cost[city][0];
+        }
+        
+        if (dp[city][mask] != -1) {
+            return dp[city][mask];
+        }
+        
+        int minCost = 1e9;
+        
+        for (int c = 1; c < n; c++)
+        {
+            if (!(mask & (1 << c)))
+            {
+                mask = mask | (1 << c);
+                
+                int curr = cost[city][c] + mm(c, n, cost, dp);
+                minCost = min(minCost, curr);
+                
+                mask = mask ^ (1 << c);
+            }
+        }
+        
+        return dp[city][mask] = minCost;
+    }
+    
+    int tsp(vector<vector<int> >& cost) {
+        // code here
+        int n = cost.size();
+        
+        vector<vector<int> > dp(n, vector<int>(1 << n, -1));
+        
+        return mm(0, n, cost, dp);
+    }
+};
