@@ -1,0 +1,23 @@
+int maximizeScore(vector<int>& arr, int n, int k)
+{
+	// Write your code here
+	int total = 0;
+	for (int x : arr) total += x;
+
+	if (k >= n) {
+		return total;
+	}
+
+	int sum = 0;
+	for (int i = 0; i < n - k; i++) sum += arr[i];
+
+	int mini = sum;
+
+	for (int i = 1; i + n - k - 1 < n; i++)
+	{
+		sum += arr[i + n - k - 1] - arr[i - 1];
+		mini = min(sum, mini);
+	}
+
+	return (total - mini);
+}
