@@ -1,0 +1,40 @@
+class Solution {
+  public:
+    int prefix[102];
+    int dp[101][101];
+  
+    int mm(int start, int end, vector<int>& keys, vector<int>& freq)
+    {
+        if (start > end) {
+            return 0;
+        }
+        
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+        
+        int cost = 1e9;
+        
+        for (int i = start; i <= end; i++)
+        {
+            int curr = mm(start, i - 1, keys, freq) + mm(i + 1, end, keys, freq);
+            cost = min(curr, cost);
+        }
+        
+        return dp[start][end] = cost + prefix[end + 1] - prefix[start];
+    }
+  
+    int minCost(vector<int>& keys, vector<int>& freq) {
+        // code here
+        memset(dp, -1,sizeof(dp));
+        memset(prefix, 0, sizeof(prefix));
+        
+        for (int i = 1; i <= keys.size(); i++)
+        {
+            prefix[i] = prefix[i - 1] + freq[i - 1];
+        }
+        
+        int ans = mm(0, freq.size() - 1, keys, freq);
+        return ans;
+    }
+};
