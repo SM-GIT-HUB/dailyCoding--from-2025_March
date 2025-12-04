@@ -1,0 +1,37 @@
+#include <bits/stdc++.h> 
+/*
+	Time complexity: O(N ^ 2)
+	Space Complexity: O(N ^ 2)
+	
+	Where N is the number of coins. 
+*/
+
+int maxi = 1e9;
+
+int mm(int start, int end, vector<int>& coins, vector<vector<int> >& dp)
+{
+	if (start == end) {
+		return coins[start];
+	}
+
+	if (dp[start][end] != maxi) {
+		return dp[start][end];
+	}
+
+	int takeLeft = coins[start] - mm(start + 1, end, coins, dp);
+	int takeRight = coins[end] - mm(start, end - 1, coins, dp);
+
+	return dp[start][end] = max(takeLeft, takeRight);
+}
+
+int optimalStrategyOfGame(vector<int> coins, int n)
+{
+	vector<vector<int> > dp(n, vector<int>(n, maxi));
+
+	int total = 0;
+	int diff = mm(0, n - 1, coins, dp);
+
+	for (int x : coins) total += x;
+
+	return (total + diff) >> 1;
+}
