@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+
+long long dp[505][505];
+long long mini = -1000000000000000;
+
+long long maximumSum(vector<int>& arr, int k) {
+	// Write your code here.
+	int n = (int)arr.size();
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 1; j < k; j++)
+		{
+			dp[i][j] = mini;
+		}
+
+		dp[i][k] = arr[i];
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		if (arr[i] < 0) {
+			continue;
+		}
+
+		for (int len = 1; len < k; len++)
+		{
+			long long sum = mini;
+
+			for (int j = i + 1; j < n; j++)
+			{
+				if (arr[i] <= arr[j]) {
+					sum = max(sum, dp[j][len + 1]);
+				}
+			}
+
+			dp[i][len] = sum + arr[i];
+		}
+	}
+
+	long long ans = mini;
+
+	for (int i = 0; i < n; i++)
+	{
+		ans = max(dp[i][1], ans);
+	}
+
+	return (ans < 0)? -1 : ans;
+}
