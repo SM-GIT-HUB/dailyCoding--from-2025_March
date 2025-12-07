@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+
+vector<int> relativeSorting(vector<int> &arr, vector<int> &brr, int n, int m)
+{
+    // Write your code here.
+    unordered_map<int, int> mapp;
+    for (int x : brr) mapp[x] = 1;
+
+    vector<int> ans;
+
+    for (int x : arr)
+    {
+        if (!mapp.count(x)) {
+            ans.push_back(x);
+        }
+        else
+            mapp[x]++;
+    }
+
+    sort(ans.rbegin(), ans.rend());
+
+    for (int i = m - 1; i >= 0; i--)
+    {
+        int x = brr[i];
+        int c = mapp[x] - 1;
+
+        while (c--)
+        {
+            ans.push_back(x);
+        }
+    }
+
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
