@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int countTriples(int n) {
+        int count = 0;
+
+        for (int c = n; c > 2; c--)
+        {
+            int c2 = c * c;
+
+            int a = 1;
+            int b = c - 1;
+
+            while (a < b)
+            {
+                int mul = a * a + b * b;
+
+                if (mul == c2)
+                {
+                    count++;
+                    a++;
+                    b--;
+                }
+                else if (mul < c2) {
+                    a++;
+                }
+                else
+                    b--;
+            }
+        }
+
+        return (count << 1);
+    }
+};
