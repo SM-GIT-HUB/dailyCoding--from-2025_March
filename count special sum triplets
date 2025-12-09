@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int specialTriplets(vector<int>& arr) {
+        int maxi = 100000;
+        int mapp1[100001] = {0};
+        int mapp2[100001] = {0};
+
+        for (int x : arr) ++mapp2[x];
+
+        int mod = 1e9 + 7;
+        long long count = 0;
+
+        for (int x : arr)
+        {
+            --mapp2[x];
+
+            int req = (x << 1);
+
+            if (req <= maxi) {
+                count = (count + (long long)mapp1[req] * mapp2[req]) % mod;
+            }
+
+            ++mapp1[x];
+        }
+
+        return count;
+    }
+};
