@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int countPermutations(vector<int>& complx) {
+        int mini = complx[0];
+        
+        for (int i = 1; i < (int)complx.size(); i++)
+        {
+            if (complx[i] <= mini) {
+                return 0;
+            }
+        }
+
+        long long ans = 1;
+
+        for (int i = 2; i < (int)complx.size(); i++)
+        {
+            ans = (ans * i) % 1000000007;
+        }
+
+        return ans;
+    }
+};
