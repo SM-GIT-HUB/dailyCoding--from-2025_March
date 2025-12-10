@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+int prefix[52];
+int dp[51][51];
+
+int mm(int start, int end, vector<int>& freq)
+{
+	if (start == end) {
+		return freq[start];
+	}
+
+	if (start > end) {
+		return 0;
+	}
+
+	if (dp[start][end] != -1) {
+		return dp[start][end];
+	}
+
+	int cost = INT_MAX;
+
+	for (int i = start; i <= end; i++)
+	{
+		cost = min(cost, mm(start, i - 1, freq) + mm(i + 1, end, freq));
+	}
+
+	return dp[start][end] = cost + prefix[end + 1] - prefix[start];
+}
+
+int optimalCost(vector<int>& keys, vector<int>& freq, int n)
+{
+	// Write your code here
+	prefix[0] = 0;
+
+	for (int i = 1; i <= n; i++)
+	{
+		prefix[i] = prefix[i - 1] + freq[i - 1];
+
+		for (int j = i - 1; j < n; j++)
+		{
+			dp[i - 1][j] = -1;
+		}
+	}
+
+	return mm(0, n - 1, freq);
+}
