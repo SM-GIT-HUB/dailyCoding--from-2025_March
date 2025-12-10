@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int getRef(int num)
+    {
+        int ref = 0;
+
+        while (num)
+        {
+            ref = (ref << 1) + (num & 1);
+            num = num >> 1;
+        }
+
+        return ref;
+    }
+    
+    vector<int> sortByReflection(vector<int>& nums) {
+        vector<pair<int, int> > ps;
+
+        for (int x : nums)
+        {
+            ps.emplace_back(getRef(x), x);
+        }
+
+        sort(ps.begin(), ps.end());
+
+        vector<int> arr;
+        arr.reserve(nums.size());
+
+        for (auto [_, num] : ps)
+        {
+            arr.push_back(num);
+        }
+
+        return arr;
+    }
+};
