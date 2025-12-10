@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+
+int dp[10001];
+
+int mm(int idx, int n, int x, vector<int>& arr, vector<int>& revenue)
+{
+	if (idx == n) {
+		return 0;
+	}
+
+	if (dp[idx] != -1) {
+		return dp[idx];
+	}
+
+	int exclude = mm(idx + 1, n, x, arr, revenue);
+	int include = revenue[idx];
+
+	int nextIdx = lower_bound(arr.begin() + idx, arr.end(), arr[idx] + x) - arr.begin();
+
+	if (nextIdx < n) {
+		include += mm(nextIdx, n, x, arr, revenue);
+	}
+
+	return dp[idx] = max(include, exclude);
+}
+
+int highwayBillboard(vector<int>& arr, vector<int>& revenue, int m, int x) {
+    // Write your code here.
+	for (int i = 0; i < (int)arr.size(); i++)
+	{
+		dp[i] = -1;
+	}
+
+	return mm(0, arr.size(), x + 1, arr, revenue);
+}
