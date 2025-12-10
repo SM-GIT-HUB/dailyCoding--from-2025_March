@@ -1,0 +1,49 @@
+class Solution {
+public:
+    bitset<270000> mark;
+
+    void calc(int n)
+    {
+        mark.set();
+        
+        for (int i = 1; i < n; i++)
+        {
+            if (!mark[i]) {
+                continue;
+            }
+
+            int elem = (i << 1) + 1;
+
+            for (int j = i + elem; j < n; j += elem)
+            {
+                mark[j] = 0;
+            }
+        }
+    }
+    
+    int largestPrime(int n) {
+        if (n < 2) {
+            return 0;
+        }
+        
+        int ans = 2;
+        int primeSum = 2;
+
+        calc((n >> 1) + 1);
+
+        for (int num = 3; primeSum < n; num += 2)
+        {
+            if (!mark[num >> 1]) {
+                continue;
+            }
+            
+            primeSum += num;
+
+            if ((primeSum & 1) && mark[primeSum >> 1] && primeSum <= n) {
+                ans = primeSum;
+            }
+        }
+
+        return ans;
+    }
+};
