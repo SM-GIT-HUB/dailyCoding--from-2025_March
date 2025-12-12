@@ -1,0 +1,73 @@
+class Solution {
+public:
+    vector<int> countMentions(int n, vector<vector<string> >& events) {
+        vector<int> count(n);
+        vector<int> onlineTime(n);
+
+        sort(events.begin(), events.end(), [](auto &a, auto &b) {
+            int t1 = stoi(a[1]);
+            int t2 = stoi(b[1]);
+
+            if (t1 != t2) {
+                return (t1 < t2);
+            }
+
+            if (b[0] == "OFFLINE") {
+                return false;
+            }
+
+            return true;
+        });
+
+        for (auto &e : events)
+        {
+            int time = stoi(e[1]);
+            
+            if (e[0] == "MESSAGE")
+            {
+                if (e[2] == "HERE")
+                {
+                    for (int id = 0; id < n; id++)
+                    {
+                        if (onlineTime[id] <= time) {
+                            ++count[id];
+                        }
+                    }
+
+                    continue;
+                }
+                else if (e[2] == "ALL")
+                {
+                    for (int id = 0; id < n; id++)
+                    {
+                        ++count[id];
+                    }
+
+                    continue;
+                }
+
+                int id = 0;
+
+                for (char x : e[2])
+                {
+                    if (x == ' ')
+                    {
+                        ++count[id];
+                        id = 0;
+                    }
+                    else if (x == 'i' || x == 'd') {
+                        continue;
+                    }
+                    else
+                        id = id * 10 + (x - '0');
+                }
+                
+                ++count[id];
+            }
+            else
+                onlineTime[stoi(e[2])] = time + 60;
+        }
+
+        return count;
+    }
+};
