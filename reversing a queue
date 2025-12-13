@@ -1,0 +1,20 @@
+#include <bits/stdc++.h> 
+queue<int> reverseQueue(queue<int> q)
+{
+    // Write your code here.
+    vector<int> stack;
+
+    while (q.size())
+    {
+        stack.push_back(q.front());
+        q.pop();
+    }
+
+    while (stack.size())
+    {
+        q.push(stack.back());
+        stack.pop_back();
+    }
+
+    return q;
+}
