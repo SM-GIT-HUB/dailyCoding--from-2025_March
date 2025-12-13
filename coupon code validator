@@ -1,0 +1,46 @@
+class Solution {
+public:
+    string lines = "electronics-grocery-pharmacy-restaurant";
+
+    int check(string &code)
+    {
+        for (char x : code)
+        {
+            if (!(x == '_' || (x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z') || (x >= '0' && x <= '9'))) {
+                return 0;
+            }
+        }
+
+        return 1;
+    }
+
+    vector<string> validateCoupons(vector<string>& code, vector<string>& businessLine, vector<bool>& isActive) {
+        int n = code.size();
+        vector<pair<string, string> > arr;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (isActive[i] && code[i].size() && lines.find(businessLine[i]) != string::npos && check(code[i])) {
+                arr.emplace_back(businessLine[i], code[i]);
+            }
+        }
+
+        sort(arr.begin(), arr.end(), [](auto &a, auto &b) {
+            if (a.first == b.first) {
+                return (a.second < b.second);
+            }
+
+            return (a.first < b.first);
+        });
+
+        vector<string> ans;
+        ans.reserve(arr.size());
+
+        for (auto &p : arr)
+        {
+            ans.push_back(p.second);
+        }
+
+        return ans;
+    }
+};
