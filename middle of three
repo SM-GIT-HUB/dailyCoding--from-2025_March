@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+int middleOfThree(int x, int y, int z)
+{
+    // Write your code here
+	if (x > y && x > z) {
+		return (y > z)? y : z;
+	}
+
+	if (y > x && y > z) {
+		return (x > z)? x : z;
+	}
+
+	return (y > x)? y : x;
+}
