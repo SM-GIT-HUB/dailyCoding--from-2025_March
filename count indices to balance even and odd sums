@@ -1,0 +1,62 @@
+class Solution {
+  public:
+    int cntWays(vector<int>& arr) {
+        // code here
+        int odd = 0;
+        int even = 0;
+        
+        int bit = 1;
+        
+        for (int x : arr)
+        {
+            if (bit) {
+                odd += x;
+            }
+            else
+                even += x;
+            
+            bit = bit ^ 1;
+        }
+        
+        int od = 0;
+        int ev = 0;
+        
+        int count = 0;
+        
+        for (int i = 0; i < (int)arr.size(); i++)
+        {
+            if (!(i & 1))
+            {
+                int nextEv = even - ev;
+                int newOdd = od + nextEv;
+                
+                int nextOd = odd - od - arr[i];
+                int newEven = ev + nextOd;
+                
+                if (newOdd == newEven) {
+                    count++;
+                }
+            }
+            else
+            {
+                int nextOd = odd - od;
+                int newEven = ev + nextOd;
+                
+                int nextEv = even - ev - arr[i];
+                int newOdd = od + nextEv;
+                
+                if (newOdd == newEven) {
+                    count++;
+                }
+            }
+            
+            if (!(i & 1)) {
+                od += arr[i];
+            }
+            else
+                ev += arr[i];
+        }
+        
+        return count;
+    }
+};
