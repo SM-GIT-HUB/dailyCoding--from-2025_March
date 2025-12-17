@@ -1,0 +1,40 @@
+class Solution {
+public:
+    long long mm(int i, int t, int s, vector<int>& prices, int k, vector<vector<array<long long, 3> > >& dp)
+    {
+        if (i == prices.size()) {
+            return (s == 0 ? 0 : -1000000000);
+        }
+
+        if (t == k) {
+            return 0;
+        }
+
+        if (dp[i][t][s] != -1) {
+            return dp[i][t][s];
+        }
+
+        long long profit = mm(i + 1, t, s, prices, k, dp);
+
+        if (s == 0)
+        {
+            profit = max(profit, -prices[i] + mm(i + 1, t, 1, prices, k, dp));
+            profit = max(profit, prices[i] + mm(i + 1, t, 2, prices, k, dp));
+        }
+        else if (s == 1) {
+            profit = max(profit, prices[i] + mm(i + 1, t + 1, 0, prices, k, dp));
+        }
+        else 
+            profit = max(profit, -prices[i] + mm(i + 1, t + 1, 0, prices, k, dp));
+
+        return dp[i][t][s] = profit;
+    }
+
+    long long maximumProfit(vector<int>& prices, int k) {
+        int n = prices.size();
+
+        vector<vector<array<long long, 3> > > dp(n, vector<array<long long, 3> >(k + 1, {-1, -1, -1}));
+
+        return mm(0, 0, 0, prices, k, dp);
+    }
+};
