@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int mx;
+    int dp[20][11001];
+
+    int mm(int idx, int n, int diff, vector<int>& arr)
+    {
+        if (idx == n) {
+            return (diff == 0)? 0 : -1000000000;
+        }
+
+        if (dp[idx][diff + mx] != -1) {
+            return dp[idx][diff + mx];
+        }
+
+        int x = arr[idx];
+
+        int skip = mm(idx + 1, n, diff, arr);
+        int aLen = x + mm(idx + 1, n, diff + x, arr);
+        int bLen = x + mm(idx + 1, n, diff - x, arr);
+
+        return dp[idx][diff + mx] = max({skip, aLen, bLen});
+    }
+
+    int tallestBillboard(vector<int>& rods) {
+        int sum = 0;
+        for (int x : rods) sum += x;
+
+        mx = sum;
+
+        for (int i = 0; i < (int)rods.size(); i++)
+        {
+            for (int j = 0; j < (sum << 1); j++)
+            {
+                dp[i][j] = -1;
+            }
+        }
+
+        return mm(0, rods.size(), 0, rods) >> 1;
+    }
+};
