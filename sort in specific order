@@ -1,0 +1,24 @@
+class Solution {
+  public:
+    void sortIt(vector<int>& arr) {
+        // code here
+        sort(arr.begin(), arr.end(), [](int a, int b) {
+            int oddA = (a & 1);
+            int oddB = (b & 1);
+            
+            if (oddA && oddB) {
+                return a > b;
+            }
+            
+            if (oddA && !oddB) {
+                return true;
+            }
+            
+            if (!oddA && oddB) {
+                return false;
+            }
+            
+            return (a < b);
+        });
+    }
+};
