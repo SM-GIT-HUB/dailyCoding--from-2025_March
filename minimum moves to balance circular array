@@ -1,0 +1,71 @@
+class Solution {
+public:
+    long long minMoves(vector<int>& balance) {
+        int idx = -1;
+        long long sum = 0;
+        int n = balance.size();
+
+        for (int i = 0; i < n; i++)
+        {
+            sum += balance[i];
+
+            if (balance[i] < 0) {
+                idx = i;
+            }
+        }
+
+        if (idx == -1) {
+            return 0;
+        }
+
+        if (sum < 0) {
+            return -1;
+        }
+
+        long long ans = 0;
+        int i = (idx - 1 + n) % n;
+        int j = (idx + 1) % n;
+
+        long long dist = 0;
+        int x = balance[idx];
+
+        while (x < 0)
+        {
+            int d = abs(idx - i);
+            dist = min(d, n - d);
+
+            if (balance[i] >= -x)
+            {
+                ans += dist * -x;
+                break;
+            }
+            else if (balance[i])
+            {
+                x += balance[i];
+                ans += dist * balance[i];
+                balance[i] = 0;
+            }
+
+            i = (i - 1 + n) % n;
+
+            d = abs(idx - j);
+            dist = min(d, n - d);
+
+            if (balance[j] >= -x)
+            {
+                ans += dist * -x;
+                break;
+            }
+            else if (balance[j])
+            {
+                x += balance[j];
+                ans += dist * balance[j];
+                balance[j] = 0;
+            }
+
+            j = (j + 1) % n;
+        }
+
+        return ans;
+    }
+};
