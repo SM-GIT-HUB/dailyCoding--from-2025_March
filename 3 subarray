@@ -1,0 +1,63 @@
+#include <bits/stdc++.h> 
+vector<int> subArray(int n, int k, vector<int> arr)
+{
+    // Write your code here.
+    int m = n - k + 1;
+    vector<int> window;
+
+    int sum = 0;
+    window.reserve(m);
+
+    for (int i = 0; i < k; i++) sum += arr[i];
+
+    window.push_back(sum);
+
+    for (int i = 1; i + k - 1 < n; i++)
+    {
+        sum += arr[i + k - 1] - arr[i - 1];
+        window.push_back(sum);
+    }
+
+    int maxi = 0;
+    vector<int> left(m);
+
+    for (int i = 0; i < m; i++)
+    {
+        if (window[i] > window[maxi]) {
+            maxi = i;
+        }
+
+        left[i] = maxi;
+    }
+
+    maxi = m - 1;
+    vector<int> right(m);
+
+    for (int i = m - 1; i >= 0; i--)
+    {
+        if (window[i] >= window[maxi]) {
+            maxi = i;
+        }
+
+        right[i] = maxi;
+    }
+
+    int best = 0;
+    vector<int> ans(3);
+
+    for (int mid = k; mid + k < m; mid++)
+    {
+        int l = left[mid - k];
+        int r = right[mid + k];
+
+        int sum = window[l] + window[mid] + window[r];
+
+        if (sum > best)
+        {
+            best = sum;
+            ans = {l, mid, r};
+        }
+    }
+
+    return ans;
+}
