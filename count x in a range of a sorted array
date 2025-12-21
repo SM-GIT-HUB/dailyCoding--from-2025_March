@@ -1,0 +1,15 @@
+class Solution {
+  public:
+    vector<int> countXInRange(vector<int>& arr, vector<vector<int> >& queries) {
+        // code here
+        vector<int> ans;
+        
+        for (auto &q : queries)
+        {
+            int count = upper_bound(arr.begin() + q[0], arr.begin() + q[1] + 1, q[2]) - lower_bound(arr.begin() + q[0], arr.begin() + q[1] + 1, q[2]);
+            ans.push_back(count);
+        }
+        
+        return ans;
+    }
+};
