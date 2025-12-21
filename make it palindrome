@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+int palindrome(vector<int> arr)
+{
+	// Write your code here.
+	int count = 0;
+	int start = 0, end = arr.size() - 1;
+
+	long long left = arr[0], right = arr.back();
+
+	while (start < end)
+	{
+		if (left == right)
+		{
+			start++;
+			end--;
+
+			if (start < end)
+			{
+				left = arr[start];
+				right = arr[end];
+			}
+
+			continue;
+		}
+
+		if (left < right) {
+			left += arr[++start];
+		}
+		else
+			right += arr[--end];
+		
+		++count;
+	}
+
+	return count;
+}
