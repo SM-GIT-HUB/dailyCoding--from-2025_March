@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int dp[102][102];
+
+    int mm(int c, int prev, int n, vector<string>& strs)
+    {
+        if (c == n) {
+            return 0;
+        }
+
+        if (dp[prev + 1][c] != -1) {
+            return dp[prev + 1][c];
+        }
+
+        int include = 1e9;
+        int exclude = 1 + mm(c + 1, prev, n, strs);
+
+        if (prev == -1) {
+            include = mm(c + 1, c, n, strs);
+        }
+        else
+        {
+            int flag = 1;
+
+            for (auto &s : strs)
+            {
+                if (s[prev] > s[c])
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+
+            if (flag) {
+                include = mm(c + 1, c, n, strs);
+            }
+        }
+
+        return dp[prev + 1][c] = min(include, exclude);
+    }
+
+    int minDeletionSize(vector<string>& strs) {
+        int m = strs.size();
+        int n = strs[0].size();
+
+        memset(dp, -1, sizeof(dp));
+
+        return mm(0, -1, n, strs);
+    }
+};
