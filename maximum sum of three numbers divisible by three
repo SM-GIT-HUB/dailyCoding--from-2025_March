@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int maximumSum(vector<int>& nums) {
+        int zero[3] = {0};
+        int one[3] = {0};
+        int two[3] = {0};
+
+        auto add = [](int x, int *arr) {
+            if (x >= arr[2])
+            {
+                arr[0] = arr[1];
+                arr[1] = arr[2];
+                arr[2] = x;
+            }
+            else if (x >= arr[1])
+            {
+                arr[0] = arr[1];
+                arr[1] = x;
+            }
+            else if (x >= arr[0])
+                arr[0] = x;
+        };
+
+        for (int x : nums)
+        {
+            int rem = x % 3;
+
+            if (!rem) {
+                add(x, zero);
+            }
+            else if (rem == 1) {
+                add(x, one);
+            }
+            else
+                add(x, two);
+        }
+
+        auto sum = [](int *arr) {
+            if (arr[0]) {
+                return (arr[0] + arr[1] + arr[2]);
+            }
+
+            return 0;
+        };
+        
+        int ans = sum(zero);
+        ans = max(sum(one), ans);
+        ans = max(sum(two), ans);
+
+        if (zero[2] && one[2] && two[2]) {
+            ans = max(ans, zero[2] + one[2] + two[2]);
+        }
+
+        return ans;
+    }
+};
