@@ -1,21 +1,24 @@
-#include <bits/stdc++.h> 
-int findMaxElement(vector < pair < int, int > > & arr, int n, int m) {
+#include <bits/stdc++.h>
+
+int mapp[1002];
+
+int findMaxElement(vector<pair<int,int> >& arr, int n, int m) {
     // Write Your Code here.
-    vector<int> diff(n + 2, 0);
+    memset(mapp, 0, sizeof(mapp));
 
-    for (auto &p : arr)
+    for (auto [L, R] : arr)
     {
-        diff[p.first] += 1;
-        diff[p.second + 1] -= 1;
+        ++mapp[L];
+        --mapp[R + 1];
     }
 
-    int maxi = 0, curr = 0;
+    int maxi = 0;
 
-    for (int i = 1; i <= n; i++)
+    for(int i = 1; i <= n; i++)
     {
-        curr += diff[i];
-        maxi = max(curr, maxi);
+        mapp[i] += mapp[i - 1];
+        maxi = max(mapp[i], maxi);
     }
-    
+
     return maxi;
 }
