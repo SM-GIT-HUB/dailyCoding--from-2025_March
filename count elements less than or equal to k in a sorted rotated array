@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int getPivot(int n, vector<int>& arr)
+    {
+        int elem = arr[0];
+        int start = 0, end = n - 1;
+        
+        while (start < end)
+        {
+            int mid = (start + end) >> 1;
+            
+            if (arr[mid] >= elem) {
+                start = mid + 1;
+            }
+            else
+                end = mid;
+        }
+        
+        return start - 1;
+    }
+    
+    int countLessEqual(vector<int>& arr, int x) {
+        // code here
+        int n = arr.size();
+        
+        if (n == 1 || arr[0] < arr.back()) {
+            return upper_bound(arr.begin(), arr.end(), x) - arr.begin();
+        }
+        
+        int pivot = getPivot(n, arr);
+        
+        int count = upper_bound(arr.begin(), arr.begin() + pivot + 1, x) - arr.begin();
+        count += upper_bound(arr.begin() + pivot + 1, arr.end(), x) - (arr.begin() + pivot + 1);
+        
+        return count;
+    }
+};
