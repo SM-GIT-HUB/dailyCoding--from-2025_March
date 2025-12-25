@@ -1,31 +1,25 @@
 #include <bits/stdc++.h> 
-vector<vector<int>> intersectionIntervals(vector<vector<int>>& in1, vector<vector<int>>& in2, int m, int n)
+vector<vector<int> > intersectionIntervals(vector<vector<int> >& interval1, vector<vector<int> >& interval2, int n1, int n2)
 {
     // Write your code here.
+    int i = 0;
+    int j = 0;
     vector<vector<int> > ans;
 
-    int oneIn = 0, twoIn = 0;
-    
-    while (oneIn < m && twoIn < n)
+    while (i < n1 && j < n2)
     {
-        int start1 = in1[oneIn][0];
-        int end1 = in1[oneIn][1];
-        
-        int start2 = in2[twoIn][0];
-        int end2 = in2[twoIn][1];
+        int L = max(interval1[i][0], interval2[j][0]);
+        int R = min(interval1[i][1], interval2[j][1]);
 
-        int start = max(start1, start2);
-        int end = min(end1, end2);
-
-        if (start <= end) {
-            ans.push_back({start, end});
+        if (L <= R) {
+            ans.push_back({L, R});
         }
 
-        if (end1 < end2) {
-            oneIn++;
+        if (interval1[i][1] < interval2[j][1]) {
+            i++;
         }
         else
-            twoIn++;
+            j++;
     }
 
     return ans;
