@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int bestClosingTime(string str) {
+        int y = 0;
+
+        for (char ch : str)
+        {
+            if (ch == 'Y') {
+                y++;
+            }
+        }
+
+        int pen = 0;
+        int mini = 10000000;
+
+        int ans = -1;
+
+        for (int i = 0; i < (int)str.size(); i++)
+        {
+            if (pen + y < mini)
+            {
+                mini = pen + y;
+                ans = i;
+            }
+
+            if (str[i] == 'N') {
+                ++pen;
+            }
+            else
+                --y;
+        }
+
+        if (pen + y < mini) {
+            return str.size();
+        }
+
+        return ans;
+    }
+};
