@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+
+int dp[1001][1001];
+
+int mm(int i, int j, string &str)
+{
+    if (i > j) {
+        return 0;
+    }
+
+    if (i == j) {
+        return 1;
+    }
+
+    if (dp[i][j] != -1) {
+        return dp[i][j];
+    }
+
+    if (str[i] == str[j]) {
+        return dp[i][j] = 2 + mm(i + 1, j - 1, str);
+    }
+    else
+    {
+        int len = mm(i + 1, j, str);
+        len = max(len, mm(i, j - 1, str));
+
+        return dp[i][j] = len;
+    }
+}
+
+bool isPalindrome(int k, string str) {
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+
+    int maxLen = mm(0, str.size() - 1, str);
+
+    return (int)str.size() - maxLen <= k;
+}
