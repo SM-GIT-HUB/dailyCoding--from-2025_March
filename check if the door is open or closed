@@ -1,0 +1,15 @@
+#include <bits/stdc++.h> 
+string doorStatus(int n) {
+    // Write your code here.
+    string str = string(n, '0');
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = i; j <= n; j += i)
+        {
+            str[j - 1] = (1 ^ (str[j - 1] - '0')) + '0';
+        }
+    }
+
+    return str;
+}
