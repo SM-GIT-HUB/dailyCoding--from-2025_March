@@ -1,0 +1,21 @@
+long long maxSubarraySum(vector<int> arr, int n)
+{
+    // Write your code here.
+    long long ans = 0;
+    long long sum = 0;
+
+    for (int x : arr)
+    {
+        sum += x;
+
+        if (sum > ans) {
+            ans = sum;
+        }
+
+        if (sum < 0) {
+            sum = 0;
+        }
+    }
+
+    return ans;
+}
