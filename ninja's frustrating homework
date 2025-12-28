@@ -1,0 +1,27 @@
+#include <bits/stdc++.h> 
+vector<int> searchWords(string booklet, vector<string>& diary)
+{
+	// Write Your code here.
+	vector<int> ans;
+
+	for (auto &str : diary)
+	{
+		auto it = booklet.find(str);
+
+		if (it != string::npos)
+		{
+			ans.push_back((int)it);
+			it = booklet.find(str, it + 1);
+
+			while (it != string::npos)
+			{
+				ans.push_back((int)it);
+				it = booklet.find(str, it + 1);
+			}
+		}
+	}
+
+	sort(ans.begin(), ans.end());
+
+	return ans;
+}
