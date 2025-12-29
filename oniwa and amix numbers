@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+int minimumFlips(int a, int b, int c)
+{
+	// Write your code here.
+	int count = 0;
+
+	for (int i = 0; i < 30; i++)
+	{
+		if (c & (1 << i))
+		{
+			int flag = ((a & (1 << i)) | (b & (1 << i)));
+
+			if (!flag) {
+				count++;
+			}
+		}
+		else
+			count += ((a >> i) & 1) + ((b >> i) & 1);
+	}
+
+	return count;
+}
