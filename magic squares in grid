@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int> >& g) {
+        int m = g.size();
+        int n = g[0].size();
+
+        int count = 0;
+        int match = (1 << 9) - 1;
+
+        auto check = [](int &mask, int x) -> bool {
+            if (!x) {
+                return 0;
+            }
+
+            mask = mask | (1 << (x - 1));
+            return (x < 10);
+        };
+
+        for (int i = 0; i + 2 < m; i++)
+        {
+            for (int j = 0; j + 2 < n; j++)
+            {
+                int mask = 0;
+
+                int numCheck = check(mask, g[i][j]) && check(mask, g[i][j + 1]) && check(mask, g[i][j + 2]) && check(mask, g[i + 1][j]) && check(mask, g[i + 1][j + 1]) && check(mask, g[i + 1][j + 2]) && check(mask, g[i + 2][j]) && check(mask, g[i + 2][j + 1]) && check(mask, g[i + 2][j + 2]);
+
+                if (numCheck && mask == match)
+                {
+                    int sum1 = g[i][j] + g[i][j + 1] + g[i][j + 2];
+                    int sum2 = g[i + 1][j] + g[i + 1][j + 1] + g[i + 1][j + 2];
+                    int sum3 = g[i + 2][j] + g[i + 2][j + 1] + g[i + 2][j + 2];
+                    int sum4 = g[i][j] + g[i + 1][j + 1] + g[i + 2][j + 2];
+                    int sum5 = g[i][j + 2] + g[i + 1][j + 1] + g[i + 2][j];
+                    int sum6 = g[i][j] + g[i + 1][j] + g[i + 2][j];
+                    int sum7 = g[i][j + 1] + g[i + 1][j + 1] + g[i + 2][j + 1];
+                    int sum8 = g[i][j + 2] + g[i + 1][j + 2] + g[i + 2][j + 2];
+
+                    if (sum1 == sum2 && sum2 == sum3 && sum3 == sum4 && sum4 == sum5 && sum5 == sum6 && sum6 == sum7) {
+                        ++count;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+};
