@@ -1,0 +1,84 @@
+class Solution {
+public:
+    class DSU {
+    public:
+        int parent[200020];
+
+        DSU(int row, int col)
+        {
+            for (int i = 0; i < 200020; i++)
+            {
+                parent[i] = i;
+            }
+        }
+
+        int findParent(int u)
+        {
+            return (u == parent[u])? u : parent[u] = findParent(parent[u]);
+        }
+
+        void unionBy(int u, int v)
+        {
+            int uPar = findParent(u);
+            int vPar = findParent(v);
+
+            if (uPar == vPar) {
+                return;
+            }
+
+            if (uPar < vPar) {
+                parent[vPar] = uPar;
+            }
+            else
+                parent[uPar] = vPar;
+        }
+    };
+
+    int latestDayToCross(int row, int col, vector<vector<int> >& cells) {
+        DSU ds(row, col);
+        int top = row * col;
+        int bottom = row * col + 1;
+
+        vector<vector<int> > grid(row, vector<int>(col));
+
+        for (int i = cells.size() - 1; i >= 0; i--)
+        {
+            int r = cells[i][0] - 1;
+            int c = cells[i][1] - 1;
+
+            grid[r][c] = 1;
+
+            int cell = col * r + c;
+
+            if (r - 1 >= 0 && grid[r - 1][c]) {
+                ds.unionBy(col * (r - 1) + c, cell);
+            }
+
+            if (r + 1 < row && grid[r + 1][c]) {
+                ds.unionBy(col * (r + 1) + c, cell);
+            }
+
+            if (c - 1 >= 0 && grid[r][c - 1]) {
+                ds.unionBy(col * r + c - 1, cell);
+            }
+
+            if (c + 1 < col && grid[r][c + 1]) {
+                ds.unionBy(col * r + c + 1, cell);
+            }
+
+            if (r == 0) {
+                ds.unionBy(cell, top);
+            }
+
+            if (r == row - 1) {
+                ds.unionBy(cell, bottom);
+            }
+
+            if (ds.findParent(top) == ds.findParent(bottom)) {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+};
