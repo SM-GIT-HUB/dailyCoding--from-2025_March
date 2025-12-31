@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+
+class DSU {
+public:
+    int cost[1001];
+    int count[1001];
+    int parent[1001];
+
+    DSU(int n, vector<int>& choco)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            count[i] = 1;
+            parent[i] = i;
+            cost[i] = choco[i];
+        }
+    }
+
+    int findParent(int u)
+    {
+        return (u == parent[u])? u : parent[u] = findParent(parent[u]);
+    }
+
+    void unionBy(int u, int v)
+    {
+        int uPar = findParent(u);
+        int vPar = findParent(v);
+
+        if (uPar == vPar) {
+            return;
+        }
+
+        if (count[uPar] >= count[vPar])
+        {
+            parent[vPar] = uPar;
+            cost[uPar] += cost[vPar];
+            count[uPar] += count[vPar];
+        }
+        else
+        {
+            parent[uPar] = vPar;
+            cost[vPar] += cost[uPar];
+            count[vPar] += count[uPar];
+        }
+    }
+};
+
+int mm(int idx, int n, vector<int>& pars, int total, int c, vector<vector<int> >& dp, DSU &ds)
+{
+    if (idx == n) {
+        return 0;
+    }
+
+    if (dp[total][idx] != -1) {
+        return dp[total][idx];
+    }
+
+    int par = pars[idx];
+    int include = 0;
+
+    if (ds.cost[par] + total <= c) {
+        include = ds.count[par] + mm(idx + 1, n, pars, total + ds.cost[par], c, dp, ds);
+    }
+
+    int exclude = mm(idx + 1, n, pars, total, c, dp, ds);
+
+    return dp[total][idx] = max(include, exclude);
+}
+
+int countChildren(int n, vector<vector<int> >& friends, int m, vector<int>& chocolates, int c) {
+    // Write your code here.
+    DSU ds(n, chocolates);
+
+    for (auto &v : friends)
+    {
+        ds.unionBy(v[0] - 1, v[1] - 1);
+    }
+
+    vector<int> pars;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (ds.findParent(i) == i) {
+            pars.push_back(i);
+        }
+    }
+
+    vector<vector<int> > dp(c + 1, vector<int>(pars.size(), -1));
+    
+    return mm(0, pars.size(), pars, 0, c, dp, ds);
+}
