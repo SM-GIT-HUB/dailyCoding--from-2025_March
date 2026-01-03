@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int numOfWays(int n) {
+        int MOD = 1e9 + 7;
+        long long A = 6, B = 6;
+
+        for (int i = 1; i < n; i++)
+        {
+            int newA = (2 * A + 2 * B) % MOD;
+            int newB = (2 * A + 3 * B) % MOD;
+
+            A = newA;
+            B = newB;
+        }
+
+        return (A + B) % MOD;
+    }
+};
