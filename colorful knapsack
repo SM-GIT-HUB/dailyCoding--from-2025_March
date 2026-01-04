@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+
+int dp[102][10001];
+
+int mm(int col, int m, int wt, int x, vector<int> *arr)
+{
+    if (col == m + 1) {
+        return (x - wt);
+    }
+
+    if (dp[col][wt] != -1) {
+        return dp[col][wt];
+    }
+
+    int mini = 1e9;
+
+    for (int w : arr[col])
+    {
+        if (w + wt <= x) {
+            mini = min(mm(col + 1, m, wt + w, x, arr), mini);
+        }
+    }
+
+    return dp[col][wt] = mini;
+}
+
+int colorfulKnapsack(int w[], int c[], int n, int m, int x)
+{
+    // Write Your Code here
+    vector<int> arr[m + 1];
+    memset(dp, -1, sizeof(dp));
+
+    for (int i = 0; i < n; i++)
+    {
+        arr[c[i]].push_back(w[i]);
+    }
+
+    int ans = mm(1, m, 0, x, arr);
+
+    return (ans == 1e9)? -1 : ans;
+}
