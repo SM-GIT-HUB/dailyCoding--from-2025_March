@@ -1,0 +1,44 @@
+int minimumTapsToFillGarden(vector<int>& ranges, int n) 
+{
+    // Write your code here.
+    int m = n + 1;
+    vector<pair<int, int> > arr;
+
+    for (int i = 0; i < m; i++)
+    {
+        arr.emplace_back(make_pair(max(0, i - ranges[i]), i + ranges[i]));
+    }
+
+    sort(arr.begin(), arr.end());
+
+    int count = 0;
+    int maxRange = 0;
+    int currRange = 0;
+
+    int idx = 0;
+
+    while (idx < m)
+    {
+        if (currRange >= n) {
+            return count;
+        }
+
+        if (arr[idx].first > currRange)
+        {
+            if (maxRange < arr[idx].first) {
+                return -1;
+            }
+
+            ++count;
+            currRange = maxRange;
+        }
+
+        maxRange = max(arr[idx++].second, maxRange);
+    }
+
+    if (currRange < n) {
+        return (maxRange >= n)? count + 1 : -1;
+    }
+
+    return count;
+}
