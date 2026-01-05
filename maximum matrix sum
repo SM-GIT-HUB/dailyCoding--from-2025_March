@@ -1,0 +1,33 @@
+class Solution {
+public:
+    long long maxMatrixSum(vector<vector<int> >& matrix) {
+        long long sum = 0;
+
+        int count = 0;
+        int negMin = INT_MAX;
+
+        int zero = 0;
+
+        for (auto &arr : matrix)
+        {
+            for (int x : arr)
+            {
+                sum += abs(x);
+
+                if (x < 0)
+                {
+                    ++count;
+                    negMin = min(-x, negMin);
+                }
+                else
+                    negMin = min(x, negMin);
+            }
+        }
+
+        if (!(count & 1)) {
+            return sum;
+        }
+
+        return (sum - (negMin << 1));
+    }
+};
