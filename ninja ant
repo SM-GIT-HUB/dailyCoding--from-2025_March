@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+
+int dirs[4][2] = {{1, 0}, {0, -1}, {-1, 0}, {0, 1}};
+
+vector<int> ninjaAnt(vector<vector<int> >& mat, int sr, int sc, int moves) 
+{
+	// Write code here.
+    int d = 0;
+    int x = sr;
+    int y = sc;
+    int n = mat.size();
+
+    while (moves--)
+    {
+        int bit = mat[x][y];
+        mat[x][y] = bit ^ 1;
+
+        if (bit)
+        {
+            x += dirs[d][0];
+            y += dirs[d][1];
+        }
+        else
+        {
+            x -= dirs[d][0];
+            y -= dirs[d][1];
+        }
+
+        if (x < 0 || x == n || y < 0 || y == n) {
+            return {-1, -1};
+        }
+
+        if (bit) {
+            d = (d + 1) % 4;
+        }
+        else
+            d = (d - 1 + 4) % 4;
+    }
+
+    return {x, y};
+}
