@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> fullBloomFlowers(vector<vector<int> >& flowers, vector<int>& people) {
+        vector<int> start;
+        vector<int> end;
+
+        for (auto &f : flowers)
+        {
+            start.push_back(f[0]);
+            end.push_back(f[1]);
+        }
+
+        sort(start.begin(), start.end());
+        sort(end.begin(), end.end());
+
+        vector<int> ans;
+
+        for (int x : people)
+        {
+            int bloomed = upper_bound(start.begin(), start.end(), x) - start.begin();
+            int stop = lower_bound(end.begin(), end.end(), x) - end.begin();
+
+            ans.push_back(bloomed - stop);
+        }
+
+        return ans;
+    }
+};
