@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int countLatticePoints(vector<vector<int> >& circles) {
+        int count = 0;
+        int does[201][201] = {0};
+        
+        for (auto &p : circles)
+        {
+            int x = p[0], y = p[1];
+            int r = p[2];
+
+            int maxX = x + r;
+            int maxY = y + r;
+
+            int r2 = r * r;
+
+            for (int i = x - r; i <= maxX; i++)
+            {
+                for (int j = y - r; j <= maxY; j++)
+                {
+                    if ((x - i) * (x - i) + (y - j) * (y - j) <= r2)
+                    {
+                        if (!does[i][j])
+                        {
+                            ++count;
+                            does[i][j] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+};
