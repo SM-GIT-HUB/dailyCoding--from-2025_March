@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int longestPath(vector<int>& parent, string s) {
+        int n = (int)parent.size();
+
+        queue<int> q;
+        int max1[100000] = {0};
+        int max2[100000] = {0};
+        int inDegree[100000] = {0};
+
+        for (int i = 0; i < n; i++)
+        {
+            if (parent[i] != -1) {
+                ++inDegree[parent[i]];
+            }
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            if (!inDegree[i]) {
+                q.push(i);
+            }
+        }
+
+        int ans = 0;
+
+        while (!q.empty())
+        {
+            int c = q.front();
+            q.pop();
+            ans = max(1 + max1[c] + max2[c], ans);
+
+            int p = parent[c];
+
+            if (p != -1 && --inDegree[p] == 0) {
+                q.push(p);
+            }
+
+            if (!c || s[c] == s[p]) {
+                continue;
+            }
+
+            int len = 1 + max1[c];
+
+            if (len >= max1[p])
+            {
+                max2[p] = max1[p];
+                max1[p] = len;
+            }
+            else if (len > max2[p]) {
+                max2[p] = len;
+            }
+        }
+
+        return ans;
+    }
+};
