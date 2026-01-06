@@ -1,0 +1,87 @@
+class Solution {
+public:
+    int maxTrailingZeros(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        
+        vector<vector<pair<int, int> > > rows(m, vector<pair<int, int> >(n, {0, 0}));
+        vector<vector<pair<int, int> > > cols(m, vector<pair<int, int> >(n, {0, 0}));
+
+        auto getFactors = [](int val) -> pair<int, int> {
+            int two = 0;
+            int five = 0;
+
+            while (val % 2 == 0)
+            {
+                two++;
+                val = val / 2;
+            }
+
+            while (val % 5 == 0)
+            {
+                five++;
+                val = val / 5;
+            }
+
+            return {two, five};
+        };
+
+        for (int i = 0; i < m; i++)
+        {
+            int val = grid[i][0];
+            rows[i][0] = getFactors(val);
+
+            for (int j = 1; j < n; j++)
+            {
+                pair<int, int> prev = rows[i][j - 1];
+                pair<int, int> facs = getFactors(grid[i][j]);
+                rows[i][j] = {prev.first + facs.first, prev.second + facs.second};
+            }
+        }
+
+        for (int j = 0; j < n; j++)
+        {
+            int val = grid[0][j];
+            cols[0][j] = getFactors(val);
+
+            for (int i = 1; i < m; i++)
+            {
+                pair<int, int> prev = cols[i - 1][j];
+                pair<int, int> facs = getFactors(grid[i][j]);
+                cols[i][j] = {prev.first + facs.first, prev.second + facs.second};
+            }
+        }
+
+        int ans = 0;
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                int right2 = rows[i][n - 1].first - rows[i][j].first;
+                int right5 = rows[i][n - 1].second - rows[i][j].second;
+
+                int left2 = (j > 0)? rows[i][j - 1].first : 0;
+                int left5 = (j > 0)? rows[i][j - 1].second : 0;
+
+                int up2 = (i > 0)? cols[i - 1][j].first : 0;
+                int up5 = (i > 0)? cols[i - 1][j].second : 0;
+
+                int down2 = cols[m - 1][j].first - cols[i][j].first;
+                int down5 = cols[m - 1][j].second - cols[i][j].second;
+
+                int curr2 = rows[i][j].first - ((j > 0)? rows[i][j - 1].first : 0);
+                int curr5 = rows[i][j].second - ((j > 0)? rows[i][j - 1].second : 0);
+
+                int comb1 = min(curr2 + right2 + down2, curr5 + right5 + down5);
+                int comb2 = min(curr2 + left2 + down2, curr5 + left5 + down5);
+                int comb3 = min(curr2 + left2 + up2, curr5 + left5 + up5);
+                int comb4 = min(curr2 + right2 + up2, curr5 + right5 + up5);
+
+                ans = max(ans, max({comb1, comb2, comb3, comb4}));
+            }
+        }
+
+        return ans;
+    }
+};
