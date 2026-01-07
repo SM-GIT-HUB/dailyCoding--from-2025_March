@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+double dp[1001][1001];
+
+double mm(int i, vector<double>& arr, int taken, int target)
+{
+    if (i == arr.size()) {
+        return (taken == target)? 1.0 : 0.0;
+    }
+
+    if (dp[i][taken] >= 0) {
+        return dp[i][taken];
+    }
+
+    double include = 0;
+
+    if (taken < target) {
+        include = arr[i] * mm(i + 1, arr, taken + 1, target);
+    }
+
+    double exclude = (1 - arr[i]) * mm(i + 1, arr, taken, target);
+
+    return dp[i][taken] = (include + exclude);
+}
+
+double tossStrangeCoins(vector<double>& prob, int target)
+{
+	// Write your code here.
+    memset(dp, -1, sizeof(dp));
+    return mm(0, prob, 0, target);
+}
