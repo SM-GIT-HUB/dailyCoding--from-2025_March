@@ -1,0 +1,23 @@
+int minimumDifference(int n, vector<int> arr)
+{
+    // Write your code here.
+    int one = 0;
+    int two = 0;
+
+    for (int x : arr)
+    {
+        two += x;
+    }
+
+    int ans = 1e9;
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        one += arr[i];
+        two -= arr[i];
+
+        ans = min(abs(one - two), ans);
+    }
+
+    return ans;
+}
