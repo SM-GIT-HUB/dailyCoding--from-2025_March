@@ -1,0 +1,64 @@
+class Solution {
+  public:
+    int countSubarrays(vector<int>& arr, int k) {
+        // code here
+        int odd = 0;
+        int start = 0;
+        
+        int n = arr.size();
+        
+        int count = 0;
+        
+        int f = -1;
+        int last = -1;
+        
+        for (int end = 0; end < n; end++)
+        {
+            int isOdd = (arr[end] & 1);
+            
+            if (isOdd) {
+                ++odd;
+            }
+            
+            if (isOdd && odd > k)
+            {
+                int countAfterLast = end - 1 - last;
+                int countBeforeFirst = f - start;
+                
+                count += countBeforeFirst * countAfterLast + countBeforeFirst + countAfterLast + 1;
+                
+                --odd;
+                start = f + 1;
+                
+                for (int i = start; i < n; i++)
+                {
+                    if (arr[i] & 1)
+                    {
+                        f = i;
+                        break;
+                    }
+                }
+                
+                last = end;
+            }
+            else if (isOdd)
+            {
+                if (f == -1) {
+                    f = end;
+                }
+                
+                last = end;
+            }
+        }
+        
+        if (odd == k)
+        {
+            int countAfterLast = n - 1 - last;
+            int countBeforeFirst = f - start;
+            
+            count += countBeforeFirst * countAfterLast + countBeforeFirst + countAfterLast + 1;
+        }
+        
+        return count;
+    }
+};
