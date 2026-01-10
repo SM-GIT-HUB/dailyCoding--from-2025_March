@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int dp[1000][1000];
+    int next1[1002] = {0};
+    int next2[1002] = {0};
+
+    int mm(int i, int m, int j, int n, string &s1, string &s2)
+    {
+        if (i == m && j == n) {
+            return 0;
+        }
+
+        if (i == m) {
+            return next2[j];
+        }
+
+        if (j == n) {
+            return next1[i];
+        }
+
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+
+        if (s1[i] == s2[j]) {
+            return dp[i][j] = mm(i + 1, m, j + 1, n, s1, s2);
+        }
+        else
+        {
+            int del1 = s1[i] + mm(i + 1, m, j, n, s1, s2);
+            int del2 = s2[j] + mm(i, m, j + 1, n, s1, s2);
+
+            return dp[i][j] = min(del1, del2);
+        }
+    }
+
+    int minimumDeleteSum(string s1, string s2) {
+        int m = s1.size();
+        int n = s2.size();
+
+        memset(dp, -1, sizeof(dp));
+
+        for (int i = m - 1; i >= 0; --i)
+        {
+            next1[i] = s1[i] + next1[i + 1];
+        }
+
+        for (int j = n - 1; j >= 0; --j)
+        {
+            next2[j] = s2[j] + next2[j + 1];
+        }
+
+        return mm(0, m, 0, n, s1, s2);
+    }
+};
