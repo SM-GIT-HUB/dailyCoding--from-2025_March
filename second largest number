@@ -1,0 +1,6 @@
+vector<int> getSecondOrderElements(int n, vector<int> a) {
+    // Write your code here.
+    sort(a.rbegin(), a.rend());
+
+    return {a[1], a[n - 2]};
+}
