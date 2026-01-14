@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+
+const int MAXI = 1e7;
+int dp[101][101][17];
+
+int mm(int idx, int n, int prev, int k, int g, int m, vector<int>& arr, vector<vector<int> >& cost)
+{
+    if (idx == n) {
+        return (g == m)? 0 : MAXI;
+    }
+
+    if (g > m) {
+        return MAXI;
+    }
+
+    if (dp[idx][g][prev] != -1) {
+        return dp[idx][g][prev];
+    }
+
+    int costVal = MAXI;
+
+    if (arr[idx]) {
+        costVal = mm(idx + 1, n, arr[idx], k, g + (prev != arr[idx]), m, arr, cost);
+    }
+    else
+    {
+        for (int c = 1; c <= k; c++)
+        {
+            int nextVal = cost[idx][c - 1] + mm(idx + 1, n, c, k, g + (prev != c), m, arr, cost);
+            costVal = min(nextVal, costVal);
+        }
+    }
+
+    return dp[idx][g][prev] = costVal;
+}
+
+int paintingJob(int n, int k, int m, vector<int>& arr, vector<vector<int> >& cost)
+{
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+
+    int costVal = mm(0, n, 0, k, 0, m, arr, cost);
+
+    return (costVal >= MAXI)? -1 : costVal;
+}
