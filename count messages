@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+
+unordered_map<string, int[3001]> mapp;
+
+void receiveMessage(string user, int time) {
+	// Write your code here
+	mapp[user][time]++;
+}
+
+vector<int> getMessageCount(int l, int r, string user, int k) {
+	// Write your code here
+	int idx = l;
+	vector<int> ans;
+
+	while (idx <= r)
+	{
+		int count = 0;
+
+		for (int c = 0; c < k && idx <= r; ++c)
+		{
+			count += mapp[user][idx++];
+		}
+
+		ans.push_back(count);
+	}
+
+	return ans;
+}
+
