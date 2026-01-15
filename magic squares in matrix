@@ -1,0 +1,54 @@
+#include <bits/stdc++.h> 
+int countSqaures(int m, int n, vector<vector<int> >& mat){
+    // Write your code here.
+    int count = 0;
+    int match = (1 << 9) - 1;
+
+    auto check = [](int &mask, int x) -> bool {
+        if (!x) {
+            return 0;
+        }
+
+        mask = mask | (1 << (x - 1));
+        return (x < 10);
+    };
+    
+    for (int i = 0; i + 2 < m; i++)
+    {
+        for (int j = 0; j + 2 < n; j++)
+        {
+            int numcheck = 1;
+            int mask = 0;
+
+            for (int r = i; numcheck && r < i + 3; r++)
+            {
+                for (int c = j; c < j + 3; c++)
+                {
+                    if (!check(mask, mat[r][c]))
+                    {
+                        numcheck = 0;
+                        break;
+                    }
+                }
+            }
+
+            if (numcheck && mask == match)
+            {
+                int sum1 = mat[i][j] + mat[i][j + 1] + mat[i][j + 2];
+                int sum2 = mat[i + 1][j] + mat[i + 1][j + 1] + mat[i + 1][j + 2];
+                int sum3 = mat[i + 2][j] + mat[i + 2][j + 1] + mat[i + 2][j + 2];
+                int sum4 = mat[i][j] + mat[i + 1][j] + mat[i + 2][j];
+                int sum5 = mat[i][j + 1] + mat[i + 1][j + 1] + mat[i + 2][j + 1];
+                int sum6 = mat[i][j + 2] + mat[i + 1][j + 2] + mat[i + 2][j + 2];
+                int sum7 = mat[i][j] + mat[i + 1][j + 1] + mat[i + 2][j + 2];
+                int sum8 = mat[i][j + 2] + mat[i + 1][j + 1] + mat[i + 2][j];
+
+                if (sum1 == sum2 && sum2 == sum3 && sum3 == sum4 && sum4 == sum5 && sum5 == sum6 && sum6 == sum7 && sum7 == sum8) {
+                    ++count;
+                }
+            }
+        }
+    }
+
+    return count;
+}
