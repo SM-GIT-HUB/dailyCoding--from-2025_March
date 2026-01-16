@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int maximizeSquareArea(int m, int n, vector<int>& hFences, vector<int>& vFences) {
+        if ((int)hFences.size() > (int)vFences.size()) {
+            return maximizeSquareArea(n, m, vFences, hFences);
+        }
+
+        hFences.push_back(1);
+        vFences.push_back(1);
+        hFences.push_back(m);
+        vFences.push_back(n);
+        
+        unordered_set<int> sett;
+
+        int hn = (int)hFences.size();
+        sett.reserve(hn * (hn - 1));
+
+        for (int i = 0; i < (int)hFences.size(); i++)
+        {
+            int c = hFences[i];
+
+            for (int j = i + 1; j < (int)hFences.size(); j++)
+            {
+                sett.insert(abs(hFences[j] - c));
+            }
+        }
+
+        int maxi = -1;
+
+        for (int i = 0; i < (int)vFences.size(); i++)
+        {
+            int c = vFences[i];
+
+            for (int j = i + 1; j < (int)vFences.size(); j++)
+            {
+                int v = abs(vFences[j] - c);
+
+                if (sett.count(v)) {
+                    maxi = max(v, maxi);
+                }
+            }
+        }
+
+        if (maxi < 0) {
+            return maxi;
+        }
+
+        return ((long long)maxi * maxi) % 1000000007;
+    }
+};
