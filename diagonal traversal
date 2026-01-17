@@ -1,0 +1,62 @@
+#include <bits/stdc++.h> 
+/*
+    
+    Following is the Binary Tree node structure for your referance:
+
+    class TreeNode {
+    public :
+        int data;
+        TreeNode *left;
+        TreeNode *right;
+
+        TreeNode(int data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+        ~TreeNode() {
+            if (left){
+            delete left;
+            }
+            if (right){
+            delete right;
+            }
+        }
+    };
+
+*/
+
+using Node = TreeNode<int>;
+
+vector<vector<int> > diagonal(TreeNode<int>* root){
+    // Write your code here.
+    queue<Node*> q;
+    vector<vector<int> > ans;
+
+    q.push(root);
+
+    while (!q.empty())
+    {
+        int size = q.size();
+        ans.push_back({});
+
+        while (size--)
+        {
+            Node* curr = q.front();
+            q.pop();
+
+            while (curr)
+            {
+                ans.back().push_back(curr->data);
+
+                if (curr->left) {
+                    q.push(curr->left);
+                }
+
+                curr = curr->right;
+            }
+        }
+    }
+
+    return ans;
+}
