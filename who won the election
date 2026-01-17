@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+
+int leftB[10001];
+int rightA[10001];
+
+string electionResult(string voters) {
+
+	// Write your code here.
+	int as = 0;
+	int bs = 0;
+
+	int n = (int)voters.size();
+
+	int a = -1;
+	int b = -1;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (voters[i] == 'B')
+		{
+			++bs;
+			b = i;
+		}
+		else if (voters[i] == '-') {
+			leftB[i] = b;
+		}
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		if (voters[i] == 'A')
+		{
+			++as;
+			a = i;
+		}
+		else if (voters[i] == '-') {
+			rightA[i] = a;
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		if (voters[i] == '-')
+		{
+			int bDist = (leftB[i] < 0)? INT_MAX : i - leftB[i];
+			int aDist = (rightA[i] < 0)? INT_MAX : rightA[i] - i;
+
+			if (aDist < bDist) {
+				++as;
+			}
+			else if (aDist > bDist) {
+				++bs;
+			}
+		}
+	}
+
+	if (as == bs) {
+		return "Coalition";
+	}
+
+	return (as > bs)? "A" : "B";
+}
