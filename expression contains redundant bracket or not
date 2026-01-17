@@ -1,0 +1,30 @@
+class Solution {
+  public:
+    bool checkRedundancy(string &s) {
+        // code here
+        stack<char> st;
+        string cons = "+-*/(";
+        
+        for (char ch : s)
+        {
+        	if (cons.find(ch) != string::npos) {
+        		st.push(ch);
+			}
+			else if (ch == ')')
+			{
+				if (st.top() == '(') {
+					return 1;
+				}
+				
+				while (st.top() != '(')
+				{
+					st.pop();
+				}
+				
+				st.pop();
+			}
+		}
+		
+		return 0;
+    }
+};
