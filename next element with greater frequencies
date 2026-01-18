@@ -1,27 +1,32 @@
 class Solution {
   public:
-    vector<int> findGreater(vector<int>& arr) {
+    vector<int> nextFreqGreater(vector<int>& arr) {
         // code here
-        int n = arr.size();
-        vector<int> stack;
+        int n = (int)arr.size();
+        int mapp[100001] = {0};
         
-        unordered_map<int, int> mapp;
-        for (int x : arr) mapp[x]++;
-        
-        vector<int> ans(n);
-        stack.push_back(-1);
-        
-        for (int i = n - 1; i >= 0; i--)
+        for (int x : arr)
         {
-            while (stack.back() != -1 && (mapp[stack.back()] <= mapp[arr[i]] || stack.back() == arr[i]))
-            {
-                stack.pop_back();
-            }
-            
-            ans[i] = stack.back();
-            stack.push_back(arr[i]);
-        }
-        
-        return ans;
+        	++mapp[x];
+		}
+		
+		vector<int> ans(n, -1);
+		vector<pair<int, int> > st;
+		
+		for (int i = n - 1; i >= 0; --i)
+		{
+			while (!st.empty() && st.back().second <= mapp[arr[i]])
+			{
+				st.pop_back();
+			}
+			
+			if (!st.empty()) {
+				ans[i] = st.back().first;
+			}
+			
+			st.push_back({arr[i], mapp[arr[i]]});
+		}
+		
+		return ans;
     }
 };
