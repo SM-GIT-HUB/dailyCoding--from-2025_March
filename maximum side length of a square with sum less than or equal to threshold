@@ -1,0 +1,68 @@
+class Solution {
+public:
+	int isPos(int len, int m, int n, int prefix[301][301], int th)
+	{
+		for (int i = len - 1; i < m; i++)
+		{
+			for (int j = len - 1; j < n; j++)
+			{
+				int sum = prefix[i][j];
+				
+				if (i - len >= 0) {
+					sum -= prefix[i - len][j];
+				}
+				
+				if (j - len >= 0) {
+					sum -= prefix[i][j - len];
+				}
+				
+				if (i - len >= 0 && j - len >= 0) {
+					sum += prefix[i - len][j - len];
+				}
+				
+				if (sum <= th) {
+					return 1;
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
+    int maxSideLength(vector<vector<int> >& mat, int threshold) {
+        int m = mat.size();
+        int n = mat[0].size();
+        
+        int prefix[301][301];
+        prefix[0][0] = mat[0][0];
+        
+        for (int i = 1; i < n; i++) prefix[0][i] = prefix[0][i - 1] + mat[0][i];
+        for (int i = 1; i < m; i++) prefix[i][0] = prefix[i - 1][0] + mat[i][0];
+        
+        for (int i = 1; i < m; i++)
+        {
+        	for (int j = 1; j < n; j++)
+        	{
+        		prefix[i][j] = mat[i][j] + prefix[i - 1][j] + prefix[i][j - 1] - prefix[i - 1][j - 1];
+			}
+		}
+		
+		int ans = 0;
+		int start = 1, end = min(m, n);
+		
+		while (start <= end)
+		{
+			int mid = start + ((end - start) >> 1);
+			
+			if (isPos(mid, m, n, prefix, threshold))
+			{
+				ans = mid;
+				start = mid + 1;
+			}
+			else
+				end = mid - 1;
+		}
+		
+		return ans;
+    }
+};
