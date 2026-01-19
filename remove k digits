@@ -1,0 +1,49 @@
+class Solution {
+  public:
+    string removeKdig(string &s, int k) {
+        // code here
+        int m = k;
+        int n = (int)s.size();
+        
+        if (k >= n) {
+            return "0";
+        }
+        
+        string st;
+        
+        for (char ch : s)
+        {
+        	if (st.empty()) {
+        		st.push_back(ch);
+			}
+			else
+			{
+				while (m && !st.empty() && st.back() > ch)
+				{
+					m--;
+					st.pop_back();
+				}
+				
+			    st.push_back(ch);
+			}
+		}
+		
+		while (st.size() > n - k)
+		{
+			st.pop_back();
+		}
+		
+		int idx = 0;
+		
+		while (idx < (int)st.size() && st[idx] == '0')
+		{
+			++idx;
+		}
+		
+		if (idx == (int)st.size()) {
+		    return "0";
+		}
+		
+		return st.substr(idx);
+    }
+};
