@@ -1,31 +1,44 @@
-#include <bits/stdc++.h> 
-vector<bool> ninjaAcademy(int n, vector<vector<int>> prerequisite, vector<vector<int>> query) {
+#include <bits/stdc++.h>
+
+bitset<3005> visited;
+unordered_set<int> sett[3005];
+
+void dfs(int u, vector<vector<int> >& adj, unordered_set<int>& sett)
+{
+  visited[u] = 1;
+  sett.insert(u);
+
+  for (int v : adj[u])
+  {
+    if (!visited[v]) {
+      dfs(v, adj, sett);
+    }
+  }
+}
+
+vector<bool> ninjaAcademy(int n, vector<vector<int> > prerequisite, vector<vector<int> > query) {
   // Write your code here.
-  vector<vector<int> > reachable(n, vector<int>(n, 0));
+  vector<vector<int> > adj(n);
 
   for (auto &p : prerequisite)
   {
-    reachable[p[0]][p[1]] = 1;
+    adj[p[0]].push_back(p[1]);
   }
 
-  for (int k = 0; k < n; k++)
+  for (int u = 0; u < n; u++)
   {
-    for (int u = 0; u < n; u++)
-    {
-      for (int v = 0; v < n; v++)
-      {
-        if (reachable[u][k] == 1 && reachable[k][v] == 1) {
-          reachable[u][v] = 1;
-        }
-      }
-    }
+    visited.reset();
+    sett[u].clear();
+
+    dfs(u, adj, sett[u]);
   }
 
   vector<bool> ans;
+  ans.reserve((int)query.size());
 
   for (auto &q : query)
   {
-    if (reachable[q[0]][q[1]] == 1) {
+    if (sett[q[0]].count(q[1])) {
       ans.push_back(true);
     }
     else
