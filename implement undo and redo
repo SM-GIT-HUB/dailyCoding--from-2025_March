@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    char ch;
+    string st;
+    string str;
+  
+    void append(char x) {
+        // append x into document
+        str.push_back(x);
+    }
+
+    void undo() {
+        // undo last change
+        st.push_back(str.back());
+        str.pop_back();
+    }
+
+    void redo() {
+        // redo changes
+        str.push_back(st.back());
+        st.pop_back();
+    }
+
+    string read() {
+        // read the document
+        return str;
+    }
+};
