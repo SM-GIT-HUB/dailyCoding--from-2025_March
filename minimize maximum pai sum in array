@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int minPairSum(vector<int>& arr) {
+        int i = 100000, j = 0;
+        int mapp[100001] = {0};
+
+        for (int x : arr)
+        {
+            if (x < i) {
+                i = x;
+            }
+
+            if (x > j) {
+                j = x;
+            }
+
+            ++mapp[x];
+        }
+
+        int ans = 0;
+
+        while (i <= j)
+        {
+            while (i <= j && !mapp[i])
+            {
+                i++;
+            }
+
+            while (i <= j && !mapp[j])
+            {
+                j--;
+            }
+
+            if (i <= j)
+            {
+                ans = max(ans, i + j);
+                --mapp[i];
+                --mapp[j];
+            }
+            else
+                break;
+        }
+
+        return ans;
+    }
+};
