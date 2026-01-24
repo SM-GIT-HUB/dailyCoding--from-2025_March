@@ -1,0 +1,63 @@
+class Solution {
+  public:
+    class DSU {
+    public:
+        vector<int> parent;
+        
+        DSU(int n)
+        {
+            parent.reserve(n);
+            
+            for (int i = 0; i < n; i++)
+            {
+                parent[i] = i;
+            }
+        }
+        
+        int getParent(int u)
+        {
+            return (u == parent[u])? u : parent[u] = getParent(parent[u]);
+        }
+        
+        void unionBy(int u, int v)
+        {
+            int uPar = getParent(u);
+            int vPar = getParent(v);
+            
+            if (uPar == vPar) {
+                return;
+            }
+            
+            parent[uPar] = vPar;
+        }
+    };
+  
+    int josephus(int n, int k) {
+        // code here
+        DSU ds(n);
+        int size = n;
+        
+        int curr = 0;
+        
+        while (--size)
+        {
+            for (int i = 0; i < k - 1; i++)
+            {
+                curr = ds.getParent((curr + 1) % n);
+            }
+            
+            ds.unionBy(curr, (curr + 1) % n);
+            
+            curr = ds.getParent((curr + 1) % n);
+        }
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (ds.parent[i] == i) {
+                return (i + 1);
+            }
+        }
+        
+        return -1;
+    }
+};
