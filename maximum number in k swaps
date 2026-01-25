@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+void track(int idx, int n, int k, string &str, string &maxi)
+{
+	if (idx == n || !k) {
+		return;
+	}
+
+	char mx = str[idx];
+
+	for (int i = idx; i < n; i++)
+	{
+		mx = max(str[i], mx);
+	}
+
+	if (mx == str[idx]) {
+		track(idx + 1, n, k, str, maxi);
+	}
+	else
+	{
+		for (int i = idx + 1; i < n; i++)
+		{
+			if (str[i] == mx)
+			{
+				swap(str[idx], str[i]);
+
+				maxi = max(maxi, str);
+				track(idx + 1, n, k - 1, str, maxi);
+
+				swap(str[idx], str[i]);
+			}
+		}
+	}
+}
+
+string findMax(string m, int k){       
+	// Write your code here.
+	int n = (int)m.size();
+
+	string maxi = m;
+	track(0, n, k, m, maxi);
+
+	return maxi;
+}
