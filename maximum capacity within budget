@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int binSearch(int start, int end, int x, vector<pair<int, int> >& arr)
+    {
+        int idx = -1;
+
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+
+            if (arr[mid].first <= x)
+            {
+                idx = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+
+        return idx;
+    }
+
+    int maxCapacity(vector<int>& costs, vector<int>& capacity, int budget) {
+        int n = (int)costs.size();
+        
+        int maxi = 0;
+        vector<pair<int, int> > arr(n);
+        
+        for (int i = 0; i < n; i++)
+        {
+        	arr[i] = {costs[i], capacity[i]};
+            if (costs[i] < budget) maxi = max(capacity[i], maxi);
+		}
+
+		sort(arr.begin(), arr.end());
+
+        vector<int> prefix((int)arr.size());
+        prefix[0] = arr[0].second;
+
+        for (int i = 1; i < n; i++)
+        {
+            prefix[i] = max(arr[i].second, prefix[i - 1]);
+        }
+        
+        for (int i = n - 1; i > 0; i--)
+        {
+            if (arr[i].first >= budget) {
+                continue;
+            }
+
+            int idx = binSearch(0, i - 1, budget - arr[i].first - 1, arr);
+
+            if (idx != -1) {
+                maxi = max(maxi, prefix[idx] + arr[i].second);
+            }
+        }
+
+        return maxi;
+    }
+};
