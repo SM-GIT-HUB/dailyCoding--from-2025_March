@@ -1,0 +1,35 @@
+class Solution {
+  public:
+	void track(int op, int cl, int open, int close, int &count)
+	{
+		if (op == open && cl == close)
+		{
+			++count;
+			return;
+		}
+		
+		if (op < open) {
+			track(op + 1, cl, open, close, count);
+		}
+		
+		if (op > cl) {
+			track(op, cl + 1, open, close, count);
+		}
+	}
+  	
+	int findWays(int n) {
+	    // code here
+	    if (n & 1) {
+	    	return 0;
+		}
+		
+		int open = n / 2;
+		int close = n / 2;
+		
+		int count = 0;
+		
+		track(0, 0, open, close, count);
+		
+		return count;
+	}
+};
