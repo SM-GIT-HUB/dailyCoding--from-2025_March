@@ -1,0 +1,54 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the linkedListNode class:
+
+    template <typename T>
+    class linkedListNode
+    {
+    public:
+        T data;
+        linkedListNode<T> *next;
+        linkedListNode(T data)
+        {
+            this->data = data;
+            this->next = NULL;
+        }
+    };
+
+*****************************************************************/
+
+using Node = linkedListNode<int>;
+
+linkedListNode<int> *zeroConsecutiveNodes(linkedListNode<int> *head) {
+    // Write your code here.
+    Node* root = new Node(-1);
+    root->next = head;
+
+    Node* curr = head;
+
+    while(curr)
+    {
+        int sum = 0;
+        unordered_map<int, Node*> mapp;
+
+        mapp[0] = root;
+
+        while(curr)
+        {
+            sum += curr->data;
+
+            if (mapp.count(sum))
+            {
+                mapp[sum]->next = curr->next;
+                curr = root->next;
+                break;
+            }
+
+            mapp[sum] = curr;
+            curr = curr->next;
+        }
+    }
+
+    return root->next;
+}
