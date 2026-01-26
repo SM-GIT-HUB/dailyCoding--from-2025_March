@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    void track(int idx, int n, vector<int>& arr, vector<vector<int> >& ans)
+    {
+        if (idx == n)
+        {
+            ans.emplace_back(arr);
+            return;
+        }
+        
+        for (int i = idx; i < n; i++)
+        {
+            swap(arr[idx], arr[i]);
+            track(idx + 1, n, arr, ans);
+            swap(arr[idx], arr[i]);
+        }
+    }
+  
+    vector<vector<int> > permuteDist(vector<int>& arr) {
+        // code here
+        vector<vector<int> > ans;
+        track(0, (int)arr.size(), arr, ans);
+        
+        return ans;
+    }
+};
