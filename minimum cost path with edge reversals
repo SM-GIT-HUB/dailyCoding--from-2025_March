@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int minCost(int n, vector<vector<int> >& edges) {
+        vector<vector<pair<int, int> > > adj(n);
+
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1], w = e[2];
+            adj[u].emplace_back(v, w);
+            adj[v].emplace_back(u, w << 1);
+        }
+
+        vector<int> dist(n, 1e9);
+        dist[0] = 0;
+
+        priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > pq;
+        pq.emplace(0, 0);
+
+        while (!pq.empty())
+        {
+            auto[w, u] = pq.top();
+            pq.pop();
+
+            if (dist[u] < w) {
+                continue;
+            }
+
+            if (u == n - 1) {
+                return dist[u];
+            }
+
+            for (auto [v, wt] : adj[u])
+            {
+                if (w + wt < dist[v])
+                {
+                    dist[v] = w + wt;
+                    pq.emplace(w + wt, v);
+                }
+            }
+        }
+
+        return -1;
+    }
+};
