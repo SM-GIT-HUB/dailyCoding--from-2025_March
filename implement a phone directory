@@ -1,0 +1,35 @@
+
+#include<bits/stdc++.h>
+
+vector<vector<string> > phoneDirectory(vector<string>& contactList, string &queryStr)
+{
+    // Write your code here.
+    vector<vector<string> > ans;
+    sort(contactList.begin(), contactList.end());
+
+    string sub = "";
+
+    for (char ch : queryStr)
+    {
+        sub.push_back(ch);
+        vector<string> temp;
+        unordered_set<string> sett;
+
+        for (auto &str : contactList)
+        {
+            if (str.find(sub) == 0 && !sett.count(str))
+            {
+                temp.emplace_back(str);
+                sett.insert(str);
+            }
+        }
+
+        if (temp.empty()) {
+            break;
+        }
+
+        ans.emplace_back(temp);
+    }
+
+    return ans;
+}
