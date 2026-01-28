@@ -1,0 +1,49 @@
+class Solution {
+  public:
+    void track1(int idx, int n, int sum, vector<int>& arr, vector<int>& left)
+    {
+        if (idx == n)
+        {
+            left.push_back(sum);
+            return;
+        }
+        
+        track1(idx + 1, n, sum + arr[idx], arr, left);
+        track1(idx + 1, n, sum, arr, left);
+    }
+    
+    void track2(int idx, int n, int sum, vector<int>& arr, unordered_map<int, int>& mapp)
+    {
+        if (idx == n)
+        {
+            ++mapp[sum];
+            return;
+        }
+        
+        track2(idx + 1, n, sum + arr[idx], arr, mapp);
+        track2(idx + 1, n, sum, arr, mapp);
+    }
+  
+    int countSubset(vector<int>& arr, int k) {
+        // code here
+        ios::sync_with_stdio(false);
+        cin.tie(nullptr);
+        
+        int n = (int)arr.size();
+        
+        vector<int> left;
+        unordered_map<int, int> mapp;
+        
+        track1(0, n / 2 + 1, 0, arr, left);
+        track2(n / 2 + 1, n, 0, arr, mapp);
+        
+        int count = 0;
+        
+        for (int x : left)
+        {
+            count += mapp[k - x];
+        }
+        
+        return count;
+    }
+};
