@@ -1,0 +1,116 @@
+#include <bits/stdc++.h> 
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+            int data;
+            Node *next;
+            Node(int data)
+            {
+                this->data = data;
+                this->next = NULL;
+            }
+        };
+
+*****************************************************************/
+
+Node* getMid(Node* root)
+{
+    Node* slow = root;
+    Node* fast = root->next;
+
+    while (fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+Node* reverse(Node* root)
+{
+    Node* prev = nullptr;
+    Node* curr = root;
+    Node* forward = nullptr;
+
+    while (curr)
+    {
+        forward = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forward;
+    }
+
+    return prev;
+}
+
+Node* addFirstAndReversedSecondHalf(Node* head)
+{
+    // Write your code here.
+    if (!head || !head->next) {
+        return head;
+    }
+
+    Node* mid = getMid(head);
+
+    Node* one = head;
+    Node* two = mid->next;
+    mid->next = nullptr;
+
+    one = reverse(one);
+    
+    Node* root = new Node(-1);
+    Node* temp = root;
+
+    int sum = 0;
+    int carry = 0;
+
+    while (one && two)
+    {
+        sum = one->data + two->data + carry;
+
+        temp->next = new Node(sum % 10);
+        carry = sum / 10;
+
+        temp = temp->next;
+        one = one->next;
+        two = two->next;
+    }
+
+    while (one)
+    {
+        sum = one->data + carry;
+        temp->next = new Node(sum % 10);
+        carry = sum / 10;
+
+        temp = temp->next;
+        one = one->next;
+    }
+
+    while (two)
+    {
+        sum = two->data + carry;
+        temp->next = new Node(sum % 10);
+        carry = sum / 10;
+
+        temp = temp->next;
+        two = two->next;
+    }
+
+    if (carry) {
+        temp->next = new Node(carry);
+    }
+
+    root = reverse(root->next);
+
+    while (root->next && root->data == 0)
+    {
+        root = root->next;
+    }
+
+    return root;
+}
