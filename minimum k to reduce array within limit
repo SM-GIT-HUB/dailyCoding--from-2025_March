@@ -1,0 +1,46 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+
+    int isPos(int k, vint &arr)
+    {
+        int ops = 0;
+        int64 maxK = (int64)k * k;
+
+        for (int x : arr)
+        {
+            if (x >= 0) {
+                ops += (x + k - 1) / k;
+            }
+
+            if (ops > maxK) {
+                break;
+            }
+        }
+
+        return (ops <= maxK);
+    }
+    
+    int minimumK(vector<int>& nums) {
+        int k = -1;
+        int start = 1, end = 1e5;
+
+        while (start <= end)
+        {
+            int mid = ((start + end) >> 1);
+
+            if (isPos(mid, nums))
+            {
+                k = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+
+        return k;
+    }
+};
