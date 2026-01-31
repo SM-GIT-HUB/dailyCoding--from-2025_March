@@ -1,0 +1,45 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		int n, m, l, r;
+		cin >> n >> m >> l >> r;
+		
+		int k = n - m;
+		
+		int l1 = (l + k <= 0)? l + k : 0;
+		
+		int extra = k - (l1 - l);
+		
+		int r1 = r;
+		
+		if (extra > 0) {
+			r1 = r - extra;
+		}
+		
+		cout << l1 << ' ' << r1 << enc;
+	}
+	
+	return 0;
+}
