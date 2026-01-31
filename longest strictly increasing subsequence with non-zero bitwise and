@@ -1,0 +1,49 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+    
+    int longestSubsequence(vector<int>& arr) {
+        int count = 0;
+        int n = (int)arr.size();
+
+        vint store;
+        store.reserve(n);
+
+        for (int bit = 30; bit >= 0; bit--)
+        {
+            store.clear();
+
+            for (int x : arr)
+            {
+                if (!(x & (1 << bit))) {
+                    continue;
+                }
+
+                if (store.empty()) {
+                    store.push_back(x);
+                }
+                else
+                {
+                    if (x > store.back()) {
+                        store.push_back(x);
+                    }
+                    else
+                    {
+                        int idx = lower_bound(store.begin(), store.end(), x) - store.begin();
+                        
+                        if (idx < (int)store.size()) {
+                            store[idx] = x;
+                        }
+                    }
+                }
+            }
+
+            count = max(count, (int)store.size());
+        }
+
+        return count;
+    }
+};
