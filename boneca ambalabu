@@ -1,0 +1,76 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+
+int64 setBit[31];
+int64 notSet[31];
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		int n;
+		cin >> n;
+		
+		vint arr(n);
+		
+		for (int i = 0; i < n; i++)
+		{
+			cin >> arr[i];
+		}
+		
+		int64 maxScore = 0;
+		
+		memset(setBit, 0, sizeof(setBit));
+		memset(notSet, 0, sizeof(notSet));
+		
+		for (int x : arr)
+		{
+			for (int bit = 29; bit >= 0; bit--)
+			{
+				if (x & (1 << bit)) {
+					++setBit[bit];
+				}
+				else
+					++notSet[bit];
+			}
+		}
+		
+		for (int x : arr)
+		{
+			int64 score = 0;
+			
+			for (int bit = 29; bit >= 0; bit--)
+			{
+				if (x & (1 << bit)) {
+					score += notSet[bit] * (1 << bit);
+				}
+				else
+					score += setBit[bit] * (1 << bit);
+			}
+			
+			maxScore = max(score, maxScore);
+		}
+		
+		cout << maxScore << enc;
+	}
+	
+	return 0;
+}
