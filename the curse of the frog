@@ -1,0 +1,64 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+
+void myFunction()
+{
+	int64 n, x;
+	cin >> n >> x;
+	
+	vector<array<int64, 3> > arr(n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		cin >> arr[i][0] >> arr[i][1] >> arr[i][2];
+	}
+	
+	int64 pos = 0;
+	int64 mx = 0;
+	
+	for (int i = 0; i < n; i++)
+	{
+		pos += arr[i][0] * (arr[i][1] - 1);
+		mx = max(mx, arr[i][0] * arr[i][1] - arr[i][2]);
+	}
+	
+	int64 rem = x - pos;
+	
+	if (rem <= 0) {
+		cout << 0;
+	}
+	else if (mx <= 0) {
+		cout << -1;
+	}
+	else
+		cout << (rem + mx - 1) / mx;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
