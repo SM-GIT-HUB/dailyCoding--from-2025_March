@@ -1,0 +1,60 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		int n, h, l;
+		cin >> n >> h >> l;
+		
+		int maxi = max(h, l);
+		int mini = min(h, l);
+		
+		int minsum = 0;
+		int maxsum = 0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			int num;
+			cin >> num;
+			
+			num--;
+			
+			if (num < mini) {
+				++minsum;
+			}
+			else if (num < maxi) {
+				++maxsum;
+			}
+		}
+		
+		int sum = min(minsum, maxsum);
+		
+		if (minsum > sum) {
+			sum += (minsum - sum) / 2;
+		}
+		
+		cout << sum << enc;
+	}
+	
+	return 0;
+}
