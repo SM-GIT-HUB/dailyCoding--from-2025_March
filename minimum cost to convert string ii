@@ -1,0 +1,157 @@
+class Solution {
+    long long dp[1001];
+    long long dist[201][201];
+    static const long long inf = 1e15;
+
+public:
+    struct Node {
+        int id;
+        Node* children[26];
+
+        Node(): id(-1)
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                children[i] = nullptr;
+            }
+        }
+    };
+
+    class Trie {
+    public:
+        Node* root;
+        Trie(): root(new Node()) {}
+        
+        void insert(int &c, string &word)
+        {
+            Node* curr = root;
+
+            for (char ch : word)
+            {
+                if (!curr->children[ch - 'a']) {
+                    curr->children[ch - 'a'] = new Node();
+                }
+
+                curr = curr->children[ch - 'a'];
+            }
+
+            if (curr->id == -1) {
+                curr->id = c++;
+            }
+        }
+
+        int getId(string &word)
+        {
+            Node* curr = root;
+
+            for (char ch : word)
+            {
+                curr = curr->children[ch - 'a'];
+            }
+
+            return curr->id;
+        }
+    };
+
+    long long mm(int idx, int n, string &src, string &target, Trie &tr)
+    {
+        if (idx == n) {
+            return 0;
+        }
+
+        if (dp[idx] != -1) {
+            return dp[idx];
+        }
+
+        int same = 1;
+        Node* c1 = tr.root;
+        Node* c2 = tr.root;
+
+        long long cost = inf;
+
+        for (int i = idx; i < n; i++)
+        {
+            c1 = (c1 && c1->children[src[i] - 'a'])? c1->children[src[i] - 'a'] : nullptr;
+            c2 = (c2 && c2->children[target[i] - 'a'])? c2->children[target[i] - 'a'] : nullptr;
+
+            if (src[i] != target[i]) {
+                same = 0;
+            }
+
+            if ((!c1 || !c2) && !same) {
+                break;
+            }
+            
+            int u = c1? c1->id : -1;
+            int v = c2? c2->id : -1;
+
+            if (same) {
+                cost = min(cost, mm(i + 1, n, src, target, tr));
+            }
+            else if (u != -1 && v != -1 && dist[u][v] != inf) {
+                cost = min(cost, dist[u][v] + mm(i + 1, n, src, target, tr));
+            }
+        }
+
+        return dp[idx] = cost;
+    }
+
+    long long minimumCost(string source, string target, vector<string>& original, vector<string>& changed, vector<int>& cost) {
+        Trie tr;
+
+        int n = original.size();
+        memset(dp, -1, sizeof(dp));
+
+        int c = 1;
+
+        for (string &s : original)
+        {
+            tr.insert(c, s);
+        }
+
+        for (string &s : changed)
+        {
+            tr.insert(c, s);
+        }
+
+        for (int i = 1; i < c; i++)
+        {
+            for (int j = 1; j < c; j++)
+            {
+                dist[i][j] = inf;
+            }
+
+            dist[i][i] = 0;
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            int u = tr.getId(original[i]);
+            int v = tr.getId(changed[i]);
+            dist[u][v] = min(dist[u][v], (long long)cost[i]);
+        }
+
+        for (int k = 1; k < c; k++)
+        {
+            for (int u = 1; u < c; u++)
+            {
+                if (u == k || dist[u][k] == inf) {
+                    continue;
+                }
+
+                for (int v = 1; v < c; v++)
+                {
+                    if (v == u || dist[k][v] == inf) {
+                        continue;
+                    }
+
+                    dist[u][v] = min(dist[u][v], dist[u][k] + dist[k][v]);
+                }
+            }
+        }
+
+        long long ans = mm(0, (int)source.size(), source, target, tr);
+
+        return (ans >= inf)? -1 : ans;
+    }
+};
