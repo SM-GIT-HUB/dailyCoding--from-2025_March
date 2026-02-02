@@ -1,0 +1,112 @@
+class Solution {
+public:
+	using int64 = int64_t;
+	using vint = vector<int>;
+	using vi64 = vector<int64_t>;
+	using pr2 = pair<int, int>;
+	
+    long long minimumCost(vector<int>& nums, int k, int dist) {
+    	int64 mini = LLONG_MAX;
+    	int n = (int)nums.size();
+        
+        unordered_set<int> sett;
+        
+		priority_queue<pr2> maxq;
+		priority_queue<pr2, vector<pr2>, greater<pr2> > minq;
+		
+		int m = k - 1;
+		int64 sum = 0;
+		
+		int d = dist + 1;
+        
+        for (int i = 1; i < d + 1; i++)
+        {
+        	if (sett.size() < m)
+        	{
+        		sett.insert(i);
+        		maxq.push({nums[i], i});
+        		
+        		sum += nums[i];
+			}
+			else if (nums[i] < maxq.top().first)
+			{
+				sett.erase(maxq.top().second);
+                sum -= maxq.top().first;
+				
+				minq.push(maxq.top());
+				maxq.pop();
+				
+                sett.insert(i);
+				maxq.push({nums[i], i});
+				
+				sum += nums[i];
+			}
+			else
+				minq.push({nums[i], i});
+		}
+		
+		mini = min(sum, mini);
+		
+		for (int i = 2; i + d - 1 < n; i++)
+		{
+            if (sett.count(i - 1))
+            {
+                sum -= nums[i - 1];
+                sett.erase(i - 1);
+            }
+
+			while (!maxq.empty() && maxq.top().second < i)
+			{
+				sett.erase(maxq.top().second);
+				maxq.pop();
+			}
+			
+			while (!minq.empty() && minq.top().second < i)
+			{
+				minq.pop();
+			}
+			
+			while (!minq.empty() && (int)sett.size() < m)
+			{
+				if (minq.top().second < i || sett.count(minq.top().second))
+				{
+					minq.pop();
+					continue;
+				}
+				
+				sett.insert(minq.top().second);
+				sum += minq.top().first;
+				
+				maxq.push(minq.top());
+				minq.pop();
+			}
+			
+			if (sett.size() < m)
+			{
+				sett.insert(i + d - 1);
+				maxq.push({nums[i + d - 1], i + d - 1});
+				
+				sum += nums[i + d - 1];
+			}
+			else if (nums[i + d - 1] < maxq.top().first)
+			{
+				sett.erase(maxq.top().second);
+				sum -= maxq.top().first;
+				
+				minq.push(maxq.top());
+				maxq.pop();
+				
+                sett.insert(i + d - 1);
+				maxq.push({nums[i + d - 1], i + d - 1});
+				
+				sum += nums[i + d - 1];
+			}
+			else
+				minq.push({nums[i + d - 1], i + d - 1});
+				
+			mini = min(sum, mini);
+		}
+		
+		return mini + nums[0];
+    }
+};
