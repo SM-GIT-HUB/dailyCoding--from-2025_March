@@ -1,0 +1,16 @@
+class Solution {
+  public:
+    int maxProfit(vector<int>& prices) {
+        // code here
+        int profit = 0;
+        int buy = prices[0];
+        
+        for (int x : prices)
+        {
+            profit = max(x - buy, profit);
+            buy = min(x, buy);
+        }
+        
+        return profit;
+    }
+};
