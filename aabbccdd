@@ -1,0 +1,66 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+void myFunction()
+{
+	int n;
+	cin >> n;
+	
+	string str;
+	cin >> str;
+	
+	int mapp[26] = {0};
+	
+	for (char ch : str)
+	{
+		++mapp[tolower(ch) - 'a'];
+	}
+	
+	int max1 = 0;
+	int max2 = 0;
+	
+	for (int i = 0; i < 26; i++)
+	{
+		if (mapp[i] >= max1)
+		{
+			max2 = max1;
+			max1 = mapp[i];
+		}
+		else if (mapp[i] > max2) {
+			max2 = mapp[i];
+		}
+	}
+	
+	cout << (max1 + max2);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
