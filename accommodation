@@ -1,0 +1,59 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+void myFunction()
+{
+	int64 b, g, x, y, n;
+	cin >> b >> g >> x >> y >> n;
+	
+	if (n < x + y || b < x || g < y)
+	{
+	    cout << -1;
+	    return;
+	}
+	
+	int64 left = (b + g + n - 1) / n;
+	
+	int64 c1 = (b + g) / (x + y);
+	int64 c2 = b / x;
+	int64 c3 = g / y;
+	
+	int64 right = min({c1, c2, c3});
+	
+	if (left > right) {
+		cout << -1;
+	}
+	else
+		cout << left;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
