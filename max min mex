@@ -1,0 +1,119 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+int64 mod = 998244353;
+
+int64 fact(int n)
+{
+	if (n == 0) {
+		return 1;
+	}
+	
+	int64 mul = 1;
+	
+	for (int i = 2; i <= n; i++)
+	{
+		mul = (mul * i) % mod;
+	}
+	
+	return mul;
+}
+
+int64 getPower(int n)
+{
+	int64 mul = 1;
+	
+	for (int i = 0; i < n; i++)
+	{
+		mul = (mul * 2) % mod;
+	}
+	
+	return mul;
+}
+
+void myFunction()
+{
+	int64 n;
+	cin >> n;
+	
+	vi64 arr(n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		cin >> arr[i];
+	}
+	
+	sort(arr.begin(), arr.end());
+	
+	int64 len = 0;
+	int64 seg = 0;
+	int64 maxlen = 0;
+	int64 prev = -1;
+	
+	for (int64 x : arr)
+	{
+		if (prev + 1 == x) {
+			++len;
+		}
+		else
+		{
+			if (len > maxlen)
+			{
+				seg = 1;
+				maxlen = len;
+			}
+			else if (len && len == maxlen) {
+				++seg;
+			}
+			
+			len = 1;
+		}
+		
+		prev = x;
+	}
+	
+	if (len > maxlen)
+	{
+		seg = 1;
+		maxlen = len;
+	}
+	else if (len == maxlen) {
+		++seg;
+	}
+	
+	int64 ans = getPower(maxlen - 1);
+	ans = (ans * fact(n - maxlen)) % mod;
+	
+	cout << (ans * seg) % mod;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
