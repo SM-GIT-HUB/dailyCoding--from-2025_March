@@ -1,0 +1,83 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+int64 dp[200005][2][2];
+
+void myFunction()
+{
+	int64 n, k;
+	cin >> n >> k;
+	
+	vi64 arr(n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		cin >> arr[i];
+	}
+	
+	int64 maxi = -1;
+	int64 mini = INT_MAX;
+	
+	int64 count = 0;
+	
+	for (int64 x : arr)
+	{
+		if (x > mini)
+		{
+			if (x - mini - k > 0)
+			{
+				++count;
+				maxi = -1;
+				mini = INT_MAX;
+				continue;
+			}
+		}
+		
+		if (x < maxi)
+		{
+			if (maxi - x - k > 0)
+			{
+				++count;
+				maxi = -1;
+				mini = INT_MAX;
+				continue;
+			}
+		}
+		
+		mini = min(x, mini);
+		maxi = max(x, maxi);
+	}
+	
+	cout << count;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
