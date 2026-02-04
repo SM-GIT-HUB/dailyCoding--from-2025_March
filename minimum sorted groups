@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+
+int minimumSortedGroups(int n, vector<int>& arr) {
+    // Write your code here.
+    multiset<int> sett;
+
+    for (int x : arr)
+    {
+        if (sett.empty())
+        {
+            sett.insert(x);
+            continue;
+        }
+
+        auto it = sett.upper_bound(x);
+
+        if (it != sett.begin()) {
+            sett.erase(--it);
+        }
+
+        sett.insert(x);
+    }
+
+    return (int)sett.size();
+}
