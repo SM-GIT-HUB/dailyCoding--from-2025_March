@@ -1,0 +1,82 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+void myFunction()
+{
+	int64 x, y;
+	cin >> x >> y;
+	
+	if (!(x & y))
+	{
+		cout << x << ' ' << y;
+		return;
+	}
+	
+	int64 p = -1, q = -1;
+	
+	for (int bit = 30; bit >= 0; bit--)
+	{
+		if (x & (1 << bit))
+		{
+			if (y & (1 << bit))
+			{
+				p = x & ~((1 << bit) - 1);
+				q = y & ~((1 << bit) - 1);
+				q--;
+				
+				int cx = x | ((1 << bit) - 1);
+				cx++;
+				
+				if (!(cx & y) && abs(x - cx) < abs(x - p) + abs(y - q))
+				{
+					p = cx;
+					q = y;
+				}
+				
+				int cy = y | ((1 << bit) - 1);
+				cy++;
+				
+				if (!(x & cy) && abs(y - cy) < abs(x - p) + abs(y - q))
+				{
+					p = x;
+					q = cy;
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	cout << p << ' ' << q;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
