@@ -1,0 +1,72 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+void myFunction()
+{
+	int n;
+	cin >> n;
+	
+	vi64 arr(n);
+	int64 mini = 1e15;
+	int64 maxi = -1;
+	
+	for (int i = 0; i < n; i++)
+	{
+		cin >> arr[i];
+		mini = min(arr[i], mini);
+		maxi = max(arr[i], maxi);
+	}
+	
+	if (is_sorted(arr.begin(), arr.end())) {
+		cout << -1;
+	}
+	else
+	{
+		int64 ans = 1e15;
+		
+		vi64 b = arr;
+		sort(b.begin(), b.end());
+		
+		for (int i = 0; i < n; i++)
+		{
+			if (arr[i] == b[i]) {
+				continue;
+			}
+			
+			ans = min(ans, max(arr[i] - mini, maxi - arr[i]));
+		}
+		
+		cout << ans;
+	}
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
