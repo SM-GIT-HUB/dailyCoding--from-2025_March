@@ -1,0 +1,52 @@
+class Solution {
+  public:
+    vector<int> smallestDiff(vector<int>& a, vector<int>& b, vector<int>& c) {
+        // code here.
+        int mini = 1e9;
+        int minsum = 1e9;
+        
+        vector<int> ans(3);
+        int n = (int)a.size();
+        
+        sort(a.begin(), a.end());
+        sort(b.begin(), b.end());
+        sort(c.begin(), c.end());
+        
+        int i = 0, j = 0, k = 0;
+        
+        while (i < n && j < n && k < n)
+        {
+            int ai = a[i];
+            int bj = b[j];
+            int ck = c[k];
+            
+            int sum = ai + bj + ck;
+            int diff = max(ai, max(bj, ck)) - min(ai, min(bj, ck));
+            
+            if (diff < mini)
+            {
+                mini = diff;
+                ans = {ai, bj, ck};
+                minsum = sum;
+            }
+            else if (diff == mini && sum < minsum)
+            {
+                minsum = sum;
+                ans = {ai, bj, ck};
+            }
+            
+            if (ai <= bj && ai <= ck) {
+                i++;
+            }
+            else if (bj <= ai && bj <= ck) {
+                j++;
+            }
+            else
+                k++;
+        }
+        
+        sort(ans.rbegin(), ans.rend());
+        
+        return ans;
+    }
+};
