@@ -1,0 +1,121 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args)
+{
+    ((cout << args << ' '), ...);
+}
+
+void myFunction()
+{
+	int64 n;
+	cin >> n;
+	
+	vi64 arr(n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		cin >> arr[i];
+	}
+	
+	vi64 cols(n);
+	
+	vector<pr64> a(n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		a[i] = {arr[i], i};
+	}
+	
+	sort(a.begin(), a.end());
+	
+	for (int i = 0; i < n; i++)
+	{
+		if (i & 1) {
+			cols[a[i].second] = 1;
+		}
+		else
+			cols[a[i].second] = 0;
+	}
+	
+	int isPos = 1;
+	int prev = -1;
+	
+	for (int64 x : cols)
+	{
+		if (prev == x)
+		{
+			isPos = 0;
+			break;
+		}
+		
+		prev = x;
+	}
+	
+	if (isPos)
+	{
+		prnt("YES");
+		return;
+	}
+	
+	for (int i = 0; i < n; i++)
+	{
+		if (i & 1) {
+			cols[a[i].second] = 0;
+		}
+		else
+			cols[a[i].second] = 1;
+	}
+	
+	prev = -1;
+	isPos = 1;
+	
+	for (int64 x : cols)
+	{
+		if (prev == x)
+		{
+			isPos = 0;
+			break;
+		}
+		
+		prev = x;
+	}
+	
+	if (isPos) {
+		prnt("YES");
+	}
+	else
+		prnt("NO");
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
