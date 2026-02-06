@@ -1,0 +1,69 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args)
+{
+    ((cout << args << ' '), ...);
+}
+
+void myFunction()
+{
+	int64 n;
+	cin >> n;
+	
+	int zeros = 0;
+	int ones = 0;
+	
+	for (int i = 0; i < n; i++)
+	{
+		int64 num;
+		cin >> num;
+		
+		zeros += (num == 0);
+		ones += (num == 1);
+	}
+	
+	if (!zeros) {
+		prnt("NO");
+	}
+	else if (zeros == 1) {
+		prnt("YES");
+	}
+	else if (!ones) {
+		prnt("NO");
+	}
+	else
+		prnt("YES");
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
