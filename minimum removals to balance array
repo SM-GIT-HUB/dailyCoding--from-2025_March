@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int minRemoval(vector<int>& arr, int64_t k) {
+        int n = (int)arr.size();
+
+        if (n == 1) {
+            return 0;
+        }
+
+        sort(arr.begin(), arr.end());
+
+        int len = 0;
+        int i = 0, j = 0;
+
+        while (j < n)
+        {
+            while (k * arr[i] < arr[j])
+            {
+                i++;
+            }
+            
+            len = max(j - i + 1, len);
+            ++j;
+        }
+
+        return (n - len);
+    }
+};
