@@ -3,7 +3,6 @@ class Solution {
     vector<int> smallestDiff(vector<int>& a, vector<int>& b, vector<int>& c) {
         // code here.
         int mini = 1e9;
-        int minsum = 1e9;
         
         vector<int> ans(3);
         int n = (int)a.size();
@@ -20,18 +19,11 @@ class Solution {
             int bj = b[j];
             int ck = c[k];
             
-            int sum = ai + bj + ck;
             int diff = max(ai, max(bj, ck)) - min(ai, min(bj, ck));
             
             if (diff < mini)
             {
                 mini = diff;
-                ans = {ai, bj, ck};
-                minsum = sum;
-            }
-            else if (diff == mini && sum < minsum)
-            {
-                minsum = sum;
                 ans = {ai, bj, ck};
             }
             
