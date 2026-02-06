@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+int mapp[26];
+
+char findNonRepeating(string str) {
+    // Write your code here.
+    memset(mapp, 0, sizeof(mapp));
+
+    for (char ch : str)
+    {
+        ++mapp[ch - 'a'];
+    }
+
+    for (char ch : str)
+    {
+        if (mapp[ch - 'a'] == 1) {
+            return ch;
+        }
+    }
+
+    return '#';
+}
