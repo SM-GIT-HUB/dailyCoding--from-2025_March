@@ -1,0 +1,56 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+	class TreeNode {
+	public:
+	    int data;
+	    TreeNode* left;
+	    TreeNode* right;
+
+	    TreeNode(int data) {
+	        this->data = data;
+	        this->left = nullptr;
+	        this->right = nullptr;
+	    }
+	};
+
+ ************************************************************/
+
+using Node = TreeNode;
+
+Node* dfs(int start, int end, int idx, vector<int>& inn, vector<int>& level)
+{
+	if (start > end) {
+		return nullptr;
+	}
+
+	if (start == end) {
+		return new Node(inn[start]);
+	}
+
+	int i = -1;
+
+	for (int j = start; j <= end; j++)
+	{
+		if (inn[j] == level[idx])
+		{
+			i = j;
+			break;
+		}
+	}
+
+	Node* root = new Node(level[idx]);
+	
+	root->left = dfs(start, i - 1, 2 * idx + 1, inn, level);
+	root->right = dfs(i + 1, end, 2 * idx + 2, inn, level);
+
+	return root;
+}
+
+TreeNode* getTreeFromInorderAndLevelorder(int n, vector<int>& inn, vector<int>& level)
+{
+	// Write your code here.
+	return dfs(0, n - 1, 0, inn, level);
+}
