@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+
+using int64 = int64_t;
+
+int64 prefix[105];
+int64 dp[101][101];
+
+int64 mm(int start, int end, vector<int>& arr)
+{
+    if (start >= end) {
+        return 0;
+    }
+
+    if (dp[start][end] != -1) {
+        return dp[start][end];
+    }
+
+    int64 smoke = 1e15;
+
+    for (int i = start; i < end; i++)
+    {
+        int64 a = (prefix[i + 1] - prefix[start]) % 100;
+        int64 b = (prefix[end + 1] - prefix[i + 1]) % 100;
+
+        smoke = min(smoke, a * b + mm(start, i, arr) + mm(i + 1, end, arr));
+    }
+
+    return dp[start][end] = smoke;
+}
+
+int minimizeSmoke(vector<int>& arr,int n) {
+    // Write your code here.
+    prefix[0] = 0;
+    memset(dp, -1, sizeof(dp));
+    
+    for (int i = 0; i < n; i++)
+    {
+        prefix[i + 1] = prefix[i] + arr[i];
+    }
+
+    return mm(0, n - 1, arr);
+}
