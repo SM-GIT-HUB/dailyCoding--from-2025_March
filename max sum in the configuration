@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    int maxSum(vector<int>& arr) {
+        // code here
+        int sum = accumulate(arr.begin(), arr.end(), 0);
+        
+        int curr = 0;
+        int maxi = 0;
+        int n = (int)arr.size();
+        
+        for (int i = 0; i < n; i++)
+        {
+            curr += arr[i] * i;
+        }
+        
+        maxi = curr;
+        
+        for (int i = 1; i < n; i++)
+        {
+            curr = curr + sum - arr[n - i] * n;
+            maxi = max(curr, maxi);
+        }
+        
+        return maxi;
+    }
+};
