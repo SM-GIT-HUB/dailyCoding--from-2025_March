@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+
+string specificOrder(string &x, string &y) {
+    // Write your code here.
+    int count[26] = {0};
+
+    for (char ch : x)
+    {
+        ++count[ch - 'a'];
+    }
+
+    string str;
+
+    for (char ch : y)
+    {
+        for (int c = 0; c < count[ch - 'a']; c++)
+        {
+            str.push_back(ch);
+        }
+
+        count[ch - 'a'] = 0;
+    }
+
+    for (char ch : x)
+    {
+        if (count[ch - 'a']) {
+            str.push_back(ch);
+        }
+    }
+
+    return str;
+}
