@@ -1,0 +1,79 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args)
+{
+    ((cout << args << ' '), ...);
+}
+
+void myFunction()
+{
+	int64 n;
+	cin >> n;
+	
+	string s;
+	cin >> s;
+	
+	vint count(n + 1);
+	vint next(n + 1, n);
+	
+	for (int i = n - 1; i >= 0; i--)
+	{
+		if (s[i] == '(') {
+			next[i] = i;
+		}
+		else
+			next[i] = next[i + 1];
+			
+		count[i] = (s[i] == '(');
+		count[i] += count[i + 1];
+	}
+	
+	int64 ans = -1;
+	
+	for (int i = 0; i < n; i++)
+	{
+		if (s[i] == ')' && next[i] < n)
+		{
+			int ji = next[i] - i;
+			
+			if (count[next[i] + 1] >= ji) {
+				ans = max(ans, n - 2 * ji);
+			}
+		}
+	}
+	
+	prnt(ans);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
