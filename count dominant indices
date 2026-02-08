@@ -1,0 +1,29 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    using int128 = __int128;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>;
+    
+    int dominantIndices(vector<int>& arr) {
+        int64 sum = accumulate(arr.begin(), arr.end(), 0LL);
+        int64 n = (int)arr.size();
+        int64 total = n;
+
+        int count = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            sum -= arr[i];
+            --total;
+
+            if ((double)arr[i] > (double)sum / (double)total) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+};
