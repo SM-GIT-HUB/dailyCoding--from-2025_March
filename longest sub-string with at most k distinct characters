@@ -1,0 +1,27 @@
+int getLengthofLongestSubstring(int k, string s)
+{
+   // Write your code here.
+   int mapp[26] = {0};
+
+   int len = 0;
+   int dist = 0;
+   int start = 0;
+
+   for (int end = 0; end < (int)s.size(); end++)
+   {
+      if (++mapp[s[end] - 'a'] == 1) {
+         ++dist;
+      }
+
+      while (dist > k)
+      {
+         if (--mapp[s[start++] - 'a'] == 0) {
+            --dist;
+         }
+      }
+
+      len = max(len, end - start + 1);
+   }
+
+   return len;
+}
