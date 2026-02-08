@@ -1,0 +1,58 @@
+class Solution {
+public:
+    using ll = long long;
+    using int64 = int64_t;
+    using int128 = __int128;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>;
+    
+    long long countSubarrays(vector<int>& arr, long long k) {
+        int64 count = 0;
+        
+        deque<int> mini;
+        deque<int> maxi;
+
+        int start = 0;
+
+        for (int end = 0; end < (int)arr.size(); end++)
+        {
+            while (!mini.empty() && arr[mini.back()] >= arr[end])
+            {
+                mini.pop_back();
+            }
+
+            while (!maxi.empty() && arr[maxi.back()] <= arr[end])
+            {
+                maxi.pop_back();
+            }
+
+            mini.push_back(end);
+            maxi.push_back(end);
+
+            int64 cost = (int64)(arr[maxi.front()] - arr[mini.front()]) * (end - start + 1);
+
+            while (cost > k)
+            {
+                ++start;
+
+                while (maxi.front() < start)
+                {
+                    maxi.pop_front();
+                }
+
+                while (mini.front() < start)
+                {
+                    mini.pop_front();
+                }
+
+                cost = (int64)(arr[maxi.front()] - arr[mini.front()]) * (end - start + 1);
+            }
+
+            count += (end - start + 1);
+        }
+
+        return count;
+    }
+};
