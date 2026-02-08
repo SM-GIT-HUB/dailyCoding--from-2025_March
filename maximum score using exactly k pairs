@@ -1,0 +1,52 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    using int128 = __int128;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>;
+
+    int64 inf = -1e16;
+    int64 dp[101][101][105];
+
+    int64 mm(int i, int m, int j, int n, int taken, int k, vint &a, vint &b)
+    {
+        if (taken == k) {
+            return 0;
+        }
+        
+        if (i == m || j == n) {
+            return inf;
+        }
+
+        if ((m - i) < k - taken || (n - j) < k - taken) {
+            return inf;
+        }
+
+        if (dp[i][j][taken] != inf) {
+            return dp[i][j][taken];
+        }
+
+        int64 include = (int64)a[i] * b[j] + mm(i + 1, m, j + 1, n, taken + 1, k, a, b);
+        int64 exIdx = mm(i + 1, m, j, n, taken, k, a, b);
+        int64 exJdx = mm(i, m, j + 1, n, taken, k, a, b);
+
+        return dp[i][j][taken] = max({include, exIdx, exJdx});
+    }
+    
+    long long maxScore(vector<int>& nums1, vector<int>& nums2, int k) {
+        for (int i = 0; i < (int)nums1.size(); i++)
+        {
+            for (int j = 0; j < (int)nums2.size(); j++)
+            {
+                for (int taken = 0; taken <= k; taken++)
+                {
+                    dp[i][j][taken] = inf;
+                }
+            }
+        }
+        
+        return mm(0, (int)nums1.size(), 0, (int)nums2.size(), 0, k, nums1, nums2);
+    }
+};
