@@ -1,0 +1,28 @@
+class Solution {
+public:
+    using ll = long long;
+    using int64 = int64_t;
+    using int128 = __int128;
+    using vint = vector<int>;
+    using vi64 = vector<int64_t>;
+    using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>;
+    
+    vector<long long> mergeAdjacent(vector<int>& arr) {
+        vector<ll> stack;
+        stack.reserve((int)arr.size());
+
+        for (int64 x : arr)
+        {
+            while (!stack.empty() && stack.back() == x)
+            {
+                x += stack.back();
+                stack.pop_back();
+            }
+
+            stack.push_back(x);
+        }
+
+        return stack;
+    }
+};
