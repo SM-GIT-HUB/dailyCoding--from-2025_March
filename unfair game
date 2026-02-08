@@ -1,0 +1,84 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+#define long long long
+
+using int64 = int64_t;
+using int128 = __int128;
+using vint = vector<int>;
+using vi64 = vector<int64_t>;
+using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args)
+{
+    ((cout << args << ' '), ...);
+}
+
+int64 ncr[31][31];
+
+void myFunction()
+{
+	int64 n, k;
+	cin >> n >> k;
+	
+	int64 ans = 0;
+	int64 d = (int)log2(n);
+	
+	for (int bit = 0; bit < d; bit++)
+	{
+		for (int cnt = 1; cnt <= bit + 1; cnt++)
+		{
+			if (bit + cnt <= k) {
+				continue;
+			}
+			
+			ans += ncr[bit][cnt - 1];
+		}
+	}
+	
+	if (d + 1 > k) {
+		++ans;
+	}
+	
+	prnt(ans);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	for (int i = 0; i < 30; i++)
+	{
+		for (int j = 0; j < 30; j++)
+		{
+			if (i < j) {
+				ncr[i][j] = 0;
+			}
+			else if (j == 0) {
+				ncr[i][j] = 1;
+			}
+			else
+				ncr[i][j] = ncr[i - 1][j - 1] + ncr[i - 1][j];
+		}
+	}
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
