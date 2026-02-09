@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    using Node = TreeNode;
+
+    void collect(Node* root, vector<Node*>& arr)
+    {
+        if (!root) {
+            return;
+        }
+
+        collect(root->left, arr);
+        arr.push_back(root);
+        collect(root->right, arr);
+    }
+
+    Node* dfs(int start, int end, vector<Node*>& arr)
+    {
+        if (start > end) {
+            return nullptr;
+        }
+
+        if (start == end)
+        {
+            arr[start]->left = arr[start]->right = nullptr;
+            return arr[start];
+        }
+
+        int mid = ((start + end) >> 1);
+
+        Node* root = arr[mid];
+        root->left = dfs(start, mid - 1, arr);
+        root->right = dfs(mid + 1, end, arr);
+
+        return root;
+    }
+
+    TreeNode* balanceBST(TreeNode* root) {
+        vector<Node*> arr;
+        collect(root, arr);
+
+        return dfs(0, (int)arr.size() - 1, arr);
+    }
+};
