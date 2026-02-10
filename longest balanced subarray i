@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int longestBalanced(vector<int>& arr) {
+        int len = 0;
+        int n = (int)arr.size();
+        
+        array<int, 100001> mapp;
+
+        for (int i = 0; i < n; i++)
+        {
+            int even = 0, odd = 0;
+
+            for (int j = i; j < n; j++)
+            {
+                mapp[arr[j]] = 0;
+            }
+
+            for (int j = i; j < n; j++)
+            {
+                if (++mapp[arr[j]] == 1)
+                {
+                    if (arr[j] & 1) {
+                        ++odd;
+                    }
+                    else
+                        ++even;
+                }
+
+                if (even == odd) {
+                    len = max(len, j - i + 1);
+                }
+            }
+        }
+
+        return len;
+    }
+};
