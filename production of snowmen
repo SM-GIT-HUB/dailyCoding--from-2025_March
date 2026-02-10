@@ -1,0 +1,90 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+int isPos(int idx, int n, vint &arr, vint &b, int comp)
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (!comp)
+		{
+			if (arr[(idx + i) % n] >= b[i]) {
+				return 0;
+			}
+		}
+		else
+		{
+			if (b[i] >= arr[(idx + i) % n]) {
+				return 0;
+			}
+		}
+	}
+	
+	return 1;
+}
+
+void myFunction()
+{
+	int64 n;
+	cin >> n;
+	
+	vint a;
+	vint b;
+	vint c;
+	
+	singleInput(n, a);
+	singleInput(n, b);
+	singleInput(n, c);
+	
+	int64 c1 = 0;
+	int64 c2 = 0;
+	
+	for (int i = 0; i < n; i++)
+	{
+		if (isPos(i, n, a, b, 0)) {
+			++c1;
+		}
+		
+		if (isPos(i, n, c, b, 1)) {
+			++c2;
+		}
+	}
+	
+	prnt(c1 * c2 * n);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
