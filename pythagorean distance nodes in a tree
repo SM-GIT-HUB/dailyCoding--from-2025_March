@@ -1,0 +1,52 @@
+class Solution {
+public:
+    using int64 = int64_t; using lint = long long; using int128 = __int128;
+    using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>;
+    
+    void dfs(int u, int par, int counter, vint &d, vector<vint>& adj)
+    {
+        d[u] = counter;
+
+        for (int v : adj[u])
+        {
+            if (par != v) {
+                dfs(v, u, counter + 1, d, adj);
+            }
+        }
+    }
+    
+    int specialNodes(int n, vector<vector<int> >& edges, int x, int y, int z) {
+        vector<vint> adj(n);
+
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+
+        vint distx(n);
+        vint disty(n);
+        vint distz(n);
+
+        dfs(x, -1, 0, distx, adj);
+        dfs(y, -1, 0, disty, adj);
+        dfs(z, -1, 0, distz, adj);
+
+        int count = 0;
+
+        for (int u = 0; u < n; u++)
+        {
+            int64 a = min({distx[u], disty[u], distz[u]});
+            int64 c = max({distx[u], disty[u], distz[u]});
+            int64 b = (distx[u] + disty[u] + distz[u]) - a - c;
+
+            if (a * a + b * b == c * c) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+};
