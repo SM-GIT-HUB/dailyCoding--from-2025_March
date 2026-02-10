@@ -1,0 +1,109 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int64 a, b;
+	cin >> a >> b;
+	
+	int64 m = a, n = b;
+	
+	int64 take = 0;
+	int64 size = 1;
+	
+	int64 ans = 0;
+	int64 count = 0;
+	
+	while (m || n)
+	{
+		if (!take)
+		{
+			if (size > m) {
+				break;
+			}
+			else
+				m -= size;
+		}
+		else
+		{
+			if (size > n) {
+				break;
+			}
+			else
+				n -= size;
+		}
+		
+		take = take ^ 1;
+		
+		size = (size << 1);
+		++ans;
+	}
+	
+	size = 1;
+	take = 0;
+	m = a, n = b;
+	
+	while (m || n)
+	{
+		if (take)
+		{
+			if (size > m) {
+				break;
+			}
+			else
+				m -= size;
+		}
+		else
+		{
+			if (size > n) {
+				break;
+			}
+			else
+				n -= size;
+		}
+		
+		take = take ^ 1;
+		
+		size = (size << 1);
+		++count;
+	}
+	
+	prnt(max(count, ans));
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
