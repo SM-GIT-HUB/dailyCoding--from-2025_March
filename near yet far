@@ -1,0 +1,111 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int64 n, k;
+	cin >> n >> k;
+	
+	vi64 a;
+	singleInput(n, a);
+	
+	if (k == 2 && n < 3)
+	{
+		prnt(0);
+		return;
+	}
+	
+	if (k == 2)
+	{
+		int64 maxi = a[0];
+		int64 mini = a[0];
+		
+		int64 ans = 0;
+		
+		for (int i = 0; i < n; i += 2)
+		{
+			maxi = max(a[i], maxi);
+			mini = min(a[i], mini);
+			
+			ans = max(ans, maxi - mini);
+		}
+		
+		maxi = a[1];
+		mini = a[1];
+		
+		for (int i = 1; i < n; i += 2)
+		{
+			maxi = max(a[i], maxi);
+			mini = min(a[i], mini);
+			
+			ans = max(ans, maxi - mini);
+		}
+		
+		prnt(ans);
+		return;
+	}
+	
+	vi64 maxa(n);
+	vi64 mina(n);
+	
+	maxa[n - 1] = mina[n - 1] = a[n - 1];
+	
+	for (int i = n - 2; i >= 0; i--)
+	{
+		maxa[i] = max(a[i], maxa[i + 1]);
+		mina[i] = min(a[i], mina[i + 1]);
+	}
+	
+	int64 maxi = a[0];
+	int64 mini = a[0];
+	
+	int64 ans = 0;
+	
+	for (int i = 0; i + 2 < n; i++)
+	{
+		maxi = max(a[i], maxi);
+		mini = min(a[i], mini);
+		
+		ans = max(ans, maxi - mina[i + 2]);
+		ans = max(ans, maxa[i + 2] - mini);
+	}
+	
+	prnt(ans);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
