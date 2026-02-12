@@ -1,0 +1,85 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	string s, t;
+	cin >> s >> t;
+	
+	int64 mapp1[26] = {0};
+	int64 mapp2[26] = {0};
+	
+	for (char ch : s) ++mapp1[ch - 'a'];
+	for (char ch : t) ++mapp2[ch - 'a'];
+	
+	for (int i = 0; i < 26; i++)
+	{
+		if (mapp1[i] > mapp2[i])
+		{
+			prnt("Impossible");
+			return;
+		}
+	}
+	
+	string str;
+	
+	for (char ch : s)
+	{
+		for (char x = 'a'; x < ch; x++)
+		{
+			int64 rem = mapp2[x - 'a'] - mapp1[x - 'a'];
+			
+			for (int c = 0; c < rem; c++) str.push_back(x);
+			
+			mapp2[x - 'a'] -= rem;
+		}
+		
+		--mapp1[ch - 'a'];
+		--mapp2[ch - 'a'];
+		str.push_back(ch);
+	}
+	
+	for (int i = 0; i < 26; i++)
+	{
+		for (int c = 0; c < mapp2[i]; c++) str.push_back(i + 'a');
+	}
+	
+	prnt(str);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
