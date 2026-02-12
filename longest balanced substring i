@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int longestBalanced(string s) {
+        int len = 0;
+        int mapp[26];
+        int n = (int)s.size();
+
+        for (int i = 0; i < n; i++)
+        {
+            int freq = 0;
+            int count = 0;
+            int charCount = 0;
+            memset(mapp, 0, sizeof(mapp));
+
+            for (int j = i; j < n; j++)
+            {
+                int f = ++mapp[s[j] - 'a'];
+
+                if (f == 1) {
+                    ++charCount;
+                }
+
+                if (f > freq)
+                {
+                    count = 1;
+                    freq = f;
+                }
+                else if (f == freq) {
+                    ++count;
+                }
+
+                if (count == charCount) {
+                    len = max(len, j - i + 1);
+                }
+            }
+        }
+
+        return len;
+    }
+};
