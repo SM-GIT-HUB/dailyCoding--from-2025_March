@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+
+vector<int> partitionString(string str) {
+	// Write your code here
+	int mapp[26] = {0};
+	int n = (int)str.size();
+
+	for (int i = 0; i < n; i++)
+	{
+		mapp[str[i] - 'a'] = i;
+	}
+
+	vector<int> ans;
+	int last = -1, next = 0;
+
+	for (int i = 0; i < n; i++)
+	{
+		if (i > next)
+		{
+			ans.push_back(next - last);
+			next = mapp[str[i] - 'a'];
+			last = i - 1;
+			continue;
+		}
+
+		next = max(next, mapp[str[i] - 'a']);
+	}
+
+	ans.push_back(next - last);
+
+	return ans;
+}
