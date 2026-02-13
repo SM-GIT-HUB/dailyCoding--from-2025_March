@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+
+void sort0and1(int n, vector<int>& arr){
+    // Write your code here.
+	int i = 0, j = 0;
+
+	while (j < n)
+	{
+		if (arr[j] == 0) {
+			swap(arr[i++], arr[j++]);
+		}
+		else
+			j++;
+	}
+}
