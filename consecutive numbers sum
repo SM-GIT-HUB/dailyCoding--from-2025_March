@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int consecutiveNumbersSum(int n) {
+        // for x integers, x * (x + 1) / 2 = 1 + 2 + 3 + ... + xth
+        // (n - x * (x + 1) / 2) % x == 0, and n >= x * (x + 1) / 2
+        // we can shift x numbers to right to make up n
+        // n = 15, x = 2, x * (x + 1) / 2 = 3 and 15 % 3 == 0, that means, there exists a possible shift
+        // where it will be eventually 15. 1 + 2 --> 2 + 3 --> ... --> 7 + 8
+
+        int count = 0;
+
+        for (int x = 1; x * (x + 1) / 2 <= n; x++)
+        {
+            if ((n - x * (x + 1) / 2) % x == 0) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+};
