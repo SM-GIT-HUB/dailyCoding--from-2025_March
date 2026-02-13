@@ -1,0 +1,102 @@
+class Solution {
+public:
+    int getLen(string &s)
+    {
+        int maxi = 1;
+        int count = 0;
+
+        char last = '#';
+
+        for (char ch : s)
+        {
+            if (ch == last) {
+                maxi = max(++count, maxi);
+            }
+            else
+            {
+                last = ch;
+                count = 1;
+            }
+        }
+
+        return maxi;
+    }
+
+    int getTwoChars(char x, char y, string &s)
+    {
+        unordered_map<int, int> mapp;
+
+        int c1 = 0;
+        int c2 = 0;
+        int maxi = 0;
+
+        mapp[0] = -1;
+
+        for (int i = 0; i < (int)s.size(); i++)
+        {
+            if (s[i] != x && s[i] != y)
+            {
+                mapp.clear();
+                mapp[0] = i;
+                c1 = c2 = 0;
+            }
+            else
+            {
+                if (s[i] == x) {
+                    ++c1;
+                }
+                else
+                    ++c2;
+
+                int mask = c1 - c2;
+
+                if (mapp.count(mask)) {
+                    maxi = max(i - mapp[mask], maxi);
+                }
+                else
+                    mapp[mask] = i;
+            }
+        }
+
+        return maxi;
+    }
+
+    inline uint64_t getKey(int a, int b) {
+        return ((uint64_t)a << 32) | (uint32_t)b;
+    }
+
+    int longestBalanced(string s) {
+        int len = getLen(s);
+        
+        len = max(getTwoChars('a', 'b', s), len);
+        len = max(getTwoChars('b', 'c', s), len);
+        len = max(getTwoChars('c', 'a', s), len);
+        
+        int a = 0, b = 0, c = 0;
+        unordered_map<uint64_t, int> mapp;
+
+        mapp[getKey(0, 0)] = -1;
+
+        for (int i = 0; i < (int)s.size(); i++)
+        {
+            if (s[i] == 'a') {
+                ++a;
+            }
+            else if (s[i] == 'b') {
+                ++b;
+            }
+            else
+                ++c;
+            
+            uint64_t key = getKey(a - b, a - c);
+
+            if (mapp.count(key)) {
+                len = max(i - mapp[key], len);
+            }
+            else
+                mapp[key] = i;
+        }
+
+        return len;
+    }
+};
