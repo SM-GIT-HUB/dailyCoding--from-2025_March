@@ -1,0 +1,103 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+vector<string> two;
+vector<string> three;
+vector<string> four;
+
+void calc(int idx, int n, string &str, vector<string>& arr)
+{
+	if (idx == n)
+	{
+		arr.emplace_back(str);
+		return;
+	}
+	
+	for (int i = idx; i < n; i++)
+	{
+		swap(str[idx], str[i]);
+		calc(idx + 1, n, str, arr);
+		swap(str[idx], str[i]);
+	}
+}
+
+void myFunction()
+{
+	string n;
+	int64 j, k;
+	
+	cin >> n >> j >> k;
+	
+	vector<string> curr;
+	
+	if (n == "12")
+	{
+		if (two.empty()) calc(0, 2, n, two);
+		curr = two;
+	}
+	else if (n == "123")
+	{
+		if (three.empty()) calc(0, 3, n, three);
+		curr = three;
+	}
+	else if (n == "1234")
+	{
+		if (four.empty()) calc(0, 4, n, four);
+		curr = four;
+	}
+	
+	sort(curr.begin(), curr.end());
+	
+	string f = curr[j - 1];
+	string s = curr[k - 1];
+	
+	int64 c1 = 0;
+	int64 c2 = 0;
+	
+	int size = (int)f.size();
+	
+	for (int i = 0; i < size; i++)
+	{
+		if (f[i] == s[i]) ++c1;
+		else ++c2;
+	}
+	
+	prnt(to_string(c1) + "A" + to_string(c2) + "B");
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
