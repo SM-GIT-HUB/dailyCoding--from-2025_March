@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+
+int parent[1001 * 1001];
+int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+int getParent(int u)
+{
+	return (u == parent[u])? u : parent[u] = getParent(parent[u]);
+}
+
+void merge(int u, int v)
+{
+	int upar = getParent(u);
+	int vpar = getParent(v);
+
+	parent[vpar] = upar;
+}
+
+vector<int> numOfIslandsII(int m, int n, vector<vector<int> >& queries) {
+	// Write your code here.
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			parent[i * n + j] = -1;
+		}
+	}
+
+	int islands = 0;
+	vector<int> ans;
+
+	for (auto &q : queries)
+	{
+		++islands;
+		int x = q[0], y = q[1];
+		int u = x * n + y;
+
+		set<int> sett;
+		parent[u] = u;
+
+		for (auto &d : dirs)
+		{
+			int dx = x + d[0], dy = y + d[1];
+
+			if (dx >= 0 && dx < m && dy >= 0 && dy < n && parent[dx * n + dy] != -1) {
+				sett.insert(getParent(dx * n + dy));
+			}
+		}
+
+		islands -= (int)sett.size();
+		ans.push_back(islands);
+
+		for (int v : sett)
+		{
+			merge(u, v);
+		}
+	}
+
+	return ans;
+}
