@@ -1,0 +1,50 @@
+class Solution {
+  public:
+    using int64 = int64_t;
+    
+    int isPos(int64 mx, int k, vector<int>& arr)
+    {
+        int p = 0;
+        int64 total = 0;
+        
+        for (int x : arr)
+        {
+            if (total + x > mx)
+            {
+                p++;
+                
+                if (p >= k || x > mx) {
+                    return 0;
+                }
+                
+                total = x;
+            }
+            else
+                total += x;
+        }
+        
+        return (p <= k);
+    }
+  
+    int minTime(vector<int>& arr, int k) {
+        // code here
+        int64 start = 1, end = accumulate(arr.begin(), arr.end(), 0LL);
+        
+        int64 ans = end;
+        
+        while (start <= end)
+        {
+            int64 mid = (start + end) >> 1;
+            
+            if (isPos(mid, k, arr))
+            {
+                ans = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return ans;
+    }
+};
