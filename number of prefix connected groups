@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int prefixConnected(vector<string>& words, int k) {
+        int count = 0;
+        unordered_map<string, int> mapp;
+
+        for (string &str: words)
+        {
+            if (str.size() >= k) {
+                ++mapp[str.substr(0, k)];
+            }
+        }
+
+        for (auto it : mapp)
+        {
+            if (it.second > 1) ++count;
+        }
+
+        return count;
+    }
+};
