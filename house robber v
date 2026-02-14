@@ -1,0 +1,34 @@
+class Solution {
+public:
+    using int64 = int64_t; using lint = long long; using int128 = __int128;
+    using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+    int64 spaceOpt(int n, vint &arr, vint &col)
+    {
+        int64 a = arr[n - 1];
+        int64 b = 0;
+
+        for (int idx = n - 2; idx >= 0; idx--)
+        {
+            int next = 0;
+
+            if (idx + 1 < n && col[idx + 1] == col[idx]) {
+                ++next;
+            }
+
+            int64 include = arr[idx] + ((next == 0)? a : b);
+            int64 exclude = a;
+
+            b = a;
+            a = max(include, exclude);
+        }
+
+        return a;
+    }
+    
+    long long rob(vector<int>& arr, vector<int>& colors) {
+        int n = (int)arr.size();
+        return spaceOpt(n, arr, colors);
+    }
+};
