@@ -1,0 +1,24 @@
+class Solution {
+public:
+    double champagneTower(int poured, int query_row, int query_glass) {
+        double tower[102][102] = {0};
+
+        tower[0][0] = poured;
+
+        for (int i = 0; i <= query_row; i++)
+        {
+            for (int j = 0; j <= i; j++)
+            {
+                double rest = tower[i][j] - 1.0;
+
+                if (rest > 0)
+                {
+                    tower[i + 1][j] += rest / 2.0;
+                    tower[i + 1][j + 1] += rest / 2.0;
+                }
+            }
+        }
+
+        return min(1.0, tower[query_row][query_glass]);
+    }
+};
