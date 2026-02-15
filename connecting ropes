@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+
+int binSearch(int x, vector<int>& arr)
+{
+    int start = 0, end = (int)arr.size();
+    int idx = end + 1;
+
+    while (start <= end)
+    {
+        int mid = (start + end) >> 1;
+
+        if (arr[mid] >= x)
+        {
+            idx = mid;
+            end = mid - 1;
+        }
+        else
+            start = mid + 1;
+    }
+
+    return idx;
+}
+
+int getLis(vector<pair<int, int> >& arr)
+{
+    vector<int> ans;
+
+    for (auto [_, x] : arr)
+    {
+        if (ans.empty() || x > ans.back()) {
+            ans.push_back(x);
+        }
+        else
+        {
+            int idx = binSearch(x, ans);
+            if (idx < (int)ans.size()) {
+                ans[idx] = x;
+            }
+        }
+    }
+
+    return (int)ans.size();
+}
+
+int connectingRopes(vector<int>& a, vector<int>& b, int n) {
+    // Write your code hre.
+    vector<pair<int, int> > arr(n);
+    for (int i = 0; i < n; i++) arr[i] = make_pair(a[i], b[i]); 
+
+    sort(arr.begin(), arr.end(), [](auto &p, auto &q) {
+        if (p.first == q.first) return p.second > q.second;
+        return p.first < q.first;
+    });
+
+    return getLis(arr);
+}
