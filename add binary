@@ -1,0 +1,56 @@
+class Solution {
+public:
+    pair<int, int> get(int x, int y)
+    {
+        if (!x && !y) return {0, 0};
+        if (x && y) return {0, 1};
+
+        return {1, 0};
+    }
+
+    string addBinary(string a, string b) {
+        string str;
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+
+        int m = (int)a.size();
+        int n = (int)b.size();
+
+        int carry = 0;
+        int i = 0, j = 0;
+
+        while (i < m && j < n)
+        {
+            pair<int, int> c1 = get(a[i] - '0', b[i] - '0');
+            pair<int, int> c2 = get(c1.first, carry);
+
+            carry = (c1.second || c2.second);
+            str.push_back(c2.first + '0');
+
+            i++, j++;
+        }
+
+        while (i < m)
+        {
+            pair<int, int> c = get(a[i] - '0', carry);
+            carry = c.second;
+            str.push_back(c.first + '0');
+            i++;
+        }
+
+        while (j < n)
+        {
+            pair<int, int> c = get(b[j] - '0', carry);
+            carry = c.second;
+            str.push_back(c.first + '0');
+            j++;
+        }
+
+        if (carry) {
+            str.push_back('1');
+        }
+
+        reverse(str.begin(), str.end());
+        return str;
+    }
+};
