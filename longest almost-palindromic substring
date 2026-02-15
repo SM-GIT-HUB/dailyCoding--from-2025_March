@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int delLen(int start, int end, int n, string &str)
+    {
+        while (start >= 0 && end < n && str[start] == str[end])
+        {
+            start--;
+            end++;
+        }
+
+        return (end - start - 1);
+    }
+
+    int getLen(int start, int end, int n, string &str)
+    {
+        while (start >= 0 && end < n)
+        {
+            if (str[start] == str[end])
+            {
+                start--;
+                end++;
+            }
+            else
+                return max(delLen(start - 1, end, n, str), delLen(start, end + 1, n, str));
+        }
+
+        if (start >= 0 || end < n) return (end - start);
+
+        return (end - start - 1);
+    }
+
+    int almostPalindromic(string s) {
+        int len = 1;
+        int n = (int)s.size();
+
+        for (int i = 0; i < n - 1; i++)
+        {
+            len = max(len, getLen(i, i, n, s));
+            len = max(len, getLen(i, i + 1, n, s));
+        }
+
+        return len;
+    }
+};
