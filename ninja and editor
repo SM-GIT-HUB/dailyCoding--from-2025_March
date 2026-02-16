@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+
+string editSentence(string &str)
+{
+	// Write your code here.
+	string s;
+
+	for (char ch : str)
+	{
+		if (ch >= 'A' && ch <= 'Z')
+		{
+			if (!s.empty()) {
+				s.push_back(' ');
+			}
+			
+			s.push_back(ch - 'A' + 'a');
+		}
+		else
+			s.push_back(ch);
+	}
+
+	return s;
+}
