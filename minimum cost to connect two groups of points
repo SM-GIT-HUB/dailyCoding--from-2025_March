@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+
+int mini[12];
+int dp[12][1050];
+
+int mm(int idx, int m, int n, int mask, vector<vector<int> >& cost)
+{
+	if (dp[idx][mask] != -1) {
+		return dp[idx][mask];
+	}
+
+	if (idx == m)
+	{
+		int c = 0;
+
+		for (int j = 0; j < n; j++)
+		{
+			if (!(mask & (1 << j))) {
+				c += mini[j];
+			}
+		}
+
+		return dp[idx][mask] = c;
+	}
+
+	int c = 1e7;
+
+	for (int j = 0; j < n; j++)
+	{
+		c = min(c, cost[idx][j] + mm(idx + 1, m, n, mask | (1 << j), cost));
+	}
+
+	return dp[idx][mask] = c;
+}
+
+int connectTwoGroups(vector<vector<int> >& cost)
+{
+	//	Write your code here.
+	int m = (int)cost.size();
+	int n = (int)cost[0].size();
+
+	memset(dp, -1, sizeof(dp));
+	for (int i = 0; i < n; i++) mini[i] = 1e7;
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			mini[j] = min(mini[j], cost[i][j]);
+		}
+	}
+
+	return mm(0, m, n, 0, cost);
+}
