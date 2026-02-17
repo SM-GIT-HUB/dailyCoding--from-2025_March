@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    int overlapInt(vector<vector<int> >& arr) {
+        // code here
+        int n = (int)arr.size();
+        
+        vector<int> start;
+        vector<int> end;
+        
+        start.reserve(n);
+        end.reserve(n);
+        
+        for (auto &in : arr)
+        {
+            start.push_back(in[0]);
+            end.push_back(in[1]);
+        }
+        
+        sort(start.begin(), start.end());
+        sort(end.begin(), end.end());
+        
+        int i = 0, j = 0;
+        
+        int maxi = 0;
+        int entry = 0;
+        
+        while (i < n && j < n)
+        {
+            if (start[i] <= end[j])
+            {
+                maxi = max(++entry, maxi);
+                i++;
+            }
+            else
+            {
+                --entry;
+                j++;
+            }
+        }
+        
+        return maxi;
+    }
+};
