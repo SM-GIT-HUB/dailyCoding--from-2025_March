@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+
+int dp[101][11];
+
+void getHs(vector<int>& hs, vector<vector<int> >& adj)
+{
+    queue<int> q;
+    q.push(0);
+    hs[0] = 1;
+
+    while (!q.empty())
+    {
+        int u = q.front();
+        q.pop();
+
+        for (int v : adj[u])
+        {
+            if (!hs[v])
+            {
+                q.push(v);
+                hs[v] = hs[u] + 1;
+            }
+        }
+    }
+}
+
+int mm(int u, int rest, int k, vector<int>& hs, vector<int>& special, vector<vector<int> >& adj, unordered_map<int, vector<int> >& mapp)
+{
+    if (dp[u][rest] != -1) {
+        return dp[u][rest];
+    }
+
+    int score = 0;
+
+    if (rest < k)
+    {
+        for (int v : mapp[hs[u]])
+        {
+            if (u != v) {
+                score = max(score, mm(v, rest + 1, k, hs, special, adj, mapp));
+            }
+        }
+    }
+
+    for (int v : adj[u])
+    {
+        if (hs[v] > hs[u]) {
+            score = max(score, mm(v, rest, k, hs, special, adj, mapp));
+        }
+    }
+
+    return dp[u][rest] = score + special[u];
+}
+
+int treeJump(int n, int k, vector<vector<int> >& edges, vector<int> &special) {
+	// Write your code here
+    memset(dp, -1, sizeof(dp));
+    vector<vector<int> > adj(n);
+
+    for (auto &e : edges)
+    {
+        int u = e[0], v = e[1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<int> hs(n);
+    getHs(hs, adj);
+
+    unordered_map<int, vector<int> > mapp;
+
+    for (int u = 0; u < n; u++) mapp[hs[u]].push_back(u);
+
+    return mm(0, 0, k, hs, special, adj, mapp);
+}
