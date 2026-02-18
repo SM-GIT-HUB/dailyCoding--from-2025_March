@@ -1,0 +1,59 @@
+class Solution {
+  public:
+    int merge(int start, int mid, int end, vector<int>& arr)
+    {
+        int count = 0;
+        int i = start, j = mid + 1;
+        
+        vector<int> sorted;
+        
+        while (i <= mid && j <= end)
+        {
+            if (arr[i] <= arr[j]) {
+                sorted.push_back(arr[i++]);
+            }
+            else
+            {
+                count += mid - i + 1;
+                sorted.push_back(arr[j++]);
+            }
+        }
+        
+        while (i <= mid)
+        {
+            sorted.push_back(arr[i++]);
+        }
+        
+        while (j <= end)
+        {
+            sorted.push_back(arr[j++]);
+        }
+        
+        for (auto x : sorted)
+        {
+            arr[start++] = x;
+        }
+        
+        return count;
+    }
+  
+    int mergeSort(int start, int end, vector<int>& arr)  
+    {
+        if (start >= end) {
+            return 0;
+        }
+        
+        int mid = (start + end) >> 1;
+        
+        int count = mergeSort(start, mid, arr);
+        count += mergeSort(mid + 1, end, arr);
+        count += merge(start, mid, end, arr);
+        
+        return count;
+    }
+
+    int inversionCount(vector<int>& arr) {
+        // Code Here
+        return mergeSort(0, arr.size() - 1, arr);
+    }
+};
