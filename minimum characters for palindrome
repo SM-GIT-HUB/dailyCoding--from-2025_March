@@ -1,0 +1,28 @@
+
+int getLen(int start, int end, int n, string &str)
+{
+	while (start >= 0 && end < n && str[start] == str[end])
+	{
+		--start;
+		++end;
+	}
+
+	return (start == -1)? (end - start - 1) : 0;
+}
+
+int minCharsforPalindrome(string str) {
+	// Write your code here.
+	int len = 0;
+	int n = (int)str.size();
+
+	if (n == 1) {
+		return 0;
+	}
+
+	for (int i = 0; i <= (n >> 1); i++)
+	{
+		len = max(len, max(getLen(i, i, n, str), getLen(i, i + 1, n, str)));
+	}
+
+	return (n - len);
+}
