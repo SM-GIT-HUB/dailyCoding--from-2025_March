@@ -1,0 +1,74 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int64 n, x;
+	vi64 a;
+	
+	cin >> n >> x;
+	singleInput(n, a);
+	
+	sort(a.rbegin(), a.rend());
+	int64 sum = accumulate(a.begin(), a.end(), 0LL);
+	
+	int64 bonus = 0;
+	
+	for (int i = 0; i < sum / x; i++) bonus += a[i];
+	
+	cout << bonus << enc;
+	
+	int64 i = 0, j = n - 1;
+	sum = 0;
+	
+	while (i <= j)
+	{
+		if (sum / x < (sum + a[i]) / x)
+		{
+			prnt(a[i]);
+			sum += a[i++];
+		}
+		else
+		{
+			prnt(a[j]);
+			sum += a[j--];
+		}
+	}
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
