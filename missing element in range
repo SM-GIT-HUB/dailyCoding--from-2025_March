@@ -1,0 +1,24 @@
+class Solution {
+  public:
+    vector<int> missinRange(vector<int>& arr, int low, int high) {
+        // code here
+        vector<int> ans;
+        vector<int> sett(high - low + 1);
+        
+        for (int x : arr)
+        {
+            if (low <= x && x <= high) {
+                sett[x - low] = 1;
+            }
+        }
+        
+        for (int x = low; x <= high; x++)
+        {
+            if (!sett[x - low]) {
+                ans.push_back(x);
+            }
+        }
+        
+        return ans;
+    }
+};
