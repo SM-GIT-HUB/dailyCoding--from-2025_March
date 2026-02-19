@@ -1,0 +1,71 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+int mapp[400001];
+
+void myFunction()
+{
+	int64 n;
+	vi64 a;
+	
+	cin >> n;
+	singleInput(n << 1, a);
+	
+	for (int i = 1; i <= (n << 1); i++) mapp[i] = 0;
+	
+	for (auto x : a) ++mapp[x];
+	
+	int64 x = 0, y = 0, z = 0;
+	
+	for (auto elem : a)
+	{
+		if (!mapp[elem]) continue;
+		
+		int c = mapp[elem];
+		mapp[elem] = 0;
+		
+		if (c & 1) ++x;
+		else if (c % 4) ++y;
+		else ++z;
+	}
+	
+	if (x > 0 || !(z & 1)) prnt(x + (y << 1) + (z << 1));
+	else prnt(x + (y << 1) + (z << 1) - 2);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
