@@ -1,18 +1,12 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+
 int findInteger(int n, int k) 
 {
     // Write your code here
-    int odds = n / 2 + n % 2;
-    int evens = n / 2;
-    
-    if (k <= odds) {
-        return k * 2 - 1;
-    }
-    else
-    {
-        k -= odds;
-        return k * 2;
-    }
+    int odds = (n + 2 - 1) / 2;
 
-    return -1;
+    if (k <= odds) return (k << 1) - 1;
+
+    k -= odds;
+    return (k << 1);
 }
