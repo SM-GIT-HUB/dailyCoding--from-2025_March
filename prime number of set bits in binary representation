@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int isPrime(int num)
+    {
+        if (num < 3) return (num == 2);
+
+        for (int i = 2; i * i <= num; i++)
+        {
+            if (num % i == 0) return 0;
+        }
+
+        return 1;
+    }
+
+    int countPrimeSetBits(int left, int right) {
+        int count = 0;
+        int prime[32] = {0};
+
+        for (int x = left; x <= right; x++)
+        {
+            int pop = __builtin_popcount(x);
+
+            if (prime[pop]) {
+                count += (prime[pop] == 1);
+            }
+            else
+            {
+                int p = isPrime(pop);
+
+                if (p)
+                {
+                    ++count;
+                    prime[pop] = 1;
+                }
+                else
+                    prime[pop] = 2;
+            }
+        }
+
+        return count;
+    }
+};
