@@ -1,0 +1,84 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int64 n, h, k;
+	cin >> n >> h >> k;
+	
+	vi64 a;
+	singleInput(n, a);
+	
+	int64 total = accumulate(a.begin(), a.end(), 0LL);
+	
+	if (h % total == 0)
+	{
+		int64 c = h / total;
+		prnt(c * n + (c - 1) * k);
+		return;
+	}
+	
+	int64 c = h / total;
+	int64 val = c * n + c * k;
+	
+	h = h % total;
+	
+	int64 mini = a[0];
+	vi64 suffix(n);
+	
+	suffix[n - 1] = a[n - 1];
+	for (int i = n - 2; i >= 0; i--) suffix[i] = max(suffix[i + 1], a[i]);
+	
+	int64 sum = 0;
+	
+	for (int i = 0; i < n - 1; i++)
+	{
+		sum += a[i];
+		mini = min(a[i], mini);
+		
+		if (sum >= h || sum - mini + suffix[i + 1] >= h)
+		{
+			prnt(val + i + 1);
+			return;
+		}
+	}
+	
+	prnt(val + n);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
