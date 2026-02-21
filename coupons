@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+
+int pickCoupons(int n, vector<int>& arr)
+{
+    // Write your code here
+    int len = n + 1;
+    unordered_map<int, int> mapp;
+
+    int start = 0;
+
+    for (int end = 0; end < n; end++)
+    {
+        ++mapp[arr[end]];
+
+        while (mapp[arr[end]] > 1)
+        {
+            len = min(len, end - start + 1);
+            --mapp[arr[start++]];
+        }
+    }
+
+    return (len > n)? -1 : len;
+}
