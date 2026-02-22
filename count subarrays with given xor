@@ -1,0 +1,22 @@
+class Solution {
+  public:
+    long subarrayXor(vector<int>& arr, int k) {
+        // code here
+        int xorr = 0;
+        unordered_map<int, int> mapp;
+        
+        ++mapp[0];
+        int count = 0;
+        
+        for (int x : arr)
+        {
+            xorr = xorr ^ x;
+            
+            count += mapp[xorr ^ k];
+            
+            ++mapp[xorr];
+        }
+        
+        return count;
+    }
+};
