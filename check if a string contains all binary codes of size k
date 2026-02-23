@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool hasAllCodes(string s, int k) {
+        int total = (1 << k);
+        int n = (int)s.size();
+
+        if (n - k + 1 < total) return 0;
+
+        int num = 0;
+        vector<int> mapp(total + 1);
+
+        for (int i = 0; i < k; i++) num = (num << 1) + (s[i] - '0');
+        mapp[num] = 1;
+
+        for (int i = 1; i + k - 1 < n; i++)
+        {
+            num = (num & ((1 << (k - 1)) - 1));
+            num = (num << 1) | (s[i + k - 1] - '0');
+
+            mapp[num] = 1;
+        }
+
+        return (count(mapp.begin(), mapp.end(), 1) >= total);
+    }
+};
