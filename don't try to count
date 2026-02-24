@@ -1,0 +1,70 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int n, m;
+	cin >> n >> m;
+	
+	string x, s;
+	cin >> x >> s;
+	
+	if (x.find(s) != string::npos)
+	{
+		prnt(0);
+		return;
+	}
+	
+	int count = 0;
+	
+	while ((int)x.size() <= 50)
+	{
+		x += x;
+		++count;
+		
+		if (x.find(s) != string::npos)
+		{
+			prnt(count);
+			return;
+		}
+	}
+	
+	prnt(-1);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
