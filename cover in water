@@ -24,57 +24,16 @@ void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin
 void myFunction()
 {
 	int n;
-	cin >> n;
-	
 	string str;
-	cin >> str;
+	cin >> n >> str;
 	
-	int last = -1;
-	int count = 0;
-	
-	for (int i = 0; i < n; i++)
+	if (str.find("...") != string::npos)
 	{
-		if (str[i] == '.')
-		{
-			if (last == -1) {
-				last = i;
-			}
-		}
-		else
-		{
-			if (last != -1)
-			{
-				int len = (i - last);
-				
-				if (len >= 3)
-				{
-					prnt(2);
-					return;
-				}
-				
-				if (last == (i - 1)) ++count;
-				else count += 2;
-				
-				last = -1;
-			}
-		}
+		prnt(2);
+		return;
 	}
-	
-	if (str.back() == '.')
-	{
-		int len = (n - last);
-		
-		if (len >= 3)
-		{
-			prnt(2);
-			return;
-		}
-		
-		if (last == (n - 1)) ++count;
-		else count += 2;
-	}
-	
-	prnt(count);
+	else
+		prnt(count(str.begin(), str.end(), '.'));
 }
 
 int main()
