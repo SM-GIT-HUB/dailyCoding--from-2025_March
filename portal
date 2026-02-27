@@ -1,0 +1,130 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+void myFunction()
+{
+	int n, x, y;
+	cin >> n >> x >> y;
+	
+	vint p;
+	singleInput(n, p);
+	
+	if (x == 0 && y == n)
+	{
+		int mini = *min_element(all(p));
+		int idx = 0;
+		
+		for (int i = 0; i < n; i++)
+		{
+			if (p[i] == mini)
+			{
+				idx = i;
+				break;
+			}
+		}
+		
+		int m = n;
+		
+		while (m--)
+		{
+			prnt(p[idx]);
+			idx = (idx + 1) % n;
+		}
+		
+		return;
+	}
+	
+	int mini = INT_MAX;
+	int idx = -1;
+	
+	for (int i = x; i < y; i++)
+	{
+		if (p[i] < mini)
+		{
+			mini = p[i];
+			idx = i;
+		}
+	}
+	
+	vector<int> middle;
+	
+	for (int i = 0; i < y - x; i++)
+	{
+		middle.push_back(p[idx]);
+		idx = (idx + 1);
+		
+		if (idx >= y) idx = x;
+	}
+	
+	vector<int> before;
+	vector<int> after;
+	
+	for (int i = 0; i < x; i++)
+	{
+		if (p[i] < mini) before.push_back(p[i]);
+		else
+		{
+			for (int j = i; j < x; j++) after.push_back(p[j]);
+			break;
+		}
+	}
+	
+	vector<int> last;
+	for (int i = y; i < n; i++) last.push_back(p[i]);
+	
+	for (int x : before) prnt(x);
+	
+	idx = 0;
+	
+	if (after.empty())
+	{
+		while (idx < int(last.size()) && last[idx] < mini)
+		{
+			prnt(last[idx++]);
+		}
+	}
+	
+	for (int x : middle) prnt(x);
+	for (int x : after) prnt(x);
+	
+	for (int i = idx; i < int(last.size()); i++) prnt(last[i]);
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
