@@ -1,0 +1,116 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args>
+void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+
+template<typename T>
+void singleInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x; }
+
+template<typename T>
+void pairInput(int64 n, vector<T>& arr) { arr.resize(n); for (auto &x : arr) cin >> x.first >> x.second; }
+
+vector<int> primes;
+int flag = 1;
+
+void calc()
+{
+	flag = 0;
+	primes.push_back(2);
+	bitset<500005> mark;
+	
+	for (int i = 1; i <= 500000; i++)
+	{
+		if (mark[i]) continue;
+		int elem = (i << 1) + 1;
+		primes.push_back(elem);
+		
+		for (int j = i + elem; j <= 500000; j += elem) mark[j] = 1;
+	}
+}
+
+int smallest(int num)
+{	
+	for (int i : primes)
+	{
+		if (i * i > num) break;
+		
+		if (num % i == 0)
+		{
+			while (num % i == 0)
+			{
+				num = num / i;
+			}
+			
+			if (num > 1) return -1;
+			return i;
+		}
+	}
+	
+	return num;
+}
+
+void myFunction()
+{
+	int n;
+	cin >> n;
+	vint a;
+	singleInput(n, a);
+	
+	if (flag) calc();
+	
+	if (is_sorted(all(a)))
+	{
+		prnt("Bob");
+		return;
+	}
+	
+	vint spfs;
+	spfs.reserve(n);
+	
+	for (auto x : a)
+	{
+		int sm = smallest(x);
+		
+		if (sm == -1)
+		{
+			prnt("Alice");
+			return;
+		}
+		else
+			spfs.push_back(sm);
+	}
+	
+	if (is_sorted(all(spfs))) prnt("Bob");
+	else prnt("Alice");
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
