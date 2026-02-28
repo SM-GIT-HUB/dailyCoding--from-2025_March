@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int concatenatedBinary(int n) {
+        int64_t val = 0;
+        int mod = 1e9 + 7;
+
+        int shift = 0;
+
+        for (int x = 1; x <= n; x++)
+        {
+            if (!(x & (x - 1))) {
+                ++shift;
+            }
+
+            val = ((val << shift) + x) % mod;
+        }
+
+        return val;
+    }
+};
