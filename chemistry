@@ -1,0 +1,66 @@
+
+/**
+ * author: soumik001
+**/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define enc '\n'
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+
+using int64 = int64_t; using lint = long long; using int128 = __int128;
+using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+
+template<typename... Args> void prnt(const Args&... args) { ((cout << args << ' '), ...); }
+template<typename T> void sinput(vector<T>& arr) { for (auto &x : arr) cin >> x; }
+template<typename T> void pinput(vector<T>& arr) { for (auto &x : arr) cin >> x.first >> x.second; }
+
+int64 mod = 1000000007;
+int64 power(int64 m, int64 n) { int64 p = 1; while (n) { if (n & 1) p = (p * m) % mod; m = (m * m) % mod; n = n >> 1; } return p; }
+
+void myFunction()
+{
+	int n, k;
+	cin >> n >> k;
+	
+	string str;
+	cin >> str;
+	
+	if (k == n)
+	{
+		prnt("YES");
+		return;
+	}
+	
+	int mapp[26] = {0};
+	for (char ch : str) mapp[ch - 'a']++;
+	
+	int c = 0;
+	for (auto x : mapp)
+	{
+		if (x & 1) ++c;
+	}
+	
+	if (k < c - 1) prnt("NO");
+	else prnt("YES");
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	
+	int t;
+	cin >> t;
+	
+	while (t--)
+	{
+		myFunction();
+		cout << enc;
+	}
+	
+	return 0;
+}
