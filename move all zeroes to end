@@ -1,0 +1,17 @@
+class Solution {
+  public:
+    void pushZerosToEnd(vector<int>& arr) {
+        // code here
+        int i = 0, j = 0;
+        int n = int(arr.size());
+        
+        while (i < n && j < n)
+        {
+            if (arr[j] > 0) {
+                swap(arr[i++], arr[j++]);
+            }
+            else
+                ++j;
+        }
+    }
+};
