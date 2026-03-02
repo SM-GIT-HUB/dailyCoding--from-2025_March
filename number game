@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+
+string gameWinner(vector<int>& arr, int n) {
+	// Write your code here
+	int maxi = *max_element(arr.begin(), arr.end());
+	
+	int g = arr[0];
+	for (auto x : arr) g = gcd(x, g);
+
+	int moves = maxi / g - n;
+
+	if (moves & 1) return "Alice";
+	return "Bob";
+}
