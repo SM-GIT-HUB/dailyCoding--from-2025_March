@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+
+int dp[19][1 << 18];
+
+int mm(int idx, int n, int mask, int s, int sn, vector<int>& arr)
+{
+    if (idx == n) {
+        return 0;
+    }
+
+    if (dp[idx][mask] != -1) {
+        return dp[idx][mask];
+    }
+
+    int sum = -1;
+
+    for (int bit = 0; bit < sn; bit++)
+    {
+        if (!(mask & (1 << bit)))
+        {
+            int b = bit % s + 1;
+            sum = max(sum, (arr[idx] & b) + mm(idx + 1, n, mask | (1 << bit), s, sn, arr));
+        }
+    }
+
+    return dp[idx][mask] = sum;
+}
+
+int coinInSlots(vector<int>& arr, int s) {
+    // Write your code here.
+    int n = int(arr.size());
+    memset(dp, -1, sizeof(dp));
+
+    return mm(0, n, 0, s, (s << 1), arr);
+}
+
