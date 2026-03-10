@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+vector<int> isIlluminated(int n, int m, vector<vector<int> >& arr, int qn, vector<vector<int> >& qs) {
+    // Write your code here.
+    unordered_set<int> sett;
+    int mapp1[2 * 2 * 10002] = {0};
+    unordered_map<int, int> mapp2;
+    
+    int rows[2 * 10001] = {0};
+    int cols[2 * 10001] = {0};
+
+    for (auto &v : arr)
+    {
+        int x = v[0], y = v[1];
+
+        if (!sett.count(n * x + y))
+        {
+            mapp1[x + y]++;
+            mapp2[x - y]++;
+            rows[x]++;
+            cols[y]++;
+
+            sett.insert(n * x + y);
+        }
+    }
+
+    vector<int> ans;
+    int dirs[9][2] = {{0, 0}, {-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
+
+    for (auto &q : qs)
+    {
+        int x = q[0], y = q[1];
+
+        if (mapp1[x + y] > 0 || mapp2[x - y] > 0 || rows[x] > 0 || cols[y] > 0) {
+            ans.push_back(1);
+        }
+        else
+            ans.push_back(0);
+
+        for (auto d : dirs)
+        {
+            int dx = x + d[0], dy = y + d[1];
+
+            if (dx >= 0 && dx < n && dy >= 0 && dy < n)
+            {
+                if (sett.count(dx * n + dy))
+                {
+                    mapp1[dx + dy]--;
+                    mapp2[dx - dy]--;
+                    rows[dx]--;
+                    cols[dy]--;
+
+                    sett.erase(n * dx + dy);
+                }
+            }
+        }
+    }
+
+    return ans;
+}
