@@ -1,0 +1,35 @@
+class Solution {
+public:
+    inline int64_t nck(int n, int k)
+    {
+        int64_t size = 1;
+
+        for (int i = 0; i < k; i++) size = size * i;
+        for (int i = 1; i <= k; i++) size = size / i;
+
+        return size;
+    }
+
+    vector<vector<int> > combine(int n, int k) {
+        vector<vector<int> > ans;
+        ans.reserve(nck(n, min(k, n - k)));
+
+        for (int x = 0; x < (1 << n); x++)
+        {
+            if (__builtin_popcount(x) == k)
+            {
+                ans.push_back({});
+                ans.back().reserve(k);
+
+                for (int bit = n; bit > 0; bit--)
+                {
+                    if (x & (1 << (bit - 1))) {
+                        ans.back().push_back(bit);
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
