@@ -1,0 +1,25 @@
+class Solution {
+  public:
+    int countSubarrays(vector<int>& arr) {
+        // code here
+        stack<int> st;
+        int n = int(arr.size());
+        
+        int count = 0;
+        
+        for (int i = 0; i <= n; i++)
+        {
+            while (!st.empty() && (i == n || arr[st.top()] > arr[i]))
+            {
+                int idx = st.top();
+                st.pop();
+                
+                count += (i - idx);
+            }
+            
+            st.push(i);
+        }
+        
+        return count;
+    }
+};
