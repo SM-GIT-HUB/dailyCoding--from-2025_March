@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+
+int dp[1001][1001];
+
+int mm(int i, int j, int n, int m, vector<int>& a, vector<int>& b)
+{
+	if (i == n || j == m) {
+		return 0;
+	}
+
+	if (dp[i][j] != -1) {
+		return dp[i][j];
+	}
+
+	int c1 = 0;
+
+	if (a[i] == b[j]) {
+		c1 = 1 + mm(i + 1, j + 1, n, m, a, b);
+	}
+
+	int c2 = mm(i + 1, j, n, m, a, b);
+	int c3 = mm(i, j + 1, n, m, a, b);
+
+	return dp[i][j] = max(c1, max(c2, c3));
+}
+
+int minimumInsertions(int n, int m, vector<int>& a, vector<int>& b) {
+	// Write your code here
+	memset(dp, -1, sizeof(dp));
+	return max(0, n - mm(0, 0, n, m, a, b));
+}
