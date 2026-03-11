@@ -1,23 +1,26 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+
+int isPos(int j, vector<int>& arr)
+{
+    for (int x : arr)
+    {
+        if (x % j == 0) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 int avoidTraps(vector<int>& obstacles, int n) 
 {
     // Write your code here.
-    
-    for (int j = 1; j <= 1e6; j++)
+    for (int j = 1; j <= 1e6 + 1; j++)
     {
-        int flag = 1;
-
-        for (int x : obstacles)
-        {
-            if (x % j == 0)
-            {
-                flag = 0;
-                break;
-            }
+        if (isPos(j, obstacles)) {
+            return j;
         }
-
-        if (flag) return j;
     }
 
-    return -1;
+    return 1e6 + 1;
 }
