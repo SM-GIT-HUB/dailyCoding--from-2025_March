@@ -1,0 +1,30 @@
+class Solution {
+public:
+    #define all(x) x.begin(), x.end()
+    #define rall(x) x.rbegin(), x.rend()
+    
+    using int64 = int64_t; using lint = long long; using int128 = __int128;
+    using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+    
+    int minCost(vector<int>& a, vector<int>& b) {
+        int mp1[80001] = {0};
+        int mp2[80001] = {0};
+
+        for (auto x : a) ++mp1[x];
+        for (auto x : b) ++mp2[x];
+
+        int count = 0;
+
+        for (int i = 0; i < 80001; i++)
+        {
+            if ((mp1[i] + mp2[i]) & 1) return -1;
+
+            int c = (mp1[i] + mp2[i]) >> 1;
+            count += abs(mp1[i] - c);
+            count += abs(mp2[i] - c);
+        }
+
+        return count / 4;
+    }
+};
