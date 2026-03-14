@@ -1,0 +1,45 @@
+class Solution {
+public:
+    void track(char p, int idx, int n, int &c, int k, string &output, string &ans)
+    {
+        if (c >= k) {
+            return;
+        }
+        
+        if (idx == n)
+        {
+            if (++c == k) {
+                ans = output;
+            }
+
+            return;
+        }
+
+        output.push_back('#');
+
+        for (char ch = 'a'; ch < 'd'; ch++)
+        {
+            if (p != ch)
+            {
+                output.back() = ch;
+                track(ch, idx + 1, n, c, k, output, ans);
+            }
+        }
+
+        output.pop_back();
+    }
+
+    string getHappyString(int n, int k) {
+        if (k > 3 * (1 << (n - 1))) {
+            return "";
+        }
+
+        string output;
+        int c = 0;
+
+        string ans;
+        track('z', 0, n, c, k, output, ans);
+
+        return ans;
+    }
+};
