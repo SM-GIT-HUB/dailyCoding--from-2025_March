@@ -2,8 +2,5 @@
 
 bool oneSegment(string str) {
 	// Write your code here.
-	int seg = 0;
-	for (int i = 1; i < int(str.size()) && seg < 2; i++) seg += (str[i - 1] != str[i]);
-
-	return (seg < 2);
+	return (str.find("01") == string::npos);
 }
