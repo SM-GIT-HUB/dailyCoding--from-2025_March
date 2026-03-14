@@ -1,0 +1,24 @@
+class Solution {
+public:
+    #define all(x) x.begin(), x.end()
+    #define rall(x) x.rbegin(), x.rend()
+    
+    using int64 = int64_t; using lint = long long; using int128 = __int128;
+    using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+    
+    int firstUniqueEven(vector<int>& arr) {
+        int mapp[51] = {0};
+        for (auto x : arr)
+        {
+            if (x % 2 == 0)  mapp[x >> 1]++;
+        }
+
+        for (auto x : arr)
+        {
+            if (x % 2 == 0 && mapp[x >> 1] == 1) return x;
+        }
+
+        return -1;
+    }
+};
