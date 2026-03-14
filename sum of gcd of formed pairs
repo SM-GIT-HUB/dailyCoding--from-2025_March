@@ -1,0 +1,35 @@
+class Solution {
+public:
+    #define all(x) x.begin(), x.end()
+    #define rall(x) x.rbegin(), x.rend()
+    
+    using int64 = int64_t; using lint = long long; using int128 = __int128;
+    using vint = vector<int>; using vi64 = vector<int64>; using pr2 = pair<int, int>;
+    using pr64 = pair<int64, int64>; using vvint = vector<vint>; using vvi64 = vector<vi64>;
+    
+    long long gcdSum(vector<int>& arr) {
+        int n = int(arr.size());
+
+        vint gcds;
+        int maxi = 0;
+        gcds.reserve(n);
+
+        for (auto x : arr)
+        {
+            maxi = max(x, maxi);
+            gcds.push_back(__gcd(x, maxi));
+        }
+
+        sort(all(gcds));
+
+        int64 sum = 0;
+        int start = 0, end = n - 1;
+
+        while (start < end)
+        {
+            sum += __gcd(gcds[start++], gcds[end--]);
+        }
+
+        return sum;
+    }
+};
