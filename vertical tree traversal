@@ -1,0 +1,56 @@
+/*
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    vector<vector<int> > verticalOrder(Node *root) {
+        // code here
+        unordered_map<int, vector<int> > mapp;
+        int left = 0, right = 0;
+        
+        queue<pair<Node*, int> > q;
+        q.push({root, 0});
+        
+        while (!q.empty())
+        {
+            auto [curr, lvl] = q.front();
+            q.pop();
+            
+            mapp[lvl].push_back(curr->data);
+            
+            if (curr->left)
+            {
+                left = min(left, lvl - 1);
+                q.push({curr->left, lvl - 1});
+            }
+            
+            if (curr->right)
+            {
+                right = max(right, lvl + 1);
+                q.push({curr->right, lvl + 1});
+            }
+        }
+        
+        vector<vector<int> > ans;
+        ans.reserve(right - left + 1);
+        
+        for (int i = left; i <= right; i++)
+        {
+            ans.push_back(mapp[i]);
+        }
+        
+        return ans;
+    }
+};
