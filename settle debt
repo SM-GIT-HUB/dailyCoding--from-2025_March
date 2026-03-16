@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+int track(int idx, vector<int>& a)
+{
+	while (idx < int(a.size()) && a[idx] == 0)
+	{
+		idx++;
+	}
+
+	if (idx == int(a.size())) return 0;
+
+	int mini = INT_MAX;
+
+	for (int i = idx + 1; i < int(a.size()); i++)
+	{
+		if (a[idx] * a[i] < 0)
+		{
+			a[i] += a[idx];
+			mini = min(mini, 1 + track(idx + 1, a));
+			a[i] -= a[idx];
+		}
+	}
+
+	return (mini == INT_MAX)? 0 : mini;
+}
+
+int settleDebt(vector<vector<int> >& arr)
+{
+	// Write your code here.
+	int n = int(arr.size());
+	unordered_map<int, int> mapp;
+
+	for (auto &v : arr)
+	{
+		int x = v[0], y = v[1];
+		int d = v[2];
+
+		mapp[x] += d;
+		mapp[y] -= d;
+	}
+
+	vector<int> a;
+	for (auto &it : mapp)
+	{
+		if (it.second != 0) {
+			a.push_back(it.second);
+		}
+	}
+
+	return track(0, a);
+}
