@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int countSubmatrices(vector<vector<int> >& g, int k) {
+        int m = int(g.size());
+        int n = int(g[0].size());
+
+        int count = 0;
+        int arr[1001] = {0};
+
+        for (int i = 0; i < m; i++)
+        {
+            int sum = 0;
+
+            for (int j = 0; j < n; j++)
+            {
+                arr[j] += g[i][j];
+                sum += arr[j];
+
+                if (sum <= k) {
+                    ++count;
+                }
+            }
+        }
+
+        return count;
+    }
+};
