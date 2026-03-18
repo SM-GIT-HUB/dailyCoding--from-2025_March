@@ -1,19 +1,9 @@
-#include <bits/stdc++.h> 
-int maximumWeightRow(int m, int n, vector<vector<int>> &mat) {
+#include <bits/stdc++.h>
+
+int maximumWeightRow(int n, int m, vector<vector<int> >& mat) {
     // Write your code here.
-    int ans = 0;
+    int maxi = 0;
+    for (auto &r : mat) maxi = max(maxi, accumulate(r.begin(), r.end(), 0));
 
-    for (int i = 0; i < m; i++)
-    {
-        int currW = 0;
-
-        for (int x : mat[i])
-        {
-            currW += x;
-        }
-
-        ans = max(currW, ans);
-    }
-
-    return ans;
+    return maxi;
 }
