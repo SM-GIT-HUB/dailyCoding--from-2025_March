@@ -1,0 +1,74 @@
+class Solution {
+public:
+    using pr2 = pair<int, int>;
+
+    int longestArithmetic(vector<int>& arr) {
+        int n = int(arr.size());
+        vector<pr2> left(n);
+        vector<pr2> right(n);
+
+        left[0] = {1, 1e6};
+        right[n - 1] = {1, 1e6};
+
+        int maxi = 3;
+
+        for (int i = 1; i < n; i++)
+        {
+            if (arr[i] - arr[i - 1] == left[i - 1].second) {
+                left[i] = {left[i - 1].first + 1, left[i - 1].second};
+            }
+            else
+                left[i] = {2, arr[i] - arr[i - 1]};
+
+            if (i < n - 1) {
+                maxi = max(left[i].first + 1, maxi);
+            }
+            else
+                maxi = max(left[i].first, maxi);
+        }
+
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (arr[i + 1] - arr[i] == right[i + 1].second) {
+                right[i] = {right[i + 1].first + 1, right[i + 1].second};
+            }
+            else
+                right[i] = {2, arr[i + 1] - arr[i]};
+
+            if (i > 0) {
+                maxi = max(right[i].first + 1, maxi);
+            }
+            else
+                maxi = max(right[i].first, maxi);
+        }
+
+        for (int i = 1; i < n - 1; i++)
+        {
+            if ((arr[i + 1] + arr[i - 1]) % 2 == 0)
+            {
+                int b = (arr[i + 1] + arr[i - 1]) / 2;
+                int diff = b - arr[i - 1];
+
+                if (left[i - 1].second == right[i + 1].second)
+                {
+                    if (diff == arr[i + 1] - b && diff == right[i + 1].second && diff == left[i - 1].second) {
+                        maxi = max(maxi, 1 + left[i - 1].first + right[i + 1].first);
+                    }
+                }
+
+                if (diff == arr[i + 1] - b)
+                {
+                    if (right[i + 1].second == diff) {
+                        maxi = max(maxi, 2 + right[i + 1].first);
+                    }
+
+                    if (left[i - 1].second == diff) {
+                        maxi = max(maxi, 2 + left[i - 1].first);
+                    }
+                }
+            }
+        }
+
+        return maxi;
+    }
+};
