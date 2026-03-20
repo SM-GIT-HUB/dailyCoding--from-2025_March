@@ -1,0 +1,57 @@
+/* BST Node
+class Node {
+   public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x){
+        data = x;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void dfs(Node* root, Node* &prev, int key, Node* &pred, Node* &succ)
+    {
+        if (!root || (pred && succ)) {
+            return;
+        }
+        
+        dfs(root->left, prev, key, pred, succ);
+        
+        if (root->data > key)
+        {
+            if (!succ) {
+                succ = root;
+            }
+        }
+        else if (root->data < key)
+        {
+            pred = root;
+        }
+        
+        prev = root;
+        
+        dfs(root->right, prev, key, pred, succ);
+    }
+  
+    vector<Node*> findPreSuc(Node* root, int key) {
+        // code here
+        Node* pred = nullptr;
+        Node* succ = nullptr;
+        
+        Node* prev = nullptr;
+        
+        dfs(root, prev, key, pred, succ);
+        
+        if (pred && pred->data == -1) {
+            pred = nullptr;
+        }
+        
+        return {pred, succ};
+    }
+};
