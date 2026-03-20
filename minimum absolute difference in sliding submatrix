@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<vector<int> > minAbsDiff(vector<vector<int> >& grid, int k) {
+        vector<vector<int> > ans;
+
+        int m = int(grid.size());
+        int n = int(grid[0].size());
+
+        vector<int> arr;
+        arr.reserve(k * k);
+
+        for (int i = 0; i + k - 1 < m; i++)
+        {
+            ans.push_back({});
+
+            for (int j = 0; j + k - 1 < n; j++)
+            {
+                arr.clear();
+
+                for (int r = i; r < i + k; r++)
+                {
+                    for (int c = j; c < j + k; c++)
+                    {
+                        arr.push_back(grid[r][c]);
+                    }
+                }
+
+                sort(arr.begin(), arr.end());
+                int mini = 1e9;
+
+                for (int i = 1; i < int(arr.size()); i++)
+                {
+                    if (arr[i - 1] == arr[i]) continue;
+                    mini = min(abs(arr[i] - arr[i - 1]), mini);
+                }
+
+                if (mini == 1e9) ans.back().push_back(0);
+                else ans.back().push_back(mini);
+            }
+        }
+
+        return ans;
+    }
+};
