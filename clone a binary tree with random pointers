@@ -1,0 +1,65 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+        TreeNode<T> *random;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+            random= NULL;
+        }
+    };
+
+************************************************************/
+
+using Node = TreeNode<int>;
+using unmap = unordered_map<Node*, Node*>;
+
+Node* dfs(Node* root, unmap &mapp)
+{
+    if (!root) {
+        return nullptr;
+    }
+
+    Node* curr = new Node(root->data);
+    mapp[root] = curr;
+
+    curr->left = dfs(root->left, mapp);
+    curr->right = dfs(root->right, mapp);
+
+    return curr;
+}
+
+void dfs2(Node* root, unmap &mapp)
+{
+    if (!root) {
+        return;
+    }
+
+    if (root->random) {
+        mapp[root]->random = mapp[root->random];
+    }
+
+    dfs2(root->left, mapp);
+    dfs2(root->right, mapp);
+}
+
+TreeNode<int> *cloneBinaryTreeRandomPointer(TreeNode<int>* root)
+{
+    // Write your code here.
+    unmap mapp;
+    Node* curr = dfs(root, mapp);
+
+    dfs2(root, mapp);
+
+    return curr;
+}
