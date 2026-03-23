@@ -1,0 +1,45 @@
+class Solution {
+  public:
+    int timer[10001];
+    bitset<10001> running;
+    
+    void dfs(int u, int c, int &cycle, vector<vector<int> >& adj)
+    {
+        timer[u] = c;
+        running[u] = 1;
+        
+        for (int v : adj[u])
+        {
+            if (!timer[v]) {
+                dfs(v, c + 1, cycle, adj);
+            }
+            else if (running[v]) {
+                cycle = max(abs(timer[u] - timer[v] + 1), cycle);
+            }
+        }
+        
+        running[u] = 0;
+    }
+  
+    int longestCycle(int V, vector<vector<int> >& edges) {
+        // code here
+        int cycle = -1;
+        vector<vector<int> > adj(V);
+        
+        for (auto &e : edges)
+        {
+            adj[e[0]].push_back(e[1]);
+        }
+        
+        memset(timer, 0, sizeof(timer));
+        
+        for (int u = 0; u < V; u++)
+        {
+            if (!timer[u]) {
+                dfs(u, 1, cycle, adj);
+            }
+        }
+        
+        return cycle;
+    }
+};
