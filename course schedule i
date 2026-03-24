@@ -1,0 +1,46 @@
+class Solution {
+  public:
+    bool canFinish(int n, vector<vector<int> >& pre) {
+        // Code here
+        vector<int> inn(n);
+        vector<vector<int> > adj(n);
+        
+        for (auto &p : pre)
+        {
+            adj[p[1]].push_back(p[0]);
+            inn[p[0]]++;
+        }
+        
+        queue<int> q;
+        
+        for (int u = 0; u < n; u++)
+        {
+            if (!inn[u]) {
+                q.push(u);
+            }
+        }
+        
+        int count = 0;
+        
+        while (!q.empty())
+        {
+            int size = int(q.size());
+            count += size;
+            
+            while (size--)
+            {
+                int u = q.front();
+                q.pop();
+                
+                for (int v : adj[u])
+                {
+                    if (--inn[v] == 0) {
+                        q.push(v);
+                    }
+                }
+            }
+        }
+        
+        return (count == n);
+    }
+};
