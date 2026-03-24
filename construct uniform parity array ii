@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool uniformArray(vector<int>& arr) {
+        int even = 0;
+        int odd = 0;
+
+        int n = int(arr.size());
+
+        int miniOdd = INT_MAX;
+        int miniEven = INT_MAX;
+
+        for (int x : arr)
+        {
+            if (x & 1)
+            {
+                ++odd;
+                miniOdd = min(x, miniOdd);
+            }
+            else
+            {
+                ++even;
+                miniEven = min(x, miniEven);
+            }
+        }
+
+        if (even == n || odd == n) {
+            return 1;
+        }
+
+        return (miniEven > miniOdd);
+    }
+};
