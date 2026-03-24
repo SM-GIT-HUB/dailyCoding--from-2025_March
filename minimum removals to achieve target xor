@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int dp[40][1 << 14];
+
+    int mm(int idx, int n, int xorr, int target, vector<int>& arr)
+    {
+        if (idx == n) {
+            return (xorr == target)? 0 : -1e6;
+        }
+
+        if (dp[idx][xorr] != -1) {
+            return dp[idx][xorr];
+        }
+
+        int include = 1 + mm(idx + 1, n, xorr ^ arr[idx], target, arr);
+        int exclude = mm(idx + 1, n, xorr, target, arr);
+
+        return dp[idx][xorr] = max(include, exclude);
+    }
+
+    int minRemovals(vector<int>& arr, int target) {
+        memset(dp, -1, sizeof(dp));
+        int size = mm(0, int(arr.size()), 0, target, arr);
+
+        if (size < 0) {
+            return -1;
+        }
+
+        return int(arr.size()) - size;
+    }
+};
