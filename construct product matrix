@@ -1,6 +1,6 @@
 class Solution {
 public:
-    vector<vector<int>> constructProductMatrix(vector<vector<int> >& grid) {
+    vector<vector<int> > constructProductMatrix(vector<vector<int> >& grid) {
         int m = int(grid.size());
         int n = int(grid[0].size());
 
