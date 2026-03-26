@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+
+vector<vector<int> > findNearestZero(vector<vector<int> >& mat) 
+{
+	// Write your code here.
+	int m = int(mat.size());
+	int n = int(mat[0].size());
+
+	queue<pair<int, int> > q;
+	vector<vector<int> > ans(m, vector<int>(n, -1));
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (!mat[i][j])
+			{
+				ans[i][j] = 0;
+				q.push({i, j});
+			}
+		}
+	}
+
+	int dist = 0;
+	int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+	while (!q.empty())
+	{
+		++dist;
+		int size = int(q.size());
+
+		while (size--)
+		{
+			auto [x, y] = q.front();
+			q.pop();
+
+			for (auto d : dirs)
+			{
+				int dx = x + d[0];
+				int dy = y + d[1];
+
+				if (dx >= 0 && dx < m && dy >= 0 && dy < n)
+				{
+					if (ans[dx][dy] == -1)
+					{
+						q.push({dx, dy});
+						ans[dx][dy] = dist;
+					}
+				}
+			}
+		}
+	}
+
+	return ans;
+}
