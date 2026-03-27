@@ -1,0 +1,44 @@
+class Solution {
+  public:
+    int dp[70][70][70];
+    
+    int dirs[4][2] = {{1, -1}, {1, 0}, {1, 1}};
+    
+    int mm(int x, int m, int i, int j, int n, vector<vector<int> >& grid)
+    {
+        if (x == m || i < 0 || i == n || j < 0 || j == n) {
+            return 0;
+        }
+        
+        if (dp[x][i][j] != -1) {
+            return dp[x][i][j];
+        }
+        
+        int maxi = 0;
+        
+        for (int y1 = -1; y1 < 2; y1++)
+        {
+            for (int y2 = -1; y2 < 2; y2++)
+            {
+                int dy1 = i + y1;
+                int dy2 = j + y2;
+                
+                maxi = max(maxi, mm(x + 1, m, dy1, dy2, n, grid));
+            }
+        }
+        
+        int curr = (i == j)? grid[x][i] : grid[x][i] + grid[x][j];
+        
+        return dp[x][i][j] = curr + maxi;
+    }
+  
+    int maxChocolate(vector<vector<int> >& grid) {
+        // code here
+        int m = int(grid.size());
+        int n = int(grid[0].size());
+        
+        memset(dp, -1, sizeof(dp));
+        
+        return mm(0, m, 0, n - 1, n, grid);
+    }
+};
