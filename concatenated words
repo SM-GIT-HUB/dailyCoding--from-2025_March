@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+
+int track(int i, int n, string &w, unordered_set<string>& sett)
+{
+    if (i == n) {
+        return 1;
+    }
+
+    string temp;
+
+    for (int j = i; j < n; j++)
+    {
+        temp.push_back(w[j]);
+
+        if (int(temp.size()) != n && sett.count(temp) && track(j + 1, n, w, sett)) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+vector<string> getConcatenatedWords(int n, vector<string>& words) {
+    // Write your code here.
+    vector<string> ans;
+    unordered_set<string> sett(words.begin(), words.end());
+
+    for (int i = 0; i < n; i++)
+    {
+        if (track(0, int(words[i].size()), words[i], sett)) {
+            ans.push_back(words[i]);
+        }
+    }
+
+    return ans;
+}
