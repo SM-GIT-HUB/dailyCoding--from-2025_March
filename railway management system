@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+class railwaySystem{
+public:
+    pair<string, int> pas[1001];
+    unordered_map<string, pair<int, int> > mapp;
+
+    railwaySystem(){
+        // Declare the data structures here.    
+        mapp.clear();
+    }
+
+    void checkIn(int passID, string station, int time){
+        // Write your code here.
+        pas[passID] = {station, time};
+    }
+
+    void checkOut(int passID, string station, int time){
+        // Write your code here.
+        auto [prev, t] = pas[passID];
+
+        if (mapp.count(prev + station))
+        {
+            mapp[prev + station].first += 1;
+            mapp[prev + station].second += (time - t);
+        }
+        else
+            mapp[prev + station] = {1, time - t};
+    }
+
+    double getAverage(string source, string dest){
+        // Write your code here.
+        auto [c, t] = mapp[source + dest];
+        return double(t) / double(c);
+    }
+};
