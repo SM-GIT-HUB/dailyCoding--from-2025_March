@@ -27,18 +27,20 @@ void myFunction()
 	int x, y;
 	cin >> x >> y;
 	
-	int mini = min(x, y);
+	int extra = abs(x - y);
 	
-	int extra = max(x, y) - mini;
+	int count = 0;
 	
-	int count = 1;
-	
-	for (int i = 2; i <= extra; i++)
+	for (int i = 1; i * i <= extra; i++)
 	{
-		if (extra % i == 0) ++count;
+		if (extra % i == 0)
+		{
+			if (i * i == extra) ++count;
+			else count += 2;
+		}
 	}
 	
-	cout << count; cenc;
+	cout << max(1, count); cenc;
 	
 	for (int i = 0; i < x; i++) prnt(1);
 	for (int i = 0; i < y; i++) prnt(-1);
