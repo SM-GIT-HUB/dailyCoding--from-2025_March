@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+
+string splitConcatenatedString(int n, vector<string>& arr)
+{
+	// Write your code here.
+	for (string &s : arr)
+	{
+		string temp = s;
+		reverse(temp.begin(), temp.end());
+
+		if (temp > s)
+		{
+			s = temp;
+		}
+	}
+
+	vector<string> prefix(n);
+	vector<string> suffix(n);
+
+	for (int i = 0; i < n; i++)
+	{
+		prefix[i] = arr[i] + ((i > 0)? prefix[i - 1] : "");
+	}
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		suffix[i] = arr[i] + ((i < n - 1)? suffix[i + 1] : "");
+	}
+
+	string ans;
+
+	for (int i = 0; i < n; i++)
+	{
+		string &s = arr[i];
+
+		for (int j = 0; j < int(s.size()); j++)
+		{
+			string t1 = s.substr(j);
+			string t2 = (j > 0)? s.substr(0, j) : "";
+
+			// cout << t1 << " " << t2 << endl;
+
+			string temp = t1 + (i < n - 1? suffix[i + 1] : "") + (i > 0? prefix[i - 1] : "") + t2;
+
+			if (temp > ans) {
+				ans = temp;
+			}
+		}
+	}
+
+	return ans;
+}
