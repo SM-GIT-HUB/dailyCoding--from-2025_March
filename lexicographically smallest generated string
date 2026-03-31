@@ -1,0 +1,57 @@
+class Solution {
+public:
+    string generateString(string str1, string str2) {
+        int n = int(str1.size());
+        int m = int(str2.size());
+
+        int s = n + m - 1;
+        string str = string(s, '.');
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (str1[i] == 'T')
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (str[i + j] != '.' && str[i + j] != str2[j]) {
+                        return "";
+                    }
+
+                    str[i + j] = str2[j];
+                }
+            }
+        }
+
+        for (int i = 0; i < s; i++)
+        {
+            if (i < n && str1[i] == 'F' && str.compare(i, m, str2) == 0) {
+                return "";
+            }
+
+            if (str[i] == '.') {
+                str[i] = 'a';
+            }
+        }
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (str1[i] == 'F')
+            {
+                int j = i + m - 1;
+                
+                for (j = i + m - 1; j >= i; j--)
+                {
+                    if (str.compare(i, m, str2) != 0) {
+                        break;
+                    }
+
+                    if (str1[j] == 'F') {
+                        str[j] = 'b';
+                    }
+                }
+            }
+        }
+
+        return str;
+    }
+};
