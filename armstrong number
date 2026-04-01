@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+
+using int64 = int64_t;
+
+int64 power(int64 n, int64 m)
+{
+	int64 p = 1;
+
+	while (m)
+	{
+		if (m & 1) {
+			p = p * n;
+		}
+
+		n = (n * n);
+		m = (m >> 1);
+	}
+
+	return p;
+}
+
+bool isArmstrong(int num) {
+    // Write your code here
+	int64 curr = 0;
+
+	int p = ceil(log10(num));
+
+	for (char ch : to_string(num))
+	{
+		curr += power(ch - '0', p);
+	}
+
+	return (curr == num);
+}
