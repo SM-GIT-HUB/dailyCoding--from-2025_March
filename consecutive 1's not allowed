@@ -1,0 +1,19 @@
+class Solution {
+  public:
+    int countStrings(int n) {
+        // code here
+        int a = 1;
+        int b = 1;
+        
+        int c = 1;
+        
+        for (int idx = n - 1; idx >= 0; idx--)
+        {
+            c = a + b;
+            b = a;
+            a = c;
+        }
+        
+        return c;
+    }
+};
