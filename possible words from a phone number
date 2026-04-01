@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+
+string cs[10] = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+void track(int idx, int n, string &str, string &s, vector<string>& ans)
+{
+	if (idx == n)
+	{
+		ans.push_back(str);
+		return;
+	}
+
+	str.push_back(' ');
+
+	for (char ch : cs[s[idx] - '0'])
+	{
+		str.back() = ch;
+		track(idx + 1, n, str, s, ans);
+	}
+
+	str.pop_back();
+}
+
+vector<string> findPossibleWords(string s)
+{
+	// Write your code here.
+	string str;
+	vector<string> ans;
+
+	track(0, int(s.size()), str, s, ans);
+
+	return ans;
+}
