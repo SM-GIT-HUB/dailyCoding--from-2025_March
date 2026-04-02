@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int mini = -1e8;
+    int dp[500][500][3];
+
+    int mm(int x, int y, int m, int n, int neu, vector<vector<int> >& arr)
+    {
+        if (x == m - 1 && y == n - 1)
+        {
+            if (arr[x][y] >= 0) {
+                return arr[x][y];
+            }
+
+            return (neu < 2)? 0 : arr[x][y];
+        }
+
+        if (x >= m || y >= n) {
+            return mini;
+        }
+
+        if (dp[x][y][neu] != mini) {
+            return dp[x][y][neu];
+        }
+        
+        int isneg = (arr[x][y] < 0);
+
+        int right = arr[x][y] + mm(x, y + 1, m, n, neu, arr);
+
+        if (isneg && neu < 2) {
+            right = max(right, mm(x, y + 1, m, n, neu + 1, arr));
+        }
+
+        int down = arr[x][y] + mm(x + 1, y, m, n, neu, arr);
+
+        if (isneg && neu < 2) {
+            down = max(down, mm(x + 1, y, m, n, neu + 1, arr));
+        }
+
+        return dp[x][y][neu] = max(right, down);
+    }
+
+    int maximumAmount(vector<vector<int> >& coins) {
+        int m = int(coins.size());
+        int n = int(coins[0].size());
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++) dp[i][j][0] = dp[i][j][1] = dp[i][j][2] = mini;
+        }
+
+        return mm(0, 0, m, n, 0, coins);
+    }
+};
