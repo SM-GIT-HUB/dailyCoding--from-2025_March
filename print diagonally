@@ -1,0 +1,23 @@
+class Solution {
+  public:
+    vector<int> diagView(vector<vector<int> > mat) {
+        // code here
+        int m = int(mat.size());
+        int n = int(mat[0].size());
+        
+        vector<int> ans;
+        
+        for (int off = 0; off < m + n - 1; off++)
+        {
+            int j = min(off, n - 1);
+            int i = off - j;
+            
+            while (i < m && j >= 0)
+            {
+                ans.push_back(mat[i++][j--]);
+            }
+        }
+        
+        return ans;
+    }
+};
