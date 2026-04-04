@@ -1,0 +1,24 @@
+class Solution {
+public:
+    string decodeCiphertext(string en, int m) {
+        int n = int(en.size()) / m;
+
+        string str;
+        str.reserve(int(en.size()));
+
+        for (int j = 0; j < n; j++)
+        {
+            for (int r = 0, c = j; r < m && c < n; r++, c++)
+            {
+                str.push_back(en[r * n + c]);
+            }
+        }
+
+        while (!str.empty() && str.back() == ' ')
+        {
+            str.pop_back();
+        }
+
+        return str;
+    }
+};
