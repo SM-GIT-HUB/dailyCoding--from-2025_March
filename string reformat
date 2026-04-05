@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+
+string stringReformat(string &s, int k)
+{
+    // Write your code here
+    reverse(s.begin(), s.end());
+
+    string str;
+    string temp;
+
+    for (char ch : s)
+    {
+        if (ch != '-') {
+            temp.push_back(toupper(ch));
+        }
+        else
+            continue;
+
+        if (int(temp.size()) == k)
+        {
+            str += temp + "-";
+            temp = "";
+        }
+    }
+
+    if (int(temp.size())) {
+        str += temp;
+    }
+
+    if (!str.empty() && str.back() == '-') {
+        str.pop_back();
+    }
+
+    reverse(str.begin(), str.end());
+    return str;
+}
+
