@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    int dp[51][2001];
+    
+    int mm(int idx, int n, int sum, int target, vector<int>& arr)
+    {
+        if (idx == n) {
+            return (sum == target);
+        }
+        
+        if (dp[idx][sum + 1000] != -1) {
+            return dp[idx][sum + 1000];
+        }
+        
+        int plus = mm(idx + 1, n, sum + arr[idx], target, arr);
+        int minus = mm(idx + 1, n, sum - arr[idx], target, arr);
+        
+        return dp[idx][sum + 1000] = (plus + minus);
+    }
+  
+    int totalWays(vector<int>& arr, int target) {
+        //  code here
+        memset(dp, -1, sizeof(dp));
+        
+        return mm(0, int(arr.size()), 0, target, arr);
+    }
+};
