@@ -1,46 +1,50 @@
-#include <bits/stdc++.h>
+class Solution {
+public:
+    using int64 = int64_t;
+    int64 into = 60001;
+    int plus = 3 * 10000;
 
-int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    int idx = 1;
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
-int robotSim(vector<int> &commands, vector<vector<int>> &obstacles)
-{
-	// Write your code here.
-	int d = 0;
-	int x = 0, y = 0;
+    int robotSim(vector<int>& coms, vector<vector<int> >& obs) {
+        unordered_set<int64> sett;
 
-	unordered_set<string> sett;
+        for (auto &v : obs)
+        {
+            sett.insert(into * (v[0] + plus) + v[1] + plus);
+        }
 
-	for (auto &v : obstacles)
-	{
-		sett.insert(to_string(v[0]) + "|" + to_string(v[1]));
-	}
+        int64 x = 0;
+        int64 y = 0;
+        int64 dist = 0;
 
-	int ans = 0;
+        for (int c : coms)
+        {
+            if (c == -1) {
+                idx = (idx + 1) % 4;
+            }
+            else if (c == -2) {
+                idx = (idx - 1 + 4) % 4;
+            }
+            else
+            {
+                for (int k = 0; k < c; k++)
+                {
+                    int64 key = into * (x + dirs[idx][0] + plus) + y + dirs[idx][1] + plus;
 
-	for (int c : commands)
-	{
-		if (c == -2) {
-			d = (d - 1 + 4) % 4;
-		}
-		else if (c == -1) {
-			d = (d + 1) % 4;
-		}
-		else
-		{
-			string key = "";
+                    if (sett.count(key)) {
+                        break;
+                    }
 
-			while (c--)
-			{
-				key = to_string(x + dirs[d][0]) + "|" + to_string(y + dirs[d][1]);
+                    x += dirs[idx][0];
+                    y += dirs[idx][1];
 
-				if (sett.count(key)) break;
+                    dist = max(dist, x * x + y * y);
+                }
+            }
+        }
 
-				x += dirs[d][0];
-				y += dirs[d][1];
-				ans = max(x * x + y * y, ans);
-			}
-		}
-	}
-
-	return ans;
-}
+        return dist;
+    }
+};
