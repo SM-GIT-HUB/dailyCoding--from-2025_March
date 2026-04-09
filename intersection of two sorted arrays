@@ -1,0 +1,20 @@
+class Solution {
+  public:
+    vector<int> intersection(vector<int>& a, vector<int>& b) {
+        // code here
+        unordered_set<int> sett(a.begin(), a.end());
+        
+        b.erase(unique(b.begin(), b.end()), b.end());
+        
+        vector<int> ans;
+        
+        for (int x : b)
+        {
+            if (sett.count(x)) {
+                ans.push_back(x);
+            }
+        }
+        
+        return ans;
+    }
+};
