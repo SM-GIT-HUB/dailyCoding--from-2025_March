@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+string say(string &str)
+{
+	string curr;
+
+	int c = 0;
+	char p = str[0];
+	
+	for (char ch : str)
+	{
+		if (ch != p)
+		{
+			for (char x : to_string(c))
+			{
+				curr.push_back(x);
+			}
+
+			curr.push_back(p);
+			p = ch;
+			c = 1;
+		}
+		else
+			++c;
+	}
+
+	for (char x : to_string(c))
+	{
+		curr.push_back(x);
+	}
+
+	curr.push_back(p);
+
+	return curr;
+}
+
+string writeAsYouSpeak(int n) 
+{
+	// Write your code here.
+	string str = "1";
+	for (int i = 1; i < n; i++) str = say(str);
+
+	return str;
+}
