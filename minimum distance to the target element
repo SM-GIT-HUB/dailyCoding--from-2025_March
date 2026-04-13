@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int getMinDistance(vector<int>& arr, int target, int start) {
+        int dist = INT_MAX;
+
+        for (int i = 0; i < int(arr.size()); i++)
+        {
+            if (arr[i] == target)
+            {
+                if (abs(i - start) < dist) {
+                    dist = abs(i - start);
+                }
+                else
+                    break;
+            }
+        }
+
+        return dist;
+    }
+};
