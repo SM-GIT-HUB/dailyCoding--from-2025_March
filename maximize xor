@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+
+int maxXor(int L, int R)
+{
+    // Write your code here.
+	int xorr = L ^ R;
+	int pos = (xorr == 0)? 0 : log2(xorr) + 1;
+
+	return (1 << pos) - 1;
+}
