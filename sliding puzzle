@@ -1,0 +1,100 @@
+#include <bits/stdc++.h>
+
+using vvint = vector<vector<int> >;
+
+int match(vvint &b)
+{
+	int curr = 1;
+
+	for (auto &x : b)
+	{
+		for (auto y : x)
+		{
+			if (y != curr++) return 0;
+			curr = curr % 6;
+		}
+	}
+
+	return 1;
+}
+
+int getKey(vvint &b)
+{
+	int key = 0;
+
+	for (auto &x : b)
+	{
+		for (auto y : x)
+		{
+			key = key * 10 + y;
+		}
+	}
+
+	return key;
+}
+
+int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+int slidingPuzzle(vector<vector<int> >& board)
+{
+	// Write your code here.
+	int moves = 0;
+	queue<vvint> q;
+	unordered_set<int> sett;
+
+	q.push(board);
+	sett.insert(getKey(board));
+
+	while (!q.empty())
+	{
+		int size = int(q.size());
+
+		while (size--)
+		{
+			vvint b = q.front();
+			q.pop();
+
+			if (match(b)) {
+				return moves;
+			}
+
+			int x = -1, y = -1;
+
+			for (int i = 0; x == -1 && i < 2; i++)
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					if (b[i][j] == 0)
+					{
+						x = i, y = j;
+						break;
+					}
+				}
+			}
+
+			for (auto d : dirs)
+			{
+				int dx = x + d[0];
+				int dy = y + d[1];
+
+				if (dx >= 0 && dx < 2 && dy >= 0 && dy < 3)
+				{
+					swap(b[dx][dy], b[x][y]);
+					int key = getKey(b);
+
+					if (!sett.count(key))
+					{
+						q.push(b);
+						sett.insert(key);
+					}
+
+					swap(b[dx][dy], b[x][y]);
+				}
+			}
+		}
+
+		++moves;
+	}
+
+	return -1;
+}
