@@ -18,24 +18,31 @@
         };
 *****************************************************************/
 
-void inOrder(int &prev, int &ans, TreeNode<int>* root)
+using Node = TreeNode<int>;
+
+void dfs(Node* root, int &prev, int &diff)
 {
-	if (!root) return;
+	if (!root) {
+		return;
+	}
 
-	inOrder(prev, ans, root->left);
+	dfs(root->left, prev, diff);
 
-	if (prev != -1) ans = min(ans, abs(root->data - prev));
+	if (prev != -1) {
+		diff = min(root->data - prev, diff);
+	}
+
 	prev = root->data;
 
-	inOrder(prev, ans, root->right);
+	dfs(root->right, prev, diff);
 }
 
-int ninjaGf(TreeNode<int> *root)
+int ninjaGf(Node* root)
 {
-	//    Write your code here
-	int ans = 1e9;
+	// Write your code here
 	int prev = -1;
-	inOrder(prev, ans, root);
+	int diff = 1e9 + 1;
+	dfs(root, prev, diff);
 
-	return ans;
+	return diff;
 }
