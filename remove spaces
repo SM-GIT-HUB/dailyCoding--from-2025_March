@@ -1,0 +1,23 @@
+class Solution {
+  public:
+    string removeSpaces(string &s) {
+        // code here
+        int i = 0;
+        
+        for (int j = 0; j < int(s.size()); j++)
+        {
+            if (s[j] == ' ') {
+                continue;
+            }
+            else
+                s[i++] = s[j];
+        }
+        
+        while (int(s.size()) != i)
+        {
+            s.pop_back();
+        }
+        
+        return s;
+    }
+};
