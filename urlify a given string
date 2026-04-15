@@ -1,0 +1,21 @@
+class Solution {
+  public:
+    string URLify(string &s) {
+        // code here
+        string str;
+        
+        for (char ch : s)
+        {
+            if (ch == ' ')
+            {
+                str.push_back('%');
+                str.push_back('2');
+                str.push_back('0');
+            }
+            else
+                str.push_back(ch);
+        }
+        
+        return str;
+    }
+};
