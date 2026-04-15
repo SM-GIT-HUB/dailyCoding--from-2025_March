@@ -1,84 +1,56 @@
 #include <bits/stdc++.h>
 
 int flag = 1;
-vector<int> primes;
-int prefix[10001][11];
-
-void getPrimes()
-{
-	bitset<5100> mark;
-	primes.push_back(2);
-
-	for (int i = 1; i < 5001; i++)
-	{
-		if (mark[i]) continue;
-
-		int elem = (i << 1) + 1;
-		primes.push_back(elem);
-
-		for (int j = elem + i; j < 5001; j += elem)
-		{
-			mark[j] = 1;
-		}
-	}
-}
-
-int countFactors(int num)
-{
-	int count = 0;
-
-	for (int x : primes)
-	{
-		if (1LL * x * x > num) break;
-		if (num % x) continue;
-		count++;
-
-		while (num % x == 0)
-		{
-			num = num / x;
-		}
-	}
-
-	if (num > 1) count++;
-	return count;
-}
+vector<int> arr[11];
 
 void calc()
 {
-	getPrimes();
+	flag = 0;
 
-	for (int num = 1; num <= 10000; num++)
+	for (int e = 1; e <= 10000; e++)
 	{
-		int count = countFactors(num);
+		int c = 0;
+		int elem = e;
 
-		for (int j = 1; j < 11; j++)
+		for (int i = 2; i * i <= elem; i++)
 		{
-			prefix[num][j] += prefix[num - 1][j];
+			if (elem % i == 0)
+			{
+				++c;
+
+				while (elem % i == 0)
+				{
+					elem = elem / i;
+				}
+			}
 		}
 
-		prefix[num][count]++;
+		if (elem > 1) {
+			++c;
+		}
+
+		if (c < 11) {
+			arr[c].push_back(e);
+		}
 	}
 }
 
-vector<int> getNfactor(vector<vector<int>> &queries)
+vector<int> getNfactor(vector<vector<int> >& queries)
 {
 	//	Write your code here.
-	if (flag)
-	{
-		memset(prefix, 0, sizeof(prefix));
-		flag = 0;
+	if (flag) {
 		calc();
 	}
 
 	vector<int> ans;
 
-	for (auto &q : queries)
+	for (auto &v : queries)
 	{
-		int a = q[0];
-		int b = q[1];
-		int n = q[2];
+		int a = v[0], b = v[1];
+		int n = v[2];
 
-		ans.push_back(prefix[b][n] - prefix[a - 1][n]);
+		int c = upper_bound(arr[n].begin(), arr[n].end(), b) - lower_bound(arr[n].begin(), arr[n].end(), a);
+		ans.push_back(c);
 	}
 
 	return ans;
