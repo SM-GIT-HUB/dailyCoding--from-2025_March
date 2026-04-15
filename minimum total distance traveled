@@ -1,0 +1,48 @@
+class Solution {
+public:
+    using int64 = int64_t;
+
+    int64 tabulation(int n, int m, vector<int>& r, vector<int>& s)
+    {
+        int64 next[10002] = {0};
+        int64 curr[10002];
+
+        curr[m] = 1e14;
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            curr[m] = 1e14;
+
+            for (int j = m - 1; j >= 0; j--)
+            {
+                int64 skip = curr[j + 1];
+                int64 use = abs(r[i] - s[j]) + next[j + 1];
+
+                curr[j] = min(skip, use);
+            }
+
+            swap(curr, next);
+        }
+
+        return next[0];
+    }
+
+    long long minimumTotalDistance(vector<int>& robot, vector<vector<int> >& factory) {
+        sort(robot.begin(), robot.end());
+        
+        vector<int> slot;
+        slot.reserve(10000);
+
+        for (auto &v : factory)
+        {
+            for (int i = 0; i < v[1]; i++) slot.push_back(v[0]);
+        }
+
+        sort(slot.begin(), slot.end());
+
+        int n = int(robot.size());
+        int m = int(slot.size());
+        
+        return tabulation(n, m, robot, slot);
+    }
+};
