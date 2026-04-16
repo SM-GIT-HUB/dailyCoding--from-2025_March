@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+
+using int64 = int64_t;
+
+string smallestNumber(int n, int k)
+{
+	// Write your code here
+    if ((n > 1 && k == 0) || (n * 9 < k)) {
+        return "-1";
+    }
+
+    string ans;
+    k--;
+
+    for (int i = 1; i < n; i++)
+    {
+        if (k > 9)
+        {
+            k -= 9;
+            ans.push_back('9');
+        }
+        else
+        {
+            ans.push_back('0' + k);
+            k = 0;
+        }
+    }
+
+    ans.push_back(k + 1 + '0');
+    reverse(ans.begin(), ans.end());
+
+    return ans;
+}
