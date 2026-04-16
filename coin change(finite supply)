@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+
+using int64 = int64_t;
+int mod = 1e9 + 7;
+
+int64 dp[101][101];
+
+int64 mm(int idx, int n, int sum, int v, vector<int>& cs, vector<int>& f)
+{
+    if (sum == v) {
+        return 1;
+    }
+
+    if (idx == n || sum > v) {
+        return 0;
+    }
+
+    if (dp[idx][sum] != -1) {
+        return dp[idx][sum];
+    }
+
+    int64 count = 0;
+
+    for (int c = 0; sum + c * cs[idx] <= v && c <= f[idx]; c++)
+    {
+        count += mm(idx + 1, n, sum + c * cs[idx], v, cs, f);
+    }
+
+    return dp[idx][sum] = count % mod;
+}
+
+int coinChange(int n, vector<int>& cs, vector<int>& f, int v) {
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+    return mm(0, n, 0, v, cs, f);
+}
