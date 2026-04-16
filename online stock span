@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+
+vector<int> findSpans(vector<int>& price) {
+    // Write your code here.
+    int n = int(price.size());
+    
+    vector<int> st;
+    vector<int> ans(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (!st.empty() && price[st.back()] <= price[i]) {
+            st.pop_back();
+        }
+
+        if (!st.empty()) {
+            cout << st.back() << endl;
+        }
+
+        ans[i] = st.empty()? i + 1 : i - st.back();
+        st.push_back(i);
+    }
+
+    return ans;
+}
