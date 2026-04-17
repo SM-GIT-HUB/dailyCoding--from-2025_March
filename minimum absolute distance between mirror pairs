@@ -1,0 +1,37 @@
+class Solution {
+public:
+    inline int reverse(int x)
+    {
+        int y = 0;
+
+        while (x)
+        {
+            y = y * 10 + x % 10;
+            x = x / 10;
+        }
+
+        return y;
+    }
+
+    int minMirrorPairDistance(vector<int>& arr) {
+        int n = int(arr.size());
+        int dist = INT_MAX;
+
+        unordered_map<int, int> mapp;
+        mapp.reserve(n);
+        mapp[arr.back()] = n - 1;
+
+        for (int i = n - 2; i >= 0; i--)
+        {
+            int x = reverse(arr[i]);
+
+            if (mapp.count(x)) {
+                dist = min(mapp[x] - i, dist);
+            }
+
+            mapp[arr[i]] = i;
+        }
+
+        return (dist == INT_MAX)? -1 : dist;
+    }
+};
