@@ -1,0 +1,14 @@
+class Solution {
+  public:
+    bool canFormPalindrome(string &s) {
+        // code here
+        int mask = 0;
+        
+        for (char ch : s)
+        {
+            mask = mask ^ (1 << (ch - 'a'));
+        }
+        
+        return (mask & (mask - 1)) == 0;
+    }
+};
