@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+
+bitset<100001> mark;
+
+int differentGCDSubsequence(vector<int>& arr) {
+    // Write your code here.
+    mark.reset();
+    int count = 0;
+
+    int maxi = 0;
+    
+    for (int x : arr)
+    {
+        maxi = max(x, maxi);
+        mark[x] = 1;
+    }
+
+    for (int i = 1; i <= maxi; i++)
+    {
+        int g = 0;
+
+        for (int j = i; j <= maxi; j += i)
+        {
+            if (mark[j]) {
+                g = __gcd(j, g);
+            }
+
+            if (g == i)
+            {
+                ++count;
+                break;
+            }
+        }
+    }
+
+    return count;
+}
