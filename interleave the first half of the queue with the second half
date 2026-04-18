@@ -1,25 +1,24 @@
 #include <bits/stdc++.h>
+
 void interLeaveQueue(queue<int>& q) {
     // Write your code here.
-	vector<int> stack;
-	int n = q.size() / 2;
+    queue<int> p;
+    int n = int(q.size()) >> 1;
 
-	while (n--)
-	{
-		stack.push_back(q.front());
-		q.pop();
-	}
+    while (n--)
+    {
+        p.push(q.front());
+        q.pop();
+    }
 
-	reverse(stack.begin(), stack.end());
+    n = int(q.size());
 
-	n = q.size();
+    while (n--)
+    {
+        q.push(p.front());
+        q.push(q.front());
 
-	while (n--)
-	{
-		q.push(stack.back());
-		q.push(q.front());
-
-		stack.pop_back();
-		q.pop();
-	}
+        q.pop();
+        p.pop();
+    }
 }
