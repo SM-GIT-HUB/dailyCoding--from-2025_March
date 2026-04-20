@@ -1,51 +1,48 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 
-int minDirectionChanges(vector<vector<char>> grid, int m, int n)
+int dist[101][101];
+
+string str = "URDL";
+int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+int minDirectionChanges(vector<vector<char> >& g, int m, int n)
 {
     // Write your code here
-    vector<vector<int> > cost(m, vector<int>(n, INT_MAX));
     deque<pair<int, int> > dq;
+    for (int i = 0; i < m; i++) fill(dist[i], dist[i] + n, 1e8);
 
-    int dx[4] = {-1, 1, 0, 0}; //u-d-l-r
-    int dy[4] = {0, 0, -1, 1};
-
-    char dir[4] = {'D', 'U', 'R', 'L'};
-
-    dq.push_back({m - 1, n - 1});
-    cost[m - 1][n - 1] = 0;
-
-    auto check = [&](int x, int y) {
-        return (x >= 0 && x < m && y >= 0 && y < n);
-    };
+    dist[0][0] = 0;
+    dq.push_front({0, 0});
 
     while (!dq.empty())
     {
-        int x = dq.front().first;
-        int y = dq.front().second;
+        auto [x, y] = dq.front();
         dq.pop_front();
 
         for (int i = 0; i < 4; i++)
         {
-            int newX = x + dx[i], newY = y + dy[i];
+            int c = (g[x][y] != str[i]);
 
-            if (check(newX, newY))
-            {
-                int change = (grid[newX][newY] != dir[i]);
-                int newCost = cost[x][y] + change;
+            int dx = x + dirs[i][0];
+            int dy = y + dirs[i][1];
 
-                if (newCost < cost[newX][newY])
-                {
-                    cost[newX][newY] = newCost;
-
-                    if (change == 0) {
-                        dq.push_front({newX, newY});
-                    }
-                    else
-                        dq.push_back({newX, newY});
-                }
+            if (dx < 0 || dx == m || dy < 0 || dy == n) {
+                continue;
             }
+
+            if (dist[x][y] + c >= dist[dx][dy]) {
+                continue;
+            }
+
+            dist[dx][dy] = dist[x][y] + c;
+
+            if (c == 0) {
+                dq.push_front({dx, dy});
+            }
+            else
+                dq.push_back({dx, dy});
         }
     }
 
-    return cost[0][0];
+    return dist[m - 1][n - 1];
 }
