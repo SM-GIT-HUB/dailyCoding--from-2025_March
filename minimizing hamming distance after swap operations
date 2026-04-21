@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int parent[100001];
+
+    int getPar(int u)
+    {
+        return (u == parent[u])? u : parent[u] = getPar(parent[u]);
+    }
+
+    void unionBy(int u, int v)
+    {
+        if (parent[u] == -1) parent[u] = u;
+        if (parent[v] == -1) parent[v] = v;
+
+        u = getPar(u);
+        v = getPar(v);
+
+        if (u == v) {
+            return;
+        }
+
+        if (u < v) {
+            parent[v] = u;
+        }
+        else
+            parent[u] = v;
+    }
+
+    int minimumHammingDistance(vector<int>& source, vector<int>& target, vector<vector<int> >& aw) {
+        int n = int(source.size());
+        for (int i = 0; i < n; i++) parent[i] = -1;
+        
+        for (auto &v : aw)
+        {
+            unionBy(v[0], v[1]);
+        }
+
+        int c = 0;
+        vector<vector<int> > one(n);
+        vector<unordered_map<int, int> > two(n);
+
+        for (int i = 0; i < n; i++)
+        {
+            if (parent[i] == -1) {
+                c += (source[i] != target[i]);
+            }
+            else
+            {
+                one[getPar(i)].push_back(source[i]);
+                two[getPar(i)][target[i]]++;
+            }
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            if (parent[i] == i)
+            {
+                for (int x : one[i])
+                {
+                    if (two[i][x] > 0) {
+                        two[i][x]--;
+                    }
+                    else
+                        ++c;
+                }
+            }
+        }
+
+        return c;
+    }
+};
