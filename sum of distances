@@ -1,0 +1,48 @@
+class Solution {
+public:
+    using int64 = int64_t;
+
+    vector<long long> distance(vector<int>& nums) {
+        int n = int(nums.size());
+
+        unordered_map<int, pair<int, vector<int64> > > mapp;
+
+        for (int i = 0; i < n; i++)
+        {
+            auto &p = mapp[nums[i]];
+            p.second.push_back(i);
+        }
+
+        for (auto &[_, it] : mapp)
+        {
+            it.first = 0;
+
+            for (int i = 1; i < int(it.second.size()); i++)
+            {
+                it.second[i] += it.second[i - 1];
+            }
+        }
+
+        vector<long long> ans(n);
+
+        for (int i = 0; i < n; i++)
+        {
+            int64 sum = 0;
+            auto &[idx, v] = mapp[nums[i]];
+
+            if (idx != 0) {
+                sum += int64(idx) * i - v[idx - 1];
+            }
+
+            if (idx != int(v.size()) - 1) {
+                sum += v.back() - v[idx] - (int64(v.size()) - idx - 1) * i;
+            }
+
+            idx++;
+
+            ans[i] = sum;
+        }
+
+        return ans;
+    }
+};
