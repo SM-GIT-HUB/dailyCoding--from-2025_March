@@ -5,42 +5,37 @@ public:
     vector<long long> distance(vector<int>& nums) {
         int n = int(nums.size());
 
-        unordered_map<int, pair<int, vector<int64> > > mapp;
-
-        for (int i = 0; i < n; i++)
-        {
-            auto &p = mapp[nums[i]];
-            p.second.push_back(i);
-        }
-
-        for (auto &[_, it] : mapp)
-        {
-            it.first = 0;
-
-            for (int i = 1; i < int(it.second.size()); i++)
-            {
-                it.second[i] += it.second[i - 1];
-            }
-        }
-
         vector<long long> ans(n);
+        unordered_map<int, vector<int> > mapp;
 
         for (int i = 0; i < n; i++)
         {
-            int64 sum = 0;
-            auto &[idx, v] = mapp[nums[i]];
+            mapp[nums[i]].push_back(i);
+        }
 
-            if (idx != 0) {
-                sum += int64(idx) * i - v[idx - 1];
+        for (auto &[_, v]: mapp)
+        {
+            int64 c = int(v.size());
+
+            if (c == 1) {
+                continue;
             }
 
-            if (idx != int(v.size()) - 1) {
-                sum += v.back() - v[idx] - (int64(v.size()) - idx - 1) * i;
+            int64 next = accumulate(v.begin(), v.end(), 0LL);
+
+            int64 prev = v[0];
+            next -= v[0];
+
+            ans[v[0]] = next - (c - 1) * v[0];
+
+            for (int i = 1; i < c - 1; i++)
+            {
+                next -= v[i];
+                ans[v[i]] = int64(i) * v[i] - prev + next - (c - i - 1) * v[i];
+                prev += v[i];
             }
 
-            idx++;
-
-            ans[i] = sum;
+            ans[v.back()] += (c - 1) * v.back() - prev;
         }
 
         return ans;
