@@ -1,0 +1,19 @@
+class Solution {
+  public:
+    int visibleBuildings(vector<int>& arr) {
+        // code here
+        int count = 0;
+        int maxi = arr[0];
+        
+        for (int x : arr)
+        {
+            if (maxi <= x) {
+                ++count;
+            }
+            
+            maxi = max(x, maxi);
+        }
+        
+        return count;
+    }
+};
