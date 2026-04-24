@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int furthestDistanceFromOrigin(string moves) {
+        int c1 = 0;
+        int c2 = 0;
+
+        for (char ch : moves)
+        {
+            if (ch == 'L')
+            {
+                c1--;
+                c2--;
+            }
+            else if (ch == 'R')
+            {
+                c1++;
+                c2++;
+            }
+            else
+            {
+                c1--;
+                c2++;
+            }
+        }
+        
+        return max(abs(c1), abs(c2));
+    }
+};
