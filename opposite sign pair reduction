@@ -1,0 +1,54 @@
+class Solution {
+  public:
+    inline int isNeg(int x)
+    {
+        return (x < 0);
+    }
+  
+    vector<int> reducePairs(vector<int>& arr) {
+        // code here
+        vector<int> ans;
+        
+        for (int i = 0; i < int(arr.size()) - 1; i++)
+        {
+            int x = arr[i];
+            int y = arr[i + 1];
+        }
+        
+        for (int y : arr)
+        {
+            if (ans.empty())
+            {
+                ans.push_back(y);
+                continue;
+            }
+            else
+                ans.push_back(y);
+            
+            while (int(ans.size()) > 1)
+            {
+                int y = ans.back();
+                ans.pop_back();
+                int x = ans.back();
+                ans.pop_back();
+                
+                if (isNeg(x) == isNeg(y))
+                {
+                    ans.push_back(x);
+                    ans.push_back(y);
+                    break;
+                }
+                else if (abs(x) != abs(y))
+                {
+                    if (abs(x) > abs(y)) {
+                        ans.push_back(x);
+                    }
+                    else
+                        ans.push_back(y);
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
