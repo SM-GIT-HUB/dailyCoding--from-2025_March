@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int smallestSubstring(string s) {
+        // code here
+        int len = INT_MAX;
+        int start = 0;
+        int z = 0, o = 0, t = 0;
+        
+        for (int end = 0; end < int(s.size()); end++)
+        {
+            z += (s[end] == '0');
+            o += (s[end] == '1');
+            t += (s[end] == '2');
+            
+            while (start <= end && z > 0 && o > 0 && t > 0)
+            {
+                len = min(len, end - start + 1);
+                
+                z -= (s[start] == '0');
+                o -= (s[start] == '1');
+                t -= (s[start] == '2');
+                
+                start++;
+            }
+        }
+        
+        return (len == INT_MAX)? -1 : len;
+    }
+};
