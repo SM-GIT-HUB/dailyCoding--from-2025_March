@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    int longestSubstr(string &s, int k) {
+        // code here
+        int len = 0;
+        int mapp[26] = {0};
+        
+        auto getMax = [&]() {
+            int mx = 0;
+            for (int i = 0; i < 26; i++) mx = max(mapp[i], mx);
+            
+            return mx;
+        };
+        
+        int start = 0;
+        int n = int(s.size());
+        
+        for (int end = 0; end < n; end++)
+        {
+            ++mapp[s[end] - 'A'];
+            
+            int mx = getMax();
+            
+            while (end - start + 1 - mx > k)
+            {
+                --mapp[s[start++] - 'A'];
+                mx = getMax();
+            }
+            
+            len = max(end - start + 1, len);
+        }
+        
+        return len;
+    }
+};
