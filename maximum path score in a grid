@@ -1,0 +1,42 @@
+int dp[200 * 200][401];
+
+class Solution {
+public:
+    int mm(int x, int y, int m, int n, int c, int k, vector<vector<int> >& g)
+    {
+        if (x == m - 1 && y == n - 1) {
+            return g[x][y];
+        }
+
+        if (dp[x * n + y][c] != -1) {
+            return dp[x * n + y][c];
+        }
+
+        int score = -1e5;
+        int ct = g[x][y];
+
+        if (x + 1 < m && c + (g[x + 1][y] > 0) <= k) {
+            score = ct + mm(x + 1, y, m, n, c + (g[x + 1][y] > 0), k, g);
+        }
+
+        if (y + 1 < n && c + (g[x][y + 1] > 0) <= k) {
+            score = max(ct + mm(x, y + 1, m, n, c + (g[x][y + 1] > 0), k, g), score);
+        }
+
+        return dp[x * n + y][c] = score;
+    }
+
+    int maxPathScore(vector<vector<int> >& grid, int k) {
+        int m = int(grid.size());
+        int n = int(grid[0].size());
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++) memset(dp[i * n + j], -1, sizeof(dp[i * n + j]));
+        }
+
+        int ans = mm(0, 0, m, n, 0, k, grid);
+
+        return (ans < 0)? -1 : ans;
+    }
+};
