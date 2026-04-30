@@ -1,0 +1,21 @@
+class Solution {
+  public:
+    pair<int, int> dfs(int idx, int n, vector<int>& arr)
+    {
+        if (idx >= n) {
+            return {1, 0};
+        }
+        
+        auto [lt, lm] = dfs(2 * idx + 1, n, arr);
+        auto [rt, rm] = dfs(2 * idx + 2, n, arr);
+        
+        int t = (lt && rt && arr[idx] >= lm && arr[idx] >= rm);
+        
+        return {t, arr[idx]};
+    }
+  
+    bool isMaxHeap(vector<int>& arr) {
+        // code here
+        return dfs(0, int(arr.size()), arr).first;
+    }
+};
