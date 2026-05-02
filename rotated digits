@@ -1,0 +1,88 @@
+
+int flag = 1;
+vector<int> cands;
+
+class Solution {
+public:
+    vector<int> ss = {0, 1, 2, 5, 8, 6, 9};
+
+    int isGood(int n)
+    {
+        int m = n;
+        int s = 0;
+        int c = 1;
+
+        while (m)
+        {
+            int d = m % 10;
+            m = m / 10;
+
+            if (find(ss.begin(), ss.end(), d) == ss.end()) {
+                return 0;
+            }
+
+            if (d == 2) {
+                d = 5;
+            }
+            else if (d == 5) {
+                d = 2;
+            }
+            else if (d == 6) {
+                d = 9;
+            }
+            else if (d == 9) {
+                d = 6;
+            }
+
+            s = s + c * d;
+            c *= 10;
+        }
+
+        return (s != n);
+    }
+
+    void track(int idx, int num, vector<int>& cands)
+    {
+        if (num > 10000) {
+            return;
+        }
+
+        cands.push_back(num);
+
+        num = num * 10;
+
+        for (int x : ss)
+        {
+            if (x == 0 && idx == 0) {
+                continue;
+            }
+
+            track(idx + 1, num + x, cands);
+        }
+    }
+
+    int rotatedDigits(int n) {
+        int count = 0;
+        
+        if (flag)
+        {
+            flag = 0;
+            cands.reserve(2402);
+            track(0, 0, cands);
+            sort(cands.begin(), cands.end());
+        }
+
+        for (int x : cands)
+        {
+            if (x > n) {
+                break;
+            }
+
+            if (isGood(x)) {
+                ++count;
+            }
+        }
+
+        return count;
+    }
+};
