@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        int n = int(s.size());
+
+        if (n != int(goal.size())) {
+            return 0;
+        }
+
+        for (int r = 0; r < n; r++)
+        {
+            int flag = 1;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (s[(i + r) % n] != goal[i])
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+
+            if (flag) {
+                return 1;
+            }
+        }
+
+        return 0;
+    }
+};
