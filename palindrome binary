@@ -1,0 +1,22 @@
+class Solution {
+  public:
+    bool isBinaryPalindrome(int n) {
+        // code here
+        string str;
+        
+        while (n)
+        {
+            str.push_back((n & 1) & 1 + '0');
+            n = n >> 1;
+        }
+        
+        for (int start = 0, end = int(str.size()) - 1; start < end; start++, end--)
+        {
+            if (str[start] != str[end]) {
+                return 0;
+            }
+        }
+        
+        return 1;
+    }
+};
