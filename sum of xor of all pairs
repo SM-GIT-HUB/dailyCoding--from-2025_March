@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    long long sumXOR(vector<int>& arr) {
+        // code here
+        int zero[18] = {0};
+        int one[18] = {0};
+        
+        int64_t sum = 0;
+        
+        for (int i = int(arr.size()) - 1; i >= 0; i--)
+        {
+            int x = arr[i];
+            
+            for (int bit = 17; bit >= 0; bit--)
+            {
+                if (x & (1 << bit)) {
+                    sum += (1LL << bit) * zero[bit];
+                }
+                else
+                    sum += (1LL << bit) * one[bit];
+                
+                zero[bit] += !((x >> bit) & 1);
+                one[bit] += ((x >> bit) & 1);
+            }
+        }
+        
+        return sum;
+    }
+};
