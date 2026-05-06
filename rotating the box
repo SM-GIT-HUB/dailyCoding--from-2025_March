@@ -1,0 +1,58 @@
+class Solution {
+public:
+    vector<vector<char> > rotateTheBox(vector<vector<char> >& box) {
+        int n = int(box.size());
+        int m = int(box[0].size());
+
+        for (auto &r : box)
+        {
+            int idx = 0;
+
+            while (idx < m)
+            {
+                int p = idx;
+
+                while (idx < m && r[idx] != '*')
+                {
+                    idx++;
+                }
+
+                while (p < m && r[p] == '*')
+                {
+                    p++;
+                }
+
+                if (p > idx)
+                {
+                    idx++;
+                    continue;
+                }
+
+                int i = p, j = p;                
+
+                while (j < idx)
+                {
+                    if (r[j] == '.') {
+                        swap(r[i++], r[j++]);
+                    }
+                    else
+                        j++;
+                }
+
+                idx++;
+            }
+        }
+
+        vector<vector<char> > mat(m, vector<char>(n));
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                mat[j][n - i - 1] = box[i][j];
+            }
+        }
+
+        return mat;
+    }
+};
