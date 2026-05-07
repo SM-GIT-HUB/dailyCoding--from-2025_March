@@ -1,0 +1,61 @@
+/*
+Definition for Node
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int x){
+        data = x;
+        left = right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    string getStr(Node* root)
+    {
+        if (!root) {
+            return "N";
+        }
+        
+        string lt = getStr(root->left);
+        string rt = getStr(root->right);
+        
+        return to_string(root->data) + "|" + lt + "|" + rt;
+    }
+    
+    string dfs(Node* root, string &s, int &ans)
+    {
+        if (!root || ans) {
+            return "N";
+        }
+        
+        string lt = dfs(root->left, s, ans);
+        string rt = dfs(root->right, s, ans);
+        
+        if (ans) {
+            return "";
+        }
+        
+        string key = to_string(root->data) + "|" + lt + "|" + rt;
+        
+        if (key == s) {
+            ans = 1;
+        }
+        
+        return key;
+    }
+  
+    bool isSubTree(Node *root1, Node *root2) {
+        // code here
+        int ans = 0;
+        string s = getStr(root2);
+        
+        dfs(root1, s, ans);
+        
+        return ans;
+    }
+};
