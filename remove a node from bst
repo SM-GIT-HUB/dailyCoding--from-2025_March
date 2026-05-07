@@ -1,0 +1,70 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T val;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T val) {
+            this->val = val;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+using Node = TreeNode<int>;
+
+Node* getPred(Node* root)
+{
+    Node* temp = root->left;
+
+    while (temp && temp->right)
+    {
+        temp = temp->right;
+    }
+
+    return temp;
+}
+
+Node* removeNode(Node* root, int x)
+{
+    // Write your code here.
+    if (!root) {
+        return root;
+    }
+
+    if (root->val == x)
+    {
+        if (!root->left && !root->right) {
+            return nullptr;
+        }
+        else if (!root->left) {
+            return root->right;
+        }
+        else if (!root->right) {
+            return root->left;
+        }
+        else
+        {
+            Node* pred = getPred(root);
+            root->val = pred->val;
+
+            root->left = removeNode(root->left, root->val);
+
+            return root;
+        }
+    }
+    else
+    {
+        root->left = removeNode(root->left, x);
+        root->right = removeNode(root->right, x);
+        return root;
+    }
+}
