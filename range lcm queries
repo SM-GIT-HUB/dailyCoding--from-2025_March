@@ -1,0 +1,93 @@
+using int64 = int64_t;
+
+int64 tree[40010];
+
+class Solution {
+  public:
+    void buildTree(int idx, int start, int end, vector<int>& arr)
+    {
+        if (start > end) {
+            return;
+        }
+        
+        if (start == end)
+        {
+            tree[idx] = arr[start];
+            return;
+        }
+        
+        int mid = (start + end) >> 1;
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+        
+        tree[idx] = lcm(tree[left], tree[right]);
+    }
+    
+    void updatePoint(int idx, int p, int v, int start, int end)
+    {
+        if (start > end) {
+            return;
+        }
+        
+        if (start == end)
+        {
+            tree[idx] = v;
+            return;
+        }
+        
+        int mid = (start + end) >> 1;
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        
+        if (p <= mid) {
+            updatePoint(left, p, v, start, mid);
+        }
+        else
+            updatePoint(right, p, v, mid + 1, end);
+            
+        tree[idx] = lcm(tree[left], tree[right]);
+    }
+    
+    int64 rangeQuery(int idx, int start, int end, int qStart, int qEnd)
+    {
+        if (start > end) {
+            return 1;
+        }
+        
+        if (end < qStart || qEnd < start) {
+            return 1;
+        }
+        
+        if (qStart <= start && end <= qEnd) {
+            return tree[idx];
+        }
+        
+        int mid = (start + end) >> 1;
+        int left = 2 * idx + 1;
+        int right = left + 1;
+        
+        return lcm(rangeQuery(left, start, mid, qStart, qEnd), rangeQuery(right, mid + 1, end, qStart, qEnd));
+    }
+    
+    vector<long long> RangeLCMQuery(vector<int>& arr, vector<vector<int> >& queries) {
+        // code here
+        int n = int(arr.size());
+        buildTree(0, 0, n - 1, arr);
+        
+        vector<long long> ans;
+        
+        for (auto &q : queries)
+        {
+            if (q[0] == 1) {
+                updatePoint(0, q[1], q[2], 0, n - 1);
+            }
+            else
+                ans.push_back(rangeQuery(0, 0, n - 1, q[1], q[2]));
+        }
+        
+        return ans;
+    }
+};
