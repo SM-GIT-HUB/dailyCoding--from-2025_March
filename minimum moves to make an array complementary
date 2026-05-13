@@ -1,0 +1,36 @@
+
+int diff[200010];
+
+class Solution {
+public:
+    int minMoves(vector<int>& arr, int limit) {
+        int n = int(arr.size());
+        fill(diff, diff + (limit << 1) + 1, 0);
+
+        diff[2] += 2 * (n >> 1);
+        diff[(limit << 1) + 1] -= 2 * (n >> 1);
+
+        for (int i = 0; i < (n >> 1); i++)
+        {
+            int x = arr[i];
+            int y = arr[n - i - 1];
+
+            diff[min(x, y) + 1] -= 1;
+            diff[max(x, y) + limit + 1] += 1;
+
+            diff[x + y] -= 1;
+            diff[x + y + 1] += 1;
+        }
+
+        for (int i = 3; i <= (limit << 1); i++) diff[i] += diff[i - 1];
+
+        int mini = INT_MAX;
+
+        for (int i = 2; i <= (limit << 1); i++)
+        {
+            mini = min(diff[i], mini);
+        }
+
+        return mini;
+    }
+};
