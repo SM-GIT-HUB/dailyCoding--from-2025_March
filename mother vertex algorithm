@@ -1,0 +1,54 @@
+
+int visited[100001];
+
+class Solution {
+  public:
+    void dfs(int u, vector<vector<int> >& adj)
+    {
+        visited[u] = 1;
+        
+        for (int v : adj[u])
+        {
+            if (!visited[v]) {
+                dfs(v, adj);
+            }
+        }
+    }
+
+    int findMotherVertex(int n, vector<vector<int> >& edges) {
+        // code here
+        fill(visited, visited + n, 0);
+        
+        vector<vector<int> > adj(n);
+        
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            adj[u].push_back(v);
+        }
+        
+        int cand = -1;
+
+        for (int u = 0; u < n; u++)
+        {
+            if (!visited[u])
+            {
+                cand = u;
+                dfs(u, adj);
+            }
+        }
+        
+        fill(visited, visited + n, 0);
+        
+        dfs(cand, adj);
+        
+        for (int u = 0; u < n; u++)
+        {
+            if (!visited[u]) {
+                return -1;
+            }
+        }
+        
+        return cand;
+    }
+};
