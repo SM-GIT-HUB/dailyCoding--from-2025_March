@@ -1,0 +1,45 @@
+class Solution {
+  public:
+    using uint64 = uint64_t;
+  
+    vector<int> search(vector<int>& a, vector<int>& b) {
+        // code here
+        int n = int(a.size());
+        int m = int(b.size());
+        
+        vector<int> ans;
+        
+        uint64 base = 10000019;
+        uint64 p = 1;
+        
+        for (int i = 1; i < m; i++)
+        {
+            p = p * base;
+        }
+        
+        uint64 ahs = 0;
+        uint64 bhs = 0;
+        
+        for (int i = 0; i < m; i++)
+        {
+            bhs = bhs * base + b[i];
+            ahs = ahs * base + a[i];
+        }
+        
+        if (ahs == bhs) {
+            ans.push_back(0);
+        }
+        
+        for (int i = 1; i + m - 1 < n; i++)
+        {
+            ahs = ahs - a[i - 1] * p;
+            ahs = ahs * base + a[i + m - 1];
+            
+            if (ahs == bhs) {
+                ans.push_back(i);
+            }
+        }
+        
+        return ans;
+    }
+};
