@@ -1,0 +1,34 @@
+class Solution {
+  public:
+    int dp[71];
+  
+    int mm(int keys)
+    {
+        if (keys == 0) {
+            return 0;
+        }
+        
+        if (keys < 4) {
+            return keys;
+        }
+        
+        if (dp[keys] != -1) {
+            return dp[keys];
+        }
+        
+        int ans = keys;
+        
+        for (int j = 1; j <= keys - 3; j++)
+        {
+            ans = max(ans, mm(j) * (keys - j - 1));
+        }
+        
+        return dp[keys] = ans;
+    }
+  
+    int optimalKeys(int n) {
+        // code here
+        memset(dp, -1, sizeof(dp));
+        return mm(n);
+    }
+};
