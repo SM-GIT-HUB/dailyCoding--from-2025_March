@@ -1,0 +1,22 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+	// Write your code here
+	string n;
+	cin >> n;
+
+	int odd = 0;
+	int even = 0;
+
+	for (char ch : n)
+	{
+		if ((ch - '0') & 1) {
+			odd += (ch - '0');
+		}
+		else
+			even += (ch - '0');
+	}
+
+	cout << even << ' ' << odd << endl;
+}
