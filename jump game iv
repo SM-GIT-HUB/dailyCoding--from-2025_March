@@ -1,0 +1,66 @@
+
+int visited[50010];
+
+class Solution {
+public:
+    int minJumps(vector<int>& arr) {
+        int n = int(arr.size());
+
+        fill(visited, visited + n, 0);
+
+        int d = 0;
+        queue<int> q;
+
+        q.push(0);
+        visited[0] = 1;
+
+        unordered_map<int, vector<int> > adj;
+
+        for (int i = 0; i < n; i++)
+        {
+            adj[arr[i]].push_back(i);
+        }
+
+        while (!q.empty())
+        {
+            int size = int(q.size());
+
+            while (size--)
+            {
+                int idx = q.front();
+                q.pop();
+
+                if (idx == n - 1) {
+                    return d;
+                }
+
+                if (idx - 1 >= 0 && !visited[idx - 1])
+                {
+                    q.push(idx - 1);
+                    visited[idx - 1] = 1;
+                }
+
+                if (idx + 1 < n && !visited[idx + 1])
+                {
+                    q.push(idx + 1);
+                    visited[idx + 1] = 1;
+                }
+
+                for (int i : adj[arr[idx]])
+                {
+                    if (i != idx && !visited[i])
+                    {
+                        q.push(i);
+                        visited[i] = 1;
+                    }
+                }
+
+                adj.erase(arr[idx]);
+            }
+
+            ++d;
+        }
+
+        return 0;
+    }
+};
