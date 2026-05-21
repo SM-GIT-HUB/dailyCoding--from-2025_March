@@ -1,0 +1,13 @@
+class Solution {
+  public:
+    bool isBitSet(int n) {
+        // code here
+        if (!n) {
+            return 0;
+        }
+        
+        int bit = log2(n) + 1;
+        
+        return (((1 << bit) - 1) == n);
+    }
+};
