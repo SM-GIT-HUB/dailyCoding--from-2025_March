@@ -1,0 +1,34 @@
+
+using int64 = int64_t;
+int64 mod = 1e9 + 7;
+
+int64 inv(int64 n, int64 m)
+{
+	int64 p = 1;
+
+	while (m)
+	{
+		if (m & 1) {
+			p = p * n % mod;
+		}
+
+		n = n * n % mod;
+		m = m >> 1;
+	}
+
+	return p;
+}
+
+int countRectangles(int64 n)
+{
+	// Write your code here
+	int64 recs = n * (n + 1) % mod;
+	recs = recs * recs % mod;
+	recs = recs * inv(4, mod - 2) % mod;
+
+	int64 sqrs = n * (n + 1) % mod;
+	sqrs = sqrs * (2 * n + 1) % mod;
+	sqrs = sqrs * inv(6, mod - 2) % mod;
+	
+	return (recs - sqrs + mod) % mod;
+}
