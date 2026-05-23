@@ -1,0 +1,37 @@
+/* Structure for Tree Node
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    int dfs(Node* root)
+    {
+        if (!root) {
+            return 0;
+        }
+        
+        int left = dfs(root->left);
+        int right = dfs(root->right);
+        
+        int org = root->data;
+        root->data = left + right;
+        
+        return (org + left + right);
+    }
+  
+    void toSumTree(Node *root) {
+        // code here
+        dfs(root);
+    }
+};
