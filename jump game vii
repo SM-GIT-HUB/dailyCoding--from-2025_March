@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool canReach(string dp, int minj, int maxj) {
+        int n = int(dp.size());
+        
+        dp[0] = '#';
+
+        int count = 0;
+        int minr = -maxj;
+        int maxr = -minj;
+
+        for (int i = 1; i < n; i++)
+        {
+            minr++;
+            maxr++;
+
+            if (minr - 1 >= 0) {
+                count -= (dp[minr - 1] == '#');
+            }
+
+            if (maxr >= 0 && maxr < n) {
+                count += (dp[maxr] == '#');
+            }
+
+            if (count > 0 && dp[i] == '0') {
+                dp[i] = '#';
+            }
+        }
+
+        return (dp[n - 1] == '#');
+    }
+};
