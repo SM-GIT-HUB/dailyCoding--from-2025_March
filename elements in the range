@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    bool checkElements(int start, int end, vector<int>& arr) {
+        // code here
+        sort(arr.begin(), arr.end());
+        
+        int elem = start;
+        
+        for (int x : arr)
+        {
+            if (x == elem) {
+                ++elem;
+            }
+            
+            if (elem > end) {
+                break;
+            }
+            
+            if (x > elem) {
+                return 0;
+            }
+        }
+        
+        return (elem > end);
+    }
+};
