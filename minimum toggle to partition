@@ -1,0 +1,23 @@
+class Solution {
+  public:
+    int minToggle(vector<int>& arr) {
+        // code here
+        int n = int(arr.size());
+        
+        int zeros = count(arr.begin(), arr.end(), 0);
+        int ones = 0;
+        
+        int count = n;
+        
+        for (int i = 0; i < n; i++)
+        {
+            count = min(count, zeros + ones);
+            ones += arr[i];
+            zeros -= (arr[i] == 0);
+        }
+        
+        count = min(count, zeros + ones);
+        
+        return count;
+    }
+};
