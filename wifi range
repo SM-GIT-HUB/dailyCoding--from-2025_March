@@ -1,0 +1,37 @@
+
+int cover[100010];
+
+class Solution {
+  public:
+    bool wifiRange(string &s, int x) {
+        // code here
+        int n = int(s.size());
+        fill(cover, cover + n, 0);
+        
+        for (int i = 0; i < n; i++)
+        {
+            if (s[i] == '1')
+            {
+                cover[max(0, i - x)]++;
+                cover[min(n + 1, i + x + 1)]--;
+            }
+        }
+        
+        if (!cover[0]) {
+            return 0;
+        }
+        
+        int count = 1;
+        
+        for (int i = 1; i < n; i++)
+        {
+            cover[i] += cover[i - 1];
+            
+            if (cover[i]) {
+                ++count;
+            }
+        }
+        
+        return (count == n);
+    }
+};
