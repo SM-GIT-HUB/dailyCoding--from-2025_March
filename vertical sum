@@ -1,0 +1,60 @@
+/* Structure of binary tree node
+class Node{
+public:
+    int data;
+    Node* left, right;
+    Node(int item)
+    {
+        data = item;
+        left = nullptr;
+        right = nullptr;
+    }
+}
+*/
+
+int mapp[20010];
+
+class Solution {
+  public:
+    vector<int> verticalSum(Node* root) {
+        // code here
+        int left = 0;
+        int right = 0;
+        int shift = 10001;
+        
+        memset(mapp, 0, sizeof(mapp));
+        
+        vector<int> ans;
+        
+        queue<pair<Node*, int> > q;
+        
+        q.push({root, 0});
+        
+        while (!q.empty())
+        {
+            Node* curr = q.front().first;
+            int lvl = q.front().second;
+            q.pop();
+            
+            left = min(lvl, left);
+            right = max(lvl, right);
+            
+            mapp[lvl + shift] += curr->data;
+            
+            if (curr->left) {
+                q.push({curr->left, lvl - 1});
+            }
+            
+            if (curr->right) {
+                q.push({curr->right, lvl + 1});
+            }
+        }
+        
+        for (int i = left; i <= right; i++)
+        {
+            ans.push_back(mapp[i + shift]);
+        }
+        
+        return ans;
+    }
+};
