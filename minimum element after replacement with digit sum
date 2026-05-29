@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int minElement(vector<int>& nums) {
+        int mini = 50;
+
+        for (int x : nums)
+        {
+            int sum = 0;
+
+            while (x)
+            {
+                sum += x % 10;
+                x = x / 10;
+            }
+
+            mini = min(sum, mini);
+        }
+
+        return mini;
+    }
+};
