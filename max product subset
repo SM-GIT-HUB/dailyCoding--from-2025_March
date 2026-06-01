@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    int mod = 1e9 + 7;
+    using int64 = int64_t;
+  
+    int findMaxProduct(vector<int>& arr) {
+        // code here
+        int n = int(arr.size());
+        
+        if (n == 1) {
+            return arr[0];
+        }
+        
+        sort(arr.rbegin(), arr.rend());
+        
+        int c = 0;
+        int64 mul = 1;
+        
+        for (int x : arr)
+        {
+            if (x > 0) {
+                mul = (mul * x) % mod;
+            }
+            
+            if (x < 0) {
+                ++c;
+            }
+        }
+        
+        if (arr.back() >= 0 || c < 2) {
+            return (arr[0] > 0)? mul : 0;
+        }
+        
+        int canTake = c / 2;
+        
+        for (int i = n - 1; i >= 0 && canTake--; i -= 2)
+        {
+            mul = (mul * arr[i] * arr[i - 1]) % mod;
+        }
+        
+        return mul;
+    }
+};
