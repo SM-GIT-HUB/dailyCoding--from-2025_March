@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+
+int dist[30][30][30][30];
+int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+void bfs(int i, int j, int m, int n, vector<string>& grid)
+{
+    queue<pair<int, int> > q;
+
+    int l = 1;
+    q.push({i, j});
+    dist[i][j][i][j] = 0;
+
+    while (!q.empty())
+    {
+        int size = int(q.size());
+        
+        while (size--)
+        {
+            auto [x, y] = q.front();
+            q.pop();
+
+            for (auto &d : dirs)
+            {
+                int dx = x + d[0];
+                int dy = y + d[1];
+
+                if (dx >= 0 && dx < m && dy >= 0 && dy < n && grid[dx][dy] == '.' && (dist[i][j][dx][dy] == -1 || dist[i][j][dx][dy] > l))
+                {
+                    q.push({dx, dy});
+                    dist[i][j][dx][dy] = l;
+                }
+            }
+        }
+
+        l++;
+    }
+}
+
+int meetUp(vector<string> grid)
+{
+    // Write your code here.
+    int m = int(grid.size());
+    int n = int(grid[0].size());
+
+    vector<pair<int, int> > ps;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == 'F')
+            {
+                ps.push_back({i, j});
+                memset(dist[i][j], -1, sizeof(dist[i][j]));
+            }
+
+            bfs(i, j, m, n, grid);
+        }
+    }
+
+    int mini = INT_MAX;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == '.')
+            {
+                int f = 0;
+                int sum = 0;
+
+                for (auto [x, y] : ps)
+                {
+                    if (dist[x][y][i][j] == -1)
+                    {
+                        f = 1;
+                        break;
+                    }
+                    else
+                        sum += dist[x][y][i][j];
+                }
+
+                if (f) {
+                    continue;
+                }
+
+                mini = min(sum, mini);
+            }
+        }
+    }
+
+    return (mini == INT_MAX)? -1 : mini;
+}
