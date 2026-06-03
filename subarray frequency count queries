@@ -1,0 +1,30 @@
+
+vector<int> mapp[100001];
+
+class Solution {
+  public:
+    vector<int> freqInRange(vector<int>& arr, vector<vector<int> >& queries) {
+        // code here
+        int n = int(arr.size());
+        
+        for (int i = 0; i < n; i++)
+        {
+            mapp[arr[i]].push_back(i);
+        }
+        
+        vector<int> ans;
+        
+        for (auto &q : queries)
+        {
+            int cnt = upper_bound(mapp[q[2]].begin(), mapp[q[2]].end(), q[1]) - lower_bound(mapp[q[2]].begin(), mapp[q[2]].end(), q[0]);
+            ans.push_back(cnt);
+        }
+        
+        for (int x : arr)
+        {
+            mapp[x].clear();
+        }
+        
+        return ans;
+    }
+};
