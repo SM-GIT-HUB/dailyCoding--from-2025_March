@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int earliestFinishTime(vector<int>& lst, vector<int>& ld, vector<int>& wst, vector<int>& wd) {
+        int m = int(lst.size());
+        int n = int(wst.size());
+        
+        int t1 = INT_MAX;
+        int t2 = INT_MAX;
+
+        int time = INT_MAX;
+
+        for (int i = 0; i < m; i++)
+        {
+            t1 = min(t1, lst[i] + ld[i]);
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            t2 = min(t2, wst[i] + wd[i]);
+            time = min(time, max(t1, wst[i]) + wd[i]);
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            time = min(time, max(t2, lst[i]) + ld[i]);
+        }
+
+        return time;
+    }
+};
