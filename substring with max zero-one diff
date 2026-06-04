@@ -1,0 +1,31 @@
+class Solution {
+  public:
+    int maxSubstring(string &s) {
+        // code here
+        if (s.find('0') == string::npos) {
+            return -1;
+        }
+        
+        int zero = 0;
+        int one = 0;
+        
+        int diff = 0;
+        
+        for (char ch : s)
+        {
+            if (ch == '0') {
+                ++zero;
+            }
+            else
+                ++one;
+                
+            if (one > zero) {
+                zero = one = 0;
+            }
+            else
+                diff = max(diff, zero - one);
+        }
+        
+        return diff;
+    }
+};
