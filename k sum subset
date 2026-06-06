@@ -1,0 +1,60 @@
+int kSumSubset(vector<int>& arr, int k)
+{
+    // Write your code here
+    int n = int(arr.size());
+    int m = n >> 1;
+
+    vector<int> f, s;
+
+    for (int i = 0; i < (1 << m); i++)
+    {
+        long long sum = 0;
+
+        for (int j = 0; j < m; j++)
+        {
+            if (i & (1 << j)) {
+                sum += arr[j];
+            }
+        }
+
+        f.push_back(sum);
+    }
+
+    for (int i = 0; i < (1 << (n - m)); i++)
+    {
+        long long sum = 0;
+
+        for (int j = 0; j < (n - m); j++)
+        {
+            if (i & (1 << j)) {
+                sum += arr[m + j];
+            }
+        }
+
+        s.push_back(sum);
+    }
+
+    int ans = 0;
+    sort(s.begin(), s.end());
+
+    for (int x : f)
+    {
+        if (x > k) {
+            continue;
+        }
+
+        int idx = lower_bound(s.begin(), s.end(), k - x) - s.begin();
+
+        if (idx == int(s.size()) || s[idx] > k - x) {
+            --idx;
+        }
+
+        ans = max(ans, x + s[idx]);
+    }
+
+    return ans;
+}
+
+
+
+
