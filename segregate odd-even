@@ -1,0 +1,45 @@
+/****************************************************************
+
+    Following is the class structure of the Node class:
+
+        class Node
+        {
+        public:
+	        int data;
+	        Node *next;
+	        Node(int data)
+	        {
+		        this->data = data;
+		        this->next = NULL;
+	        }
+        };
+
+*****************************************************************/
+
+Node * segregateOddEven (Node * head)
+{
+	// Write your code here.
+	Node* even = new Node(-1);
+    Node* etl = even;
+    Node* odd = new Node(-1);
+    Node* otl = odd;
+
+    for (Node* curr = head; curr != nullptr; curr = curr->next)
+    {
+        if (curr->data & 1)
+        {
+            otl->next = curr;
+            otl = otl->next;
+        }
+        else
+        {
+            etl->next = curr;
+            etl = etl->next;
+        }
+    }
+
+    etl->next = nullptr;
+    otl->next = even->next;
+
+    return odd->next;
+}
