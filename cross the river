@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+
+int dp[1000][1005];
+
+int mm(int idx, int jump, int n, vector<int>& arr)
+{
+    if (idx == n - 1) {
+        return 1;
+    }
+
+    if (dp[idx][jump] != -1) {
+        return dp[idx][jump];
+    }
+
+    int pos = 0;
+
+    for (int j = idx + 1; !pos && j < n && arr[j] - arr[idx] <= jump + 1; j++)
+    {
+        if (arr[j] - arr[idx] < jump - 1) {
+            continue;
+        }
+
+        pos = mm(j, arr[j] - arr[idx], n, arr);
+    }
+
+    return dp[idx][jump] = pos;
+}
+
+bool crossRiver(vector<int> &arr) {
+    // Write your code here.
+    int n = int(arr.size());
+
+    for (int i = 0; i < n; i++)
+    {
+        memset(dp[i], -1, sizeof(dp[i]));
+    }
+
+    return mm(0, 0, n, arr);
+}
