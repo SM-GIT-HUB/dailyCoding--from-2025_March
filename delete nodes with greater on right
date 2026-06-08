@@ -1,0 +1,57 @@
+/* Structure of a Linked List node
+class Node {
+  public:
+    int data;
+    Node* next;
+
+    Node(int x) {
+        data = x;
+        next = nullptr;
+    }
+};
+*/
+class Solution {
+  public:
+    Node* reverse(Node* root)
+    {
+        Node* prev = nullptr;
+        Node* forward = nullptr;
+        
+        while (root)
+        {
+            forward = root->next;
+            root->next = prev;
+            prev = root;
+            root = forward;
+        }
+        
+        return prev;
+    }
+  
+    Node* compute(Node* head) {
+        // code here
+        head = reverse(head);
+        
+        Node* curr = head;
+        Node* prev = head;
+        
+        int val = 0;
+        
+        while (curr)
+        {
+            if (curr->data < val)
+            {
+                prev->next = curr->next;
+                curr = curr->next;
+            }
+            else
+            {
+                val = max(curr->data, val);
+                prev = curr;
+                curr = curr->next;
+            }
+        }
+        
+        return reverse(head);
+    }
+};
