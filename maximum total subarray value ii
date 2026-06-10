@@ -1,0 +1,90 @@
+
+using int64 = int64_t;
+pair<int, int> tree[200010];
+
+class Solution {
+public:
+    void buildTree(int idx, int start, int end, vector<int>& arr)
+    {
+        if (start > end) {
+            return;
+        }
+
+        if (start == end)
+        {
+            tree[idx] = {arr[start], arr[start]};
+            return;
+        }
+
+        int mid = (start + end) >> 1;
+        int left = 2 * idx + 1;
+        int right = left + 1;
+
+        buildTree(left, start, mid, arr);
+        buildTree(right, mid + 1, end, arr);
+
+        tree[idx].first = min(tree[left].first, tree[right].first);
+        tree[idx].second = max(tree[left].second, tree[right].second);
+    }
+
+    pair<int, int> queryRange(int idx, int start, int end, int qStart, int qEnd)
+    {
+        if (end < qStart || qEnd < start) {
+            return {INT_MAX, INT_MIN};
+        }
+
+        if (qStart <= start && end <= qEnd) {
+            return tree[idx];
+        }
+
+        int mid = (start + end) >> 1;
+        int left = 2 * idx + 1;
+        int right = left + 1;
+
+        auto [min1, max1] = queryRange(left, start, mid, qStart, qEnd);
+        auto [min2, max2] = queryRange(right, mid + 1, end, qStart, qEnd);
+
+        return {min(min1, min2), max(max1, max2)};
+    }
+
+    struct obj {
+        int64 v;
+        int l;
+        int r;
+    };
+
+    long long maxTotalValue(vector<int>& arr, int k) {
+        int n = int(arr.size());
+        buildTree(0, 0, n - 1, arr);
+
+        auto comp = [](auto &a, auto &b) {
+            return (a.v < b.v);
+        };
+
+        priority_queue<obj, vector<obj>, decltype(comp)> pq;
+
+        for (int i = 0; i < n; i++)
+        {
+            auto [mn, mx] = queryRange(0, 0, n - 1, i, n - 1);
+            pq.push({mx - mn, i, n - 1});
+        }
+
+        int64 ans = 0;
+
+        while (k--)
+        {
+            auto [v, l, r] = pq.top();
+            pq.pop();
+
+            ans += v;
+
+            if (l < r)
+            {
+                auto [mn, mx] = queryRange(0, 0, n - 1, l, r - 1);
+                pq.push({mx - mn, l, r - 1});
+            }
+        }
+
+        return ans;
+    }
+};
