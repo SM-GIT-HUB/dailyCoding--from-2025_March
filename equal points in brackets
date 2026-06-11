@@ -1,0 +1,20 @@
+class Solution {
+  public:
+    int findIndex(string &s) {
+        // code here
+        int open = 0;
+        int close = count(s.begin(), s.end(), ')');
+        
+        for (int i = 0; i < int(s.size()); i++)
+        {
+            if (open == close) {
+                return i;
+            }
+            
+            close -= (s[i] == ')');
+            open += (s[i] == '(');
+        }
+        
+        return int(s.size());
+    }
+};
