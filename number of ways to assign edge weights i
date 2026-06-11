@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int dfs(int u, int par, int d, vector<vector<int> >& adj)
+    {
+        int mx = 0;
+
+        for (int v : adj[u])
+        {
+            if (v == par) {
+                continue;
+            }
+
+            mx = max(dfs(v, u, d + 1, adj), mx);
+        }
+
+        return max(d, mx);
+    }
+
+    int assignEdgeWeights(vector<vector<int> >& edges) {
+        vector<vector<int> > adj(edges.size() + 2);
+
+        for (auto &e : edges)
+        {
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        
+        int d = dfs(1, -1, 0, adj) - 1;
+
+        int64_t p = 1;
+        int64_t n = 2;
+        int mod = 1e9 + 7;
+
+        while (d > 0)
+        {
+            if (d & 1) {
+                p = (p * n) % mod;
+            }
+
+            n = (n * n) % mod;
+            d = d >> 1;
+        }
+
+        return p;
+    }
+};
