@@ -1,0 +1,27 @@
+class Solution {
+  public:
+    bool kSubstr(string &s, int k) {
+        // code here
+        int n = int(s.size());
+        
+        if (n % k) {
+            return 0;
+        }
+        
+        unordered_map<string, int> mapp;
+        
+        for (int i = 0; i < n; i += k)
+        {
+            mapp[s.substr(i, k)]++;
+        }
+        
+        int maxi = 0;
+        
+        for (auto [_, c] : mapp)
+        {
+            maxi = max(c, maxi);
+        }
+        
+        return (maxi >= (n / k - 1));
+    }
+};
