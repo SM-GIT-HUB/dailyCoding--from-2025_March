@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+
+vector<int> k_stack(int l, int n, int q, vector<vector<int>> &queries){
+    // Write your code here.
+    int size = 0;
+    vector<int> ans;
+    vector<vector<int> > st(n + 1);
+
+    for (auto &q : queries)
+    {
+        int a = q[0], b = q[1], c = (q.size() == 3)? q.back() : -1;
+
+        if (a == 1)
+        {
+            if (size == l) {
+                ans.push_back(-1);
+            }
+            else
+            {
+                st[b].push_back(c);
+                ans.push_back(0);
+                ++size;
+            }
+        }
+        else
+        {
+            if (size == 0 || st[b].empty()) {
+                ans.push_back(-1);
+            }
+            else
+            {
+                ans.push_back(st[b].back());
+                st[b].pop_back();
+                --size;
+            }
+        }
+    }
+
+    return ans;
+}
