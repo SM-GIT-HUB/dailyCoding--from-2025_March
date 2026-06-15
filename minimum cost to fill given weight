@@ -1,0 +1,49 @@
+
+using int64 = int64_t;
+
+int64 dp[2001][2001];
+
+class Solution {
+  public:
+    int64 mm(int idx, int n, int c, int w, vector<int>& cost)
+    {
+        if (c == w) {
+            return 0;
+        }
+        
+        if (idx == n || c > w) {
+            return 1e12;
+        }
+        
+        if (dp[idx][c] != -1) {
+            return dp[idx][c];
+        }
+        
+        if (cost[idx] == -1) {
+            return dp[idx][c] = mm(idx + 1, n, c, w, cost);
+        }
+        
+        int64 minCost = mm(idx + 1, n, c, w, cost);
+        
+        for (int i = 1; (idx + 1) * i <= w; i++)
+        {
+            minCost = min(minCost, cost[idx] * i + mm(idx + 1, n, c + (idx + 1) * i, w, cost));
+        }
+        
+        return dp[idx][c] = minCost;
+    }
+  
+    int minimumCost(vector<int>& cost, int w) {
+        // code here
+        int n = int(cost.size());
+        
+        for (int i = 0; i < n; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        int64 ans = mm(0, n, 0, w, cost);
+        
+        return (ans >= 1e12)? -1 : ans;
+    }
+};
