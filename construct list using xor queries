@@ -1,0 +1,36 @@
+
+int xorr[100003];
+
+class Solution {
+  public:
+    vector<int> constructList(vector<vector<int> >& qs) {
+        // code here
+        vector<int> arr = {0};
+        fill(xorr, xorr + qs.size() + 1, 0);
+        
+        for (auto &q : qs)
+        {
+            if (q[0] == 0) {
+                arr.push_back(q[1]);
+            }
+            else
+            {
+                xorr[0] = xorr[0] ^ q[1];
+                xorr[int(arr.size())] ^= q[1];
+            }
+        }
+        
+        int n = int(arr.size());
+        arr[0] = arr[0] ^ xorr[0];
+        
+        for (int i = 1; i < n; i++)
+        {
+            xorr[i] = xorr[i - 1] ^ xorr[i];
+            arr[i] = arr[i] ^ xorr[i];
+        }
+        
+        sort(arr.begin(), arr.end());
+        
+        return arr;
+    }
+};
