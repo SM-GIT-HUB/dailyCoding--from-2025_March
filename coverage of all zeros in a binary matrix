@@ -1,0 +1,66 @@
+
+pair<int, int> rows[101];
+pair<int, int> cols[101];
+
+class Solution {
+  public:
+    int findCoverage(vector<vector<int> >& mat) {
+        // code here
+        int m = int(mat.size());
+        int n = int(mat[0].size());
+        
+        for (int i = 0; i < m; i++)
+        {
+            rows[i] = {INT_MAX, INT_MIN};
+        }
+        
+        for (int j = 0; j < n; j++)
+        {
+            cols[j] = {INT_MAX, INT_MIN};
+        }
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (mat[i][j])
+                {
+                    rows[i].first = min(rows[i].first, j);
+                    rows[i].second = j;
+                    cols[j].first = min(cols[j].first, i);
+                    cols[j].second = i;
+                }
+            }
+        }
+        
+        int count = 0;
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (mat[i][j]) {
+                    continue;
+                }
+                
+                if (rows[i].first < j) {
+                    ++count;
+                }
+                
+                if (rows[i].second > j) {
+                    ++count;
+                }
+                
+                if (cols[j].first < i) {
+                    ++count;
+                }
+                
+                if (cols[j].second > i) {
+                    ++count;
+                }
+            }
+        }
+        
+        return count;
+    }
+};
