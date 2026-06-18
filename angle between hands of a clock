@@ -1,0 +1,23 @@
+class Solution {
+public:
+    double angleClock(double hour, double minutes) {
+        double degPerMark = 360 / double(60);
+
+        double movePerBig = 5 / double(60);
+
+        double small = ((hour != 12)? hour * 5 : 0.0) + movePerBig * minutes;
+
+        double otherAngle = 0;
+
+        if (small == minutes) {
+            return 0;
+        }
+        else if (small < minutes) {
+            otherAngle = fabs(small + double(60) - minutes) * degPerMark;
+        }
+        else
+            otherAngle = fabs(minutes + double(60) - small) * degPerMark;
+
+        return min(fabs(small - minutes) * degPerMark, otherAngle);
+    }
+};
