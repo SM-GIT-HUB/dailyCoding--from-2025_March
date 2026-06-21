@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+
+int dp[101][101][2];
+
+int mm(int start, int end, int kevin, vector<int>& arr)
+{
+    if (start == end) {
+        return (kevin)? arr[start] : 0;
+    }
+
+    if (dp[start][end][kevin] != -1) {
+        return dp[start][end][kevin];
+    }
+
+    int one = ((kevin)? arr[start] : 0) + mm(start + 1, end, !kevin, arr);
+    int two = ((kevin)? arr[end] : 0) + mm(start, end - 1, !kevin, arr);
+
+    int ans = (kevin)? max(one, two) : min(one, two);
+
+    return dp[start][end][kevin] = ans;
+}
+
+int getMaxFruits(vector<int>& arr, int n){
+    // Write your code here.
+    memset(dp, -1, sizeof(dp));
+    return mm(0, n - 1, 1, arr);
+}
