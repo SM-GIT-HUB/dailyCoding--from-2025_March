@@ -1,0 +1,39 @@
+
+int mapp[100001];
+
+class Solution {
+public:
+    int maxIceCream(vector<int>& costs, int coins) {
+        int maxi = 0;
+        memset(mapp, 0, sizeof(mapp));
+
+        for (int x : costs)
+        {
+            if (x > maxi) {
+                maxi = x;
+            }
+
+            ++mapp[x];
+        }
+
+        int apu = 0;
+
+        for (int i = 1; i <= maxi;)
+        {
+            if (mapp[i] == 0) {
+                ++i;
+            }
+            else if (i > coins) {
+                break;
+            }
+            else
+            {
+                coins -= i;
+                --mapp[i];
+                ++apu;
+            }
+        }
+
+        return apu;
+    }
+};
