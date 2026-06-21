@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+
+vector<int> rowWaveForm(vector<vector<int> >& mat) {
+    // Write your code here.
+    int m = int(mat.size());
+    int n = int(mat[0].size());
+
+    vector<int> arr;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            arr.push_back(mat[i][j]);
+        }
+
+        i++;
+
+        if (i == m) {
+            break;
+        }
+
+        for (int j = n - 1; j >= 0; j--)
+        {
+            arr.push_back(mat[i][j]);
+        }
+    }
+
+    return arr;
+}
