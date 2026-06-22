@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+void track(int idx, int len, int d, int num, int n, vector<int>& apu)
+{
+    if (idx == len)
+    {
+        apu.push_back(num);
+        return;
+    }
+
+    if (d + 1 < 10 && num * 10 + d + 1 <= n) {
+        track(idx + 1, len, d + 1, num * 10 + d + 1, n, apu);
+    }
+
+    if (d - 1 >= 0 && num * 10 + d - 1 <= n) {
+        track(idx + 1, len, d - 1, num * 10 + d - 1, n, apu);
+    }
+}
+
+vector<int> findJumpingNumbers(int n) {
+    // Write your code here.
+    int mxlen = log10(n) + 1;
+
+    vector<int> apu;
+
+    for (int num = 0; num < 10 && num <= n; num++)
+    {
+        apu.push_back(num);
+    }
+
+    if (mxlen == 1) {
+        return apu;
+    }
+
+    for (int len = 2; len <= mxlen; len++)
+    {
+        for (int d = 1; d < 10; d++)
+        {
+            track(1, len, d, d, n, apu);
+        }
+    }
+
+    sort(apu.begin(), apu.end());
+
+    return apu;
+}
