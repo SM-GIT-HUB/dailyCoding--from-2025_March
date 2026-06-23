@@ -1,0 +1,54 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    int mod = 1000000000 + 7;
+
+    int zigZagArrays(int n, int l, int r) {
+        int next[2002][2] = {0};
+        int curr[2002][2] = {0};
+
+        for (int d = l; d <= r; d++)
+        {
+            next[d][0] = next[d][1] = 1;
+        }
+
+        for (int d = l + 1; d <= r; d++)
+        {
+            next[d][1] += next[d - 1][1];
+        }
+
+        for (int d = r - 1; d >= l; d--)
+        {
+            next[d][0] += next[d + 1][0];
+        }
+
+        for (int idx = n - 1; idx >= 1; idx--)
+        {
+            for (int inc = 1; inc >= 0; inc--)
+            {
+                for (int d = l; d <= r; d++)
+                {
+                    if (inc) {
+                        curr[d][1] = next[d + 1][!inc];
+                    }
+                    else
+                        curr[d][0] = next[d - 1][!inc];
+                }
+            }
+
+            for (int d = l + 1; d <= r; d++)
+            {
+                curr[d][1] = (curr[d][1] + curr[d - 1][1]) % mod;
+            }
+
+            for (int d = r - 1; d >= l; d--)
+            {
+                curr[d][0] = (curr[d][0] + curr[d + 1][0]) % mod;
+            }
+
+            swap(curr, next);
+        }
+
+        return (next[r][1] + next[l][0]) % mod;
+    }
+};
