@@ -1,0 +1,52 @@
+class Solution {
+public:
+    string mapp[10] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+
+    string intToRoman(int num) {
+        string apu = "";
+
+        if (num >= 1000) {
+            apu = string(num / 1000, 'M') + intToRoman(num % 1000);
+        }
+        else if (num >= 500)
+        {
+            if (num / 100 == 9) {
+                apu = "CM" + intToRoman(num % 900);
+            }
+            else
+                apu = string(num / 500, 'D') + intToRoman(num % 500);
+        }
+        else if (num >= 100)
+        {
+            if (num / 100 == 4) {
+                apu = "CD" + intToRoman(num % 400);
+            }
+            else
+                apu = string(num / 100, 'C') + intToRoman(num % 100);
+        }
+        else if (num >= 50)
+        {
+            if (num / 10 == 9) {
+                apu = "XC" + intToRoman(num % 90);
+            }
+            else
+                apu = string(num / 50, 'L') + intToRoman(num % 50);
+        }
+        else if (num >= 10)
+        {
+            int cnt = num / 10;
+
+            if (cnt < 4) {
+                apu = string(cnt, 'X');
+            }
+            else
+                apu = "XL";
+
+            apu += intToRoman(num % 10);
+        }
+        else
+            apu = mapp[num];
+        
+        return apu;
+    }
+};
