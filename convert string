@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+
+string convertString(string str) 
+{
+	// WRITE YOUR CODE HERE
+	int last = 1;
+
+	for (char &ch : str)
+	{
+		if (last == 1)
+		{
+			ch = toupper(ch);
+			last = 0;
+		}
+		else if (ch == ' ') {
+			last = 1;
+		}
+		else
+			last = 0;
+	}
+
+	return str;
+}
