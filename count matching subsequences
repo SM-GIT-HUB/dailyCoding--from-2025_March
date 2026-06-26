@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    using int64 = int64_t;
+    
+    int mod = 1e9 + 7;
+    int dp[1001][1002];
+    
+    int mm(int i, int m, int j, int n, string &s1, string &s2)
+    {
+        if (j == n) {
+            return 1;
+        }
+        
+        if (i == m) {
+            return 0;
+        }
+        
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        
+        int64 apu = 0;
+        
+        if (s1[i] == s2[j]) {
+            apu = (apu + mm(i + 1, m, j + 1, n, s1, s2)) % mod;
+        }
+        
+        apu = (apu + mm(i + 1, m, j, n, s1, s2)) % mod;
+        
+        return dp[i][j] = apu;
+    }
+  
+    int countWays(string &s1, string &s2) {
+        // code here
+        int m = int(s1.size());
+        int n = int(s2.size());
+        
+        for (int i = 0; i < m; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        int64 apu = mm(0, m, 0, n, s1, s2);
+        
+        return apu;
+    }
+};
