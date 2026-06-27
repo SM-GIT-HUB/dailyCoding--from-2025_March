@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int maximumLength(vector<int>& arr) {
+        int apu = 1;
+        unordered_map<int, int> mapp;
+
+        for (int x : arr)
+        {
+            ++mapp[x];
+        }
+
+        for (int64_t x : arr)
+        {
+            if (mapp[x] < 0) {
+                continue;
+            }
+            else
+                mapp[x] *= -1;
+
+            if (x == 1)
+            {
+                if (abs(mapp[x]) & 1) {
+                    apu = max(apu, abs(mapp[x]));
+                }
+                else
+                    apu = max(apu, abs(mapp[x]) - 1);
+
+                continue;
+            }
+
+            int len = 0;
+
+            while (x <= 1e9 && abs(mapp[x]) > 1)
+            {
+                len += 2;
+                apu = max(apu, len - 1);
+
+                x = x * x;
+
+                if (abs(mapp[x]) == 1) {
+                    apu = max(len + 1, apu);
+                }
+            }
+        }
+
+        return apu;
+    }
+};
