@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    using int64 = int64_t;
+    
+    int dp[100001];
+    int mod = 1e9 + 7;
+    
+    int mm(int idx, int n, int m)
+    {
+        if (idx == n) {
+            return 1;
+        }
+        
+        if (dp[idx] != -1) {
+            return dp[idx];
+        }
+        
+        int64 count = mm(idx + 1, n, m);
+        
+        if (idx + m <= n) {
+            count = (count + mm(idx + m, n, m)) % mod;
+        }
+        
+        return dp[idx] = count % mod;
+    }
+  
+    int countWays(int n, int m) {
+        // code here.
+        memset(dp, -1, sizeof(dp));
+        return mm(0, n, m);
+    }
+};
