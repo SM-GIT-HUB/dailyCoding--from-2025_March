@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+
+        arr[0] = 1;
+        int apu = 1, last = 1;
+
+        for (int x : arr)
+        {
+            if (abs(x - last) <= 1)
+            {
+                apu = max(x, apu);
+                last = x;
+                continue;
+            }
+
+            last = last + 1;
+            apu = max(last, apu);
+        }
+
+        return apu;
+    }
+};
