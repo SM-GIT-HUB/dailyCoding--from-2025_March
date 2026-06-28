@@ -1,0 +1,37 @@
+int dp[1001][1001][2];
+
+class Solution {
+  public:
+    using int64 = int64_t;
+    int mod = 1000000000 + 7;
+    
+    int mm(int idx, int n, int last, int ones, int k)
+    {
+        if (idx == n) {
+            return (ones == k);
+        }
+        
+        if (ones > k) {
+            return 0;
+        }
+        
+        if (dp[idx][ones][last] != -1) {
+            return dp[idx][ones][last];
+        }
+        
+        int64 count = mm(idx + 1, n, 0, ones, k);
+        count = (count + mm(idx + 1, n, 1, ones + (last == 1), k)) % mod;
+        
+        return dp[idx][ones][last] = count;
+    }
+  
+    int countStrings(int n, int k) {
+        // code here
+        for (int i = 0; i < n; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        return mm(0, n, 0, 0, k);
+    }
+};
