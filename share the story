@@ -1,0 +1,50 @@
+vector<int> shareStory(vector<vector<int> >& arr, int n)
+{
+    // Write your code here.
+    sort(arr.begin(), arr.end(), [](auto &a, auto &b) {
+        if (a[2] == b[2]) {
+            return (a[0] < b[0]);
+        }
+
+        return (a[2] < b[2]);
+    });
+
+    int flag = 1;
+
+    for (auto &a : arr)
+    {
+        if (a[0] == 1)
+        {
+            flag = 0;
+            break;
+        }
+    }
+
+    if (flag) {
+        return {};
+    }
+
+    vector<int> ans = {1};
+    unordered_set<int> sett;
+
+    sett.insert(1);
+
+    for (auto &a : arr)
+    {
+        int p1 = a[0], p2 = a[1];
+
+        if (!sett.count(p1)) {
+            continue;
+        }
+
+        if (!sett.count(p2))
+        {
+            sett.insert(p2);
+            ans.push_back(p2);
+        }
+    }
+
+    sort(ans.begin(), ans.end());
+
+    return ans;
+}
