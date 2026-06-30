@@ -1,0 +1,71 @@
+
+bitset<100001> mark;
+
+class Solution {
+  public:
+    int binSearch(int x, vector<int>& arr)
+    {
+        int apu = -1;
+        int start = 0, end = int(arr.size()) - 1;
+        
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+            
+            if (arr[mid] >= x)
+            {
+                apu = mid;
+                end = mid - 1;
+            }
+            else
+                start = mid + 1;
+        }
+        
+        return apu;
+    }
+  
+    int getLis(vector<int>& arr)
+    {
+        vector<int> apu;
+        
+        for (int x : arr)
+        {
+            if (apu.empty() || x > apu.back())
+            {
+                apu.push_back(x);
+                continue;
+            }
+            
+            int idx = binSearch(x, apu);
+            
+            apu[idx] = x;
+        }
+        
+        return int(apu.size());
+    }
+  
+    int minInsAndDel(vector<int>& a, vector<int>& b) {
+        // code here
+        mark.reset();
+        
+        for (int x : b)
+        {
+            mark[x] = 1;
+        }
+        
+        vector<int> arr;
+        
+        for (int x : a)
+        {
+            if (mark[x]) {
+                arr.push_back(x);
+            }
+        }
+        
+        int m = int(a.size());
+        int n = int(b.size());
+        int apu = getLis(arr);
+        
+        return (m - apu) + (n - apu);
+    }
+};
