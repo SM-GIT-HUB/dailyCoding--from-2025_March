@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        // I love you ;)
+        int apu = 0;
+        int a = 0, b = 0, c = 0;
+
+        for (int start = 0, end = 0; end < int(s.size()); end++)
+        {
+            char ch = s[end];
+
+            if (ch == 'a') {
+                ++a;
+            }
+            else if (ch == 'b') {
+                ++b;
+            }
+            else
+                ++c;
+            
+            while (a && b && c)
+            {
+                a -= (s[start] == 'a');
+                b -= (s[start] == 'b');
+                c -= (s[start++] == 'c');
+            }
+
+            apu += start;
+        }
+
+        return apu;
+    }
+};
