@@ -1,0 +1,13 @@
+vector<int> countFrequency(int n, int x, vector<int>& nums){
+    // Write your code here.
+    vector<int> freq(n);
+
+    for (int y : nums)
+    {
+        if (y <= n) {
+            ++freq[y - 1];
+        }
+    }
+
+    return freq;
+}
