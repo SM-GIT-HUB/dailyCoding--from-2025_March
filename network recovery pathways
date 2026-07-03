@@ -1,0 +1,87 @@
+int visited[50005];
+long long dist[50005];
+
+class Solution {
+public:
+    void dfs(int u, vector<int>& topo, vector<vector<pair<int, int> > >& adj)
+    {
+        visited[u] = 1;
+
+        for (auto [v, _] : adj[u])
+        {
+            if (!visited[v]) {
+                dfs(v, topo, adj);
+            }
+        }
+
+        topo.push_back(u);
+    }
+
+    int isPos(int mx, long long k, int n, vector<int>& topo, vector<bool>& online, vector<vector<pair<int, int> > >& adj)
+    {
+        fill(dist, dist + n, 1e18);
+
+        dist[0] = 0;
+
+        for (int u : topo)
+        {
+            if (!online[u]) {
+                continue;
+            }
+
+            for (auto [v, w] : adj[u])
+            {
+                if (!online[v] || w < mx) {
+                    continue;
+                }
+
+                if (dist[u] + w < dist[v] && dist[u] + w <= k) {
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }
+
+        return (dist[n - 1] <= k);
+    }
+
+    int findMaxPathScore(vector<vector<int> >& edges, vector<bool>& online, long long k) {
+        int n = int(online.size());
+        vector<vector<pair<int, int> > > adj(n);
+
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1], w = e[2];
+
+            adj[u].push_back({v, w});
+        }
+
+        vector<int> topo;
+        fill(visited, visited + n, 0);
+        
+        for (int u = 0; u < n; u++)
+        {
+            if (!visited[u]) {
+                dfs(u, topo, adj);
+            }
+        }
+
+        int apu = -1;
+        int start = 0, end = 1e9;
+        reverse(topo.begin(), topo.end());
+
+        while (start <= end)
+        {
+            int mid = start + ((end - start) >> 1);
+
+            if (isPos(mid, k, n, topo, online, adj))
+            {
+                apu = mid;
+                start = mid + 1;
+            }
+            else
+                end = mid - 1;
+        }
+        
+        return apu;
+    }
+};
