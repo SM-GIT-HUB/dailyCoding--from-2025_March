@@ -1,0 +1,51 @@
+int dist[51][51];
+int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+class Solution {
+public:
+    bool findSafeWalk(vector<vector<int> >& grid, int health) {
+        int m = int(grid.size());
+        int n = int(grid[0].size());
+
+        for (int i = 0; i < m; i++)
+        {
+            fill(dist[i], dist[i] + n, 5000);
+        }
+
+        deque<pair<int, int> > apu;
+
+        apu.push_back({0, 0});
+        dist[0][0] = grid[0][0];
+
+        while (!apu.empty())
+        {
+            auto [x, y] = apu.front();
+            apu.pop_front();
+
+            for (auto &d : dirs)
+            {
+                int dx = x + d[0];
+                int dy = y + d[1];
+
+                if (dx < 0 || dx == m || dy < 0 || dy == n) {
+                    continue;
+                }
+
+                int c = grid[dx][dy];
+
+                if (dist[x][y] + c < dist[dx][dy])
+                {
+                    if (c) {
+                        apu.push_back({dx, dy});
+                    }
+                    else
+                        apu.push_front({dx, dy});
+                    
+                    dist[dx][dy] = dist[x][y] + c;
+                }
+            }
+        }
+
+        return (dist[m - 1][n - 1] < health);
+    }
+};
