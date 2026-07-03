@@ -1,0 +1,62 @@
+int pref[105][105];
+int suff[105][105];
+
+class Solution {
+  public:
+    int waysToIncreaseLCSBy1(string &s1, string &s2) {
+        // code here
+        int m = int(s1.size());
+        int n = int(s2.size());
+        
+        memset(pref, 0, sizeof(pref));
+        memset(suff, 0, sizeof(suff));
+        
+        for (int i = m - 1; i >= 0; i--)
+        {
+            for (int j = n - 1; j >= 0; j--)
+            {
+                if (s1[i] == s2[j]) {
+                    suff[i][j] = 1 + suff[i + 1][j + 1];
+                }
+                
+                suff[i][j] = max(suff[i][j], max(suff[i + 1][j], suff[i][j + 1]));
+            }
+        }
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (s1[i] == s2[j]) {
+                    pref[i + 1][j + 1] = 1 + pref[i][j];
+                }
+                
+                pref[i + 1][j + 1] = max(pref[i + 1][j + 1], max(pref[i][j + 1], pref[i + 1][j]));
+            }
+        }
+        
+        int apu = 0;
+        int lcs = suff[0][0];
+        
+        for (int i = 0; i <= m; i++)
+        {
+            bitset<26> mark;
+            
+            for (int j = 0; j < n; j++)
+            {
+                if (1 + pref[i][j] + suff[i][j + 1] == lcs + 1)
+                {
+                    int c = s2[j] - 'a';
+                    
+                    if (!mark[c])
+                    {
+                        ++apu;
+                        mark[c] = 1;
+                    }
+                }
+            }
+        }
+        
+        return apu;
+    }
+};
