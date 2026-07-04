@@ -1,0 +1,28 @@
+int prefix[100001];
+
+class Solution {
+public:
+    int maxValidPairSum(vector<int>& arr, int k) {
+        int n = int(arr.size());
+        
+        prefix[0] = arr[0];
+
+        for (int i = 1; i < n; i++)
+        {
+            prefix[i] = max(prefix[i - 1], arr[i]);
+        }
+
+        int ans = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (i - k < 0) {
+                continue;
+            }
+
+            ans = max(ans, arr[i] + prefix[i - k]);
+        }
+
+        return ans;
+    }
+};
