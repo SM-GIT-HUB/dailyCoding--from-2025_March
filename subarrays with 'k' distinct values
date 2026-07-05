@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+
+int getSub(int n, int k, vector<int>& arr)
+{
+    int dist = 0;
+    int count = 0;
+    unordered_map<int, int> mapp;
+
+    for (int start = 0, end = 0; end < n; end++)
+    {
+        if (++mapp[arr[end]] == 1) {
+            ++dist;
+        }
+
+        while (dist > k)
+        {
+            dist -= (--mapp[arr[start++]] == 0);
+        }
+
+        count += (end - start + 1);
+    }
+
+    return count;
+}
+
+int kDistinctSubarrays(vector<int>& arr, int n, int k)
+{
+    // Write your code here
+    return getSub(n, k, arr) - getSub(n, k - 1, arr);
+}
