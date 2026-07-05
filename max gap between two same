@@ -1,0 +1,23 @@
+class Solution {
+  public:
+    int mapp[26];
+    
+    int maxCharGap(string &s) {
+        // code here
+        int apu = -1;
+        memset(mapp, -1, sizeof(mapp));
+        
+        for (int i = 0; i < int(s.size()); i++)
+        {
+            int ch = s[i] - 'a';
+            
+            if (mapp[ch] != -1) {
+                apu = max(apu, i - mapp[ch] - 1);
+            }
+            else
+                mapp[ch] = i;
+        }
+        
+        return apu;
+    }
+};
