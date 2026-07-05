@@ -1,0 +1,88 @@
+class Solution {
+public:
+    using int64 = int64_t;
+    using pr2 = pair<int, int>;
+    
+    int maxs[101][101];
+    int ways[101][101];
+    int mod = 1000000000 + 7;
+
+    pr2 mm(int x, int y, int n, vector<string>& b)
+    {
+        if (x == n - 1 && y == n - 1) {
+            return {1, 1};
+        }
+
+        if (maxs[x][y] != -1) {
+            return {maxs[x][y], ways[x][y]};
+        }
+
+        pr2 right = {0, 0};
+        pr2 down = {0, 0};
+        pr2 diag = {0, 0};
+
+        if (y + 1 < n && b[x][y + 1] != 'X') {
+            right = mm(x, y + 1, n, b);
+        }
+
+        if (x + 1 < n && b[x + 1][y] != 'X') {
+            down = mm(x + 1, y, n, b);
+        }
+
+        if (x + 1 < n && y + 1 < n && b[x + 1][y + 1] != 'X') {
+            diag = mm(x + 1, y + 1, n, b);
+        }
+
+        int mx = max({right.first, down.first, diag.first});
+
+        if (mx == 0)
+        {
+            maxs[x][y] = ways[x][y] = 0;
+            return {0, 0};
+        }
+
+        int64 apu = 0;
+
+        if (right.first == mx) {
+            apu += right.second;
+        }
+
+        if (down.first == mx) {
+            apu += down.second;
+        }
+
+        if (diag.first == mx) {
+            apu += diag.second;
+        }
+
+        apu = apu % mod;
+        int sum = mx;
+
+        if (x != 0 || y != 0) {
+            sum += (b[x][y] - '0');
+        }
+
+        maxs[x][y] = sum;
+        ways[x][y] = apu;
+
+        return {sum, apu};
+    }
+
+    vector<int> pathsWithMaxScore(vector<string>& b) {
+        int n = int(b.size());
+
+        for (int i = 0; i < n; i++)
+        {
+            memset(maxs[i], -1, sizeof(maxs[i]));
+            memset(ways[i], -1, sizeof(ways[i]));
+        }
+
+        pr2 apu = mm(0, 0, n, b);
+        
+        if (apu.first == 0) {
+            return {0, 0};
+        }
+
+        return {apu.first - 1, apu.second};
+    }
+};
