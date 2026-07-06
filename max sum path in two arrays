@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    int maxPathSum(vector<int>& a, vector<int>& b) {
+        // Code here
+        int m = int(a.size());
+        int n = int(b.size());
+        
+        int sum1 = 0;
+        int sum2 = 0;
+        
+        int apu = 0;
+        int i = 0, j = 0;
+        
+        while (i < m || j < n)
+        {
+            if (j == n)
+            {
+                sum1 += a[i++];
+                continue;
+            }
+            
+            if (i == m)
+            {
+                sum2 += b[j++];
+                continue;
+            }
+            
+            if (a[i] < b[j]) {
+                sum1 += a[i++];
+            }
+            else if (a[i] > b[j]) {
+                sum2 += b[j++];
+            }
+            else
+            {
+                apu += max(sum1, sum2) + a[i];
+                sum1 = sum2 = 0;
+                i++;
+                j++;
+            }
+        }
+        
+        apu += max(sum1, sum2);
+        
+        return apu;
+    }
+};
