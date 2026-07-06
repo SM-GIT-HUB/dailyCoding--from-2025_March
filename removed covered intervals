@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int removeCoveredIntervals(vector<vector<int> >& arr) {
+        sort(arr.begin(), arr.end(), [](auto &a, auto &b) {
+            if (a[0] == b[0]) {
+                return (a[1] > b[1]);
+            }
+
+            return (a[0] < b[0]);
+        });
+
+        int apu = 0;
+        int maxi = -1;
+
+        for (auto &v : arr)
+        {
+            if (v[1] > maxi) {
+                ++apu;
+            }
+
+            maxi = max(v[1], maxi);
+        }
+
+        return apu;
+    }
+};
