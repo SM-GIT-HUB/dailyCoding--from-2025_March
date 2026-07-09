@@ -1,0 +1,58 @@
+#include<bits/stdc++.h>
+
+int tree[4050];
+
+int rangeQuery(int idx, int start, int end, int qStart, int qEnd)
+{
+    if (end < qStart || qEnd < start) {
+        return 0;
+    }
+
+    if (qStart <= start && end <= qEnd) {
+        return tree[idx];
+    }
+
+    int mid = (start + end) >> 1;
+    int left = 2 * idx + 1;
+    int right = left + 1;
+
+    return rangeQuery(left, start, mid, qStart, qEnd) + rangeQuery(right, mid + 1, end, qStart, qEnd);
+}
+
+void pointUpdate(int idx, int i, int start, int end)
+{
+    if (start == end)
+    {
+        tree[idx] += i;
+        return;
+    }
+
+    int mid = (start + end) >> 1;
+    int left = 2 * idx + 1;
+    int right = left + 1;
+
+    if (i <= mid) {
+        pointUpdate(left, i, start, mid);
+    }
+    else
+        pointUpdate(right, i, mid + 1, end);
+    
+    tree[idx] = (tree[left] + tree[right]);
+}
+
+vector<int> fenwikTree(vector<int> arr, int N)
+{
+    // Write your code here.
+    vector<int> ans;
+    memset(tree, 0, sizeof(tree));
+
+    int maxi = 1001;
+
+    for (int x : arr)
+    {
+        ans.push_back(rangeQuery(0, 0, maxi, x + 1, maxi));
+        pointUpdate(0, x, 0, maxi);
+    }
+
+    return ans;
+}
