@@ -1,0 +1,18 @@
+class Solution {
+  public:
+    int countKdivPairs(vector<int>& arr, int k) {
+        // code here
+        int count = 0;
+        unordered_map<int, int> mapp;
+        
+        for (int x : arr)
+        {
+            int rem = x % k;
+            count += mapp[(k - rem) % k];
+            
+            ++mapp[rem];
+        }
+        
+        return count;
+    }
+};
