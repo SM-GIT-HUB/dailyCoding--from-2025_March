@@ -1,0 +1,41 @@
+
+int parent[100001];
+vector<bool> ans(100001);
+
+class Solution {
+public:
+    int getParent(int u)
+    {
+        return (u == parent[u])? u : parent[u] = getParent(parent[u]);
+    }
+
+    void unionBy(int u, int v)
+    {
+        int upar = getParent(u);
+        int vpar = getParent(v);
+
+        parent[vpar] = upar;
+    }
+
+    vector<bool> pathExistenceQueries(int n, vector<int>& nums, int maxDiff, vector<vector<int> >& qs) {
+        iota(parent, parent + n, 0);
+
+        for (int i = 0; i < n - 1; i++)
+        {
+            if (nums[i + 1] - nums[i] <= maxDiff) {
+                unionBy(i, i + 1);
+            }
+        }
+
+        for (int i = 0; i < int(qs.size()); i++)
+        {
+            if (getParent(qs[i][0]) == getParent(qs[i][1])) {
+                ans[i] = 1;
+            }
+            else
+                ans[i] = 0;
+        }
+
+        return vector<bool>(ans.begin(), ans.begin() + qs.size());
+    }
+};
