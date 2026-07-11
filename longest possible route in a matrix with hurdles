@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    bitset<10> visited[10];
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    
+    void dfs(int x, int y, int xd, int yd, int m, int n, int dis, int &ans, vector<vector<int> >& mat)
+    {
+        if (x == xd && y == yd)
+        {
+            ans = max(ans, dis);
+            return;
+        }
+        
+        visited[x][y] = 1;
+        
+        for (auto &d : dirs)
+        {
+            int dx = x + d[0];
+            int dy = y + d[1];
+            
+            if (dx >= 0 && dx < m && dy >= 0 && dy < n && !visited[dx][dy] && mat[dx][dy]) {
+                dfs(dx, dy, xd, yd, m, n, dis + 1, ans, mat);
+            }
+        }
+        
+        visited[x][y] = 0;
+    }
+  
+    int longestPath(vector<vector<int> >& mat, int xs, int ys, int xd, int yd) {
+        // code here
+        int m = int(mat.size());
+        int n = int(mat[0].size());
+        
+        if (!mat[xs][ys]) {
+            return -1;
+        }
+        
+        int ans = -1;
+        dfs(xs, ys, xd, yd, m, n, 0, ans, mat);
+        
+        return ans;
+    }
+};
