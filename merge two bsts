@@ -1,0 +1,41 @@
+/*************************************************************
+
+    Following is the Binary Tree node structure:
+
+    class TreeNode
+    {
+    public:
+        int data;
+        TreeNode *left, *right;
+        TreeNode() : data(0), left(NULL), right(NULL) {}
+        TreeNode(int x) : data(x), left(NULL), right(NULL) {}
+        TreeNode(int x, TreeNode *left, TreeNode *right) : data(x), left(left), right(right) {}
+    };
+
+*************************************************************/
+
+using Node = TreeNode;
+
+void dfs(Node* root, vector<int>& arr)
+{
+    if (!root) {
+        return;
+    }
+
+    dfs(root->left, arr);
+    dfs(root->right, arr);
+
+    arr.push_back(root->data);
+}
+
+vector<int> mergeBST(TreeNode *root1, TreeNode *root2)
+{
+    // Write your code here.
+    vector<int> arr;
+    dfs(root1, arr);
+    dfs(root2, arr);
+
+    sort(arr.begin(), arr.end());
+
+    return arr;
+}
