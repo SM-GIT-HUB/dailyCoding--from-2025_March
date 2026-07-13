@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+using int64 = int64_t;
+
+vector<int64> arr;
+
+void add(int num)
+{
+	if (num == 0) {
+		arr.clear();
+	}
+	else if (arr.empty()) {
+		arr = {1, num};
+	}
+	else
+		arr.push_back(arr.back() * num);
+}
+
+int getProd(int k)
+{
+	if (int(arr.size()) <= k) {
+		return 0;
+	}
+
+	return arr.back() / arr[arr.size() - k - 1];
+}
+
+vector<int> solve(int q, vector<pair<int, int> > queries)
+{
+	// Write your code here
+	arr.clear();
+	vector<int> apu;
+
+	for (auto [t, e] : queries)
+	{
+		if (t == 0) {
+			add(e);
+		}
+		else
+			apu.push_back(getProd(e));
+	}
+
+	return apu;
+}
