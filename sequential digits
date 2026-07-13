@@ -1,0 +1,34 @@
+class Solution {
+public:
+    void getNums(int d, int low, int high, vector<int>& apu)
+    {
+        int64_t num = d;
+
+        while (num <= high)
+        {
+            if (num >= low) {
+                apu.push_back(num);
+            }
+
+            if (d == 9) {
+                break;
+            }
+
+            num = num * 10 + d + 1;
+            ++d;
+        }
+    }
+
+    vector<int> sequentialDigits(int low, int high) {
+        vector<int> apu;
+
+        for (int d = 1; d < 10; d++)
+        {
+            getNums(d, low, high, apu);
+        }
+
+        sort(apu.begin(), apu.end());
+
+        return apu;
+    }
+};
