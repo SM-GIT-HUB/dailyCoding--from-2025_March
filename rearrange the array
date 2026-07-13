@@ -1,0 +1,113 @@
+
+using int64 = int64_t;
+
+int flag = 1;
+int maxp[10001];
+vector<int> primes;
+bitset<10002> visited;
+
+int mod = 1000000000 + 7;
+
+class Solution {
+  public:
+    void compute()
+    {
+        flag = 0;
+        
+        for (int x = 2; x <= 10000; x++)
+        {
+            int isPrime = 1;
+            
+            for (int i = 2; i * i <= x; i++)
+            {
+                if (x % i == 0)
+                {
+                    isPrime = 0;
+                    break;
+                }
+            }
+            
+            if (isPrime) {
+                primes.push_back(x);
+            }
+        }
+    }
+    
+    void factorize(int cycle)
+    {
+        for (int p : primes)
+        {
+            if (p > cycle) {
+                break;
+            }
+            
+            int f = 0;
+            
+            while (cycle % p == 0)
+            {
+                ++f;
+                cycle = cycle / p;
+            }
+            
+            maxp[p] = max(f, maxp[p]);
+        }
+    }
+    
+    int64 power(int64 n, int64 m)
+    {
+        int64 p = 1;
+        
+        while (m)
+        {
+            if (m & 1) {
+                p = (p * n) % mod;
+            }
+            
+            n = (n * n) % mod;
+            m = (m >> 1);
+        }
+        
+        return p;
+    }
+  
+    int minOperations(vector<int>& b) {
+        // code here
+        if (flag) {
+            compute();
+        }
+        
+        visited.reset();
+        memset(maxp, 0, sizeof(maxp));
+        
+        int n = int(b.size());
+        
+        for (int i = 1; i <= n; i++)
+        {
+            int c = 0;
+            int j = i;
+            
+            if (visited[j]) {
+                continue;
+            }
+            
+            do {
+                ++c;
+                j = b[j - 1];
+                visited[j] = 1;
+            } while(j != i);
+            
+            factorize(c);
+        }
+        
+        int64 apu = 1;
+        
+        for (int x : primes)
+        {
+            if (maxp[x]) {
+                apu = (apu * power(x, maxp[x])) % mod;
+            }
+        }
+        
+        return apu;
+    }
+};
