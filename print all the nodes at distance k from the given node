@@ -1,0 +1,106 @@
+#include <bits/stdc++.h> 
+/************************************************************
+
+    Following is the TreeNode class structure
+
+    template <typename T>
+    class TreeNode {
+       public:
+        T data;
+        TreeNode<T> *left;
+        TreeNode<T> *right;
+
+        TreeNode(T data) {
+            this->data = data;
+            left = NULL;
+            right = NULL;
+        }
+    };
+
+************************************************************/
+
+using Node = TreeNode<int>;
+
+unordered_set<Node*> sett;
+unordered_map<Node*, Node*> par;
+
+void dfs(Node* root, Node* &start, int target)
+{
+    if (!root) {
+        return;
+    }
+
+    if (root->left)
+    {
+        par[root->left] = root;
+        dfs(root->left, start, target);
+    }
+
+    if (root->right)
+    {
+        par[root->right] = root;
+        dfs(root->right, start, target);
+    }
+
+    if (root->data == target) {
+        start = root;
+    }
+}
+
+vector<int> kDistance(Node* root, int target, int k)
+{
+    // Write your code here
+    par.clear();
+    sett.clear();
+
+    Node* start = nullptr;
+    dfs(root, start, target);
+
+    queue<Node*> q;
+
+    q.push(start);
+    sett.insert(start);
+
+    while (k-- && !q.empty())
+    {
+        int size = int(q.size());
+
+        while (size--)
+        {
+            Node* curr = q.front();
+            q.pop();
+
+            if (!curr) {
+                continue;
+            }
+
+            if (par.count(curr) && !sett.count(par[curr]))
+            {
+                sett.insert(par[curr]);
+                q.push(par[curr]);
+            }
+
+            if (curr->left && !sett.count(curr->left))
+            {
+                sett.insert(curr->left);
+                q.push(curr->left);
+            }
+
+            if (curr->right && !sett.count(curr->right))
+            {
+                sett.insert(curr->right);
+                q.push(curr->right);
+            }
+        }
+    }
+
+    vector<int> apu;
+
+    while (!q.empty())
+    {
+        apu.push_back(q.front()->data);
+        q.pop();
+    }
+
+    return apu;
+}
