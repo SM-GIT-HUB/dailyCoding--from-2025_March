@@ -1,0 +1,33 @@
+class Solution {
+  public:
+    int bitonic(vector<int>& arr) {
+        // code here
+        int n = int(arr.size());
+        
+        vector<int> prev(n, 1);
+        vector<int> next(n, 1);
+        
+        for (int i = 1; i < n; i++)
+        {
+            if (arr[i - 1] <= arr[i]) {
+                prev[i] += prev[i - 1];
+            }
+        }
+        
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (arr[i] >= arr[i + 1]) {
+                next[i] += next[i + 1];
+            }
+        }
+        
+        int apu = max(next[0], prev[n - 1]);
+        
+        for (int i = 1; i < n; i++)
+        {
+            apu = max(apu, prev[i] + next[i] - 1);
+        }
+        
+        return apu;
+    }
+};
