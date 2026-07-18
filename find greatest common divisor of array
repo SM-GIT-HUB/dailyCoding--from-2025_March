@@ -1,0 +1,8 @@
+class Solution {
+public:
+    #define all(r) r.begin(), r.end()
+
+    int findGCD(vector<int>& arr) {
+        return gcd(*min_element(all(arr)), *max_element(all(arr)));
+    }
+};
