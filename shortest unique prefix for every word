@@ -1,0 +1,72 @@
+class Solution {
+  public:
+    struct Node {
+        int pass;
+        Node* children[26];
+        
+        Node(): pass(0)
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                children[i] = nullptr;
+            }
+        }
+    };
+    
+    class Trie {
+    public:
+        Node* root;
+        Trie(): root(new Node()) {}
+        
+        void insert(string &w)
+        {
+            Node* curr = root;
+            
+            for (char ch : w)
+            {
+                if (!curr->children[ch - 'a']) {
+                    curr->children[ch - 'a'] = new Node();
+                }
+                
+                curr = curr->children[ch - 'a'];
+                ++curr->pass;
+            }
+        }
+        
+        string find(string &w)
+        {
+            string str;
+            Node* curr = root;
+            
+            for (char ch : w)
+            {
+                str.push_back(ch);
+                curr = curr->children[ch - 'a'];
+                
+                if (curr->pass == 1) {
+                    return str;
+                }
+            }
+            
+            return w;
+        }
+    };
+  
+    vector<string> findPrefixes(vector<string>& arr) {
+        // code here
+        Trie tr;
+        vector<string> apu;
+        
+        for (auto &s : arr)
+        {
+            tr.insert(s);
+        }
+        
+        for (auto &s : arr)
+        {
+            apu.push_back(tr.find(s));
+        }
+        
+        return apu;
+    }
+};
