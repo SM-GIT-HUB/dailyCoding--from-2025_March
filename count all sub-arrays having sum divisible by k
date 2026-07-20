@@ -1,0 +1,20 @@
+#include <bits/stdc++.h>
+
+int subArrayCount(vector<int>& arr, int k) {
+    // Write your code here.
+    int rem = 0;
+    int count = 0;
+    unordered_map<int, int> mapp;
+
+    mapp[0] = 1;
+
+    for (int x : arr)
+    {
+        rem = ((rem + x) % k + k) % k;
+        count += (mapp[rem]);
+
+        ++mapp[rem];
+    }
+
+    return count;
+}
