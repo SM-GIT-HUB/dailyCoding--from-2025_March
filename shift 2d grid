@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int> > shiftGrid(vector<vector<int> >& grid, int k) {
+        int m = int(grid.size());
+        int n = int(grid[0].size());
+
+        int t = m * n;
+        k = k % t;
+
+        if (k == 0) {
+            return grid;
+        }
+
+        vector<vector<int> > apu(m, vector<int>(n));
+
+        for (int i = 0; i < t; i++)
+        {
+            int r = i / n;
+            int c = i % n;
+
+            int nr = ((i + k) % t) / n;
+            int nc = ((i + k) % t) % n;
+
+            apu[nr][nc] = grid[r][c];
+        }
+
+        return apu;
+    }
+};
