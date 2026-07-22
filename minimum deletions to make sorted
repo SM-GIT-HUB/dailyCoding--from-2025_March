@@ -1,0 +1,22 @@
+class Solution {
+  public:
+    int minDeletions(vector<int>& arr) {
+        // code here
+        vector<int> ans;
+        
+        for (int x : arr)
+        {
+            if (ans.empty() || ans.back() < x)
+            {
+                ans.push_back(x);
+                continue;
+            }
+            
+            int idx = lower_bound(ans.begin(), ans.end(), x) - ans.begin();
+            
+            ans[idx] = x;
+        }
+        
+        return (int(arr.size()) - int(ans.size()));
+    }
+};
