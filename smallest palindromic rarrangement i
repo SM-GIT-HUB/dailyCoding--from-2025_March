@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int mapp[26];
+
+    string smallestPalindrome(string apu) {
+        int n = int(apu.size());
+        memset(mapp, 0, sizeof(mapp));
+
+        for (char ch : apu)
+        {
+            ++mapp[ch - 'a'];
+        }
+
+        for (int c = 0, i = 0, j = n - 1; c < 26 && i <= j;)
+        {
+            if (mapp[c] < 1)
+            {
+                ++c;
+                continue;
+            }
+
+            if (mapp[c] & 1)
+            {
+                apu[n >> 1] = (c + 'a');
+                --mapp[c];
+                continue;
+            }
+
+            apu[i++] = apu[j--] = (c + 'a');
+
+            mapp[c] -= 2;
+        }
+
+        return apu;
+    }
+};
