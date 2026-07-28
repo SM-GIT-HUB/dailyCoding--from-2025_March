@@ -1,0 +1,73 @@
+
+int dist[100001];
+
+class Solution {
+  public:
+    int shortestPath(int n, int src, int dest, vector<vector<int> >& edges) {
+        // code here
+        vector<vector<pair<int, int> > > adj(n);
+        
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            int w = e[2];
+            
+            adj[u].push_back({v, w});
+            adj[v].push_back({u, w});
+        }
+        
+        for (int u = 0; u < n; u++)
+        {
+            dist[u] = INT_MAX;
+        }
+        
+        dist[src] = 0;
+        
+        vector<int> twos;
+        queue<pair<int, int> > q;
+        
+        int dis = 0;
+        q.push({src, 0});
+        
+        while ((!q.empty() || !twos.empty()) && dist[dest] == INT_MAX)
+        {
+            vector<int> temp;
+            int size = int(q.size());
+            
+            while (size--)
+            {
+                auto [u, d] = q.front();
+                q.pop();
+                
+                for (auto [v, w] : adj[u])
+                {
+                    if (w == 2) {
+                        temp.push_back(v);
+                    }
+                    else if (dist[v] == INT_MAX)
+                    {
+                        dist[v] = d + 1;
+                        q.push({v, d + 1});
+                    }
+                }
+                
+            }
+            
+            for (int v : twos)
+            {
+                if (dist[v] == INT_MAX)
+                {
+                    dist[v] = dis + 1;
+                    q.push({v, dis + 1});
+                }
+            }
+            
+            ++dis;
+            twos = temp;
+        }
+        
+        int apu = (dist[dest] == INT_MAX)? -1 : dist[dest];
+        
+        return apu;
+    }
+};
