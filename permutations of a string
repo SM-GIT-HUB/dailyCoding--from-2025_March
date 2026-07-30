@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+
+void track(int idx, int n, string &str, vector<string>& ans)
+{
+    if (idx == n)
+    {
+        ans.push_back(str);
+        return;
+    }
+
+    for (int i = idx; i < n; i++)
+    {
+        swap(str[idx], str[i]);
+        track(idx + 1, n, str, ans);
+        swap(str[idx], str[i]);
+    }
+}
+
+vector<string> generatePermutations(string &str)
+{
+    // write your code here
+    vector<string> ans;
+    track(0, int(str.size()), str, ans);
+
+    sort(ans.begin(), ans.end());
+
+    return ans;
+}
