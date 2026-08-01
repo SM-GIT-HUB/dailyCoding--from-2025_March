@@ -1,0 +1,25 @@
+
+int inc[1000005];
+
+class Solution {
+  public:
+    int findMax(int n, vector<int>& a, vector<int>& b, vector<int>& k) {
+        // code here
+        fill(inc, inc + n + 2, 0);
+        
+        for (int i = 0; i < int(a.size()); i++)
+        {
+            inc[a[i]] += k[i];
+            inc[b[i] + 1] -= k[i];
+        }
+        
+        for (int i = 1; i < n; i++)
+        {
+            inc[i] += inc[i - 1];
+        }
+        
+        int apu = *max_element(inc, inc + n);
+        
+        return apu;
+    }
+};
