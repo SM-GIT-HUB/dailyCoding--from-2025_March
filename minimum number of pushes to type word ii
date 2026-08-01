@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int minimumPushes(string_view word) {
+        int mapp[26] = {0};
+
+        for (char ch : word)
+        {
+            ++mapp[ch - 'a'];
+        }
+
+        sort(mapp, mapp + 26);
+
+        int idx = 0;
+        int apu = 0;
+
+        for (int i = 25; i >= 0 && mapp[i]; i--)
+        {
+            apu += mapp[i] * (idx / 8 + 1);
+            ++idx;
+        }
+
+        return apu;
+    }
+};
