@@ -1,0 +1,46 @@
+int dp[20][20][2];
+
+class Solution {
+public:
+    int mini = INT_MIN;
+
+    int mm(int i, int j, int k, vector<int>& arr)
+    {
+        if (i > j) {
+            return 0;
+        }
+
+        if (dp[i][j][k] != mini) {
+            return dp[i][j][k];
+        }
+
+        int one = mm(i + 1, j, !k, arr);
+        int two = mm(i, j - 1, !k, arr);
+
+        int apu = 0;
+
+        if (!k) {
+            apu = max(arr[i] + one, arr[j] + two);
+        }
+        else
+            apu = min(-arr[i] + one, -arr[j] + two);
+
+        return dp[i][j][k] = apu;
+    }
+
+    bool predictTheWinner(vector<int>& arr) {
+        int n = int(arr.size());
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                dp[i][j][0] = dp[i][j][1] = mini;
+            }
+        }
+
+        int apu = mm(0, n - 1, 0, arr);
+
+        return (apu >= 0);
+    }
+};
