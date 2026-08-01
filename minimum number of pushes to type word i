@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int minimumPushes(string word) {
+        int apu = 0;
+
+        for (int i = 0; i < int(word.size()); i++)
+        {
+            apu += i / 8 + 1;
+        }
+
+        return apu;
+    }
+};
