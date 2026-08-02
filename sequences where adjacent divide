@@ -1,0 +1,60 @@
+int dp[12][12];
+
+int flag = 1;
+vector<int> divs[12];
+
+class Solution {
+  public:
+    int mm(int idx, int n, int p, int m)
+    {
+        if (idx == n) {
+            return 1;
+        }
+        
+        if (dp[idx][p] != -1) {
+            return dp[idx][p];
+        }
+        
+        int ans = 0;
+        
+        for (int e : divs[p])
+        {
+            if (e > m) {
+                break;
+            }
+            
+            ans += mm(idx + 1, n, e, m);
+        }
+        
+        return dp[idx][p] = ans;
+    }
+  
+    int count(int n, int m) {
+        // code here
+        memset(dp, -1, sizeof(dp));
+        
+        if (flag)
+        {
+            flag = 0;
+            
+            for (int e = 1; e <= 11; e++)
+            {
+                for (int d = 1; d <= 11; d++)
+                {
+                    if (e % d == 0 || d % e == 0) {
+                        divs[e].push_back(d);
+                    }
+                }
+            }
+        }
+        
+        int ans = 0;
+        
+        for (int e = 1; e <= m; e++)
+        {
+            ans += mm(1, n, e, m);
+        }
+        
+        return ans;
+    }
+};
