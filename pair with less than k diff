@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> findMissingElements(vector<int>& arr) {
+        sort(arr.begin(), arr.end());
+
+        vector<int> apu;
+
+        int el = arr[0];
+
+        for (int x : arr)
+        {
+            while (el != x)
+            {
+                apu.push_back(el++);
+            }
+
+            ++el;
+        }
+
+        return apu;
+    }
+};
