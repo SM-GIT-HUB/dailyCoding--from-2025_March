@@ -1,0 +1,59 @@
+int indegree[100001];
+bitset<100001> visited;
+vector<int> adj[100001];
+
+class Solution {
+public:
+    void dfs(int u)
+    {
+        visited[u] = 1;
+
+        for (int v : adj[u])
+        {
+            --indegree[v];
+
+            if (!visited[v]) {
+                dfs(v);
+            }
+        }
+    }
+
+    vector<int> remainingMethods(int n, int k, vector<vector<int> >& edges) {
+        for (int i = 0; i < n; i++)
+        {
+            adj[i].clear();
+            visited[i] = indegree[i] = 0;
+        }
+
+        for (auto &e : edges)
+        {
+            int u = e[0], v = e[1];
+            adj[u].push_back(v);
+            ++indegree[v];
+        }
+
+        dfs(k);
+
+        int flag = 0;
+        vector<int> apu;
+        
+        for (int u = 0; u < n && !flag; u++)
+        {
+            if (visited[u] == 1 && indegree[u] != 0) {
+                flag = 1;
+            }
+        }
+
+        for (int u = 0; u < n; u++)
+        {
+            if (flag) {
+                apu.push_back(u);
+            }
+            else if (!visited[u]) {
+                apu.push_back(u);
+            }
+        }
+
+        return apu;
+    }
+};
