@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    int getCount(int n, int cap, vector<int>& arr)
+    {
+        int apu = 0;
+        int sum = 0;
+        
+        for (int start = 0, end = 0; end < n; end++)
+        {
+            sum += arr[end];
+            
+            while (sum > cap && start <= end)
+            {
+                sum -= arr[start++];
+            }
+            
+            apu += (end - start + 1);
+        }
+        
+        return apu;
+    }
+  
+    int countSubarray(vector<int>& arr, int l, int r) {
+        // code here
+        int n = int(arr.size());
+        return getCount(n, r, arr) - getCount(n, l - 1, arr);
+    }
+};
