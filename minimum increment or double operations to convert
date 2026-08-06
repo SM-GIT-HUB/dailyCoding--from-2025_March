@@ -1,0 +1,16 @@
+class Solution {
+  public:
+    int countMinOperations(vector<int>& arr) {
+        // code here
+        int maxb = 0;
+        int count = 0;
+        
+        for (int x : arr)
+        {
+            count += __builtin_popcount(x);
+            maxb = max(maxb, int(log2(x)));
+        }
+        
+        return (count + maxb);
+    }
+};
