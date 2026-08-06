@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int smallestNumber(int n, int t) {
+        int num = n;
+
+        auto divisible = [](int num, int t) {
+            int prod = 1;
+
+            while (num)
+            {
+                prod = prod * (num % 10);
+                num = num / 10;
+            }
+
+            return (prod % t == 0);
+        };
+
+        while (!divisible(num, t))
+        {
+            ++num;
+        }
+
+        return num;
+    }
+};
