@@ -1,0 +1,54 @@
+// Stack class.
+class Stack {
+    
+public:
+    int s = 0;
+    int cap = 0;
+    vector<int> arr;
+    Stack(int capacity) {
+        // Write your code here.
+        cap = capacity;
+    }
+
+    void push(int num) {
+        // Write your code here.
+        if (s < cap)
+        {
+            arr.push_back(num);
+            ++s;
+        }
+    }
+
+    int pop() {
+        // Write your code here.
+        if (arr.empty()) {
+            return -1;
+        }
+
+        int x = arr.back();
+        arr.pop_back();
+        --s;
+
+        return x;
+    }
+    
+    int top() {
+        // Write your code here.
+        if (arr.empty()) {
+            return -1;
+        }
+
+        return arr.back();
+    }
+    
+    int isEmpty() {
+        // Write your code here.
+        return arr.empty();
+    }
+    
+    int isFull() {
+        // Write your code here.
+        return (s == cap);
+    }
+    
+};
