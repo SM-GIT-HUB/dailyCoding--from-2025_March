@@ -1,0 +1,28 @@
+class Solution {
+  public:
+    int dp[19];
+  
+    int mm(int n)
+    {
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        
+        if (dp[n] != -1) {
+            return dp[n];
+        }
+        
+        int one = mm(n - 1);
+        int two = (n - 1) * mm(n - 2);
+        
+        return dp[n] = (one + two);
+    }
+  
+    int countFriendsPairings(int n) {
+        // code here
+        memset(dp, -1, sizeof(dp));
+        
+        int apu = mm(n);
+        return apu;
+    }
+};
