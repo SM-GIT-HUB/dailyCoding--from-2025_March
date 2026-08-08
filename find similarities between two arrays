@@ -1,0 +1,19 @@
+#include <bits/stdc++.h> 
+pair < int , int > findSimilarity(vector < int > arr1, vector < int > arr2, int n, int m) 
+{
+	// Write Your Code here.
+	unordered_set<int> sett(arr1.begin(), arr1.end());
+
+	int a = 0;
+
+	for (int x : arr2)
+	{
+		if (sett.count(x)) {
+			++a;
+		}
+		else
+			sett.insert(x);
+	}
+
+	return {a, int(sett.size())};
+}
