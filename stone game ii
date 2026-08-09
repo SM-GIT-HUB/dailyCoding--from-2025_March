@@ -1,0 +1,40 @@
+
+int suffix[100];
+int dp[105][105];
+
+class Solution {
+public:
+    int tabulation(int n, vector<int>& arr)
+    {
+        for (int idx = n - 1; idx >= 0; idx--)
+        {
+            for (int m = ((n + 1) >> 1); m > 0; m--)
+            {
+                int maxi = 0;
+
+                for (int x = 1; x <= (m << 1) && idx + x <= n; x++)
+                {
+                    maxi = max(maxi, suffix[idx] - dp[idx + x][max(m, x)]);
+                }
+
+                dp[idx][m] = maxi;
+            }
+        }
+
+        return dp[0][1];
+    }
+
+    int stoneGameII(vector<int>& arr) {
+        int n = int(arr.size());
+        memset(dp, 0, sizeof(dp));
+
+        suffix[n - 1] = arr[n - 1];
+
+        for (int idx = n - 2; idx >= 0; idx--)
+        {
+            suffix[idx] = arr[idx] + suffix[idx + 1];
+        }
+
+        return tabulation(n, arr);
+    }
+};
