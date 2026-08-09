@@ -1,0 +1,49 @@
+#include <bits/stdc++.h> 
+#include <iostream>
+
+using namespace std;
+
+int flag = 1;
+vector<int> primes;
+
+void collect()
+{
+    flag = 0;
+
+    for (int x = 2; x <= 100; x++)
+    {
+        int yes = 1;
+
+        for (int i = 2; i * i <= x; i++)
+        {
+            if (x % i == 0)
+            {
+                yes = 0;
+                break;
+            }
+        }
+
+        if (yes) {
+            primes.push_back(x);
+        }
+    }
+}
+
+//Write your totalPrime function here
+
+int totalPrime(int s, int e)
+{
+    return upper_bound(primes.begin(), primes.end(), e) - lower_bound(primes.begin(), primes.end(), s);
+}
+
+int main() {
+    int S, E;
+    cin >> S >> E;
+
+    if (flag) {
+        collect();
+    }
+
+    cout << totalPrime(S, E);
+    return 0;
+}
