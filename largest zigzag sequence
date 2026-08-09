@@ -1,0 +1,43 @@
+class Solution {
+  public:
+    int dp[100][100];
+    
+    int mm(int i, int j, int n, vector<vector<int> >& mat)
+    {
+        if (i == n - 1) {
+            return mat[i][j];
+        }
+        
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        
+        int apu = 0;
+        
+        for (int y = 0; y < n; y++)
+        {
+            if (y == j) {
+                continue;
+            }
+            
+            apu = max(mm(i + 1, y, n, mat), apu);
+        }
+        
+        return dp[i][j] = mat[i][j] + apu;
+    }
+  
+    int zigzagSequence(vector<vector<int> >& mat) {
+        // code here
+        int n = int(mat.size());
+        memset(dp, -1, sizeof(dp));
+        
+        int apu = 0;
+        
+        for (int j = 0; j < n; j++)
+        {
+            apu = max(mm(0, j, n, mat), apu);
+        }
+        
+        return apu;
+    }
+};
