@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    int tabulation(int n, vector<int>& h, vector<int>& l)
+    {
+        array<int, 2> next = {0, 0};
+        array<int, 2> curr;
+        
+        for (int idx = n - 1; idx >= 0; idx--)
+        {
+            for (int did = 0; did < 2; did++)
+            {
+                int nextAns = next[1];
+        
+                int one = ((did == 0)? h[idx] : 0);
+                int two = l[idx];
+                
+                int perform = max(one, two) + nextAns;
+                int noPerform = next[0];
+                
+                curr[did] = max(perform, noPerform);
+            }
+            
+            next = curr;
+        }
+        
+        return next[0];
+    }
+  
+    int maxTask(vector<int>& h, vector<int>& l) {
+        // code here
+        int n = int(h.size());
+        
+        return tabulation(n, h, l);
+    }
+};
