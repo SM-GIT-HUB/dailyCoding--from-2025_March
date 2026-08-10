@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+int totalSalary(double basic, char grade) 
+{
+    // Write your code here.
+    double hra = basic * 20 / 100;
+    double da = basic * 50 / 100;
+    double pf = basic * 11 / 100;
+
+    double allow = 0;
+
+    if (grade == 'A') {
+        allow = 1700;
+    }
+    else if (grade == 'B') {
+        allow = 1500;
+    }
+    else
+        allow = 1300;
+    
+    return round(basic + hra + da + allow - pf);
+}
