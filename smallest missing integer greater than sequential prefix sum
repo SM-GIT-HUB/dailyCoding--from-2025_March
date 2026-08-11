@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int missingInteger(vector<int>& nums) {
+        bitset<51> mapp;
+
+        int sum = 0;
+        int p = nums[0] - 1;
+
+        for (int x : nums)
+        {
+            if (p != -1)
+            {
+                if (p + 1 == x)
+                {
+                    sum += x;
+                    p = x;
+                }
+                else
+                    p = -1;
+            }
+
+            mapp[x] = 1;
+        }
+
+        if (sum > 50) {
+            return sum;
+        }
+
+        while (sum <= 50 && mapp[sum])
+        {
+            ++sum;
+        }
+
+        return sum;
+    }
+};
