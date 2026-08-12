@@ -1,0 +1,65 @@
+class Solution {
+  public:
+    int mod = 1e9 + 7;
+    using int64 = int64_t;
+    
+    int64 mini = -1e14;
+    int64 sign = -1e16;
+    
+    pair<int64, int64> dp[101][101];
+    
+    pair<int, int> mm(int i, int j, int n, vector<vector<int> >& g)
+    {
+        if (i == n - 1 && j == n - 1) {
+            return {1, g[i][j]};
+        }
+        
+        if (i >= n || j >= n) {
+            return {0, mini};
+        }
+        
+        if (dp[i][j].second != sign) {
+            return dp[i][j];
+        }
+        
+        pair<int64, int64> curr = {0, mini};
+        
+        if (g[i][j] == 1) {
+            curr = mm(i, j + 1, n, g);
+        }
+        else if (g[i][j] == 2) {
+            curr = mm(i + 1, j, n, g);
+        }
+        else
+        {
+            pair<int64, int64> right = mm(i, j + 1, n, g);
+            pair<int64, int64> down = mm(i + 1, j, n, g);
+            
+            curr.first = (right.first + down.first) % mod;
+            curr.second = max(right.second, down.second);
+        }
+        
+        curr.second += g[i][j];
+        
+        // cout << curr.first << ' ' << curr.second << endl;
+        
+        return dp[i][j] = curr;
+    }
+  
+    vector<int> findWays(vector<vector<int> >& grid) {
+        // code here
+        int n = int(grid.size());
+        
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                dp[i][j] = {0, sign};
+            }
+        }
+        
+        pair<int, int> ans = mm(0, 0, n, grid);
+        
+        return {ans.first, max(0, ans.second)};
+    }
+};
