@@ -1,0 +1,4 @@
+long long solve(int n, vector<int>& a) {
+    // Write your code here.
+    return accumulate(a.begin(), a.end(), 0LL);
+}
