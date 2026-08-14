@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+
+string encode(string &message)
+{
+    // Write your code here.
+    int c = 0;
+    char p = message[0];
+
+    string str;
+
+    for (char ch : message)
+    {
+        if (ch == p) {
+            ++c;
+        }
+        else
+        {
+            str.push_back(p);
+
+            for (char x : to_string(c))
+            {
+                str.push_back(x);
+            }
+
+            c = 1;
+            p = ch;
+        }
+    }
+
+    str.push_back(p);
+
+    for (char x : to_string(c))
+    {
+        str.push_back(x);
+    }
+
+    return str;
+}
