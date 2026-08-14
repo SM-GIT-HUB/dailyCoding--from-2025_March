@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maximumLengthSubstring(string s) {
+        int ans = 0;
+        int mapp[26] = {0};
+
+        for (int start = 0, end = 0; end < int(s.size()); end++)
+        {
+            ++mapp[s[end] - 'a'];
+
+            while (mapp[s[end] - 'a'] > 2)
+            {
+                --mapp[s[start++] - 'a'];
+            }
+
+            ans = max(end - start + 1, ans);
+        }
+
+        return ans;
+    }
+};
