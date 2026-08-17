@@ -1,0 +1,21 @@
+#include <bits/stdc++.h> 
+#include<iostream>
+
+using namespace std;
+
+class Person {
+
+    // Complete the class
+
+};
+
+int main() {
+
+    //Write your code here
+    string name, age;
+    cin >> name >> age;
+
+    cout << "The name of the person is " << name << " and the age is " << age << ".\n";
+
+    return 0;
+}
