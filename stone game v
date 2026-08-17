@@ -1,0 +1,52 @@
+int prefix[502];
+
+int dp[501][501];
+
+class Solution {
+public:
+    int mm(int start, int end, vector<int>& arr)
+    {
+        if (start >= end) {
+            return 0;
+        }
+
+        if (dp[start][end] != -1) {
+            return dp[start][end];
+        }
+
+        int sum = 0;
+        int total = prefix[end + 1] - prefix[start];
+        int maxi = INT_MIN;
+
+        for (int i = start; i < end; i++)
+        {
+            sum += arr[i];
+            int rest = total - sum;
+
+            if (sum > rest) {
+                maxi = max(maxi, rest + mm(i + 1, end, arr));
+            }
+            else if (sum < rest) {
+                maxi = max(maxi, sum + mm(start, i, arr));
+            }
+            else
+                maxi = max(maxi, max(rest + mm(i + 1, end, arr), sum + mm(start, i, arr)));
+        }
+
+        return dp[start][end] = maxi;
+    }
+
+    int stoneGameV(vector<int>& arr) {
+        int n = int(arr.size());
+
+        prefix[0] = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+            prefix[i + 1] = prefix[i] + arr[i];
+        }
+
+        return mm(0, n - 1, arr);
+    }
+};
