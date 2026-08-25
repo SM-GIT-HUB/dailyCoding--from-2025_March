@@ -1,8 +1,10 @@
+bitset<101> mark;
+
 class Solution {
 public:
     int missingMultiple(vector<int>& arr, int k) {
-        bitset<201> mark;
-        
+        mark.reset();
+
         for (int x : arr)
         {
             mark[x] = 1;
@@ -11,7 +13,7 @@ public:
         int m = k;
         int mul = 2;
 
-        while (mark[m])
+        while (m < 101 && mark[m])
         {
             m = k * mul++;
         }
