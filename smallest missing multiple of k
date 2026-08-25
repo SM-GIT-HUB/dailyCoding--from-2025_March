@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int missingMultiple(vector<int>& arr, int k) {
+        bitset<201> mark;
+        
+        for (int x : arr)
+        {
+            mark[x] = 1;
+        }
+
+        int m = k;
+        int mul = 2;
+
+        while (mark[m])
+        {
+            m = k * mul++;
+        }
+
+        return m;
+    }
+};
