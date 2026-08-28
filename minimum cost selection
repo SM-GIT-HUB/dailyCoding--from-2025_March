@@ -1,0 +1,47 @@
+int dp[100001][3];
+
+class Solution {
+  public:
+    int mm(int i, int p, int n, vector<vector<int> >& mat)
+    {
+        if (i == n) {
+            return 0;
+        }
+        
+        if (dp[i][p] != -1) {
+            return dp[i][p];
+        }
+        
+        int cost = INT_MAX;
+        
+        for (int j = 0; j < 3; j++)
+        {
+            if (j == p) {
+                continue;
+            }
+            
+            cost = min(cost, mat[i][j] + mm(i + 1, j, n, mat));
+        }
+        
+        return dp[i][p] = cost;
+    }
+  
+    int minCost(vector<vector<int> >& mat) {
+        // code here
+        int n = int(mat.size());
+        
+        for (int i = 0; i < n; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        int cost = INT_MAX;
+        
+        for (int j = 0; j < 3; j++)
+        {
+            cost = min(cost, mat[0][j] + mm(1, j, n, mat));
+        }
+        
+        return cost;
+    }
+};
