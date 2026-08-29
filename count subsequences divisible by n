@@ -1,0 +1,29 @@
+class Solution {
+  public:
+    int mod = 1e9 + 7;
+    
+    int mm(int idx, int m, int rem, int n, string &str, vector<vector<int> >& dp)
+    {    
+        if (idx == m) {
+            return (rem == 0);
+        }
+        
+        if (dp[idx][rem] != -1) {
+            return dp[idx][rem];
+        }
+        
+        long long count = mm(idx + 1, m, (rem * 10 + (str[idx] - '0')) % n, n, str, dp);
+        count = (count + mm(idx + 1, m, rem, n, str, dp)) % mod;
+        
+        return dp[idx][rem] = count;
+    }
+  
+    int countSubsequences(string &s, int n) {
+        // code here
+        int m = int(s.size());
+        
+        vector<vector<int> > dp(m, vector<int>(n, -1));
+        
+        return (mm(0, m, 0, n, s, dp) - 1 + mod) % mod;
+    }
+};
