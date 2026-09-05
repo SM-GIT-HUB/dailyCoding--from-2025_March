@@ -1,0 +1,8 @@
+int missingNumber(vector<int>& a, int n) {
+    // Write your code here.
+    int e = 1;
+    int xorr = 0;
+    for (int x : a) xorr = (xorr ^ x ^ e++);
+
+    return (xorr ^ e);
+}
