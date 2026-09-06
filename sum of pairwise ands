@@ -1,0 +1,36 @@
+class Solution {
+  public:
+    long long pairAndSum(vector<int>& arr) {
+        // code here
+        int bits[31] = {0};
+        int n = int(arr.size());
+        
+        for (int b = 30; b >= 0; b--)
+        {
+            if (arr[0] & (1 << b)) {
+                ++bits[b];
+            }
+        }
+        
+        long long sum = 0;
+        
+        for (int i = 1; i < n; i++)
+        {
+            for (int b = 30; b >= 0; b--)
+            {
+                if (arr[i] & (1 << b)) {
+                    sum += (1LL << b) * bits[b];
+                }
+            }
+            
+            for (int b = 30; b >= 0; b--)
+            {
+                if (arr[i] & (1 << b)) {
+                    ++bits[b];
+                }
+            }
+        }
+        
+        return sum;
+    }
+};
