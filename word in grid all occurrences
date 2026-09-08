@@ -1,0 +1,47 @@
+class Solution {
+  public:
+    int dirs[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}};
+    
+    int search(int x, int y, int m, int n, int dx, int dy, string &str, vector<vector<char> >& mat)
+    {
+        for (char ch : str)
+        {
+            if (x < 0 || x == m || y < 0 || y == n || mat[x][y] != ch) {
+                return 0;
+            }
+            
+            x += dx;
+            y += dy;
+        }
+        
+        return 1;
+    }
+  
+    vector<vector<int> > searchWord(vector<vector<char> >& mat, string &word) {
+        // Code here
+        vector<vector<int> > ans;
+        
+        int m = int(mat.size());
+        int n = int(mat[0].size());
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (mat[i][j] == word[0])
+                {
+                    for (auto &d : dirs)
+                    {
+                        if (search(i, j, m, n, d[0], d[1], word, mat))
+                        {
+                            ans.push_back({i, j});
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
