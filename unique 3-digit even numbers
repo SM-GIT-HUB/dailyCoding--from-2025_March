@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int mapp[10];
+
+    int dfs(int idx)
+    {
+        if (idx == 3) {
+            return 1;
+        }
+
+        int used = 0;
+        int count = 0;
+
+        for (int e = 0; e < 10; e++)
+        {
+            if (!mapp[e] || (used & (1 << e))) {
+                continue;
+            }
+
+            if (idx == 0 && e == 0) {
+                continue;
+            }
+            else if (idx == 2 && (e & 1)) {
+                continue;
+            }
+
+            used = (used | (1 << e));
+
+            --mapp[e];
+
+            count += dfs(idx + 1);
+
+            ++mapp[e];
+        }
+
+        return count;
+    }
+
+    int totalNumbers(vector<int>& digits) {
+        int n = int(digits.size());
+
+        memset(mapp, 0, sizeof(mapp));
+
+        for (int x : digits)
+        {
+            ++mapp[x];
+        }
+
+        return dfs(0);
+    }
+};
