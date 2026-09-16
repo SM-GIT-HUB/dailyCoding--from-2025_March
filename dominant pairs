@@ -1,0 +1,26 @@
+class Solution {
+  public:
+    int dominantPairs(vector<int>& arr) {
+        // Code here
+        vector<int> js;
+        int n = int(arr.size());
+        
+        for (int j = n / 2; j < n; j++)
+        {
+            js.push_back(arr[j] * 5);
+        }
+        
+        sort(js.begin(), js.end());
+        
+        int count = 0;
+        
+        for (int i = 0; i < n / 2; i++)
+        {
+            auto it = upper_bound(js.begin(), js.end(), arr[i]) - 1;
+            
+            count += (it - js.begin() + 1);
+        }
+        
+        return count;
+    }
+};
