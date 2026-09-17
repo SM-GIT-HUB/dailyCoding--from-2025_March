@@ -1,0 +1,17 @@
+string removeDuplicate(string &s)
+{
+    // Write your code here
+    string str;
+
+    for (char ch : s)
+    {
+        while (str.size() && str.back() == ch)
+        {
+            str.pop_back();
+        }
+
+        str.push_back(ch);
+    }
+
+    return str;
+}
