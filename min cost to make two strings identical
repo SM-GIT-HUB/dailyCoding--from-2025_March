@@ -1,0 +1,46 @@
+
+int dp[1001][1001];
+
+class Solution {
+  public:
+    int mm(int i, int m, int j, int n, int c1, int c2, string &s1, string &s2)
+    {
+        if (i == m && j == n) {
+            return 0;
+        }
+        
+        if (i == m) {
+            return c2 * (n - j);
+        }
+        
+        if (j == n) {
+            return c1 * (m - i);
+        }
+        
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        
+        if (s1[i] == s2[j]) {
+            return mm(i + 1, m, j + 1, n, c1, c2, s1, s2);
+        }
+        
+        int one = c1 + mm(i + 1, m, j, n, c1, c2, s1, s2);
+        int two = c2 + mm(i, m, j + 1, n, c1, c2, s1, s2);
+        
+        return dp[i][j] = min(one, two);
+    }
+  
+    int findMinCost(string &s1, string &s2, int c1, int c2) {
+        // code here
+        int m = int(s1.size());
+        int n = int(s2.size());
+        
+        for (int i = 0; i < m; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        return mm(0, m, 0, n, c1, c2, s1, s2);
+    }
+};
