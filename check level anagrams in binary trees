@@ -1,0 +1,79 @@
+/* Structure of binary tree Node
+class Node {
+    public:
+    int data;
+    Node *left, *right;
+    Node(int x) {
+        data = x;
+        left = right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    bool areAnagrams(Node* root1, Node* root2) {
+        // code here
+        vector<Node*> one = {root1};
+        vector<Node*> two = {root2};
+        
+        while (one.size() && two.size())
+        {
+            int s1 = one.size();
+            int s2 = two.size();
+            
+            if (s1 != s2) {
+                return 0;
+            }
+            
+            sort(one.begin(), one.end(), [](auto &a, auto &b) {
+                return (a->data < b->data);
+            });
+            
+            sort(two.begin(), two.end(), [](auto &a, auto &b) {
+                return (a->data < b->data);
+            });
+            
+            vector<Node*> t1;
+            vector<Node*> t2;
+            
+            for (int i = 0; i < s1; i++)
+            {
+                if (one[i]->data != two[i]->data) {
+                    return 0;
+                }
+            }
+            
+            for (Node* x : one)
+            {
+                if (x->left) {
+                    t1.push_back(x->left);
+                }
+                
+                if (x->right) {
+                    t1.push_back(x->right);
+                }
+            }
+            
+            for (Node* x : two)
+            {
+                if (x->left) {
+                    t2.push_back(x->left);
+                }
+                
+                if (x->right) {
+                    t2.push_back(x->right);
+                }
+            }
+            
+            one = t1;
+            two = t2;
+        }
+        
+        if (one.size() || two.size()) {
+            return 0;
+        }
+        
+        return 1;
+    }
+};
