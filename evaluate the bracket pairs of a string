@@ -1,0 +1,46 @@
+class Solution {
+public:
+    string evaluate(string s, vector<vector<string> >& knowledge) {
+        unordered_map<string, string> mapp;
+
+        for (auto &k : knowledge)
+        {
+            mapp[k[0]] = k[1];
+        }
+
+        int b = 0;
+        string ans = "";
+        string buff = "";
+
+        for (char ch : s)
+        {
+            if (ch == '(') {
+                b = 1;
+            }
+            else if (ch == ')')
+            {
+                b = 0;
+                auto &it = mapp[buff];
+
+                if (it.size())
+                {
+                    for (char x : it)
+                    {
+                        ans.push_back(x);
+                    }
+                }
+                else
+                    ans.push_back('?');
+                
+                buff = "";
+            }
+            else if (b == 1) {
+                buff.push_back(ch);
+            }
+            else
+                ans.push_back(ch);
+        }
+
+        return ans;
+    }
+};
