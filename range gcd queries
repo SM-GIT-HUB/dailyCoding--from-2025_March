@@ -1,0 +1,91 @@
+
+int tree[400010];
+
+class Solution {
+  public:
+    class SegTree {
+    public:
+        SegTree(int n, vector<int>& arr)
+        {
+            buildTree(0, 0, n - 1, arr);
+        }
+
+        void buildTree(int idx, int start, int end, vector<int>& arr)
+        {
+            if (start == end)
+            {
+                tree[idx] = arr[start];
+                return;
+            }
+
+            int mid = (start + end) / 2;
+            int left = 2 * idx + 1;
+            int right = left + 1;
+
+            buildTree(left, start, mid, arr);
+            buildTree(right, mid + 1, end, arr);
+
+            tree[idx] = gcd(tree[left], tree[right]);
+        }
+
+        int query(int idx, int start, int end, int qStart, int qEnd)
+        {
+            if (end < qStart || qEnd < start) {
+                return 0;
+            }
+
+            if (qStart <= start && end <= qEnd) {
+                return tree[idx];
+            }
+
+            int mid = (start + end) / 2;
+            int left = 2 * idx + 1;
+            int right = left + 1;
+
+            int gcdLeft = query(left, start, mid, qStart, qEnd);
+            int gcdRight = query(right, mid + 1, end, qStart, qEnd);
+
+            return gcd(gcdLeft, gcdRight);
+        }
+
+        void update(int idx, int index, int elem, int start, int end)
+        {
+            if (start == end)
+            {
+                tree[idx] = elem;
+                return;
+            }
+
+            int mid = (start + end) / 2;
+            int left = 2 * idx + 1;
+            int right = left + 1;
+
+            if (index <= mid) {
+                update(left, index, elem, start, mid);
+            }
+            else
+                update(right, index, elem, mid + 1, end);
+
+            tree[idx] = gcd(tree[left], tree[right]);
+        }
+    };
+
+    vector<int> processQueries(vector<int>& arr, vector<vector<int> >& queries) {
+        // code here
+        int n = int(arr.size());
+
+        vector<int> ans;
+        SegTree st(n, arr);
+
+        for (auto &q : queries)
+        {
+            if (q[0] == 0) {
+                ans.push_back(st.query(0, 0, n - 1, q[1], q[2]));
+            }
+            else
+                st.update(0, q[1], q[2], 0, n - 1);
+        }
+
+        return ans;
+    }
+};
