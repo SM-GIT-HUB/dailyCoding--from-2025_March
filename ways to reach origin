@@ -1,0 +1,33 @@
+
+int dp[501][501];
+int mod = 1e9 + 7;
+using int64 = int64_t;
+
+class Solution {
+  public:
+    int mm(int x, int y, int m, int n)
+    {
+        if (x == m && y == n) {
+            return 1;
+        }
+        
+        if (x > m || y > n) {
+            return 0;
+        }
+        
+        if (dp[x][y] != -1) {
+            return dp[x][y];
+        }
+        
+        int64 total = int64(mm(x + 1, y, m, n)) % mod + mm(x, y + 1, m, n) % mod;
+        
+        return dp[x][y] = total % mod;
+    }
+      
+    int ways(int x, int y) {
+        // code here
+        memset(dp, -1, sizeof(dp));
+        
+        return mm(0, 0, x, y);
+    }
+};
