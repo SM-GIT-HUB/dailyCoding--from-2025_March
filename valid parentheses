@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        string st;
+
+        auto get = [](char ch) {
+            if (ch == ')') {
+                return '(';
+            }
+            else if (ch == '}') {
+                return '{';
+            }
+            else
+                return '[';
+        };
+
+        for (char ch : s)
+        {
+            if (ch == '(' || ch == '{' || ch == '[') {
+                st.push_back(ch);
+            }
+            else
+            {
+                char x = get(ch);
+
+                if (!st.empty() && st.back() == x) {
+                    st.pop_back();
+                }
+                else
+                    return 0;
+            }
+        }
+
+        return (int(st.size()) == 0);
+    }
+};
