@@ -1,0 +1,50 @@
+int dp[1001][1001];
+
+class Solution {
+  public:
+    int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  
+    int dfsMm(int x, int y, int m, int n, vector<vector<int> >& mat)
+    {
+        if (x == m || y == n || x < 0 || y < 0) {
+            return 0;
+        }
+        
+        if (dp[x][y] != -1) {
+            return dp[x][y];
+        }
+        
+        int len = 0;
+        
+        for (auto &d : dirs)
+        {
+            int dx = x + d[0], dy = y + d[1];
+            
+            if (dx >= 0 && dx < m && dy >= 0 && dy < n && mat[x][y] < mat[dx][dy]) {
+                len = max(len, dfsMm(dx, dy, m, n, mat));
+            }
+        }
+        
+        return dp[x][y] = (1 + len);
+    }
+  
+    int longIncPath(vector<vector<int> >& matrix, int m, int n) {
+        // code here
+        for (int i = 0; i < m; i++)
+        {
+            memset(dp[i], -1, sizeof(dp[i]));
+        }
+        
+        int ans = 1;
+        
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                ans = max(ans, dfsMm(i, j, m, n, matrix));
+            }
+        }
+        
+        return ans;
+    }
+};
