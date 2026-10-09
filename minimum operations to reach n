@@ -2,19 +2,6 @@ class Solution {
   public:
     int minOperation(int n) {
         // code here
-        int op = 0;
-        
-        while (n)
-        {
-            if (n & 1) {
-                n--;
-            }
-            else
-                n = (n >> 1);
-                
-            ++op;
-        }
-        
-        return op;
+        return (__builtin_popcount(n) + log2(n));
     }
 };
