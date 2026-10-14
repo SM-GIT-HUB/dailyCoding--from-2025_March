@@ -1,0 +1,26 @@
+int mapp[100005];
+
+class Solution {
+  public:
+    string findRollOut(string &s, vector<int>& roll) {
+        // code here
+        memset(mapp, 0, sizeof(mapp));
+        
+        for (int x : roll)
+        {
+            ++mapp[x - 1];
+        }
+        
+        for (int i = int(s.size()) - 2; i >= 0; i--)
+        {
+            mapp[i] += mapp[i + 1];
+        }
+        
+        for (int i = 0; i < int(s.size()); i++)
+        {
+            s[i] = ((s[i] - 'a' + mapp[i]) % 26) + 'a';
+        }
+        
+        return s;
+    }
+};
