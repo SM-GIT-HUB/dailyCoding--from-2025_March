@@ -1,0 +1,35 @@
+class Solution {
+  public:
+    int beautySum(string &s) {
+        // code here
+        int mx = 0;
+        int mapp[26] = {0};
+        
+        int total = 0;
+        int n = int(s.size());
+        
+        for (int i = 0; i < n; i++)
+        {
+            int mx = 0;
+            memset(mapp, 0, sizeof(mapp));
+            
+            for (int j = i; j < n; j++)
+            {
+                mx = max(mx, ++mapp[s[j] - 'a']);
+                
+                int mn = mx;
+                
+                for (int x : mapp)
+                {
+                    if (x) {
+                        mn = min(mn, x);
+                    }
+                }
+                
+                total += (mx - mn);
+            }
+        }
+        
+        return total;
+    }
+};
