@@ -1,0 +1,33 @@
+int last[26];
+
+class Solution {
+  public:
+    int getCount(string &s, int k) {
+        // code here
+        fill(last, last + 26, -2);
+        
+        int mapp[26] = {0};
+        
+        for (int i = 0; i < int(s.size()); i++)
+        {
+            char ch = s[i] - 'a';
+            
+            if (last[ch] + 1 != i) {
+                mapp[ch]++;
+            }
+            
+            last[ch] = i;
+        }
+        
+        int count = 0;
+        
+        for (int i = 0; i < 26; i++)
+        {
+            if (mapp[i] == k) {
+                ++count;
+            }
+        }
+        
+        return count;
+    }
+};
