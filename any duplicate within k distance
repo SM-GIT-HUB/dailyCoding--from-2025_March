@@ -1,0 +1,18 @@
+class Solution {
+  public:
+    bool checkWithinK(vector<int>& arr, int k) {
+        // code here
+        unordered_map<int, int> mapp;
+        
+        for (int i = 0; i < int(arr.size()); i++)
+        {
+            if (mapp.count(arr[i]) && i - mapp[arr[i]] <= k) {
+                return 1;
+            }
+            
+            mapp[arr[i]] = i;
+        }
+        
+        return 0;
+    }
+};
