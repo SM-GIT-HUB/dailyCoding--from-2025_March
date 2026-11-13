@@ -1,0 +1,55 @@
+/* Structure of a Binary Search Tree node
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void dfs1(Node* root, unordered_set<int>& sett)
+    {
+        if (!root) {
+            return;
+        }
+        
+        sett.insert(root->data);
+        
+        dfs1(root->left, sett);
+        dfs1(root->right, sett);
+    }
+    
+    void dfs2(Node* root, unordered_set<int>& sett, vector<int>& ans)
+    {
+        if (!root) {
+            return;
+        }
+        
+        dfs2(root->left, sett, ans);
+        
+        if (sett.count(root->data)) {
+            ans.push_back(root->data);
+        }
+        
+        dfs2(root->right, sett, ans);
+    }
+  
+    vector<int> findCommon(Node* r1, Node* r2) {
+        // code here
+        vector<int> ans;
+        unordered_set<int> sett;
+        
+        dfs1(r1, sett);
+        dfs2(r2, sett, ans);
+        
+        return ans;
+        
+    }
+};
