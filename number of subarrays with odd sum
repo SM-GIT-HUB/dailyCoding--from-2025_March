@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int mod = 1e9 + 7;
+
+    int numOfSubarrays(vector<int>& arr) {
+        int rem = 0;
+        int mapp[2] = {0};
+        int64_t count = 0;
+
+        mapp[0] = 1;
+
+        for (int x : arr)
+        {
+            rem = (rem + x) % 2;
+            count = (count + mapp[!rem]) % mod;
+
+            ++mapp[rem];
+        }
+
+        return count;
+    }
+};
