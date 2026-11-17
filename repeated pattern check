@@ -1,0 +1,21 @@
+class Solution {
+  public:
+    bool findPattern(string &s) {
+        // code here
+        int x = 0, y = 0;
+        
+        for (char ch : s)
+        {
+            if (ch == 'x') {
+                ++x;
+            }
+            else if (x <= y) {
+                return 0;
+            }
+            else
+                ++y;
+        }
+        
+        return (x == y);
+    }
+};
